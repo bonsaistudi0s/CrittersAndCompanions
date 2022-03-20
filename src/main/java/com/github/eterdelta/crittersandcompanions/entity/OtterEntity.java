@@ -505,7 +505,6 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     static class OtterPathNavigation extends WaterBoundPathNavigation {
         private final OtterEntity otter;
-        private boolean targetsFluid;
 
         public OtterPathNavigation(OtterEntity otterEntity, Level level) {
             super(otterEntity, level);
@@ -516,12 +515,6 @@ public class OtterEntity extends Animal implements IAnimatable {
         protected PathFinder createPathFinder(int p_26531_) {
             this.nodeEvaluator = new AmphibiousNodeEvaluator(true);
             return new PathFinder(this.nodeEvaluator, p_26531_);
-        }
-
-        @Override
-        public void tick() {
-            super.tick();
-            this.targetsFluid = this.isInProgress() && !this.level.getBlockState(this.getTargetPos()).getFluidState().isEmpty();
         }
 
         @Override
@@ -541,10 +534,6 @@ public class OtterEntity extends Animal implements IAnimatable {
             } else {
                 return !this.level.getBlockState(destination.below()).isAir();
             }
-        }
-
-        public boolean targetsFluid() {
-            return targetsFluid;
         }
     }
 
