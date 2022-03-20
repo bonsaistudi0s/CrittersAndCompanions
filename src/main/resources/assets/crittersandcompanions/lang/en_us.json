@@ -1,0 +1,13 @@
+{
+  "entity.crittersandcompanions.otter": "Otter",
+  "entity.crittersandcompanions.koi_fish": "Koi Fish",
+  "entity.crittersandcompanions.dragonfly": "Dragonfly",
+
+  "item.crittersandcompanions.otter_spawn_egg": "Otter Spawn Egg",
+  "item.crittersandcompanions.koi_fish_spawn_egg": "Koi Fish Spawn Egg",
+  "item.crittersandcompanions.dragonfly_spawn_egg": "Dragonfly Spawn Egg",
+  "item.crittersandcompanions.koi_fish_bucket": "Bucket of Koi Fish",
+  "item.crittersandcompanions.koi_fish": "Koi Fish",
+  "item.crittersandcompanions.clam": "Clam",
+  "item.crittersandcompanions.pearl": "Pearl"
+}

@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[39,)"
+license="MIT"
+[[mods]]
+modId="crittersandcompanions"
+version="${file.jarVersion}"
+displayName="Critters and Companions"
+logoFile=""
+authors=""
+description='''
+
+'''
+
+[[dependencies.crittersandcompanions]]
+    modId="forge"
+    mandatory=true
+    versionRange="[39.0.70,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.crittersandcompanions]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.1,1.19)"
+    ordering="NONE"
+    side="BOTH"
