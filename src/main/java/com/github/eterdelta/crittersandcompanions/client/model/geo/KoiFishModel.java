@@ -7,7 +7,9 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class KoiFishModel extends AnimatedGeoModel<KoiFishEntity> {
     private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "geo/koi_fish.geo.json");
-    private static final ResourceLocation TEXTURE = new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/koi_fish.png");
+    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/koi_fish_1.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/koi_fish_2.png")};
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/koi_fish.animation.json");
 
     @Override
@@ -17,7 +19,7 @@ public class KoiFishModel extends AnimatedGeoModel<KoiFishEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(KoiFishEntity object) {
-        return TEXTURE;
+        return TEXTURES[object.getVariant()];
     }
 
     @Override
