@@ -449,11 +449,12 @@ public class OtterEntity extends Animal implements IAnimatable {
 
         @Override
         public void tick() {
-            if (!this.otter.isFloating()) {
-                if (this.otter.isInWater()) {
-                    if (!this.otter.needsSurface()) {
-                        this.otter.setDeltaMovement(this.otter.getDeltaMovement().add(this.otter.getLookAngle().scale(0.005F)));
-                    }
+            if (this.otter.isInWater()) {
+                if (!this.otter.needsSurface()) {
+                    this.otter.setDeltaMovement(this.otter.getDeltaMovement().add(this.otter.getLookAngle().scale(this.otter.isFloating() ? 0.002F : 0.005F)));
+                }
+
+                if (!this.otter.isFloating()) {
                     if (this.operation == Operation.MOVE_TO && !this.mob.getNavigation().isDone()) {
                         double d0 = this.wantedX - this.mob.getX();
                         double d1 = this.wantedY - this.mob.getY();
@@ -496,9 +497,9 @@ public class OtterEntity extends Animal implements IAnimatable {
                         this.mob.setYya(0.0F);
                         this.mob.setZza(0.0F);
                     }
-                } else {
-                    super.tick();
                 }
+            } else {
+                super.tick();
             }
         }
     }
