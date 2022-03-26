@@ -41,7 +41,7 @@ public class DragonflyEntity extends PathfinderMob implements IAnimatable {
     }
 
     public static boolean checkDragonflySpawnRules(EntityType<DragonflyEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
-        return levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos.below(), entityType) && levelAccessor.getRawBrightness(blockPos, 0) > 8;
+        return levelAccessor.getBlockState(blockPos).isAir() && levelAccessor.getRawBrightness(blockPos, 0) > 8;
     }
 
     @Override
