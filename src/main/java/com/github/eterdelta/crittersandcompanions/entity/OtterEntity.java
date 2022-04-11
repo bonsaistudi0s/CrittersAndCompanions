@@ -259,7 +259,7 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     @Override
     protected void jumpInLiquid(Tag<Fluid> fluidTag) {
-        this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double) 0.1F * this.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
+        this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double) 0.08F * this.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
     }
 
     @Override
@@ -481,7 +481,7 @@ public class OtterEntity extends Animal implements IAnimatable {
                             BlockPos wantedPos = new BlockPos(this.wantedX, this.wantedY, this.wantedZ);
                             BlockState wantedBlockState = this.mob.level.getBlockState(wantedPos);
 
-                            if (d1 > (double) this.mob.maxUpStep && d0 * d0 + d2 * d2 < 1.0F && wantedBlockState.getFluidState().isEmpty()) {
+                            if (d1 > (double) this.mob.maxUpStep && d0 * d0 + d2 * d2 < 4.0F && d1 <= 1.0D && wantedBlockState.getFluidState().isEmpty()) {
                                 this.mob.getJumpControl().jump();
                                 this.mob.setSpeed(speed);
                             }
