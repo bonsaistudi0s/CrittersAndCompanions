@@ -61,7 +61,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     }
 
     public static boolean checkSeaBunnySpawnRules(EntityType<SeaBunnyEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
-        return levelAccessor.getBlockState(blockPos).is(Blocks.WATER) && levelAccessor.getBlockState(blockPos.below()).isFaceSturdy(levelAccessor, blockPos.below(), Direction.UP);
+        return levelAccessor.getBlockState(blockPos.below()).isFaceSturdy(levelAccessor, blockPos.below(), Direction.UP);
     }
 
     @Override

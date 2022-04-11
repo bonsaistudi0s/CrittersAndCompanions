@@ -83,7 +83,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     }
 
     public static boolean checkOtterSpawnRules(EntityType<OtterEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
-        return blockPos.getY() < levelAccessor.getSeaLevel() - 16 && isBrightEnoughToSpawn(levelAccessor, blockPos);
+        return blockPos.getY() > levelAccessor.getSeaLevel() - 16 && isBrightEnoughToSpawn(levelAccessor, blockPos);
     }
 
     @Override
