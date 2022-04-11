@@ -3,6 +3,7 @@ package com.github.eterdelta.crittersandcompanions.handler;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.DragonflyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
+import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.MobCategory;
@@ -29,6 +30,12 @@ public class SpawnHandler {
                 event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.OTTER.get(), 6, 3, 5));
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.KOI_FISH.get(), 4, 2, 5));
                 event.getSpawns().getSpawner(MobCategory.AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.DRAGONFLY.get(), 6, 1, 1));
+            } else if (biome == Biomes.OCEAN) {
+                event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.SEA_BUNNY.get(), 6, 1, 1));
+            } else if (biome == Biomes.LUKEWARM_OCEAN) {
+                event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.SEA_BUNNY.get(), 6, 1, 1));
+            } else if (biome == Biomes.WARM_OCEAN) {
+                event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.SEA_BUNNY.get(), 12, 1, 1));
             }
         }
     }
@@ -37,5 +44,6 @@ public class SpawnHandler {
         SpawnPlacements.register(CaCEntities.OTTER.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
         SpawnPlacements.register(CaCEntities.KOI_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacements.register(CaCEntities.DRAGONFLY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, DragonflyEntity::checkDragonflySpawnRules);
+        SpawnPlacements.register(CaCEntities.SEA_BUNNY.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SeaBunnyEntity::checkSeaBunnySpawnRules);
     }
 }

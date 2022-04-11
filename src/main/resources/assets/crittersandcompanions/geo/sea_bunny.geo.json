@@ -1,0 +1,52 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.sea_bunny",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "main",
+					"pivot": [0.6, 2, 0],
+					"cubes": [
+						{"origin": [-3, 0, -4], "size": [6, 4, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "left_antennae",
+					"parent": "main",
+					"pivot": [1.5, 3.8, -3.8],
+					"rotation": [22.5, -27.5, 7.5],
+					"cubes": [
+						{"origin": [0, 3.8, -3.8], "size": [3, 6, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "right_antennae",
+					"parent": "main",
+					"pivot": [-1.5, 3.8, -3.8],
+					"rotation": [22.5, 27.5, -7.5],
+					"cubes": [
+						{"origin": [-3, 3.8, -3.8], "size": [3, 6, 0], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "tail",
+					"parent": "main",
+					"pivot": [0, 4, 4],
+					"rotation": [-32.5, 0, 0],
+					"cubes": [
+						{"origin": [-2, 3.5, 4], "size": [4, 3, 0], "uv": [8, 13]},
+						{"origin": [-2, 3.5, 4], "size": [4, 3, 0], "pivot": [0, 3, 4], "rotation": [0, -90, 0], "uv": [0, 13]}
+					]
+				}
+			]
+		}
+	]
+}
