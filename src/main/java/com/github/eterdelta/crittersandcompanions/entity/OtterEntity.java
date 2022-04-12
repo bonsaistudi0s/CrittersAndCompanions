@@ -189,10 +189,14 @@ public class OtterEntity extends Animal implements IAnimatable {
                 }
             } else {
                 if (this.isFood(this.getMainHandItem())) {
-                    if ((!this.isInWater() && !this.needsSurface()) || this.isFloating()) {
-                        this.startEating(this.getMainHandItem().is(CaCItems.CLAM.get()) ? 35 : 12);
-                    } else {
-                        this.setNeedsSurface(true);
+                    if (this.isInWater()) {
+                        if (this.isFloating()) {
+                            this.startEating();
+                        } else {
+                            this.setNeedsSurface(true);
+                        }
+                    } else if (this.isOnGround()) {
+                        this.startEating();
                     }
                 }
             }
@@ -393,9 +397,9 @@ public class OtterEntity extends Animal implements IAnimatable {
         return false;
     }
 
-    private void startEating(int delay) {
-        if (!this.getMainHandItem().isEmpty()) {
-            this.eatDelay = delay;
+    private void startEating() {
+        if (this.isFood(this.getMainHandItem())) {
+            this.eatDelay = this.getMainHandItem().is(CaCItems.CLAM.get()) ? 35 : 12;
             this.eatTime = 20;
             this.setEating(true);
         }
@@ -673,11 +677,11 @@ public class OtterEntity extends Animal implements IAnimatable {
                     }
                 } else {
                     if (this.targetPos.y() > OtterEntity.this.getY() && targetPos.distanceToSqr(OtterEntity.this.position()) <= 3.0D) {
-                        OtterEntity.this.push(0.0D, 0.03D, 0.0D);
+                        OtterEntity.this.push(0.0D, 0.02D, 0.0D);
                     }
 
                     double d0 = this.targetPos.y() - OtterEntity.this.getEyePosition().y();
-                    if (Math.sqrt(d0 * d0) <= 0.05D) {
+                    if (Math.sqrt(d0 * d0) <= 0.1D) {
                         OtterEntity.this.setDeltaMovement(OtterEntity.this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
                         OtterEntity.this.setYya(0.0F);
                         OtterEntity.this.setSpeed(0.0F);
