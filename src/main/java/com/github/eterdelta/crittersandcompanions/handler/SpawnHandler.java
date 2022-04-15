@@ -27,7 +27,7 @@ public class SpawnHandler {
             ResourceKey<Biome> biome = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 
             if (biome == Biomes.RIVER) {
-                event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.OTTER.get(), 6, 3, 5));
+                event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.OTTER.get(), 2, 3, 5));
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.KOI_FISH.get(), 4, 2, 5));
                 event.getSpawns().getSpawner(MobCategory.AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.DRAGONFLY.get(), 6, 1, 1));
             } else if (biome == Biomes.OCEAN) {
