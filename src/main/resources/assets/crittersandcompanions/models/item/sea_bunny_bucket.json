@@ -2,5 +2,25 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "crittersandcompanions:item/sea_bunny_bucket"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "variant": 0
+      },
+      "model": "crittersandcompanions:item/sea_bunny_bucket"
+    },
+    {
+      "predicate": {
+        "variant": 1
+      },
+      "model": "crittersandcompanions:item/sea_bunny_bucket_1"
+    },
+    {
+      "predicate": {
+        "variant": 2
+      },
+      "model": "crittersandcompanions:item/sea_bunny_bucket_2"
+    }
+  ]
 }

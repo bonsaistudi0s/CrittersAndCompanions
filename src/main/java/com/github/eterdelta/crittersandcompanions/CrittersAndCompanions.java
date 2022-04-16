@@ -11,6 +11,8 @@ import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,7 +38,16 @@ public class CrittersAndCompanions {
     }
 
     public void onSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(SpawnHandler::registerSpawnPlacements);
+        event.enqueueWork(() -> {
+            SpawnHandler.registerSpawnPlacements();
+            ItemProperties.register(CaCItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
+                if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
+                    return stack.getTag().getInt("BucketVariant");
+                } else {
+                    return 0.0F;
+                }
+            });
+        });
     }
 
     private void onAttributeCreation(EntityAttributeCreationEvent event) {
