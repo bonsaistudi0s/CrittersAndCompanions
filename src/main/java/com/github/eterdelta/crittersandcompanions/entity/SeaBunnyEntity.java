@@ -164,7 +164,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     public void travel(Vec3 speed) {
         super.travel(speed);
         if (this.horizontalCollision && this.onClimbable()) {
-            this.setDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.1D, 0.0D));
+            this.setDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.12D, 0.0D));
         }
     }
 
