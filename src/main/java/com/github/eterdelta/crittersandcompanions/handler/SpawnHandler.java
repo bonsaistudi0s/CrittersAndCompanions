@@ -7,11 +7,11 @@ import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
 import net.minecraft.core.Direction;
-import net.minecraft.data.worldgen.StructureFeatures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Drowned;
@@ -20,16 +20,21 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid = CrittersAndCompanions.MODID)
 public class SpawnHandler {
+
+    @SubscribeEvent
+    public static void onLivingCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
+        if (event.getEntityLiving() instanceof Drowned drowned && event.getSpawnReason() == MobSpawnType.NATURAL && drowned.getRandom().nextFloat() <= 0.05F) {
+            drowned.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(CaCItems.CLAM.get()));
+        }
+    }
 
     @SubscribeEvent
     public static void onBiomeLoading(BiomeLoadingEvent event) {
