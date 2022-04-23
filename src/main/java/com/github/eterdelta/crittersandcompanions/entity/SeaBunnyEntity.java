@@ -61,7 +61,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     }
 
     public static boolean checkSeaBunnySpawnRules(EntityType<SeaBunnyEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
-        return levelAccessor.getBlockState(blockPos.below()).isFaceSturdy(levelAccessor, blockPos.below(), Direction.UP);
+        return blockPos.getY() > levelAccessor.getSeaLevel() - 32;
     }
 
     @Override
@@ -109,11 +109,13 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     @Override
     public void saveToBucketTag(ItemStack bucketStack) {
         CompoundTag bucketCompound = bucketStack.getOrCreateTag();
+        Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
         bucketCompound.putInt("BucketVariant", this.getVariant());
     }
 
     @Override
     public void loadFromBucketTag(CompoundTag bucketCompound) {
+        Bucketable.loadDefaultDataFromBucketTag(this, bucketCompound);
         if (bucketCompound.contains("BucketVariant")) {
             this.setVariant(bucketCompound.getInt("BucketVariant"));
         }
