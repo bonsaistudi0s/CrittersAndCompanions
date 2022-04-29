@@ -1,13 +1,7 @@
 package com.github.eterdelta.crittersandcompanions;
 
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.DragonflyRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.KoiFishRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.OtterRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.SeaBunnyRenderer;
-import com.github.eterdelta.crittersandcompanions.entity.DragonflyEntity;
-import com.github.eterdelta.crittersandcompanions.entity.KoiFishEntity;
-import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
-import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
+import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
+import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
@@ -55,6 +49,7 @@ public class CrittersAndCompanions {
         event.put(CaCEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
         event.put(CaCEntities.DRAGONFLY.get(), DragonflyEntity.createAttributes().build());
         event.put(CaCEntities.SEA_BUNNY.get(), SeaBunnyEntity.createAttributes().build());
+        event.put(CaCEntities.FERRET.get(), FerretEntity.createAttributes().build());
     }
 
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -62,5 +57,6 @@ public class CrittersAndCompanions {
         event.registerEntityRenderer(CaCEntities.KOI_FISH.get(), KoiFishRenderer::new);
         event.registerEntityRenderer(CaCEntities.DRAGONFLY.get(), DragonflyRenderer::new);
         event.registerEntityRenderer(CaCEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
+        event.registerEntityRenderer(CaCEntities.FERRET.get(), FerretRenderer::new);
     }
 }

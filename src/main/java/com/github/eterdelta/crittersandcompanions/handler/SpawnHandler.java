@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +52,8 @@ public class SpawnHandler {
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.SEA_BUNNY.get(), 32, 1, 3));
             } else if (biome == Biomes.WARM_OCEAN) {
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.SEA_BUNNY.get(), 64, 1, 4));
+            } else if (biome == Biomes.BIRCH_FOREST || biome == Biomes.FOREST || biome == Biomes.PLAINS) {
+                event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.OTTER.get(), 3, 2, 3));
             }
         }
     }
@@ -61,5 +64,6 @@ public class SpawnHandler {
         SpawnPlacements.register(CaCEntities.DRAGONFLY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, DragonflyEntity::checkDragonflySpawnRules);
         SpawnPlacements.register(CaCEntities.SEA_BUNNY.get(), SpawnPlacements.Type.create("ON_WATER_GROUND",
                 ((levelReader, blockPos, entityType) -> levelReader.getFluidState(blockPos).is(FluidTags.WATER) && levelReader.getBlockState(blockPos.below()).isFaceSturdy(levelReader, blockPos.below(), Direction.UP))), Heightmap.Types.OCEAN_FLOOR, SeaBunnyEntity::checkSeaBunnySpawnRules);
+        SpawnPlacements.register(CaCEntities.FERRET.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
     }
 }
