@@ -53,7 +53,7 @@ public class SpawnHandler {
             } else if (biome == Biomes.WARM_OCEAN) {
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.SEA_BUNNY.get(), 64, 1, 4));
             } else if (biome == Biomes.BIRCH_FOREST || biome == Biomes.FOREST || biome == Biomes.PLAINS) {
-                event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.OTTER.get(), 3, 2, 3));
+                event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.FERRET.get(), 3, 2, 3));
             }
         }
     }
