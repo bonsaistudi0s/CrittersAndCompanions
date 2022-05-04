@@ -27,4 +27,5 @@ public class CaCItems {
     public static final RegistryObject<Item> DRAGONFLY_SPAWN_EGG = ITEMS.register("dragonfly_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.DRAGONFLY, 0x08EECF, 0xD3FF96, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> SEA_BUNNY_SPAWN_EGG = ITEMS.register("sea_bunny_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.SEA_BUNNY, 0xF4ECE4, 0x453337, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> FERRET_SPAWN_EGG = ITEMS.register("ferret_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.FERRET, 0xC5AC88, 0x37212D, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> DUMBO_OCTOPUS_SPAWN_EGG = ITEMS.register("dumbo_octopus_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.DUMBO_OCTOPUS, 0xFCDC4C, 0x162630, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
 }
