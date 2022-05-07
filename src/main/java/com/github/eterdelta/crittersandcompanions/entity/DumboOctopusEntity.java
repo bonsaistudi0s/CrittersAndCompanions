@@ -97,16 +97,6 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable {
     }
 
     @Override
-    public boolean hurt(DamageSource damageSource, float damageAmount) {
-        if (super.hurt(damageSource, damageAmount) && this.getLastHurtByMob() != null) {
-            ((ServerLevel) this.level).sendParticles(ParticleTypes.SQUID_INK, this.getX(), this.getY() - 0.1D, this.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     protected PathNavigation createNavigation(Level level) {
         return new WaterBoundPathNavigation(this, level);
     }
