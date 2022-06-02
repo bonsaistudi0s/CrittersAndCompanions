@@ -124,7 +124,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.huntDelay = compound.getInt("HuntDelay");
-        this.setFloating(compound.getBoolean("Trusting"));
+        this.setFloating(compound.getBoolean("Floating"));
         this.floatTime = compound.getInt("FloatTime");
         this.setEating(compound.getBoolean("Eating"));
         this.eatTime = compound.getInt("EatTime");
