@@ -1,0 +1,8 @@
+{
+  "entity.dragonfly.ambient": {
+    "sounds": [
+      "crittersandcompanions:entity/dragonfly/ambient"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.dragonfly.ambient"
+  }
+}

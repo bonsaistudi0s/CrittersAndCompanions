@@ -7,6 +7,9 @@
   "mixins": [
     "LootPoolAccessor"
   ],
+  "client": [
+    "ClientPacketListenerMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

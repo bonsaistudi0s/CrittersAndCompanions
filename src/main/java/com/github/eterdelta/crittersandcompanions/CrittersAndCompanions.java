@@ -5,6 +5,7 @@ import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -25,6 +26,7 @@ public class CrittersAndCompanions {
 
         CaCEntities.ENTITIES.register(eventBus);
         CaCItems.ITEMS.register(eventBus);
+        CaCSounds.SOUNDS.register(eventBus);
 
         eventBus.addListener(this::onSetup);
         eventBus.addListener(this::onAttributeCreation);
