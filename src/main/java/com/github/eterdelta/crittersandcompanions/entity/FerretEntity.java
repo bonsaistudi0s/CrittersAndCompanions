@@ -157,7 +157,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
-                OtterEntity baby = CaCEntities.OTTER.get().create(this.level);
+                FerretEntity baby = CaCEntities.FERRET.get().create(this.level);
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
