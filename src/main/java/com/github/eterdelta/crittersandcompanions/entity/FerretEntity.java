@@ -74,9 +74,10 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
         this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(7, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(9, new FollowParentGoal(this, 1.0D));
+        this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
     }
