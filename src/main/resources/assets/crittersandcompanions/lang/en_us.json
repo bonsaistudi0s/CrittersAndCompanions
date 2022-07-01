@@ -5,6 +5,8 @@
   "entity.crittersandcompanions.sea_bunny": "Sea Bunny",
   "entity.crittersandcompanions.ferret": "Ferret",
   "entity.crittersandcompanions.dumbo_octopus": "Dumbo Octopus",
+  "entity.crittersandcompanions.red_panda": "Red Panda",
+  "entity.crittersandcompanions.leaf_insect": "Leaf Insect",
 
   "item.crittersandcompanions.otter_spawn_egg": "Otter Spawn Egg",
   "item.crittersandcompanions.koi_fish_spawn_egg": "Koi Fish Spawn Egg",
@@ -12,6 +14,8 @@
   "item.crittersandcompanions.sea_bunny_spawn_egg": "Sea Bunny Spawn Egg",
   "item.crittersandcompanions.ferret_spawn_egg": "Ferret Spawn Egg",
   "item.crittersandcompanions.dumbo_octopus_spawn_egg": "Dumbo Octopus Spawn Egg",
+  "item.crittersandcompanions.red_panda_spawn_egg": "Red Panda Spawn Egg",
+  "item.crittersandcompanions.leaf_insect_spawn_egg": "Leaf Insect Spawn Egg",
   "item.crittersandcompanions.koi_fish_bucket": "Bucket of Koi Fish",
   "item.crittersandcompanions.sea_bunny_bucket": "Bucket of Sea Bunny",
   "item.crittersandcompanions.koi_fish": "Koi Fish",

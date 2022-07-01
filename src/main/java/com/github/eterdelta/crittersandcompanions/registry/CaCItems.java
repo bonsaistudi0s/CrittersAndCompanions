@@ -28,4 +28,6 @@ public class CaCItems {
     public static final RegistryObject<Item> SEA_BUNNY_SPAWN_EGG = ITEMS.register("sea_bunny_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.SEA_BUNNY, 0xF4ECE4, 0x453337, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> FERRET_SPAWN_EGG = ITEMS.register("ferret_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.FERRET, 0xC5AC88, 0x37212D, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> DUMBO_OCTOPUS_SPAWN_EGG = ITEMS.register("dumbo_octopus_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.DUMBO_OCTOPUS, 0xFCDC4C, 0x162630, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> LEAF_INSECT_SPAWN_EGG = ITEMS.register("leaf_insect_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.LEAF_INSECT, 0xDAD475, 0x3C6C34, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> RED_PANDA_SPAWN_EGG = ITEMS.register("red_panda_spawn_egg", () -> new ForgeSpawnEggItem(CaCEntities.RED_PANDA, 0xF4943C, 0x13131B, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
 }

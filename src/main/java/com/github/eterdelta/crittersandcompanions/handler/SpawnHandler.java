@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -59,6 +60,13 @@ public class SpawnHandler {
             } else if (biome == Biomes.BIRCH_FOREST || biome == Biomes.FOREST || biome == Biomes.PLAINS) {
                 event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.FERRET.get(), 3, 2, 3));
             }
+
+            if (event.getCategory() == Biome.BiomeCategory.FOREST) {
+                event.getSpawns().getSpawner(MobCategory.AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.LEAF_INSECT.get(), 10, 1, 1));
+            } else if (event.getCategory() == Biome.BiomeCategory.JUNGLE) {
+                event.getSpawns().getSpawner(MobCategory.AMBIENT).add(new MobSpawnSettings.SpawnerData(CaCEntities.LEAF_INSECT.get(), 8, 1, 1));
+                event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CaCEntities.RED_PANDA.get(), 6, 1, 2));
+            }
         }
     }
 
@@ -70,5 +78,7 @@ public class SpawnHandler {
                 ((levelReader, blockPos, entityType) -> levelReader.getFluidState(blockPos).is(FluidTags.WATER) && levelReader.getBlockState(blockPos.below()).isFaceSturdy(levelReader, blockPos.below(), Direction.UP))), Heightmap.Types.OCEAN_FLOOR, SeaBunnyEntity::checkSeaBunnySpawnRules);
         SpawnPlacements.register(CaCEntities.FERRET.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         SpawnPlacements.register(CaCEntities.DUMBO_OCTOPUS.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DumboOctopusEntity::checkDumboOctopusSpawnRules);
+        SpawnPlacements.register(CaCEntities.LEAF_INSECT.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Mob::checkMobSpawnRules);
+        SpawnPlacements.register(CaCEntities.RED_PANDA.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
     }
 }

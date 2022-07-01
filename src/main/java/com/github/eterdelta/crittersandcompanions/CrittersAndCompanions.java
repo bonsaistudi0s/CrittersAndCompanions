@@ -53,6 +53,8 @@ public class CrittersAndCompanions {
         event.put(CaCEntities.SEA_BUNNY.get(), SeaBunnyEntity.createAttributes().build());
         event.put(CaCEntities.FERRET.get(), FerretEntity.createAttributes().build());
         event.put(CaCEntities.DUMBO_OCTOPUS.get(), DumboOctopusEntity.createAttributes().build());
+        event.put(CaCEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
+        event.put(CaCEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
     }
 
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -62,5 +64,7 @@ public class CrittersAndCompanions {
         event.registerEntityRenderer(CaCEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
         event.registerEntityRenderer(CaCEntities.FERRET.get(), FerretRenderer::new);
         event.registerEntityRenderer(CaCEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
+        event.registerEntityRenderer(CaCEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);
+        event.registerEntityRenderer(CaCEntities.RED_PANDA.get(), RedPandaRenderer::new);
     }
 }
