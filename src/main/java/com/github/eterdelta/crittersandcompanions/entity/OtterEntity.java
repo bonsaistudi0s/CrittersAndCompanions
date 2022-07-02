@@ -326,11 +326,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.isInWater()) {
             if (this.isFloating()) {
-                if (this.isBaby()) {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_float_baby", true));
-                } else {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_float", true));
-                }
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_float", true));
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_swim", true));
             }
@@ -641,7 +637,7 @@ public class OtterEntity extends Animal implements IAnimatable {
 
         @Override
         public boolean canUse() {
-            return OtterEntity.this.isAlive() && OtterEntity.this.needsSurface();
+            return OtterEntity.this.isAlive() && OtterEntity.this.needsSurface() && !OtterEntity.this.isOnGround();
         }
 
         @Override
