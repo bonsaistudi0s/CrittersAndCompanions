@@ -10,23 +10,29 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class OtterModel extends AnimatedGeoModel<OtterEntity> {
-    private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "geo/otter.geo.json");
-    private static final ResourceLocation TEXTURE = new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/otter.png");
-    private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/otter.animation.json");
+    private static final ResourceLocation[] MODELS = new ResourceLocation[]{
+            new ResourceLocation(CrittersAndCompanions.MODID, "geo/otter.geo.json"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "geo/baby_otter.geo.json")};
+    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/otter.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_otter.png")};
+    private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
+            new ResourceLocation(CrittersAndCompanions.MODID, "animations/otter.animation.json"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "animations/baby_otter.animation.json")};
 
     @Override
     public ResourceLocation getModelLocation(OtterEntity object) {
-        return MODEL;
+        return MODELS[object.isBaby() ? 1 : 0];
     }
 
     @Override
     public ResourceLocation getTextureLocation(OtterEntity object) {
-        return TEXTURE;
+        return TEXTURES[object.isBaby() ? 1 : 0];
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(OtterEntity animatable) {
-        return ANIMATION;
+        return ANIMATIONS[animatable.isBaby() ? 1 : 0];
     }
 
     @Override
@@ -38,17 +44,6 @@ public class OtterModel extends AnimatedGeoModel<OtterEntity> {
         if (!entity.isEating() && !entity.isFloating()) {
             rotBone.setRotationX(extraData.headPitch * ((float) Math.PI / 180.0F));
             rotBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
-        }
-
-        if (entity.isBaby()) {
-            IBone head = this.getAnimationProcessor().getBone("head");
-            IBone main = this.getAnimationProcessor().getBone("main");
-            head.setScaleX(1.25F);
-            head.setScaleY(1.25F);
-            head.setScaleZ(1.25F);
-            main.setScaleX(0.5F);
-            main.setScaleY(0.5F);
-            main.setScaleZ(0.5F);
         }
     }
 }
