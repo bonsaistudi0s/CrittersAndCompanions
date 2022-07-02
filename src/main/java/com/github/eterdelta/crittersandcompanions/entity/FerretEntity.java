@@ -26,6 +26,7 @@ import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -117,7 +118,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
         if (!this.isSleeping()) {
             ItemStack handStack = player.getItemInHand(interactionHand);
 
-            if (!this.isTame() && this.isFood(handStack)) {
+            if (!this.isTame() && handStack.is(Items.RABBIT)) {
                 if (!player.getAbilities().instabuild) {
                     handStack.shrink(1);
                 }
