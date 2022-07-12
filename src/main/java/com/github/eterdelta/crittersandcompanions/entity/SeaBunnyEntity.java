@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -124,6 +126,16 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     @Override
     public ItemStack getBucketItemStack() {
         return new ItemStack(CaCItems.SEA_BUNNY_BUCKET.get());
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CaCSounds.SEA_BUNNY_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return CaCSounds.SEA_BUNNY_DEATH.get();
     }
 
     @Override

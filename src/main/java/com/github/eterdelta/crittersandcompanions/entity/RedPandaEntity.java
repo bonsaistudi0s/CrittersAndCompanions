@@ -1,14 +1,17 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -103,6 +106,21 @@ public class RedPandaEntity extends Animal implements IAnimatable {
     @Override
     public boolean isFood(ItemStack itemStack) {
         return itemStack.is(Items.BAMBOO);
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return CaCSounds.RED_PANDA_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CaCSounds.RED_PANDA_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return CaCSounds.RED_PANDA_DEATH.get();
     }
 
     @Override

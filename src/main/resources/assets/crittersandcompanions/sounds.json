@@ -4,5 +4,131 @@
       "crittersandcompanions:entity/dragonfly/ambient"
     ],
     "subtitle": "subtitles.crittersandcompanions.dragonfly.ambient"
+  },
+  "entity.ferret.ambient": {
+    "sounds": [
+      "crittersandcompanions:entity/ferret/ambient_1",
+      "crittersandcompanions:entity/ferret/ambient_2",
+      "crittersandcompanions:entity/ferret/ambient_3",
+      "crittersandcompanions:entity/ferret/ambient_4",
+      "crittersandcompanions:entity/ferret/ambient_5",
+      "crittersandcompanions:entity/ferret/ambient_6"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.ferret.ambient"
+  },
+  "entity.ferret.death": {
+    "sounds": [
+      "crittersandcompanions:entity/ferret/death_1",
+      "crittersandcompanions:entity/ferret/death_2",
+      "crittersandcompanions:entity/ferret/death_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.ferret.death"
+  },
+  "entity.ferret.hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/ferret/hurt_1",
+      "crittersandcompanions:entity/ferret/hurt_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.ferret.hurt"
+  },
+  "entity.leaf_insect.death": {
+    "sounds": [
+      "crittersandcompanions:entity/leaf_insect/death"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.leaf_insect.death"
+  },
+  "entity.leaf_insect.hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/leaf_insect/hurt_1",
+      "crittersandcompanions:entity/leaf_insect/hurt_2",
+      "crittersandcompanions:entity/leaf_insect/hurt_3",
+      "crittersandcompanions:entity/leaf_insect/hurt_4"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.leaf_insect.hurt"
+  },
+  "entity.otter.ambient": {
+    "sounds": [
+      "crittersandcompanions:entity/otter/ambient_1",
+      "crittersandcompanions:entity/otter/ambient_2",
+      "crittersandcompanions:entity/otter/ambient_3",
+      "crittersandcompanions:entity/otter/ambient_4",
+      "crittersandcompanions:entity/otter/ambient_5"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.ambient"
+  },
+  "entity.otter.death": {
+    "sounds": [
+      "crittersandcompanions:entity/otter/death_1",
+      "crittersandcompanions:entity/otter/death_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.death"
+  },
+  "entity.otter.eat": {
+    "sounds": [
+      "crittersandcompanions:entity/otter/eat_1",
+      "crittersandcompanions:entity/otter/eat_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.eat"
+  },
+  "entity.otter.hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/otter/hurt_1",
+      "crittersandcompanions:entity/otter/hurt_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.hurt"
+  },
+  "entity.otter.swim": {
+    "sounds": [
+      "crittersandcompanions:entity/otter/swim_1",
+      "crittersandcompanions:entity/otter/swim_2",
+      "crittersandcompanions:entity/otter/swim_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.swim"
+  },
+  "entity.red_panda.ambient": {
+    "sounds": [
+      "crittersandcompanions:entity/red_panda/ambient_1",
+      "crittersandcompanions:entity/red_panda/ambient_2",
+      "crittersandcompanions:entity/red_panda/ambient_3",
+      "crittersandcompanions:entity/red_panda/ambient_4"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.red_panda.ambient"
+  },
+  "entity.red_panda.death": {
+    "sounds": [
+      "crittersandcompanions:entity/red_panda/death_1",
+      "crittersandcompanions:entity/red_panda/death_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.red_panda.death"
+  },
+  "entity.red_panda.hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/red_panda/hurt_1",
+      "crittersandcompanions:entity/red_panda/hurt_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.red_panda.hurt"
+  },
+  "entity.sea_bunny.death": {
+    "sounds": [
+      "crittersandcompanions:entity/sea_bunny/death_1",
+      "crittersandcompanions:entity/sea_bunny/death_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.sea_bunny.death"
+  },
+  "entity.sea_bunny.hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/sea_bunny/hurt_1",
+      "crittersandcompanions:entity/sea_bunny/hurt_2",
+      "crittersandcompanions:entity/sea_bunny/hurt_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.sea_bunny.hurt"
+  },
+  "entity.bite_attack": {
+    "sounds": [
+      "crittersandcompanions:entity/bite_attack_1",
+      "crittersandcompanions:entity/bite_attack_2",
+      "crittersandcompanions:entity/bite_attack_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.bite_attack"
   }
 }

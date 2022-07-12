@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -10,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -19,6 +21,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -180,7 +183,7 @@ public class OtterEntity extends Animal implements IAnimatable {
                     ((ServerLevel) this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getMainHandItem()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
                     if (this.getRandom().nextDouble() < 0.5D) {
-                        this.playSound(SoundEvents.GENERIC_EAT, 0.5F, 1.8F);
+                        this.playSound(CaCSounds.OTTER_EAT.get(), 1.2F, 1.0F);
                     }
                     if (--this.eatTime <= 0) {
                         this.eat(this.level, this.getMainHandItem());
@@ -217,7 +220,7 @@ public class OtterEntity extends Animal implements IAnimatable {
                 pearl.setDeltaMovement(this.getRandom().nextGaussian() * 0.05D, this.getRandom().nextGaussian() * 0.05D + 0.2D, this.getRandom().nextGaussian() * 0.05D);
                 level.addFreshEntity(pearl);
             }
-            level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_BREAK, SoundSource.NEUTRAL, 0.8F, 1.5F);
+            level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TURTLE_EGG_BREAK, SoundSource.NEUTRAL, 0.8F, 1.5F);
             itemStack.shrink(1);
             return itemStack;
         } else {
@@ -307,6 +310,36 @@ public class OtterEntity extends Animal implements IAnimatable {
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
         OtterEntity otter = CaCEntities.OTTER.get().create(level);
         return otter;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        if (super.doHurtTarget(entity)) {
+            this.playSound(CaCSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return CaCSounds.OTTER_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getSwimSound() {
+        return CaCSounds.OTTER_SWIM.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CaCSounds.OTTER_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return CaCSounds.OTTER_DEATH.get();
     }
 
     @Override

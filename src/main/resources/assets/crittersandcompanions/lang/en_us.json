@@ -22,5 +22,21 @@
   "item.crittersandcompanions.clam": "Clam",
   "item.crittersandcompanions.pearl": "Pearl",
 
-  "subtitles.crittersandcompanions.dragonfly.ambient": "Dragonfly buzzes"
+  "subtitles.crittersandcompanions.dragonfly.ambient": "Dragonfly buzzes",
+  "subtitles.crittersandcompanions.ferret.ambient": "Ferret squeaks",
+  "subtitles.crittersandcompanions.ferret.death": "Ferret dies",
+  "subtitles.crittersandcompanions.ferret.hurt": "Ferret hurts",
+  "subtitles.crittersandcompanions.leaf_insect.death": "Leaf Insect dies",
+  "subtitles.crittersandcompanions.leaf_insect.hurt": "Leaf Insect hurts",
+  "subtitles.crittersandcompanions.otter.ambient": "Otter squeaks",
+  "subtitles.crittersandcompanions.otter.death": "Otter dies",
+  "subtitles.crittersandcompanions.otter.eat": "Otter eats",
+  "subtitles.crittersandcompanions.otter.hurt": "Otter hurts",
+  "subtitles.crittersandcompanions.otter.swim": "Otter hurts",
+  "subtitles.crittersandcompanions.red_panda.ambient": "Red Panda squeaks",
+  "subtitles.crittersandcompanions.red_panda.death": "Red Panda dies",
+  "subtitles.crittersandcompanions.red_panda.hurt": "Red Panda hurts",
+  "subtitles.crittersandcompanions.sea_bunny.death": "Sea Bunny dies",
+  "subtitles.crittersandcompanions.sea_bunny.hurt": "Sea Bunny hurts",
+  "subtitles.crittersandcompanions.bite_attack": "Animal bites"
 }

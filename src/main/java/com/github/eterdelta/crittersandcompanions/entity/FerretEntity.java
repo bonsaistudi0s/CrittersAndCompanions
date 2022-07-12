@@ -2,18 +2,21 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -114,6 +117,16 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     }
 
     @Override
+    public boolean doHurtTarget(Entity entity) {
+        if (super.doHurtTarget(entity)) {
+            this.playSound(CaCSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         if (!this.isSleeping()) {
             ItemStack handStack = player.getItemInHand(interactionHand);
@@ -152,6 +165,21 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     @Override
     public boolean isFood(ItemStack itemStack) {
         return FOODS_TAG.contains(itemStack.getItem());
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return CaCSounds.FERRET_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CaCSounds.FERRET_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return CaCSounds.FERRET_DEATH.get();
     }
 
     @Override
