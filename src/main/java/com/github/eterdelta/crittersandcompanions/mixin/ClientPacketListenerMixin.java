@@ -25,7 +25,7 @@ public class ClientPacketListenerMixin {
     @Inject(at = @At(value = "JUMP", opcode = Opcodes.IFEQ, ordinal = 0), method = "handleAddMob(Lnet/minecraft/network/protocol/game/ClientboundAddMobPacket;)V", locals = LocalCapture.CAPTURE_FAILSOFT)
     private void handleAddMob(ClientboundAddMobPacket packet, CallbackInfo callback, LivingEntity packetEntity) {
         if (packetEntity instanceof DragonflyEntity dragonflyEntity) {
-            this.minecraft.getSoundManager().play(new DragonflySoundInstance(dragonflyEntity));
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new DragonflySoundInstance(dragonflyEntity));
         }
     }
 }

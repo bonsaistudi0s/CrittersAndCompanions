@@ -13,7 +13,7 @@ public class DragonflySoundInstance extends AbstractTickableSoundInstance {
         this.dragonfly = dragonflyEntity;
         this.looping = true;
         this.delay = 0;
-        this.volume = 0.7F;
+        this.volume = 0.8F;
         this.x = dragonflyEntity.getX();
         this.y = dragonflyEntity.getY();
         this.z = dragonflyEntity.getZ();
