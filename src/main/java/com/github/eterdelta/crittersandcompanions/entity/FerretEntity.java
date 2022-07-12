@@ -110,6 +110,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
         FerretEntity ferret = CaCEntities.FERRET.get().create(level);
         UUID uuid = this.getOwnerUUID();
         if (uuid != null) {
+            ferret.setVariant(this.random.nextInt(0, 2));
             ferret.setOwnerUUID(uuid);
             ferret.setTame(true);
         }
