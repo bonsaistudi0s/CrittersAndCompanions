@@ -190,7 +190,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
         @Override
         public void tick() {
-            if (!this.redPanda.isSleeping() && !this.redPanda.isAlert()) {
+            if (!this.redPanda.isSleeping()) {
                 super.tick();
             }
         }
@@ -269,6 +269,8 @@ public class RedPandaEntity extends Animal implements IAnimatable {
         @Override
         public void start() {
             RedPandaEntity.this.setAlert(true);
+            RedPandaEntity.this.getNavigation().stop();
+            RedPandaEntity.this.getMoveControl().setWantedPosition(RedPandaEntity.this.getX(), RedPandaEntity.this.getY(), RedPandaEntity.this.getZ(), 0.0D);
         }
 
         @Override
@@ -279,7 +281,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
         @Override
         public void stop() {
-            this.time = reducedTickDelay(40);
+            this.time = 40;
             RedPandaEntity.this.setAlert(false);
         }
     }
