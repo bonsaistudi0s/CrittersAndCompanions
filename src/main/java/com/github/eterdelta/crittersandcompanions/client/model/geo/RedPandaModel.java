@@ -42,9 +42,12 @@ public class RedPandaModel extends AnimatedGeoModel<RedPandaEntity> {
         IBone headBone = this.getAnimationProcessor().getBone("head");
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (!entity.isAlert()) {
-            headBone.setRotationX(extraData.headPitch * ((float) Math.PI / 180.0F));
+
+        if (!entity.isSleeping()) {
+            if (!entity.isAlert()) {
+                headBone.setRotationX(extraData.headPitch * ((float) Math.PI / 180.0F));
+            }
+            headBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
         }
-        headBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
     }
 }
