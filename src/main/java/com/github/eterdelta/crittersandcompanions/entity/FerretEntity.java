@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.player.Player;
@@ -107,14 +108,21 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        FerretEntity ferret = CaCEntities.FERRET.get().create(level);
+        FerretEntity baby = CaCEntities.FERRET.get().create(level);
         UUID uuid = this.getOwnerUUID();
-        if (uuid != null) {
-            ferret.setVariant(this.random.nextInt(0, 2));
-            ferret.setOwnerUUID(uuid);
-            ferret.setTame(true);
+        if (ageableMob instanceof FerretEntity ferretEntity) {
+            if (this.random.nextBoolean()) {
+                baby.setVariant(this.getVariant());
+            } else {
+                baby.setVariant(ferretEntity.getVariant());
+            }
+
+            if (uuid != null) {
+                baby.setOwnerUUID(uuid);
+                baby.setTame(true);
+            }
         }
-        return ferret;
+        return baby;
     }
 
     @Override
