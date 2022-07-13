@@ -178,7 +178,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return CaCSounds.FERRET_AMBIENT.get();
+        return this.isSleeping() ? null : CaCSounds.FERRET_AMBIENT.get();
     }
 
     @Override

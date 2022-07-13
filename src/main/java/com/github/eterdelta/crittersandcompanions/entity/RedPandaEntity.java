@@ -110,7 +110,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return CaCSounds.RED_PANDA_AMBIENT.get();
+        return this.isSleeping() ? null : CaCSounds.RED_PANDA_AMBIENT.get();
     }
 
     @Override
