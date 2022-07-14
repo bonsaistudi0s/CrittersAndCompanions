@@ -213,7 +213,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     @Override
     public ItemStack eat(Level level, ItemStack itemStack) {
         if (itemStack.is(CaCItems.CLAM.get())) {
-            if (this.random.nextFloat() <= 0.05F) {
+            if (this.random.nextFloat() <= 0.07F) {
                 Vec3 mouthPos = this.calculateMouthPos();
                 ItemEntity pearl = new ItemEntity(level, mouthPos.x(), mouthPos.y(), mouthPos.z(), new ItemStack(CaCItems.PEARL.get()));
 
