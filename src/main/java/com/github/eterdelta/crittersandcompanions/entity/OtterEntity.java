@@ -376,10 +376,10 @@ public class OtterEntity extends Animal implements IAnimatable {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_walk", true));
                 return PlayState.CONTINUE;
             } else {
-                event.getController().clearAnimationCache();
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_idle", true));
+                return PlayState.CONTINUE;
             }
         }
-        return PlayState.STOP;
     }
 
     private <E extends IAnimatable> PlayState floatingHandsPredicate(AnimationEvent<E> event) {
