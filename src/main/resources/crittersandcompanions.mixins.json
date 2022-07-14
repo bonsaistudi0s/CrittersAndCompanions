@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "crittersandcompanions.refmap.json",
   "mixins": [
-    "LootPoolAccessor"
+    "LootPoolAccessor",
+    "CatMixin",
+    "OcelotMixin"
   ],
   "client": [
     "ClientPacketListenerMixin"
