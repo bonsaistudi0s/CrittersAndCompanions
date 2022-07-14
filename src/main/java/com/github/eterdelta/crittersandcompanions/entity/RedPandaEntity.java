@@ -58,7 +58,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new RedPandaEntity.AlertGoal());
         this.goalSelector.addGoal(3, new RedPandaEntity.SleepGoal(140));
         this.goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
@@ -281,7 +281,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
         @Override
         public void stop() {
-            this.time = 40;
+            this.time = 20;
             RedPandaEntity.this.setAlert(false);
         }
     }
