@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -265,7 +266,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     }
 
     @Override
-    protected void jumpInLiquid(Tag<Fluid> fluidTag) {
+    protected void jumpInLiquid(TagKey<Fluid> fluidTag) {
         this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double) 0.08F * this.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
     }
 

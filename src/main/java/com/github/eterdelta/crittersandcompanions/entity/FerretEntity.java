@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -35,6 +36,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -49,7 +51,7 @@ import java.util.UUID;
 public class FerretEntity extends TamableAnimal implements IAnimatable {
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
-    private static final Tag.Named<Item> FOODS_TAG = ItemTags.createOptional(new ResourceLocation(CrittersAndCompanions.MODID, "ferret_food"));
+    private static final TagKey<Item> FOODS_TAG = ItemTags.create(new ResourceLocation(CrittersAndCompanions.MODID, "ferret_food"));
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public FerretEntity(EntityType<? extends FerretEntity> entityType, Level level) {
@@ -155,7 +157,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
                 return InteractionResult.sidedSuccess(this.level.isClientSide());
             } else if (this.isTame() && this.isOwnedBy(player)) {
-                if (FOODS_TAG.contains(handStack.getItem())) {
+                if (handStack.is(FOODS_TAG)) {
                     return super.mobInteract(player, interactionHand);
                 }
                 if (!this.level.isClientSide()) {
@@ -173,7 +175,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return FOODS_TAG.contains(itemStack.getItem());
+        return itemStack.is(FOODS_TAG);
     }
 
     @Override

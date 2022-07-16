@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[39,)"
+loaderVersion="[40,)"
 license="MIT"
 [[mods]]
 modId="crittersandcompanions"
@@ -14,12 +14,12 @@ description='''
 [[dependencies.crittersandcompanions]]
     modId="forge"
     mandatory=true
-    versionRange="[39.0.70,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.crittersandcompanions]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.1,1.19)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"

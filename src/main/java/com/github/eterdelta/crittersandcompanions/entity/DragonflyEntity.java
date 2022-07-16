@@ -57,7 +57,7 @@ public class DragonflyEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     public float getWalkTargetValue(BlockPos blockPos) {
-        return this.level.getBiomeName(blockPos).map(biomeResourceKey -> biomeResourceKey == Biomes.RIVER ? 10.0F : 5.0F).orElse(1.0F);
+        return this.level.getBiome(blockPos).is(Biomes.RIVER) ? 10.0F : 5.0F;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class DragonflyEntity extends PathfinderMob implements IAnimatable {
             this.targetPosition = null;
         }
 
-        if (this.targetPosition == null || this.random.nextInt(30) == 0 || this.targetPosition.closerThan(this.position(), 2.0D)) {
+        if (this.targetPosition == null || this.random.nextInt(30) == 0 || this.targetPosition.closerToCenterThan(this.position(), 2.0D)) {
             Vec3 randomPos = RandomPos.generateRandomPos(this, () -> new BlockPos(this.getX() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.getY() + (double) this.random.nextInt(6) - 2.0D, this.getZ() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7)));
             this.targetPosition = randomPos == null ? this.blockPosition() : new BlockPos(randomPos);
         }
