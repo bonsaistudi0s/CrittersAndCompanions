@@ -12,6 +12,12 @@ description='''
 '''
 
 [[dependencies.crittersandcompanions]]
+    modId="geckolib3"
+    mandatory=true
+    versionRange="[3.0.27,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.crittersandcompanions]]
     modId="forge"
     mandatory=true
     versionRange="[40,)"
