@@ -1,8 +1,8 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
-import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
-import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -183,7 +183,7 @@ public class OtterEntity extends Animal implements IAnimatable {
                     ((ServerLevel) this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getMainHandItem()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
                     if (this.getRandom().nextDouble() < 0.5D) {
-                        this.playSound(CaCSounds.OTTER_EAT.get(), 1.2F, 1.0F);
+                        this.playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
                     }
                     if (--this.eatTime <= 0) {
                         this.eat(this.level, this.getMainHandItem());
@@ -212,10 +212,10 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     @Override
     public ItemStack eat(Level level, ItemStack itemStack) {
-        if (itemStack.is(CaCItems.CLAM.get())) {
+        if (itemStack.is(CACItems.CLAM.get())) {
             if (this.random.nextFloat() <= 0.07F) {
                 Vec3 mouthPos = this.calculateMouthPos();
-                ItemEntity pearl = new ItemEntity(level, mouthPos.x(), mouthPos.y(), mouthPos.z(), new ItemStack(CaCItems.PEARL.get()));
+                ItemEntity pearl = new ItemEntity(level, mouthPos.x(), mouthPos.y(), mouthPos.z(), new ItemStack(CACItems.PEARL.get()));
 
                 pearl.setDeltaMovement(this.getRandom().nextGaussian() * 0.05D, this.getRandom().nextGaussian() * 0.05D + 0.2D, this.getRandom().nextGaussian() * 0.05D);
                 level.addFreshEntity(pearl);
@@ -298,7 +298,7 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return (stack.isEdible() && stack.is(ItemTags.FISHES)) || stack.is(CaCItems.CLAM.get());
+        return (stack.isEdible() && stack.is(ItemTags.FISHES)) || stack.is(CACItems.CLAM.get());
     }
 
     @Override
@@ -308,14 +308,14 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        OtterEntity otter = CaCEntities.OTTER.get().create(level);
+        OtterEntity otter = CACEntities.OTTER.get().create(level);
         return otter;
     }
 
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (super.doHurtTarget(entity)) {
-            this.playSound(CaCSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(CACSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
             return true;
         } else {
             return false;
@@ -324,22 +324,22 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return CaCSounds.OTTER_AMBIENT.get();
+        return CACSounds.OTTER_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return CaCSounds.OTTER_SWIM.get();
+        return CACSounds.OTTER_SWIM.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CaCSounds.OTTER_HURT.get();
+        return CACSounds.OTTER_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CaCSounds.OTTER_DEATH.get();
+        return CACSounds.OTTER_DEATH.get();
     }
 
     @Override
@@ -347,7 +347,7 @@ public class OtterEntity extends Animal implements IAnimatable {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
-                OtterEntity baby = CaCEntities.OTTER.get().create(this.level);
+                OtterEntity baby = CACEntities.OTTER.get().create(this.level);
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
@@ -366,7 +366,7 @@ public class OtterEntity extends Animal implements IAnimatable {
             return PlayState.CONTINUE;
         } else {
             if (this.isEating()) {
-                if (this.getMainHandItem().is(CaCItems.CLAM.get())) {
+                if (this.getMainHandItem().is(CACItems.CLAM.get())) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_open", false));
                 } else {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_standing_eat", false));
@@ -406,7 +406,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     }
 
     public boolean isHungryAt(ItemStack foodStack) {
-        return foodStack.is(CaCItems.CLAM.get()) || this.getInLoveTime() <= 0;
+        return foodStack.is(CACItems.CLAM.get()) || this.getInLoveTime() <= 0;
     }
 
     private void rejectFood() {
@@ -428,7 +428,7 @@ public class OtterEntity extends Animal implements IAnimatable {
 
     private void startEating() {
         if (this.isFood(this.getMainHandItem())) {
-            this.eatDelay = this.getMainHandItem().is(CaCItems.CLAM.get()) ? 35 : 12;
+            this.eatDelay = this.getMainHandItem().is(CACItems.CLAM.get()) ? 35 : 12;
             this.eatTime = 20;
             this.setEating(true);
         }
@@ -675,7 +675,7 @@ public class OtterEntity extends Animal implements IAnimatable {
 
         @Override
         public void start() {
-            if (OtterEntity.this.getMainHandItem().is(CaCItems.CLAM.get())) {
+            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
                 this.targetPos = LandRandomPos.getPos(OtterEntity.this, 7, 15);
                 this.goingLand = true;
             } else {
@@ -687,7 +687,7 @@ public class OtterEntity extends Animal implements IAnimatable {
         @Override
         public void tick() {
             if (this.targetPos == null || !OtterEntity.this.getLevel().getBlockState(new BlockPos(this.targetPos)).isAir()) {
-                if (OtterEntity.this.getMainHandItem().is(CaCItems.CLAM.get())) {
+                if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
                     this.targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
                     this.goingLand = true;
                 } else {

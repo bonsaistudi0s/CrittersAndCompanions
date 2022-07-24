@@ -1,7 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
-import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -94,7 +94,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        RedPandaEntity redPanda = CaCEntities.RED_PANDA.get().create(level);
+        RedPandaEntity redPanda = CACEntities.RED_PANDA.get().create(level);
         return redPanda;
     }
 
@@ -110,17 +110,17 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isSleeping() ? null : CaCSounds.RED_PANDA_AMBIENT.get();
+        return this.isSleeping() ? null : CACSounds.RED_PANDA_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CaCSounds.RED_PANDA_HURT.get();
+        return CACSounds.RED_PANDA_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CaCSounds.RED_PANDA_DEATH.get();
+        return CACSounds.RED_PANDA_DEATH.get();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && ((AgeableMobGroupData) spawnGroupData).getGroupSize() >= 2 && this.random.nextFloat() <= 0.4F) {
             for (int i = 0; i < this.random.nextInt(1, 3); i++) {
-                RedPandaEntity baby = CaCEntities.RED_PANDA.get().create(this.level);
+                RedPandaEntity baby = CACEntities.RED_PANDA.get().create(this.level);
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);

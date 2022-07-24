@@ -2,7 +2,7 @@ package com.github.eterdelta.crittersandcompanions.handler;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.mixin.LootPoolAccessor;
-import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -28,8 +28,8 @@ public class LootHandler {
 
             fishTable.removePool("main");
             fishTable.addPool(addPoolEntries(fishPool,
-                    LootItem.lootTableItem(CaCItems.CLAM.get()).setWeight(10).when(AlternativeLootItemCondition.alternative(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(Biomes.RIVER)))).build(),
-                    LootItem.lootTableItem(CaCItems.KOI_FISH.get()).setWeight(5).build()));
+                    LootItem.lootTableItem(CACItems.CLAM.get()).setWeight(10).when(AlternativeLootItemCondition.alternative(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(Biomes.RIVER)))).build(),
+                    LootItem.lootTableItem(CACItems.KOI_FISH.get()).setWeight(5).build()));
         }
     }
 

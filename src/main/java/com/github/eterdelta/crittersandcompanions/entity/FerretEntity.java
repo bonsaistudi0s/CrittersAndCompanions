@@ -1,8 +1,8 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
-import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -107,7 +107,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        FerretEntity baby = CaCEntities.FERRET.get().create(level);
+        FerretEntity baby = CACEntities.FERRET.get().create(level);
         UUID uuid = this.getOwnerUUID();
         if (ageableMob instanceof FerretEntity ferretEntity) {
             if (this.random.nextBoolean()) {
@@ -127,7 +127,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (super.doHurtTarget(entity)) {
-            this.playSound(CaCSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(CACSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
             return true;
         } else {
             return false;
@@ -177,17 +177,17 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isSleeping() ? null : CaCSounds.FERRET_AMBIENT.get();
+        return this.isSleeping() ? null : CACSounds.FERRET_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CaCSounds.FERRET_HURT.get();
+        return CACSounds.FERRET_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CaCSounds.FERRET_DEATH.get();
+        return CACSounds.FERRET_DEATH.get();
     }
 
     @Override
@@ -195,7 +195,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
-                FerretEntity baby = CaCEntities.FERRET.get().create(this.level);
+                FerretEntity baby = CACEntities.FERRET.get().create(this.level);
                 baby.setVariant(this.random.nextInt(0, 2));
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);

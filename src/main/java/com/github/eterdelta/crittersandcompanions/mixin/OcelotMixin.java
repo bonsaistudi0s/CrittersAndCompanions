@@ -1,6 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.mixin;
 
-import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.apache.commons.lang3.ArrayUtils;
@@ -20,6 +20,6 @@ public class OcelotMixin {
 
     @Redirect(at = @At(value = "FIELD", target = "net/minecraft/world/entity/animal/Ocelot.TEMPT_INGREDIENT:Lnet/minecraft/world/item/crafting/Ingredient;", opcode = Opcodes.GETSTATIC), method = {"registerGoals()V", "isFood(Lnet/minecraft/world/item/ItemStack;)Z"})
     private Ingredient setTemptIngredient() {
-        return Ingredient.of(ArrayUtils.add(TEMPT_INGREDIENT.getItems(), CaCItems.KOI_FISH.get().getDefaultInstance()));
+        return Ingredient.of(ArrayUtils.add(TEMPT_INGREDIENT.getItems(), CACItems.KOI_FISH.get().getDefaultInstance()));
     }
 }

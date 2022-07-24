@@ -1,6 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -109,7 +109,7 @@ public class KoiFishEntity extends AbstractSchoolingFish implements IAnimatable 
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(CaCItems.KOI_FISH_BUCKET.get());
+        return new ItemStack(CACItems.KOI_FISH_BUCKET.get());
     }
 
     @Override

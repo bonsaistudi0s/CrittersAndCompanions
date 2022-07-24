@@ -3,9 +3,9 @@ package com.github.eterdelta.crittersandcompanions;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
-import com.github.eterdelta.crittersandcompanions.registry.CaCEntities;
-import com.github.eterdelta.crittersandcompanions.registry.CaCItems;
-import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -24,9 +24,9 @@ public class CrittersAndCompanions {
         GeckoLib.initialize();
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        CaCEntities.ENTITIES.register(eventBus);
-        CaCItems.ITEMS.register(eventBus);
-        CaCSounds.SOUNDS.register(eventBus);
+        CACEntities.ENTITIES.register(eventBus);
+        CACItems.ITEMS.register(eventBus);
+        CACSounds.SOUNDS.register(eventBus);
 
         eventBus.addListener(this::onSetup);
         eventBus.addListener(this::onAttributeCreation);
@@ -36,7 +36,7 @@ public class CrittersAndCompanions {
     public void onSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             SpawnHandler.registerSpawnPlacements();
-            ItemProperties.register(CaCItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
+            ItemProperties.register(CACItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
                 if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
                     return stack.getTag().getInt("BucketVariant");
                 } else {
@@ -47,24 +47,24 @@ public class CrittersAndCompanions {
     }
 
     private void onAttributeCreation(EntityAttributeCreationEvent event) {
-        event.put(CaCEntities.OTTER.get(), OtterEntity.createAttributes().build());
-        event.put(CaCEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
-        event.put(CaCEntities.DRAGONFLY.get(), DragonflyEntity.createAttributes().build());
-        event.put(CaCEntities.SEA_BUNNY.get(), SeaBunnyEntity.createAttributes().build());
-        event.put(CaCEntities.FERRET.get(), FerretEntity.createAttributes().build());
-        event.put(CaCEntities.DUMBO_OCTOPUS.get(), DumboOctopusEntity.createAttributes().build());
-        event.put(CaCEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
-        event.put(CaCEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
+        event.put(CACEntities.OTTER.get(), OtterEntity.createAttributes().build());
+        event.put(CACEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
+        event.put(CACEntities.DRAGONFLY.get(), DragonflyEntity.createAttributes().build());
+        event.put(CACEntities.SEA_BUNNY.get(), SeaBunnyEntity.createAttributes().build());
+        event.put(CACEntities.FERRET.get(), FerretEntity.createAttributes().build());
+        event.put(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusEntity.createAttributes().build());
+        event.put(CACEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
+        event.put(CACEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
     }
 
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(CaCEntities.OTTER.get(), OtterRenderer::new);
-        event.registerEntityRenderer(CaCEntities.KOI_FISH.get(), KoiFishRenderer::new);
-        event.registerEntityRenderer(CaCEntities.DRAGONFLY.get(), DragonflyRenderer::new);
-        event.registerEntityRenderer(CaCEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
-        event.registerEntityRenderer(CaCEntities.FERRET.get(), FerretRenderer::new);
-        event.registerEntityRenderer(CaCEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
-        event.registerEntityRenderer(CaCEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);
-        event.registerEntityRenderer(CaCEntities.RED_PANDA.get(), RedPandaRenderer::new);
+        event.registerEntityRenderer(CACEntities.OTTER.get(), OtterRenderer::new);
+        event.registerEntityRenderer(CACEntities.KOI_FISH.get(), KoiFishRenderer::new);
+        event.registerEntityRenderer(CACEntities.DRAGONFLY.get(), DragonflyRenderer::new);
+        event.registerEntityRenderer(CACEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
+        event.registerEntityRenderer(CACEntities.FERRET.get(), FerretRenderer::new);
+        event.registerEntityRenderer(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
+        event.registerEntityRenderer(CACEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);
+        event.registerEntityRenderer(CACEntities.RED_PANDA.get(), RedPandaRenderer::new);
     }
 }

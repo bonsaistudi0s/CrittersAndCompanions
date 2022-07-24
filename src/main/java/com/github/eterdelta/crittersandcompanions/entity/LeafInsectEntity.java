@@ -1,6 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.registry.CaCSounds;
+import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -60,12 +60,12 @@ public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CaCSounds.LEAF_INSECT_HURT.get();
+        return CACSounds.LEAF_INSECT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CaCSounds.LEAF_INSECT_DEATH.get();
+        return CACSounds.LEAF_INSECT_DEATH.get();
     }
 
     @Override
