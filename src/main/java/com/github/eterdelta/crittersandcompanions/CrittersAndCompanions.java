@@ -8,6 +8,8 @@ import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,6 +21,11 @@ import software.bernie.geckolib3.GeckoLib;
 @Mod(CrittersAndCompanions.MODID)
 public class CrittersAndCompanions {
     public static final String MODID = "crittersandcompanions";
+    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MODID) {
+        public ItemStack makeIcon() {
+            return new ItemStack(CACItems.PEARL_NECKLACE_1.get());
+        }
+    };
 
     public CrittersAndCompanions() {
         GeckoLib.initialize();
