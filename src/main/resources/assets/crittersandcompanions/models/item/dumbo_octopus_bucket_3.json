@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "crittersandcompanions:item/dumbo_octopus_bucket_3"
+  }
+}

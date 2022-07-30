@@ -1,12 +1,17 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,7 +19,10 @@ import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -29,9 +37,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Random;
 
-public class DumboOctopusEntity extends WaterAnimal implements IAnimatable {
+public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Bucketable {
     private static final EntityDataAccessor<Boolean> RESTING = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
     public int restTimer;
 
@@ -54,6 +63,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable {
         super.defineSynchedData();
         this.entityData.define(RESTING, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(FROM_BUCKET, false);
     }
 
     @Override
@@ -73,6 +83,41 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable {
         super.readAdditionalSaveData(compound);
         this.setResting(compound.getBoolean("Resting"));
         this.setVariant(compound.getInt("Variant"));
+    }
+
+    @Override
+    public boolean fromBucket() {
+        return this.entityData.get(FROM_BUCKET);
+    }
+
+    @Override
+    public void setFromBucket(boolean fromBucket) {
+        this.entityData.set(FROM_BUCKET, fromBucket);
+    }
+
+    @Override
+    public void saveToBucketTag(ItemStack bucketStack) {
+        CompoundTag bucketCompound = bucketStack.getOrCreateTag();
+        Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
+        bucketCompound.putInt("BucketVariant", this.getVariant());
+    }
+
+    @Override
+    public void loadFromBucketTag(CompoundTag bucketCompound) {
+        Bucketable.loadDefaultDataFromBucketTag(this, bucketCompound);
+        if (bucketCompound.contains("BucketVariant")) {
+            this.setVariant(bucketCompound.getInt("BucketVariant"));
+        }
+    }
+
+    @Override
+    public ItemStack getBucketItemStack() {
+        return new ItemStack(CACItems.DUMBO_OCTOPUS_BUCKET.get());
+    }
+
+    @Override
+    public SoundEvent getPickupSound() {
+        return SoundEvents.BUCKET_FILL_AXOLOTL;
     }
 
     @Override
@@ -117,8 +162,13 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable {
     }
 
     @Override
+    protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        return Bucketable.bucketMobPickup(player, interactionHand, this).orElse(super.mobInteract(player, interactionHand));
+    }
+
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CompoundTag p_146750_) {
-        this.setVariant(this.random.nextInt(0, 3));
+        this.setVariant(this.random.nextInt(0, 4));
         return spawnGroupData;
     }
 
@@ -156,7 +206,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable {
     }
 
     public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 2));
+        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 3));
     }
 
     static class RandomSwimmingGoal extends net.minecraft.world.entity.ai.goal.RandomSwimmingGoal {

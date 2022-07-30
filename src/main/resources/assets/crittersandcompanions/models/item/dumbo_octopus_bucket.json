@@ -1,0 +1,32 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "crittersandcompanions:item/dumbo_octopus_bucket"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "variant": 0
+      },
+      "model": "crittersandcompanions:item/dumbo_octopus_bucket"
+    },
+    {
+      "predicate": {
+        "variant": 1
+      },
+      "model": "crittersandcompanions:item/dumbo_octopus_bucket_1"
+    },
+    {
+      "predicate": {
+        "variant": 2
+      },
+      "model": "crittersandcompanions:item/dumbo_octopus_bucket_2"
+    },
+    {
+      "predicate": {
+        "variant": 3
+      },
+      "model": "crittersandcompanions:item/dumbo_octopus_bucket_3"
+    }
+  ]
+}

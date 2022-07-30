@@ -36,6 +36,13 @@ public class CrittersAndCompanions {
     public void onSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             SpawnHandler.registerSpawnPlacements();
+            ItemProperties.register(CACItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
+                if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
+                    return stack.getTag().getInt("BucketVariant");
+                } else {
+                    return 0.0F;
+                }
+            });
             ItemProperties.register(CACItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
                 if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
                     return stack.getTag().getInt("BucketVariant");
