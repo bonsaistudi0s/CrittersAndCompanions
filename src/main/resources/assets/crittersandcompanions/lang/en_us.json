@@ -21,6 +21,14 @@
   "item.crittersandcompanions.koi_fish": "Koi Fish",
   "item.crittersandcompanions.clam": "Clam",
   "item.crittersandcompanions.pearl": "Pearl",
+  "item.crittersandcompanions.pearl_necklace_1": "Pearl Necklace 1",
+  "item.crittersandcompanions.pearl_necklace_2": "Pearl Necklace 2",
+  "item.crittersandcompanions.pearl_necklace_3": "Pearl Necklace 3",
+
+  "pearl_necklace.level": "Level %s",
+  "pearl_necklace.swim_speed": "+%s%% Base swim speed",
+  "pearl_necklace.drowned_range": "-%s%% Drowned detection range",
+  "pearl_necklace.guardian_range": "-%s%% Guardian detection range",
 
   "subtitles.crittersandcompanions.dragonfly.ambient": "Dragonfly buzzes",
   "subtitles.crittersandcompanions.ferret.ambient": "Ferret squeaks",

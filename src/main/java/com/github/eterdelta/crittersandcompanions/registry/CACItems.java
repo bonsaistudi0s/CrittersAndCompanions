@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.registry;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
+import com.github.eterdelta.crittersandcompanions.item.PearlNecklaceItem;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.CreativeModeTab;
@@ -19,6 +20,11 @@ public class CACItems {
     public static final RegistryObject<Item> KOI_FISH = ITEMS.register("koi_fish", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_FOOD).food(Foods.TROPICAL_FISH)));
     public static final RegistryObject<Item> PEARL = ITEMS.register("pearl", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
+    public static final RegistryObject<Item> PEARL_NECKLACE_1 = ITEMS.register("pearl_necklace_1", () -> new PearlNecklaceItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC), 1));
+    public static final RegistryObject<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC), 2));
+    public static final RegistryObject<Item> PEARL_NECKLACE_3 = ITEMS.register("pearl_necklace_3", () -> new PearlNecklaceItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC), 3));
+
+    public static final RegistryObject<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", () -> new MobBucketItem(CACEntities.DUMBO_OCTOPUS, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new MobBucketItem(CACEntities.KOI_FISH, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new MobBucketItem(CACEntities.SEA_BUNNY, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
 
