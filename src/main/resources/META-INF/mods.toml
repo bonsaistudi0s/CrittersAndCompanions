@@ -5,10 +5,10 @@ license="MIT"
 modId="crittersandcompanions"
 version="${file.jarVersion}"
 displayName="Critters and Companions"
-logoFile=""
-authors=""
+logoFile="logo.png"
+authors="Joosh, EterDelta"
 description='''
-
+Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.
 '''
 
 [[dependencies.crittersandcompanions]]
