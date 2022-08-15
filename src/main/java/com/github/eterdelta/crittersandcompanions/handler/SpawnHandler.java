@@ -57,7 +57,7 @@ public class SpawnHandler {
             } else if (biome == Biomes.WARM_OCEAN) {
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 64, 1, 4));
                 event.getSpawns().getSpawner(MobCategory.WATER_AMBIENT).add(new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 6, 1, 1));
-            } else if (biome == Biomes.BIRCH_FOREST || biome == Biomes.FOREST || biome == Biomes.PLAINS) {
+            } else if (biome == Biomes.BIRCH_FOREST || biome == Biomes.FOREST) {
                 event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3));
             }
 
@@ -66,6 +66,8 @@ public class SpawnHandler {
             } else if (event.getCategory() == Biome.BiomeCategory.JUNGLE) {
                 event.getSpawns().getSpawner(MobCategory.AMBIENT).add(new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 8, 1, 1));
                 event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CACEntities.RED_PANDA.get(), 6, 1, 2));
+            } else if (event.getCategory() == Biome.BiomeCategory.PLAINS) {
+                event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3));
             }
         }
     }
