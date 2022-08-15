@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.18.2-1.0.0'
+version = '1.18.2-1.0.1'
 group = 'com.github.eterdelta.crittersandcompanions'
 archivesBaseName = 'crittersandcompanions'
 
