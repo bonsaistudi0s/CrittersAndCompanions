@@ -55,7 +55,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
     }
 
     public static boolean checkDumboOctopusSpawnRules(EntityType<DumboOctopusEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
-        return blockPos.getY() <= 40 && WaterAnimal.checkSurfaceWaterAnimalSpawnRules(entityType, levelAccessor, spawnType, blockPos, random);
+        return blockPos.getY() <= 50 && WaterAnimal.checkSurfaceWaterAnimalSpawnRules(entityType, levelAccessor, spawnType, blockPos, random);
     }
 
     @Override
