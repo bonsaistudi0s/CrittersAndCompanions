@@ -59,6 +59,16 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
     }
 
     @Override
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() || this.fromBucket();
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distance) {
+        return !this.fromBucket() && !this.hasCustomName();
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(RESTING, false);
