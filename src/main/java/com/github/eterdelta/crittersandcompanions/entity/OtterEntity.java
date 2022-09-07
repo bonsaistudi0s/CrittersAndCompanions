@@ -25,8 +25,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -76,7 +76,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     public OtterEntity(EntityType<? extends OtterEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new OtterMoveControl(this);
-        this.lookControl = new SmoothSwimmingLookControl(this, 90);
+        this.lookControl = new OtterLookControl(this);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         this.setCanPickUpLoot(true);
     }
@@ -100,7 +100,7 @@ public class OtterEntity extends Animal implements IAnimatable {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, Player.class, 32.0F, 0.9D, 1.5D, (livingEntity -> livingEntity.equals(this.getLastHurtMob()))));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
-        this.goalSelector.addGoal(2, new OtterEntity.GoToSurfaceGoal(100));
+        this.goalSelector.addGoal(2, new OtterEntity.GoToSurfaceGoal(60));
         this.goalSelector.addGoal(3, new OtterEntity.BreedGoal(this));
         this.goalSelector.addGoal(4, new OtterEntity.SearchFoodGoal());
         this.goalSelector.addGoal(5, new OtterEntity.FollowParentGoal(this));
@@ -537,6 +537,38 @@ public class OtterEntity extends Animal implements IAnimatable {
         }
     }
 
+    static class OtterLookControl extends LookControl {
+        private final OtterEntity otter;
+
+        public OtterLookControl(OtterEntity otterEntity) {
+            super(otterEntity);
+            this.otter = otterEntity;
+        }
+
+        @Override
+        public void tick() {
+            if (this.otter.isInWater()) {
+                if (this.lookAtCooldown > 0) {
+                    --this.lookAtCooldown;
+                    this.getYRotD().ifPresent((p_181134_) -> {
+                        this.mob.yHeadRot = this.rotateTowards(this.mob.yHeadRot, p_181134_ + 20.0F, this.yMaxRotSpeed);
+                    });
+                    this.getXRotD().ifPresent((p_181132_) -> {
+                        this.mob.setXRot(this.rotateTowards(this.mob.getXRot(), p_181132_ + 10.0F, this.xMaxRotAngle));
+                    });
+                } else {
+                    if (this.mob.getNavigation().isDone()) {
+                        this.mob.setXRot(this.rotateTowards(this.mob.getXRot(), 0.0F, 5.0F));
+                    }
+
+                    this.mob.yHeadRot = this.rotateTowards(this.mob.yHeadRot, this.mob.yBodyRot, this.yMaxRotSpeed);
+                }
+            } else {
+                super.tick();
+            }
+        }
+    }
+
     static class OtterPathNavigation extends WaterBoundPathNavigation {
         private final OtterEntity otter;
 
@@ -722,10 +754,11 @@ public class OtterEntity extends Animal implements IAnimatable {
         }
 
         public void tickTimeout() {
-            if (this.timeoutTimer % 5 == 0) {
+            if (this.timeoutTimer % 2 == 0) {
                 ((ServerLevel) OtterEntity.this.getLevel()).sendParticles(ParticleTypes.BUBBLE, OtterEntity.this.getRandomX(0.6D), OtterEntity.this.getY(), OtterEntity.this.getRandomZ(0.6D), 2, 0.0D, 0.1D, 0.0D, 0.0D);
             }
             if (this.timeoutTimer <= 0) {
+                OtterEntity.this.playSound(CACSounds.OTTER_AMBIENT.get(), OtterEntity.this.getSoundVolume(), 0.3F);
                 OtterEntity.this.rejectFood();
                 this.stop();
             }
