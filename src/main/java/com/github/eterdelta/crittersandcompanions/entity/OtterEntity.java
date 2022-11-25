@@ -18,6 +18,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -54,10 +55,12 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -66,7 +69,7 @@ import java.util.Random;
 public class OtterEntity extends Animal implements IAnimatable {
     private static final EntityDataAccessor<Boolean> FLOATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private boolean needsSurface;
     private int huntDelay;
     private int eatDelay;
@@ -85,7 +88,7 @@ public class OtterEntity extends Animal implements IAnimatable {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
-    public static boolean checkOtterSpawnRules(EntityType<OtterEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
+    public static boolean checkOtterSpawnRules(EntityType<OtterEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
         return blockPos.getY() > levelAccessor.getSeaLevel() - 16;
     }
 
@@ -135,15 +138,15 @@ public class OtterEntity extends Animal implements IAnimatable {
     }
 
     @Override
-    public void killed(ServerLevel level, LivingEntity killedEntity) {
-        super.killed(level, killedEntity);
+    public void awardKillScore(Entity killedEntity, int i, DamageSource damageSource) {
+        super.awardKillScore(killedEntity, i, damageSource);
         if (killedEntity instanceof AbstractSchoolingFish) {
             this.huntDelay = 6000;
         }
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return this.random.nextInt(3, 7);
     }
 
@@ -359,24 +362,24 @@ public class OtterEntity extends Animal implements IAnimatable {
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.isInWater()) {
             if (this.isFloating()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_float", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_float", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_swim", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_swim", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         } else {
             if (this.isEating()) {
                 if (this.getMainHandItem().is(CACItems.CLAM.get())) {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_open", false));
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_open", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
                 } else {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_standing_eat", false));
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_standing_eat", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
                 }
                 return PlayState.CONTINUE;
             } else if (event.isMoving()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_walk", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_walk", ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_idle", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_idle", ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
         }
@@ -385,9 +388,9 @@ public class OtterEntity extends Animal implements IAnimatable {
     private <E extends IAnimatable> PlayState floatingHandsPredicate(AnimationEvent<E> event) {
         if (this.isFloating()) {
             if (this.isEating() && this.eatDelay <= 0) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_hands_float_eat", false));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_hands_float_eat", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_hands_float_idle", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("otter_hands_float_idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }

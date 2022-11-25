@@ -15,17 +15,17 @@ public class DumboOctopusModel extends AnimatedGeoModel<DumboOctopusEntity> {
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/dumbo_octopus.animation.json");
 
     @Override
-    public ResourceLocation getModelLocation(DumboOctopusEntity object) {
+    public ResourceLocation getModelResource(DumboOctopusEntity object) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DumboOctopusEntity object) {
+    public ResourceLocation getTextureResource(DumboOctopusEntity object) {
         return TEXTURES[object.getVariant()];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(DumboOctopusEntity animatable) {
+    public ResourceLocation getAnimationResource(DumboOctopusEntity animatable) {
         return ANIMATION;
     }
 }

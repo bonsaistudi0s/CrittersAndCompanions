@@ -15,14 +15,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.18.2-1.0.2'
+version = '1.19.2-1.0.2'
 group = 'com.github.eterdelta.crittersandcompanions'
 archivesBaseName = 'crittersandcompanions'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
 
     runs {
         client {
@@ -80,8 +80,8 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.18:3.0.27')
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.7'
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.37')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

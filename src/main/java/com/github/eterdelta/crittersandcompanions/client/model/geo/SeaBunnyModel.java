@@ -18,23 +18,23 @@ public class SeaBunnyModel extends AnimatedGeoModel<SeaBunnyEntity> {
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/sea_bunny.animation.json");
 
     @Override
-    public ResourceLocation getModelLocation(SeaBunnyEntity object) {
+    public ResourceLocation getModelResource(SeaBunnyEntity object) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SeaBunnyEntity object) {
+    public ResourceLocation getTextureResource(SeaBunnyEntity object) {
         return TEXTURES[object.getVariant()];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(SeaBunnyEntity animatable) {
+    public ResourceLocation getAnimationResource(SeaBunnyEntity animatable) {
         return ANIMATION;
     }
 
     @Override
-    public void setLivingAnimations(SeaBunnyEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(SeaBunnyEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone mainBone = this.getAnimationProcessor().getBone("main");
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 

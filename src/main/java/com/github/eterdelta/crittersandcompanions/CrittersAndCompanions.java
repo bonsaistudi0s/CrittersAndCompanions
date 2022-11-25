@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -38,6 +39,12 @@ public class CrittersAndCompanions {
         eventBus.addListener(this::onSetup);
         eventBus.addListener(this::onAttributeCreation);
         eventBus.addListener(this::registerEntityRenderers);
+
+        eventBus.addListener(this::gatherData);
+    }
+
+    public void gatherData(GatherDataEvent event){
+        SpawnHandler.datagenBiomeModifiers(event);
     }
 
     public void onSetup(FMLCommonSetupEvent event) {

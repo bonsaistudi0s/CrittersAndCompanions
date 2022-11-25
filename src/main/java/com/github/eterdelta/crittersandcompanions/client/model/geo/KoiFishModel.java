@@ -13,17 +13,17 @@ public class KoiFishModel extends AnimatedGeoModel<KoiFishEntity> {
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/koi_fish.animation.json");
 
     @Override
-    public ResourceLocation getModelLocation(KoiFishEntity object) {
+    public ResourceLocation getModelResource(KoiFishEntity object) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(KoiFishEntity object) {
+    public ResourceLocation getTextureResource(KoiFishEntity object) {
         return TEXTURES[object.getVariant()];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(KoiFishEntity animatable) {
+    public ResourceLocation getAnimationResource(KoiFishEntity animatable) {
         return ANIMATION;
     }
 }

@@ -26,17 +26,19 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.EnumSet;
 
 public class RedPandaEntity extends Animal implements IAnimatable {
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ALERT = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private Player alerter;
 
     public RedPandaEntity(EntityType<? extends RedPandaEntity> entityType, Level level) {
@@ -83,7 +85,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return this.random.nextInt(2, 5);
     }
 
@@ -139,17 +141,17 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.isSleeping()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_sleeping", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_sleeping", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (this.isAlert()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_angry", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_angry", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         } else if (event.isMoving()) {
             if (this.animationSpeed >= 0.8F) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_run", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_run", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_walk", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_idle", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_idle", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }

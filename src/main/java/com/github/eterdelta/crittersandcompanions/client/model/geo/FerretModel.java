@@ -24,23 +24,23 @@ public class FerretModel extends AnimatedGeoModel<FerretEntity> {
             new ResourceLocation(CrittersAndCompanions.MODID, "animations/baby_ferret.animation.json")};
 
     @Override
-    public ResourceLocation getModelLocation(FerretEntity object) {
+    public ResourceLocation getModelResource(FerretEntity object) {
         return MODELS[object.isBaby() ? 1 : 0];
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FerretEntity object) {
+    public ResourceLocation getTextureResource(FerretEntity object) {
         return object.isBaby() ? BABY_TEXTURES[object.getVariant()] : ADULT_TEXTURES[object.getVariant()];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(FerretEntity animatable) {
+    public ResourceLocation getAnimationResource(FerretEntity animatable) {
         return ANIMATIONS[animatable.isBaby() ? 1 : 0];
     }
 
     @Override
-    public void setLivingAnimations(FerretEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(FerretEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
         if (!entity.isSleeping()) {

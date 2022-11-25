@@ -14,17 +14,17 @@ public class LeafInsectModel extends AnimatedGeoModel<LeafInsectEntity> {
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/leaf_insect.animation.json");
 
     @Override
-    public ResourceLocation getModelLocation(LeafInsectEntity object) {
+    public ResourceLocation getModelResource(LeafInsectEntity object) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(LeafInsectEntity object) {
+    public ResourceLocation getTextureResource(LeafInsectEntity object) {
         return TEXTURES[object.getVariant()];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(LeafInsectEntity animatable) {
+    public ResourceLocation getAnimationResource(LeafInsectEntity animatable) {
         return ANIMATION;
     }
 }
