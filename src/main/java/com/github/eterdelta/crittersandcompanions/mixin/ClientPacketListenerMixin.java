@@ -17,10 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
 
-    @Inject(at = @At(value = "JUMP", opcode = Opcodes.IFNULL, ordinal = 0, shift = At.Shift.AFTER), method = "handleAddEntity", locals = LocalCapture.CAPTURE_FAILHARD)
-    private void handleAddMob(ClientboundAddEntityPacket clientboundAddEntityPacket, CallbackInfo ci, EntityType<?> entityType, Entity packetEntity) {
-        if (packetEntity instanceof DragonflyEntity dragonflyEntity) {
+    @Inject(at = @At("HEAD"), method = "postAddEntitySoundInstance", cancellable = true)
+    private void handleAddMob(Entity flag, CallbackInfo ci) {
+        if (flag instanceof DragonflyEntity dragonflyEntity) {
             Minecraft.getInstance().getSoundManager().queueTickingSound(new DragonflySoundInstance(dragonflyEntity));
+
+            ci.cancel();
         }
     }
 }
