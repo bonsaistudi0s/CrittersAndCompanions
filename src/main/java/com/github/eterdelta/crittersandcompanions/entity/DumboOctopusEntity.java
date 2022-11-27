@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,10 +31,12 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Random;
 
@@ -41,7 +44,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
     private static final EntityDataAccessor<Boolean> RESTING = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public int restTimer;
 
     public DumboOctopusEntity(EntityType<? extends DumboOctopusEntity> entityType, Level level) {
@@ -54,7 +57,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 14.0D).add(Attributes.MOVEMENT_SPEED, 0.06D);
     }
 
-    public static boolean checkDumboOctopusSpawnRules(EntityType<DumboOctopusEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, Random random) {
+    public static boolean checkDumboOctopusSpawnRules(EntityType<DumboOctopusEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
         return blockPos.getY() <= 50 && WaterAnimal.checkSurfaceWaterAnimalSpawnRules(entityType, levelAccessor, spawnType, blockPos, random);
     }
 
@@ -184,11 +187,11 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.isResting()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_idle", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_idle", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_swim", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_swim", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_on_land", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_on_land", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }

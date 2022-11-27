@@ -3,13 +3,14 @@ package com.github.eterdelta.crittersandcompanions.client.sound;
 import com.github.eterdelta.crittersandcompanions.entity.DragonflyEntity;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
 
 public class DragonflySoundInstance extends AbstractTickableSoundInstance {
     private final DragonflyEntity dragonfly;
 
     public DragonflySoundInstance(DragonflyEntity dragonflyEntity) {
-        super(CACSounds.DRAGONFLY_AMBIENT.get(), SoundSource.NEUTRAL);
+        super(CACSounds.DRAGONFLY_AMBIENT.get(), SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
         this.dragonfly = dragonflyEntity;
         this.looping = true;
         this.delay = 0;

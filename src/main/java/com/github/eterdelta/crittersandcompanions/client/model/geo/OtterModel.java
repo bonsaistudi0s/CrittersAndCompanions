@@ -21,23 +21,23 @@ public class OtterModel extends AnimatedGeoModel<OtterEntity> {
             new ResourceLocation(CrittersAndCompanions.MODID, "animations/baby_otter.animation.json")};
 
     @Override
-    public ResourceLocation getModelLocation(OtterEntity object) {
+    public ResourceLocation getModelResource(OtterEntity object) {
         return MODELS[object.isBaby() ? 1 : 0];
     }
 
     @Override
-    public ResourceLocation getTextureLocation(OtterEntity object) {
+    public ResourceLocation getTextureResource(OtterEntity object) {
         return TEXTURES[object.isBaby() ? 1 : 0];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(OtterEntity animatable) {
+    public ResourceLocation getAnimationResource(OtterEntity animatable) {
         return ANIMATIONS[animatable.isBaby() ? 1 : 0];
     }
 
     @Override
-    public void setLivingAnimations(OtterEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(OtterEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone rotBone = this.getAnimationProcessor().getBone(entity.isInWater() ? "main" : "head");
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);

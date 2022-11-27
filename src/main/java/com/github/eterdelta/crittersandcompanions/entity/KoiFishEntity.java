@@ -22,14 +22,16 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class KoiFishEntity extends AbstractSchoolingFish implements IAnimatable {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(KoiFishEntity.class, EntityDataSerializers.INT);
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public KoiFishEntity(EntityType<? extends KoiFishEntity> entityType, Level level) {
         super(entityType, level);
@@ -84,7 +86,7 @@ public class KoiFishEntity extends AbstractSchoolingFish implements IAnimatable 
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return this.random.nextInt(1, 4);
     }
 
@@ -123,9 +125,9 @@ public class KoiFishEntity extends AbstractSchoolingFish implements IAnimatable 
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("koi_fish_swim", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("koi_fish_swim", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("koi_fish_on_land", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("koi_fish_on_land", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }

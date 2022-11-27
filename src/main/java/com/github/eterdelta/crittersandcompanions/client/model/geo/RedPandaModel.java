@@ -22,23 +22,23 @@ public class RedPandaModel extends AnimatedGeoModel<RedPandaEntity> {
             new ResourceLocation(CrittersAndCompanions.MODID, "animations/baby_red_panda.animation.json")};
 
     @Override
-    public ResourceLocation getModelLocation(RedPandaEntity object) {
+    public ResourceLocation getModelResource(RedPandaEntity object) {
         return MODELS[object.isBaby() ? 1 : 0];
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RedPandaEntity object) {
+    public ResourceLocation getTextureResource(RedPandaEntity object) {
         return TEXTURES[object.isBaby() ? 2 : object.isSleeping() ? 1 : 0];
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(RedPandaEntity animatable) {
+    public ResourceLocation getAnimationResource(RedPandaEntity animatable) {
         return ANIMATIONS[animatable.isBaby() ? 1 : 0];
     }
 
     @Override
-    public void setLivingAnimations(RedPandaEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(RedPandaEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone headBone = this.getAnimationProcessor().getBone("head");
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);

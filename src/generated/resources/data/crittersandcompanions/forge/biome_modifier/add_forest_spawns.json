@@ -1,0 +1,13 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains"
+  ],
+  "spawners": {
+    "type": "crittersandcompanions:ferret",
+    "maxCount": 3,
+    "minCount": 2,
+    "weight": 3
+  }
+}

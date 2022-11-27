@@ -1,0 +1,21 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:ocean",
+    "minecraft:deep_ocean"
+  ],
+  "spawners": [
+    {
+      "type": "crittersandcompanions:sea_bunny",
+      "maxCount": 2,
+      "minCount": 1,
+      "weight": 32
+    },
+    {
+      "type": "crittersandcompanions:dumbo_octopus",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 4
+    }
+  ]
+}

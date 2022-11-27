@@ -11,17 +11,17 @@ public class DragonflyModel extends AnimatedGeoModel<DragonflyEntity> {
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/dragonfly.animation.json");
 
     @Override
-    public ResourceLocation getModelLocation(DragonflyEntity object) {
+    public ResourceLocation getModelResource(DragonflyEntity object) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DragonflyEntity object) {
+    public ResourceLocation getTextureResource(DragonflyEntity object) {
         return TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(DragonflyEntity animatable) {
+    public ResourceLocation getAnimationResource(DragonflyEntity animatable) {
         return ANIMATION;
     }
 }
