@@ -84,7 +84,7 @@ public class DragonflyEntity extends PathfinderMob implements IAnimatable {
         double d2 = (double) this.targetPosition.getZ() + 0.5D - this.getZ();
 
         Vec3 deltaMovement = this.getDeltaMovement();
-        Vec3 signumDeltaMovement = deltaMovement.add((Math.signum(d0) * 0.5D - deltaMovement.x) * (double) 0.1F, (Math.signum(d1) * (double) 0.7F - deltaMovement.y) * (double) 0.1F, (Math.signum(d2) * 0.5D - deltaMovement.z) * (double) 0.1F);
+        Vec3 signumDeltaMovement = deltaMovement.add((Math.signum(d0) * 0.5D - deltaMovement.x) * (double) 0.2F, (Math.signum(d1) * (double) 0.7F - deltaMovement.y) * (double) 0.1F, (Math.signum(d2) * 0.5D - deltaMovement.z) * (double) 0.2F);
         this.setDeltaMovement(signumDeltaMovement);
 
         float angle = (float) (Mth.atan2(signumDeltaMovement.z, signumDeltaMovement.x) * (double) (180F / (float) Math.PI)) - 90.0F;
