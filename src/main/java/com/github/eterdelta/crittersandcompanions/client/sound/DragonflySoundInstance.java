@@ -22,7 +22,7 @@ public class DragonflySoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public boolean canPlaySound() {
-        return !this.dragonfly.isSilent();
+        return !this.dragonfly.isSilent() || !this.dragonfly.isInSittingPose();
     }
 
     @Override
