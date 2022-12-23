@@ -22,7 +22,7 @@ public class DragonflySoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public boolean canPlaySound() {
-        return !this.dragonfly.isSilent() || !this.dragonfly.isInSittingPose();
+        return !this.dragonfly.isSilent();
     }
 
     @Override
@@ -36,6 +36,7 @@ public class DragonflySoundInstance extends AbstractTickableSoundInstance {
             this.x = (float)this.dragonfly.getX();
             this.y = (float)this.dragonfly.getY();
             this.z = (float)this.dragonfly.getZ();
+            this.volume = this.dragonfly.isInSittingPose() ? 0.0F : 0.8F;
         } else {
             this.pitch -= 0.05F;
             this.volume -= 0.025F;
