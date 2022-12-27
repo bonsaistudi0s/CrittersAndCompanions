@@ -1,31 +1,31 @@
-modLoader="javafml"
-loaderVersion="[40,)"
-license="MIT"
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = "MIT"
 [[mods]]
-modId="crittersandcompanions"
-version="${file.jarVersion}"
-displayName="Critters and Companions"
-logoFile="logo.png"
-authors="Joosh, EterDelta"
-description='''
+modId = "crittersandcompanions"
+version = "${file.jarVersion}"
+displayName = "Critters and Companions"
+logoFile = "logo.png"
+authors = "Joosh, EterDelta"
+description = '''
 Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.
 '''
 
 [[dependencies.crittersandcompanions]]
-    modId="geckolib3"
-    mandatory=true
-    versionRange="[3.1.37,)"
-    ordering="AFTER"
-    side="BOTH"
+modId = "geckolib3"
+mandatory = true
+versionRange = "[3.1.37,)"
+ordering = "AFTER"
+side = "BOTH"
 [[dependencies.crittersandcompanions]]
-    modId="forge"
-    mandatory=true
-    versionRange="[43,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "forge"
+mandatory = true
+versionRange = "[43,)"
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.crittersandcompanions]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.19.2,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19.2,)"
+ordering = "NONE"
+side = "BOTH"

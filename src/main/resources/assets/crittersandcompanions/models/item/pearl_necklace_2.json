@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "crittersandcompanions:item/pearl_necklace"
-  }
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "crittersandcompanions:item/pearl_necklace"
+    }
 }

@@ -1,105 +1,337 @@
 {
-	"format_version": "1.12.0",
-	"minecraft:geometry": [
-		{
-			"description": {
-				"identifier": "geometry.leaf_insect",
-				"texture_width": 64,
-				"texture_height": 64,
-				"visible_bounds_width": 3,
-				"visible_bounds_height": 1.5,
-				"visible_bounds_offset": [0, 0.25, 0]
-			},
-			"bones": [
-				{
-					"name": "main",
-					"pivot": [0, 0, 1]
-				},
-				{
-					"name": "body",
-					"parent": "main",
-					"pivot": [0, 2, 1]
-				},
-				{
-					"name": "leaf",
-					"parent": "body",
-					"pivot": [2, 2, 0],
-					"cubes": [
-						{"origin": [-1.5, 2, -1], "size": [3, 1, 4], "uv": [0, 17]},
-						{"origin": [-3.5, 2.13327, 0.09503], "size": [7, 0, 11], "pivot": [2, 2.13327, -0.90497], "rotation": [12.5, 0, 0], "uv": [0, 0]}
-					]
-				},
-				{
-					"name": "head",
-					"parent": "leaf",
-					"pivot": [0, 2.5, -1],
-					"cubes": [
-						{"origin": [-1, 2, -4], "size": [2, 2, 3], "uv": [14, 17]}
-					]
-				},
-				{
-					"name": "antennae",
-					"parent": "head",
-					"pivot": [0, 3.5, -4],
-					"cubes": [
-						{"origin": [-1, 3, -6], "size": [2, 2, 2], "uv": [20, 22]}
-					]
-				},
-				{
-					"name": "right_arm",
-					"parent": "body",
-					"pivot": [0, 2, -2.5],
-					"rotation": [25, 12.5, 0],
-					"cubes": [
-						{"origin": [-3.2, 2, -7], "size": [3, 0, 5], "uv": [0, 5]}
-					]
-				},
-				{
-					"name": "left_arm",
-					"parent": "body",
-					"pivot": [0, 2, -2.5],
-					"rotation": [25, -12.5, 0],
-					"cubes": [
-						{"origin": [0.2, 2, -7], "size": [3, 0, 5], "uv": [0, 0]}
-					]
-				},
-				{
-					"name": "right_leg_1",
-					"parent": "main",
-					"pivot": [0, 2, 0],
-					"rotation": [22.5, -12.5, -17],
-					"cubes": [
-						{"origin": [-5, 2, -2], "size": [5, 0, 3], "uv": [10, 14]}
-					]
-				},
-				{
-					"name": "left_leg_3",
-					"parent": "main",
-					"pivot": [0, 2, 0],
-					"rotation": [22.5, 12.5, 17],
-					"cubes": [
-						{"origin": [0, 2, -2], "size": [5, 0, 3], "uv": [10, 11]}
-					]
-				},
-				{
-					"name": "right_leg_2",
-					"parent": "main",
-					"pivot": [-0.4, 2, 1],
-					"rotation": [-22.5, 22.5, -20.5],
-					"cubes": [
-						{"origin": [-5.4, 2, 0], "size": [5, 0, 3], "uv": [0, 14]}
-					]
-				},
-				{
-					"name": "right_leg_3",
-					"parent": "main",
-					"pivot": [0.4, 2, 1],
-					"rotation": [-22.5, -22.5, 20.5],
-					"cubes": [
-						{"origin": [0.4, 2, 0], "size": [5, 0, 3], "uv": [0, 11]}
-					]
-				}
-			]
-		}
-	]
+    "format_version": "1.12.0",
+    "minecraft:geometry": [
+        {
+            "description": {
+                "identifier": "geometry.leaf_insect",
+                "texture_width": 64,
+                "texture_height": 64,
+                "visible_bounds_width": 3,
+                "visible_bounds_height": 1.5,
+                "visible_bounds_offset": [
+                    0,
+                    0.25,
+                    0
+                ]
+            },
+            "bones": [
+                {
+                    "name": "main",
+                    "pivot": [
+                        0,
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "name": "body",
+                    "parent": "main",
+                    "pivot": [
+                        0,
+                        2,
+                        1
+                    ]
+                },
+                {
+                    "name": "leaf",
+                    "parent": "body",
+                    "pivot": [
+                        2,
+                        2,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -1.5,
+                                2,
+                                -1
+                            ],
+                            "size": [
+                                3,
+                                1,
+                                4
+                            ],
+                            "uv": [
+                                0,
+                                17
+                            ]
+                        },
+                        {
+                            "origin": [
+                                -3.5,
+                                2.13327,
+                                0.09503
+                            ],
+                            "size": [
+                                7,
+                                0,
+                                11
+                            ],
+                            "pivot": [
+                                2,
+                                2.13327,
+                                -0.90497
+                            ],
+                            "rotation": [
+                                12.5,
+                                0,
+                                0
+                            ],
+                            "uv": [
+                                0,
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "head",
+                    "parent": "leaf",
+                    "pivot": [
+                        0,
+                        2.5,
+                        -1
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -1,
+                                2,
+                                -4
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                3
+                            ],
+                            "uv": [
+                                14,
+                                17
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "antennae",
+                    "parent": "head",
+                    "pivot": [
+                        0,
+                        3.5,
+                        -4
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -1,
+                                3,
+                                -6
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                20,
+                                22
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_arm",
+                    "parent": "body",
+                    "pivot": [
+                        0,
+                        2,
+                        -2.5
+                    ],
+                    "rotation": [
+                        25,
+                        12.5,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -3.2,
+                                2,
+                                -7
+                            ],
+                            "size": [
+                                3,
+                                0,
+                                5
+                            ],
+                            "uv": [
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "left_arm",
+                    "parent": "body",
+                    "pivot": [
+                        0,
+                        2,
+                        -2.5
+                    ],
+                    "rotation": [
+                        25,
+                        -12.5,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                0.2,
+                                2,
+                                -7
+                            ],
+                            "size": [
+                                3,
+                                0,
+                                5
+                            ],
+                            "uv": [
+                                0,
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg_1",
+                    "parent": "main",
+                    "pivot": [
+                        0,
+                        2,
+                        0
+                    ],
+                    "rotation": [
+                        22.5,
+                        -12.5,
+                        -17
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -5,
+                                2,
+                                -2
+                            ],
+                            "size": [
+                                5,
+                                0,
+                                3
+                            ],
+                            "uv": [
+                                10,
+                                14
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "left_leg_3",
+                    "parent": "main",
+                    "pivot": [
+                        0,
+                        2,
+                        0
+                    ],
+                    "rotation": [
+                        22.5,
+                        12.5,
+                        17
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                0,
+                                2,
+                                -2
+                            ],
+                            "size": [
+                                5,
+                                0,
+                                3
+                            ],
+                            "uv": [
+                                10,
+                                11
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg_2",
+                    "parent": "main",
+                    "pivot": [
+                        -0.4,
+                        2,
+                        1
+                    ],
+                    "rotation": [
+                        -22.5,
+                        22.5,
+                        -20.5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -5.4,
+                                2,
+                                0
+                            ],
+                            "size": [
+                                5,
+                                0,
+                                3
+                            ],
+                            "uv": [
+                                0,
+                                14
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg_3",
+                    "parent": "main",
+                    "pivot": [
+                        0.4,
+                        2,
+                        1
+                    ],
+                    "rotation": [
+                        -22.5,
+                        -22.5,
+                        20.5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                0.4,
+                                2,
+                                0
+                            ],
+                            "size": [
+                                5,
+                                0,
+                                3
+                            ],
+                            "uv": [
+                                0,
+                                11
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
