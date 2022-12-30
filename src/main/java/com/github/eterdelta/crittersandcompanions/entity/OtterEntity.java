@@ -278,6 +278,7 @@ public class OtterEntity extends Animal implements IAnimatable {
             this.moveRelative(this.getSpeed(), speed);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+            this.calculateEntityAnimation(this, false);
         } else {
             super.travel(speed);
         }
