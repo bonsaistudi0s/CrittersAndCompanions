@@ -3,6 +3,8 @@ package com.github.eterdelta.crittersandcompanions.entity;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -10,6 +12,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -26,6 +31,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +39,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.ForgeEventFactory;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -45,13 +56,17 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
 
 public class FerretEntity extends TamableAnimal implements IAnimatable {
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DIGGING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
     private static final TagKey<Item> FOODS_TAG = ItemTags.create(new ResourceLocation(CrittersAndCompanions.MODID, "ferret_food"));
+    private static final ResourceLocation DIGGABLES = new ResourceLocation(CrittersAndCompanions.MODID, "gameplay/digging");
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    protected int digCooldown;
 
     public FerretEntity(EntityType<? extends FerretEntity> entityType, Level level) {
         super(entityType, level);
@@ -66,24 +81,26 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SLEEPING, false);
+        this.entityData.define(DIGGING, false);
         this.entityData.define(VARIANT, 0);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new PanicGoal(this, 1.5D));
-        this.goalSelector.addGoal(3, new SleepGoal(200));
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())));
-        this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
-        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.5D, true));
-        this.goalSelector.addGoal(7, new TemptGoal(this, 1.0D, Ingredient.of(FOODS_TAG), false));
-        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(9, new FollowParentGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
+        this.goalSelector.addGoal(2, new DigGoal());
+        this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(4, new SleepGoal(200));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())));
+        this.goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
+        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(8, new TemptGoal(this, 1.0D, Ingredient.of(FOODS_TAG), false));
+        this.goalSelector.addGoal(9, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(10, new FollowParentGoal(this, 1.0D));
+        this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(13, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
     }
@@ -105,6 +122,14 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     @Override
     public int getExperienceReward() {
         return this.random.nextInt(2, 5);
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if (this.digCooldown > 0) {
+            this.digCooldown--;
+        }
     }
 
     @Override
@@ -156,6 +181,12 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
                 return InteractionResult.sidedSuccess(this.level.isClientSide());
             } else if (this.isTame() && this.isOwnedBy(player)) {
+                if (handStack.is(Items.CHICKEN) && !this.isBaby() && !this.isInSittingPose()) {
+                    if (this.digCooldown <= 0) {
+                        this.setDigging(true);
+                        this.digCooldown = 6000;
+                    }
+                }
                 if (handStack.is(FOODS_TAG)) {
                     return super.mobInteract(player, interactionHand);
                 }
@@ -170,7 +201,6 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
             return InteractionResult.PASS;
         }
     }
-
 
     @Override
     public boolean isFood(ItemStack itemStack) {
@@ -209,7 +239,9 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.isInSittingPose()) {
+        if (this.isDigging()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("ferret_dig", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        } else if (this.isInSittingPose()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("ferret_sit", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (this.isSleeping()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("ferret_sleep", ILoopType.EDefaultLoopTypes.LOOP));
@@ -237,6 +269,14 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
     public void setSleeping(boolean sleeping) {
         this.entityData.set(SLEEPING, sleeping);
+    }
+
+    public boolean isDigging() {
+        return this.entityData.get(DIGGING);
+    }
+
+    public void setDigging(boolean digging) {
+        this.entityData.set(DIGGING, digging);
     }
 
     public int getVariant() {
@@ -289,6 +329,77 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
             FerretEntity.this.setSleeping(true);
             FerretEntity.this.getNavigation().stop();
             FerretEntity.this.getMoveControl().setWantedPosition(FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), 0.0D);
+        }
+    }
+
+    public class DigGoal extends Goal {
+        protected BlockState stateBelow;
+        protected int digTime;
+
+        public DigGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public boolean canUse() {
+            return FerretEntity.this.isDigging();
+        }
+
+        @Override
+        public void start() {
+            this.stateBelow = FerretEntity.this.level.getBlockState(FerretEntity.this.blockPosition().below());
+
+            if (stateBelow.is(BlockTags.DIRT) || stateBelow.is(BlockTags.SAND) || stateBelow.is(Tags.Blocks.GRAVEL)) {
+                this.digTime = 35;
+            } else {
+                this.stop();
+            }
+        }
+
+        @Override
+        public void tick() {
+            if (this.digTime > 0) {
+                this.digTime--;
+
+                if (this.digTime % 5 == 0 && this.digTime >= 10) {
+                    FerretEntity.this.level.playSound(null, FerretEntity.this, SoundEvents.GRAVEL_HIT, SoundSource.BLOCKS, 0.2F, 1.2F);
+                    for (int i = 0; i < 4; ++i) {
+                        double d0 = FerretEntity.this.random.nextGaussian() * 0.01D;
+                        double d1 = FerretEntity.this.random.nextGaussian() * 0.01D;
+                        double d2 = FerretEntity.this.random.nextGaussian() * 0.01D;
+                        ((ServerLevel) FerretEntity.this.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.stateBelow), FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), 2, d0, d1, d2, 0.1D);
+                    }
+                }
+                if (this.digTime == 10) {
+                    LootTable digTable = FerretEntity.this.level.getServer().getLootTables().get(DIGGABLES);
+                    List<ItemStack> dugItems = digTable.getRandomItems(new LootContext.Builder((ServerLevel) FerretEntity.this.level).create(LootContextParamSets.EMPTY));
+
+                    if (!dugItems.isEmpty()) {
+                        FerretEntity.this.level.playSound(null, FerretEntity.this, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.1F, 1.2F);
+                    }
+
+                    for (ItemStack stack : dugItems) {
+                        ItemEntity itemEntity = new ItemEntity(FerretEntity.this.level, FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), stack);
+                        FerretEntity.this.level.addFreshEntity(itemEntity);
+                    }
+                    ExperienceOrb xp = new ExperienceOrb(FerretEntity.this.level, FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), FerretEntity.this.random.nextInt(1, 6));
+                    FerretEntity.this.level.addFreshEntity(xp);
+                }
+            } else {
+                this.stop();
+            }
+        }
+
+        @Override
+        public void stop() {
+            FerretEntity.this.setDigging(false);
+            this.stateBelow = null;
+            this.digTime = 0;
         }
     }
 

@@ -1,0 +1,18 @@
+{
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:group",
+                    "children": [
+                        {
+                            "type": "minecraft:item",
+                            "name": "minecraft:totem_of_undying"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
