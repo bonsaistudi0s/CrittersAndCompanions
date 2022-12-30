@@ -21,7 +21,7 @@ public class PlayerHandler {
                 List<KoiFishEntity> nearKoiFishes = event.player.getLevel().getEntitiesOfClass(KoiFishEntity.class, event.player.getBoundingBox().inflate(10.0D), EntitySelector.ENTITY_STILL_ALIVE);
 
                 if (nearKoiFishes.size() >= 3) {
-                    event.player.addEffect(new MobEffectInstance(MobEffects.LUCK));
+                    event.player.addEffect(new MobEffectInstance(MobEffects.LUCK, 210));
                 }
             }
         }
