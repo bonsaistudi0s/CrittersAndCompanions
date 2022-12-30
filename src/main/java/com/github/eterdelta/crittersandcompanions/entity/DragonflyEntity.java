@@ -174,16 +174,17 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (!this.isInSittingPose()) {
+        if (this.isInSittingPose()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dragonfly_sit", ILoopType.EDefaultLoopTypes.LOOP));
+        } else {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dragonfly_fly", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
         }
-        return PlayState.STOP;
+        return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 5, this::predicate));
     }
 
     @Override
