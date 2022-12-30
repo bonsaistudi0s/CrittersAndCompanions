@@ -130,31 +130,47 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack handStack = player.getItemInHand(hand);
 
-        if (!this.isTame() && handStack.is(Items.SPIDER_EYE)) {
-            if (!player.getAbilities().instabuild) {
-                handStack.shrink(1);
-            }
-            if (!this.level.isClientSide()) {
-                if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
-                    this.tame(player);
-                    this.level.broadcastEntityEvent(this, (byte) 7);
-                } else {
-                    this.level.broadcastEntityEvent(this, (byte) 6);
-                }
-            }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
-        } else if (this.isOwnedBy(player)) {
-            if (!this.level.isClientSide()) {
-                boolean sitState = !this.isOrderedToSit();
-                if (!sitState) {
-                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.32D, 0.0D));
-                }
+        if (this.isTame()) {
+            if (handStack.is(Items.SPIDER_EYE)) {
+                this.heal(handStack.getFoodProperties(this).getNutrition());
+            } else if (this.isOwnedBy(player)) {
+                if (!this.level.isClientSide()) {
+                    boolean sitState = !this.isOrderedToSit();
+                    if (!sitState) {
+                        this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.32D, 0.0D));
+                    }
 
-                this.setOrderedToSit(sitState);
+                    this.setOrderedToSit(sitState);
+                }
+                return InteractionResult.sidedSuccess(this.level.isClientSide());
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
         } else {
-            return super.mobInteract(player, hand);
+            if (handStack.is(Items.SPIDER_EYE)) {
+                if (!player.getAbilities().instabuild) {
+                    handStack.shrink(1);
+                }
+                if (!this.level.isClientSide()) {
+                    if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                        this.tame(player);
+                        this.level.broadcastEntityEvent(this, (byte) 7);
+                    } else {
+                        this.level.broadcastEntityEvent(this, (byte) 6);
+                    }
+                }
+                return InteractionResult.sidedSuccess(this.level.isClientSide());
+            }
+        }
+        return super.mobInteract(player, hand);
+    }
+
+    @Override
+    public void setTame(boolean tame) {
+        super.setTame(tame);
+        if (tame) {
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0D);
+            this.setHealth(8.0F);
+        } else {
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(4.0D);
         }
     }
 
@@ -254,7 +270,7 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
 
         @Override
         public boolean canUse() {
-            return !DragonflyEntity.this.isTame();
+            return true;
         }
 
         @Override
