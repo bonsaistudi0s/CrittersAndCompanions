@@ -203,6 +203,11 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     }
 
     @Override
+    public boolean canFallInLove() {
+        return !this.isDigging() && super.canFallInLove();
+    }
+
+    @Override
     public boolean isFood(ItemStack itemStack) {
         return itemStack.is(FOODS_TAG);
     }
