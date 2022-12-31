@@ -66,6 +66,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     private static final TagKey<Item> FOODS_TAG = ItemTags.create(new ResourceLocation(CrittersAndCompanions.MODID, "ferret_food"));
     private static final ResourceLocation DIGGABLES = new ResourceLocation(CrittersAndCompanions.MODID, "gameplay/digging");
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    protected BlockState stateToDig;
     protected int digCooldown;
 
     public FerretEntity(EntityType<? extends FerretEntity> entityType, Level level) {
@@ -183,8 +184,14 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
             } else if (this.isTame() && this.isOwnedBy(player)) {
                 if (handStack.is(Items.CHICKEN) && !this.isBaby() && !this.isInSittingPose()) {
                     if (this.digCooldown <= 0) {
-                        this.setDigging(true);
-                        this.digCooldown = 6000;
+                        this.stateToDig = FerretEntity.this.level.getBlockState(FerretEntity.this.blockPosition().below());
+
+                        if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Tags.Blocks.GRAVEL)) {
+                            this.setDigging(true);
+                            this.digCooldown = 6000;
+                        } else {
+                            this.stateToDig = null;
+                        }
                     }
                 }
                 if (handStack.is(FOODS_TAG)) {
@@ -338,7 +345,6 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
     }
 
     public class DigGoal extends Goal {
-        protected BlockState stateBelow;
         protected int digTime;
 
         public DigGoal() {
@@ -357,13 +363,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
 
         @Override
         public void start() {
-            this.stateBelow = FerretEntity.this.level.getBlockState(FerretEntity.this.blockPosition().below());
-
-            if (stateBelow.is(BlockTags.DIRT) || stateBelow.is(BlockTags.SAND) || stateBelow.is(Tags.Blocks.GRAVEL)) {
-                this.digTime = 35;
-            } else {
-                this.stop();
-            }
+            this.digTime = 35;
         }
 
         @Override
@@ -377,7 +377,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
                         double d0 = FerretEntity.this.random.nextGaussian() * 0.01D;
                         double d1 = FerretEntity.this.random.nextGaussian() * 0.01D;
                         double d2 = FerretEntity.this.random.nextGaussian() * 0.01D;
-                        ((ServerLevel) FerretEntity.this.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.stateBelow), FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), 2, d0, d1, d2, 0.1D);
+                        ((ServerLevel) FerretEntity.this.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, FerretEntity.this.stateToDig), FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), 2, d0, d1, d2, 0.1D);
                     }
                 }
                 if (this.digTime == 10) {
@@ -403,7 +403,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
         @Override
         public void stop() {
             FerretEntity.this.setDigging(false);
-            this.stateBelow = null;
+            FerretEntity.this.stateToDig = null;
             this.digTime = 0;
         }
     }
