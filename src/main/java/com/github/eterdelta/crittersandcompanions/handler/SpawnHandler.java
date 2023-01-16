@@ -75,14 +75,14 @@ public class SpawnHandler {
         BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_luke_warm_ocean_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 32, 1, 3),
-                        new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 4, 1, 1)
+                        new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 6, 1, 1)
                 )
         );
 
         BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_warm_ocean_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.WARM_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 64, 1, 4),
-                        new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 6, 1, 1)
+                        new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 8, 1, 1)
                 )
         );
 
