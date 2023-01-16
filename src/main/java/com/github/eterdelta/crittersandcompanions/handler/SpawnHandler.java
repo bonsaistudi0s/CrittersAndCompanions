@@ -4,10 +4,12 @@ import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.core.*;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
@@ -35,7 +37,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = CrittersAndCompanions.MODID)
 public class SpawnHandler {
@@ -47,82 +51,81 @@ public class SpawnHandler {
         }
     }
 
-    @SubscribeEvent
     public static void datagenBiomeModifiers(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        RegistryAccess registryaccess$frozen = RegistryAccess.builtinCopy();
-        Registry<Biome> registry = registryaccess$frozen.registryOrThrow(Registry.BIOME_REGISTRY);
+        RegistryAccess registryAccess = RegistryAccess.builtinCopy();
+        Registry<Biome> registry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
 
-        Map<ResourceLocation, BiomeModifier> BIOME_MODIFIERS = new HashMap<>();
+        Map<ResourceLocation, BiomeModifier> modifierMap = new HashMap<>();
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_river_spawns"),
-            createSpawnModifier(getBiomeHolderSet(registry, Biomes.RIVER),
-                    new MobSpawnSettings.SpawnerData(CACEntities.OTTER.get(), 2, 3, 5),
-                    new MobSpawnSettings.SpawnerData(CACEntities.KOI_FISH.get(), 4, 2, 5),
-                    new MobSpawnSettings.SpawnerData(CACEntities.DRAGONFLY.get(), 6, 1, 1)
-            )
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_river_spawns"),
+                createSpawnModifier(getBiomeHolderSet(registry, Biomes.RIVER),
+                        new MobSpawnSettings.SpawnerData(CACEntities.OTTER.get(), 2, 3, 5),
+                        new MobSpawnSettings.SpawnerData(CACEntities.KOI_FISH.get(), 4, 2, 5),
+                        new MobSpawnSettings.SpawnerData(CACEntities.DRAGONFLY.get(), 6, 1, 1)
+                )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_ocean_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_ocean_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.OCEAN, Biomes.DEEP_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 32, 1, 2),
                         new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 4, 1, 1)
                 )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_luke_warm_ocean_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_luke_warm_ocean_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 32, 1, 3),
                         new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 6, 1, 1)
                 )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_warm_ocean_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_warm_ocean_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.WARM_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 64, 1, 4),
                         new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 8, 1, 1)
                 )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.BIRCH_FOREST, Biomes.FOREST),
                         new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3)
                 )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
                 createSpawnModifier(registry.getOrCreateTag(BiomeTags.IS_FOREST),
                         new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 10, 1, 1)
                 )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
                 createSpawnModifier(registry.getOrCreateTag(BiomeTags.IS_JUNGLE),
                         new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 8, 1, 1),
                         new MobSpawnSettings.SpawnerData(CACEntities.RED_PANDA.get(), 6, 1, 2)
                 )
         );
 
-        BIOME_MODIFIERS.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS),
                         new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3)
                 )
         );
 
-        final RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, registryaccess$frozen);
+        final RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
         generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
-                generator, existingFileHelper, CrittersAndCompanions.MODID, ops, ForgeRegistries.Keys.BIOME_MODIFIERS, BIOME_MODIFIERS));
+                generator, existingFileHelper, CrittersAndCompanions.MODID, ops, ForgeRegistries.Keys.BIOME_MODIFIERS, modifierMap));
     }
 
     @SafeVarargs
-    public static HolderSet<Biome> getBiomeHolderSet(Registry<Biome> registry, ResourceKey<Biome> ...biomes){
+    public static HolderSet<Biome> getBiomeHolderSet(Registry<Biome> registry, ResourceKey<Biome>... biomes) {
         return HolderSet.direct(Arrays.stream(biomes).map(registry::getHolderOrThrow).toList());
     }
 
-    public static BiomeModifier createSpawnModifier(HolderSet<Biome> biomes, MobSpawnSettings.SpawnerData ...spawnerData){
+    public static BiomeModifier createSpawnModifier(HolderSet<Biome> biomes, MobSpawnSettings.SpawnerData... spawnerData) {
         return (spawnerData.length == 1)
                 ? ForgeBiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(biomes, spawnerData[0])
                 : new ForgeBiomeModifiers.AddSpawnsBiomeModifier(biomes, Arrays.stream(spawnerData).toList());
