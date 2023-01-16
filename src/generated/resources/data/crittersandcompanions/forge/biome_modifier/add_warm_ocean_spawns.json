@@ -12,7 +12,7 @@
       "type": "crittersandcompanions:dumbo_octopus",
       "maxCount": 1,
       "minCount": 1,
-      "weight": 6
+      "weight": 8
     }
   ]
 }
