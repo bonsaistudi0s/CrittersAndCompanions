@@ -8,6 +8,6 @@
     "type": "crittersandcompanions:ferret",
     "maxCount": 3,
     "minCount": 2,
-    "weight": 3
+    "weight": 4
   }
 }
