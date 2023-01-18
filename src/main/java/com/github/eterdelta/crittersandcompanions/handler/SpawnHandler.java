@@ -68,14 +68,14 @@ public class SpawnHandler {
                 )
         );
 
-        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_ocean_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_oceans_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.OCEAN, Biomes.DEEP_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 32, 1, 2),
                         new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 4, 1, 1)
                 )
         );
 
-        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_luke_warm_ocean_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_lukewarm_oceans_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN),
                         new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 32, 1, 3),
                         new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 6, 1, 1)
@@ -89,26 +89,21 @@ public class SpawnHandler {
                 )
         );
 
-        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
-                createSpawnModifier(getBiomeHolderSet(registry, Biomes.BIRCH_FOREST, Biomes.FOREST),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forests_spawns"),
+                createSpawnModifier(registry.getOrCreateTag(BiomeTags.IS_FOREST),
+                        new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 10, 1, 1),
                         new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3)
                 )
         );
 
-        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
-                createSpawnModifier(registry.getOrCreateTag(BiomeTags.IS_FOREST),
-                        new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 10, 1, 1)
-                )
-        );
-
-        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_jungles_spawns"),
                 createSpawnModifier(registry.getOrCreateTag(BiomeTags.IS_JUNGLE),
                         new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 8, 1, 1),
                         new MobSpawnSettings.SpawnerData(CACEntities.RED_PANDA.get(), 6, 1, 2)
                 )
         );
 
-        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_forest_spawns"),
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_plains_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS),
                         new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3)
                 )
