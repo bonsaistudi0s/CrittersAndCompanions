@@ -105,7 +105,7 @@ public class SpawnHandler {
 
         modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_plains_spawns"),
                 createSpawnModifier(getBiomeHolderSet(registry, Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS),
-                        new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 3, 2, 3)
+                        new MobSpawnSettings.SpawnerData(CACEntities.FERRET.get(), 4, 2, 3)
                 )
         );
 
