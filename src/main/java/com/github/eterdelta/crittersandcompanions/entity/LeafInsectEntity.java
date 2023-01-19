@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -43,7 +44,7 @@ public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
     }
 
     public static boolean checkLeafInsectSpawnRules(EntityType<LeafInsectEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
-        return blockPos.getY() > 63 && levelAccessor.getBlockState(blockPos).isValidSpawn(levelAccessor, blockPos, entityType);
+        return blockPos.getY() > levelAccessor.getSeaLevel() && levelAccessor.getBlockState(blockPos).isFaceSturdy(levelAccessor, blockPos, Direction.UP);
     }
 
     @Override
