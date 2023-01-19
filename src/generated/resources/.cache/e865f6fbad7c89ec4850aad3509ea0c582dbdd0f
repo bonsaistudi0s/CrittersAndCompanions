@@ -1,6 +1,6 @@
-// 1.19.2	2023-01-17T20:06:07.4038303	forge/biome_modifier generator for crittersandcompanions
-64390e5cb33af075bef0cc1bc3aef38678d2c0ff data/crittersandcompanions/forge/biome_modifier/add_forests_spawns.json
-9cc6e098b3e405d5933750d14e89adefa4631d43 data/crittersandcompanions/forge/biome_modifier/add_jungles_spawns.json
+// 1.19.2	2023-01-19T16:31:20.198845	forge/biome_modifier generator for crittersandcompanions
+8e8d2d58faeddf451aa6c6967c8cefcff86623b0 data/crittersandcompanions/forge/biome_modifier/add_forests_spawns.json
+52ee1a7dc51a3e02d0eb659aa39533cc980781dc data/crittersandcompanions/forge/biome_modifier/add_jungles_spawns.json
 13721098516a4b8ade1b29b90463b76d552e110d data/crittersandcompanions/forge/biome_modifier/add_lukewarm_oceans_spawns.json
 a0eac9eaa6b2d647a1e631dca17a82738b29a418 data/crittersandcompanions/forge/biome_modifier/add_oceans_spawns.json
 6c28a30f365b2a93a64ad1a5bb1cfcde2c4cb1a2 data/crittersandcompanions/forge/biome_modifier/add_plains_spawns.json

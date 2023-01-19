@@ -6,13 +6,13 @@
       "type": "crittersandcompanions:leaf_insect",
       "maxCount": 1,
       "minCount": 1,
-      "weight": 8
+      "weight": 12
     },
     {
       "type": "crittersandcompanions:red_panda",
       "maxCount": 2,
       "minCount": 1,
-      "weight": 6
+      "weight": 8
     }
   ]
 }
