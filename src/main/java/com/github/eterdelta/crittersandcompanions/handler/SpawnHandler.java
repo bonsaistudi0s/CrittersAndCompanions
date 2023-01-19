@@ -99,7 +99,7 @@ public class SpawnHandler {
         modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_jungles_spawns"),
                 createSpawnModifier(registry.getOrCreateTag(BiomeTags.IS_JUNGLE),
                         new MobSpawnSettings.SpawnerData(CACEntities.LEAF_INSECT.get(), 12, 1, 1),
-                        new MobSpawnSettings.SpawnerData(CACEntities.RED_PANDA.get(), 6, 1, 2)
+                        new MobSpawnSettings.SpawnerData(CACEntities.RED_PANDA.get(), 8, 1, 2)
                 )
         );
 
