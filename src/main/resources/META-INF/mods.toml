@@ -20,7 +20,7 @@ side = "BOTH"
 [[dependencies.crittersandcompanions]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[43.2.0,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.crittersandcompanions]]
