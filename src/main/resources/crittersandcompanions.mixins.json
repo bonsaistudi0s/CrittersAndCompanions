@@ -6,6 +6,7 @@
     "refmap": "crittersandcompanions.refmap.json",
     "mixins": [
         "LootPoolAccessor",
+        "LootTableAccessor",
         "CatMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",

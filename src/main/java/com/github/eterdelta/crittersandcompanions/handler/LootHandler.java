@@ -2,8 +2,11 @@ package com.github.eterdelta.crittersandcompanions.handler;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.mixin.LootPoolAccessor;
+import com.github.eterdelta.crittersandcompanions.mixin.LootTableAccessor;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -22,12 +25,14 @@ public class LootHandler {
 
     @SubscribeEvent
     public static void onLootTableLoad(LootTableLoadEvent event) {
-        if (event.getName().equals(BuiltInLootTables.FISHING_FISH)) {
-            LootTable fishTable = event.getTable();
-            LootPool fishPool = fishTable.getPool("main");
+        ResourceLocation tableName = event.getName();
+        LootTable table = event.getTable();
 
-            fishTable.removePool("main");
-            fishTable.addPool(addPoolEntries(fishPool,
+        if (tableName.equals(BuiltInLootTables.FISHING_FISH)) {
+            LootPool fishPool = ((LootTableAccessor) table).getPools().get(0);
+
+            ((LootTableAccessor) table).getPools().remove(0);
+            table.addPool(addPoolEntries(fishPool,
                     LootItem.lootTableItem(CACItems.CLAM.get()).setWeight(10).when(AlternativeLootItemCondition.alternative(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(Biomes.RIVER)))).build(),
                     LootItem.lootTableItem(CACItems.KOI_FISH.get()).setWeight(5).build()));
         }
