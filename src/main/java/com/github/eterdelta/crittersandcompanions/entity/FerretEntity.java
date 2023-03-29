@@ -184,7 +184,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
             } else if (this.isTame() && this.isOwnedBy(player)) {
                 if (handStack.is(Items.CHICKEN) && !this.isBaby() && !this.isInSittingPose()) {
                     if (this.digCooldown <= 0) {
-                        this.stateToDig = FerretEntity.this.level.getBlockState(FerretEntity.this.blockPosition().below());
+                        this.stateToDig = this.level.getBlockState(this.blockPosition().below());
 
                         if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Tags.Blocks.GRAVEL)) {
                             this.setDigging(true);
