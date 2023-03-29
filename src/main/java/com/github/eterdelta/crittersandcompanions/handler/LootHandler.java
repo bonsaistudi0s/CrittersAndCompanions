@@ -35,6 +35,12 @@ public class LootHandler {
             table.addPool(addPoolEntries(fishPool,
                     LootItem.lootTableItem(CACItems.CLAM.get()).setWeight(10).when(AlternativeLootItemCondition.alternative(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(Biomes.RIVER)))).build(),
                     LootItem.lootTableItem(CACItems.KOI_FISH.get()).setWeight(5).build()));
+        } else if (tableName.equals(EntityType.DROWNED.getDefaultLootTable())) {
+            LootPool deathPool = ((LootTableAccessor) table).getPools().get(0);
+
+            ((LootTableAccessor) table).getPools().remove(0);
+            table.addPool(addPoolEntries(deathPool,
+                    LootItem.lootTableItem(CACItems.CLAM.get()).setWeight(10).build()));
         }
     }
 
