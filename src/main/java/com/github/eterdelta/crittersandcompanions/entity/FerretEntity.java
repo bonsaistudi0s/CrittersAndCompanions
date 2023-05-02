@@ -40,6 +40,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -179,26 +180,30 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
                         this.level.broadcastEntityEvent(this, (byte) 6);
                     }
                 }
-
                 return InteractionResult.sidedSuccess(this.level.isClientSide());
             } else if (this.isTame() && this.isOwnedBy(player)) {
-                if (handStack.is(Items.CHICKEN) && !this.isBaby() && !this.isInSittingPose()) {
-                    if (this.digCooldown <= 0) {
-                        this.stateToDig = this.level.getBlockState(this.blockPosition().below());
+                if (!this.level.isClientSide()) {
+                    if (handStack.is(Items.CHICKEN) && !this.isBaby() && !this.isInSittingPose()) {
+                        if (this.digCooldown <= 0) {
+                            this.stateToDig = this.level.getBlockState(this.blockPosition().below());
 
-                        if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Tags.Blocks.GRAVEL)) {
-                            this.setDigging(true);
-                            this.digCooldown = 6000;
-                        } else {
-                            this.stateToDig = null;
+                            if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Tags.Blocks.GRAVEL)) {
+                                this.setDigging(true);
+                                this.digCooldown = 6000;
+                            } else {
+                                this.stateToDig = null;
+                            }
                         }
                     }
-                }
-                if (handStack.is(FOODS_TAG)) {
-                    return super.mobInteract(player, interactionHand);
-                }
-                if (!this.level.isClientSide()) {
-                    this.setOrderedToSit(!this.isOrderedToSit());
+                    if (handStack.is(FOODS_TAG) && this.getHealth() < this.getMaxHealth()) {
+                        this.gameEvent(GameEvent.EAT, this);
+                        this.heal(handStack.getFoodProperties(this).getNutrition());
+                        if (!player.getAbilities().instabuild) {
+                            handStack.shrink(1);
+                        }
+                    } else {
+                        this.setOrderedToSit(!this.isOrderedToSit());
+                    }
                 }
                 return InteractionResult.sidedSuccess(this.level.isClientSide());
             } else {
