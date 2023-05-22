@@ -17,12 +17,14 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.event.ForgeEventFactory;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -33,13 +35,28 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
-public class RedPandaEntity extends Animal implements IAnimatable {
+public class RedPandaEntity extends TamableAnimal implements IAnimatable {
+    protected static final List<EntityType<? extends Mob>> SCAREABLES = new ArrayList<>(Arrays.asList(
+            EntityType.BEE,
+            EntityType.ENDERMAN,
+            EntityType.IRON_GOLEM,
+            EntityType.LLAMA,
+            EntityType.POLAR_BEAR,
+            EntityType.SPIDER,
+            EntityType.CAVE_SPIDER,
+            EntityType.VEX,
+            EntityType.WOLF,
+            EntityType.ZOMBIFIED_PIGLIN
+    ));
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ALERT = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private Player alerter;
+    private LivingEntity alerter;
 
     public RedPandaEntity(EntityType<? extends RedPandaEntity> entityType, Level level) {
         super(entityType, level);
@@ -62,12 +79,15 @@ public class RedPandaEntity extends Animal implements IAnimatable {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new RedPandaEntity.AlertGoal());
-        this.goalSelector.addGoal(3, new RedPandaEntity.SleepGoal(140));
-        this.goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
-        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(4, new RedPandaEntity.SleepGoal(140));
+        this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
+        this.goalSelector.addGoal(6, new TemptGoal(this, 1.0D, Ingredient.of(Items.SWEET_BERRIES), false));
+        this.goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -102,6 +122,29 @@ public class RedPandaEntity extends Animal implements IAnimatable {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        ItemStack handStack = player.getItemInHand(interactionHand);
+
+        if (!this.isTame()) {
+            if (handStack.is(Items.SWEET_BERRIES)) {
+                if (!player.getAbilities().instabuild) {
+                    handStack.shrink(1);
+                }
+                if (!this.level.isClientSide()) {
+                    if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                        this.tame(player);
+                        this.level.broadcastEntityEvent(this, (byte) 7);
+                    } else {
+                        this.level.broadcastEntityEvent(this, (byte) 6);
+                    }
+                }
+                return InteractionResult.sidedSuccess(this.level.isClientSide());
+            }
+        } else if (this.isTame() && this.isOwnedBy(player)) {
+            if (!this.level.isClientSide()) {
+                this.setOrderedToSit(!this.isOrderedToSit());
+            }
+            return InteractionResult.sidedSuccess(this.level.isClientSide());
+        }
         return this.isSleeping() ? InteractionResult.PASS : super.mobInteract(player, interactionHand);
     }
 
@@ -140,10 +183,12 @@ public class RedPandaEntity extends Animal implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.isSleeping()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_sleeping", ILoopType.EDefaultLoopTypes.LOOP));
-        } else if (this.isAlert()) {
+        if (this.isAlert()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_angry", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        } else if (this.isInSittingPose()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_sit", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (this.isSleeping()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_sleeping", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (event.isMoving()) {
             if (this.animationSpeed >= 0.8F) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("red_panda_run", ILoopType.EDefaultLoopTypes.LOOP));
@@ -209,7 +254,7 @@ public class RedPandaEntity extends Animal implements IAnimatable {
         }
 
         public boolean canUse() {
-            if (RedPandaEntity.this.xxa == 0.0F && RedPandaEntity.this.yya == 0.0F && RedPandaEntity.this.zza == 0.0F) {
+            if (!RedPandaEntity.this.isTame() && RedPandaEntity.this.xxa == 0.0F && RedPandaEntity.this.yya == 0.0F && RedPandaEntity.this.zza == 0.0F) {
                 return this.canSleep() || RedPandaEntity.this.isSleeping();
             } else {
                 return false;
@@ -253,10 +298,12 @@ public class RedPandaEntity extends Animal implements IAnimatable {
         @Override
         public boolean canUse() {
             if (!RedPandaEntity.this.isSleeping()) {
-                Player nearestPlayer = RedPandaEntity.this.level.getNearestPlayer(RedPandaEntity.this.getX(), RedPandaEntity.this.getY(), RedPandaEntity.this.getZ(), 2.0D, true);
+                List<LivingEntity> nearAlerters = RedPandaEntity.this.level.getEntitiesOfClass(LivingEntity.class, RedPandaEntity.this.getBoundingBox().inflate(4.0D),
+                        (livingEntity) -> RedPandaEntity.this.isTame() ? SCAREABLES.contains(livingEntity.getType()) && ((Mob) livingEntity).isAggressive() : livingEntity instanceof Player);
+                LivingEntity nearestAlerter = RedPandaEntity.this.level.getNearestEntity(nearAlerters, TargetingConditions.forNonCombat().range(4.0D), RedPandaEntity.this, RedPandaEntity.this.getX(), RedPandaEntity.this.getY(), RedPandaEntity.this.getZ());
 
-                if (nearestPlayer != RedPandaEntity.this.alerter) {
-                    RedPandaEntity.this.alerter = nearestPlayer;
+                if (nearestAlerter != RedPandaEntity.this.alerter) {
+                    RedPandaEntity.this.alerter = nearestAlerter;
                     return RedPandaEntity.this.alerter != null;
                 }
             }

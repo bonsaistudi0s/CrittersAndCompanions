@@ -3,7 +3,6 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.RedPandaEntity;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -43,11 +42,12 @@ public class RedPandaModel extends AnimatedGeoModel<RedPandaEntity> {
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
-        if (!entity.isSleeping()) {
+        if (!entity.isSleeping() && !entity.isInSittingPose()) {
             if (!entity.isAlert()) {
                 headBone.setRotationX(extraData.headPitch * ((float) Math.PI / 180.0F));
             }
             headBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
         }
+        entity.getFactory().getOrCreateAnimationData(uniqueID).setResetSpeedInTicks(0);
     }
 }

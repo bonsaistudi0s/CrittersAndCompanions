@@ -10,7 +10,9 @@
         "CatMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
-        "OcelotMixin"
+        "NeutralMobsMixin",
+        "OcelotMixin",
+        "ZombifiedPiglinMixin"
     ],
     "client": [
         "ClientPacketListenerMixin"
