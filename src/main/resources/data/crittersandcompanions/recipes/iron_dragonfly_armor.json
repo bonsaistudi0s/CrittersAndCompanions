@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "  I",
+        " I ",
+        "I  "
+    ],
+    "key": {
+        "I": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "crittersandcompanions:iron_dragonfly_armor",
+        "count": 1
+    }
+}

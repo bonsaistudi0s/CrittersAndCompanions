@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.registry;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
+import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
 import com.github.eterdelta.crittersandcompanions.item.PearlNecklaceItem;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.Foods;
@@ -27,6 +28,10 @@ public class CACItems {
     public static final RegistryObject<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", () -> new MobBucketItem(CACEntities.DUMBO_OCTOPUS, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new MobBucketItem(CACEntities.KOI_FISH, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new MobBucketItem(CACEntities.SEA_BUNNY, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(CrittersAndCompanions.CREATIVE_TAB)));
+
+    public static final RegistryObject<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(12, "diamond", (new Item.Properties()).stacksTo(1).tab(CrittersAndCompanions.CREATIVE_TAB)));
+    public static final RegistryObject<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(6, "gold", (new Item.Properties()).stacksTo(1).tab(CrittersAndCompanions.CREATIVE_TAB)));
+    public static final RegistryObject<Item> IRON_DRAGONFLY_ARMOR = ITEMS.register("iron_dragonfly_armor", () -> new DragonflyArmorItem(3, "iron", (new Item.Properties()).stacksTo(1).tab(CrittersAndCompanions.CREATIVE_TAB)));
 
     public static final RegistryObject<Item> DRAGONFLY_SPAWN_EGG = ITEMS.register("dragonfly_spawn_egg", () -> new ForgeSpawnEggItem(CACEntities.DRAGONFLY, 0x08EECF, 0xD3FF96, (new Item.Properties()).tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> FERRET_SPAWN_EGG = ITEMS.register("ferret_spawn_egg", () -> new ForgeSpawnEggItem(CACEntities.FERRET, 0xC5AC88, 0x37212D, (new Item.Properties()).tab(CrittersAndCompanions.CREATIVE_TAB)));

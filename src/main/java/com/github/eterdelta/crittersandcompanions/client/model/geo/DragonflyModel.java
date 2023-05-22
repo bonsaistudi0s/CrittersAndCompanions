@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.DragonflyEntity;
+import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
@@ -17,7 +18,7 @@ public class DragonflyModel extends AnimatedGeoModel<DragonflyEntity> {
 
     @Override
     public ResourceLocation getTextureResource(DragonflyEntity object) {
-        return TEXTURE;
+        return object.getArmor().isEmpty() ? TEXTURE : ((DragonflyArmorItem) object.getArmor().getItem()).getTexture();
     }
 
     @Override

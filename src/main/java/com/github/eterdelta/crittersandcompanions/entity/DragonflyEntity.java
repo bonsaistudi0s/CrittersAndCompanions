@@ -1,7 +1,13 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +26,7 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,6 +35,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -44,6 +52,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.EnumSet;
 
 public class DragonflyEntity extends TamableAnimal implements IAnimatable {
+    private static final EntityDataAccessor<ItemStack> ARMOR_ITEM = SynchedEntityData.defineId(DragonflyEntity.class, EntityDataSerializers.ITEM_STACK);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
@@ -61,6 +70,12 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ARMOR_ITEM, ItemStack.EMPTY);
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
@@ -69,6 +84,18 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
         this.goalSelector.addGoal(4, new DragonflyEntity.RandomFlyGoal());
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.put("ArmorItem", this.getArmor().save(new CompoundTag()));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setArmor(ItemStack.of(compound.getCompound("ArmorItem")));
     }
 
     @Override
@@ -131,16 +158,34 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
         ItemStack handStack = player.getItemInHand(hand);
 
         if (this.isTame()) {
-            if (handStack.is(Items.SPIDER_EYE)) {
+            if (handStack.is(Items.SPIDER_EYE) && this.getHealth() < this.getMaxHealth()) {
+                this.gameEvent(GameEvent.EAT, this);
                 this.heal(handStack.getFoodProperties(this).getNutrition());
+                if (!player.getAbilities().instabuild) {
+                    handStack.shrink(1);
+                }
             } else if (this.isOwnedBy(player)) {
                 if (!this.level.isClientSide()) {
-                    boolean sitState = !this.isOrderedToSit();
-                    if (!sitState) {
-                        this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.32D, 0.0D));
-                    }
+                    if (handStack.getItem() instanceof DragonflyArmorItem armorItem && this.getArmor().isEmpty()) {
+                        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(armorItem.getHealthBuff());
+                        this.setHealth(armorItem.getHealthBuff());
+                        this.setArmor(handStack.copy());
+                        handStack.shrink(1);
+                        if (!player.getAbilities().instabuild) {
+                            handStack.shrink(1);
+                        }
+                        this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 0.4F, 1.5F);
 
-                    this.setOrderedToSit(sitState);
+                    } else if (player.isCrouching() && !this.getArmor().isEmpty()) {
+                        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0D);
+                        this.setHealth(8.0F);
+                        this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getArmor().copy()));
+                        this.setArmor(ItemStack.EMPTY);
+                        this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, 1.0F);
+
+                    } else {
+                        this.setOrderedToSit(!this.isOrderedToSit());
+                    }
                 }
                 return InteractionResult.sidedSuccess(this.level.isClientSide());
             }
@@ -167,7 +212,7 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
     public void setTame(boolean tame) {
         super.setTame(tame);
         if (tame) {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0D);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0D);
             this.setHealth(8.0F);
         } else {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(4.0D);
@@ -206,6 +251,14 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    public ItemStack getArmor() {
+        return this.entityData.get(ARMOR_ITEM);
+    }
+
+    public void setArmor(ItemStack armorItem) {
+        this.entityData.set(ARMOR_ITEM, armorItem);
     }
 
     static class FollowOwnerGoal extends net.minecraft.world.entity.ai.goal.FollowOwnerGoal {
@@ -270,7 +323,7 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
 
         @Override
         public boolean canUse() {
-            return true;
+            return !DragonflyEntity.this.isOrderedToSit();
         }
 
         @Override
