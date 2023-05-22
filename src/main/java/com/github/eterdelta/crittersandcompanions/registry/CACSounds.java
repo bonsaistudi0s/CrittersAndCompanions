@@ -11,6 +11,7 @@ public class CACSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, CrittersAndCompanions.MODID);
 
     public static final RegistryObject<SoundEvent> BITE_ATTACK = SOUNDS.register("entity.bite_attack", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.bite_attack")));
+    public static final RegistryObject<SoundEvent> BUBBLE_POP = SOUNDS.register("entity.bubble_pop", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.bubble_pop")));
     public static final RegistryObject<SoundEvent> DRAGONFLY_AMBIENT = SOUNDS.register("entity.dragonfly.ambient", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.dragonfly.ambient")));
     public static final RegistryObject<SoundEvent> FERRET_AMBIENT = SOUNDS.register("entity.ferret.ambient", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.ferret.ambient")));
     public static final RegistryObject<SoundEvent> FERRET_DEATH = SOUNDS.register("entity.ferret.death", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.ferret.death")));

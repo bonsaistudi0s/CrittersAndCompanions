@@ -130,5 +130,11 @@
             "crittersandcompanions:entity/bite_attack_3"
         ],
         "subtitle": "subtitles.crittersandcompanions.bite_attack"
+    },
+    "entity.bubble_pop": {
+        "sounds": [
+            "crittersandcompanions:entity/bubble_pop"
+        ],
+        "subtitle": "subtitles.crittersandcompanions.bubble_pop"
     }
 }
