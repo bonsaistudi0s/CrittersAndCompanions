@@ -28,4 +28,5 @@ public class CACSounds {
     public static final RegistryObject<SoundEvent> RED_PANDA_HURT = SOUNDS.register("entity.red_panda.hurt", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.red_panda.hurt")));
     public static final RegistryObject<SoundEvent> SEA_BUNNY_DEATH = SOUNDS.register("entity.sea_bunny.death", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.sea_bunny.death")));
     public static final RegistryObject<SoundEvent> SEA_BUNNY_HURT = SOUNDS.register("entity.sea_bunny.hurt", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.sea_bunny.hurt")));
+    public static final RegistryObject<SoundEvent> SHIMA_ENAGA_AMBIENT = SOUNDS.register("entity.shima_enaga.ambient", () -> new SoundEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.shima_enaga.ambient")));
 }

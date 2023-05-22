@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:snowy_plains",
+  "spawners": {
+    "type": "crittersandcompanions:shima_enaga",
+    "maxCount": 3,
+    "minCount": 2,
+    "weight": 3
+  }
+}

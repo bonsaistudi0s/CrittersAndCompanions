@@ -86,6 +86,7 @@ public class CrittersAndCompanions {
         event.put(CACEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
         event.put(CACEntities.DRAGONFLY.get(), DragonflyEntity.createAttributes().build());
         event.put(CACEntities.SEA_BUNNY.get(), SeaBunnyEntity.createAttributes().build());
+        event.put(CACEntities.SHIMA_ENAGA.get(), ShimaEnagaEntity.createAttributes().build());
         event.put(CACEntities.FERRET.get(), FerretEntity.createAttributes().build());
         event.put(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusEntity.createAttributes().build());
         event.put(CACEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
@@ -97,6 +98,7 @@ public class CrittersAndCompanions {
         event.registerEntityRenderer(CACEntities.KOI_FISH.get(), KoiFishRenderer::new);
         event.registerEntityRenderer(CACEntities.DRAGONFLY.get(), DragonflyRenderer::new);
         event.registerEntityRenderer(CACEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
+        event.registerEntityRenderer(CACEntities.SHIMA_ENAGA.get(), ShimaEnagaRenderer::new);
         event.registerEntityRenderer(CACEntities.FERRET.get(), FerretRenderer::new);
         event.registerEntityRenderer(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
         event.registerEntityRenderer(CACEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);

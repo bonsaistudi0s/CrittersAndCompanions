@@ -123,6 +123,15 @@
         ],
         "subtitle": "subtitles.crittersandcompanions.sea_bunny.hurt"
     },
+    "entity.shima_enaga.ambient": {
+        "sounds": [
+            "crittersandcompanions:entity/shima_enaga/ambient_1",
+            "crittersandcompanions:entity/shima_enaga/ambient_2",
+            "crittersandcompanions:entity/shima_enaga/ambient_3",
+            "crittersandcompanions:entity/shima_enaga/ambient_4"
+        ],
+        "subtitle": "subtitles.crittersandcompanions.shima_enaga.ambient"
+    },
     "entity.bite_attack": {
         "sounds": [
             "crittersandcompanions:entity/bite_attack_1",

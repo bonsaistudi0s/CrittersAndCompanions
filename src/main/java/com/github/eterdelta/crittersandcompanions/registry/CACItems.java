@@ -41,4 +41,5 @@ public class CACItems {
     public static final RegistryObject<Item> OTTER_SPAWN_EGG = ITEMS.register("otter_spawn_egg", () -> new ForgeSpawnEggItem(CACEntities.OTTER, 0x352C34, 0xB49494, (new Item.Properties()).tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> RED_PANDA_SPAWN_EGG = ITEMS.register("red_panda_spawn_egg", () -> new ForgeSpawnEggItem(CACEntities.RED_PANDA, 0xF4943C, 0x13131B, (new Item.Properties()).tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> SEA_BUNNY_SPAWN_EGG = ITEMS.register("sea_bunny_spawn_egg", () -> new ForgeSpawnEggItem(CACEntities.SEA_BUNNY, 0xF4ECE4, 0x453337, (new Item.Properties()).tab(CrittersAndCompanions.CREATIVE_TAB)));
+    public static final RegistryObject<Item> SHIMA_ENAGA_SPAWN_EGG = ITEMS.register("shima_enaga_spawn_egg", () -> new ForgeSpawnEggItem(CACEntities.SHIMA_ENAGA, 0xFCFCEC, 0x5C3C34, (new Item.Properties()).tab(CrittersAndCompanions.CREATIVE_TAB)));
 }

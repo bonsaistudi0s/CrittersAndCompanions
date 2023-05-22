@@ -109,6 +109,12 @@ public class SpawnHandler {
                 )
         );
 
+        modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_snowy_plains_spawns"),
+                createSpawnModifier(getBiomeHolderSet(registry, Biomes.SNOWY_PLAINS),
+                        new MobSpawnSettings.SpawnerData(CACEntities.SHIMA_ENAGA.get(), 3, 2, 3)
+                )
+        );
+
         final RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
         generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
