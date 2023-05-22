@@ -2,7 +2,6 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -33,11 +31,12 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.Random;
-
 public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(LeafInsectEntity.class, EntityDataSerializers.INT);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    protected BlockPos activeJukebox;
+    protected boolean dancing;
+
 
     public LeafInsectEntity(EntityType<? extends LeafInsectEntity> entityType, Level level) {
         super(entityType, level);
@@ -60,7 +59,7 @@ public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(0, new LeafInsectEntity.WaterAvoidingRandomStrollGoal(this, 1.0D));
     }
 
     @Override
@@ -73,6 +72,21 @@ public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
+    }
+
+    @Override
+    public void aiStep() {
+        if (this.activeJukebox == null || !this.activeJukebox.closerToCenterThan(this.position(), 5.0D) || !this.level.getBlockState(this.activeJukebox).is(Blocks.JUKEBOX)) {
+            this.activeJukebox = null;
+            this.dancing = false;
+        }
+        super.aiStep();
+    }
+
+    @Override
+    public void setRecordPlayingNearby(BlockPos blockPos, boolean sounding) {
+        this.activeJukebox = blockPos;
+        this.dancing = sounding;
     }
 
     @Override
@@ -92,7 +106,9 @@ public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (event.isMoving()) {
+        if (this.isDancing()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("leaf_insect_dance", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("leaf_insect_walk", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("leaf_insect_idle", ILoopType.EDefaultLoopTypes.LOOP));
@@ -116,5 +132,28 @@ public class LeafInsectEntity extends PathfinderMob implements IAnimatable {
 
     public void setVariant(int variant) {
         this.entityData.set(VARIANT, Mth.clamp(variant, 0, 2));
+    }
+
+    public boolean isDancing() {
+        return this.dancing;
+    }
+
+    static class WaterAvoidingRandomStrollGoal extends net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal {
+        private final LeafInsectEntity leafInsect;
+
+        public WaterAvoidingRandomStrollGoal(LeafInsectEntity leafInsect, double speedModifier) {
+            super(leafInsect, speedModifier);
+            this.leafInsect = leafInsect;
+        }
+
+        @Override
+        public boolean canUse() {
+            return !leafInsect.isDancing() && super.canUse();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return !leafInsect.isDancing() && super.canContinueToUse();
+        }
     }
 }
