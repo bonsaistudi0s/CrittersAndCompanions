@@ -101,6 +101,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Resting", this.isResting());
         compound.putInt("Variant", this.getVariant());
+        compound.putBoolean("FromBucket", this.fromBucket());
     }
 
     @Override
@@ -108,6 +109,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
         super.readAdditionalSaveData(compound);
         this.setResting(compound.getBoolean("Resting"));
         this.setVariant(compound.getInt("Variant"));
+        this.setFromBucket(compound.getBoolean("FromBucket"));
     }
 
     @Override

@@ -95,6 +95,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Climbing", this.isClimbing());
         compound.putInt("Variant", this.getVariant());
+        compound.putBoolean("FromBucket", this.fromBucket());
     }
 
     @Override
@@ -102,6 +103,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
         super.readAdditionalSaveData(compound);
         this.setClimbing(compound.getBoolean("Climbing"));
         this.setVariant(compound.getInt("Variant"));
+        this.setFromBucket(compound.getBoolean("FromBucket"));
     }
 
     @Override
