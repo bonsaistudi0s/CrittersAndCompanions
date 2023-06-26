@@ -13,14 +13,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.19.2-1.1.0'
+version = '1.20.1-2.0.1'
 group = 'com.github.eterdelta.crittersandcompanions'
 archivesBaseName = 'crittersandcompanions'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: '1.20.1'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -80,8 +80,8 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.7'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.37')
+    minecraft 'net.minecraftforge:forge:1.20.1-47.0.19'
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20:4.2')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
