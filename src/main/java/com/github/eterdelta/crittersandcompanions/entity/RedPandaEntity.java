@@ -24,6 +24,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -122,30 +123,41 @@ public class RedPandaEntity extends TamableAnimal implements IAnimatable {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        ItemStack handStack = player.getItemInHand(interactionHand);
+        if (!this.isSleeping()) {
+            ItemStack handStack = player.getItemInHand(interactionHand);
 
-        if (!this.isTame()) {
-            if (handStack.is(Items.SWEET_BERRIES)) {
-                if (!player.getAbilities().instabuild) {
-                    handStack.shrink(1);
+            if (!this.isTame()) {
+                if (handStack.is(Items.SWEET_BERRIES)) {
+                    if (!player.getAbilities().instabuild) {
+                        handStack.shrink(1);
+                    }
+                    if (!this.level.isClientSide()) {
+                        if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                            this.tame(player);
+                            this.level.broadcastEntityEvent(this, (byte) 7);
+                        } else {
+                            this.level.broadcastEntityEvent(this, (byte) 6);
+                        }
+                    }
+                    return InteractionResult.sidedSuccess(this.level.isClientSide());
                 }
+            } else if (this.isTame() && this.isOwnedBy(player)) {
                 if (!this.level.isClientSide()) {
-                    if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
-                        this.tame(player);
-                        this.level.broadcastEntityEvent(this, (byte) 7);
-                    } else {
-                        this.level.broadcastEntityEvent(this, (byte) 6);
+                    if (!this.isFood(handStack)) {
+                        this.setOrderedToSit(!this.isOrderedToSit());
+                    } else if (this.getHealth() < this.getMaxHealth()) {
+                        this.gameEvent(GameEvent.EAT, this);
+                        this.heal(2.0F);
+                        if (!player.getAbilities().instabuild) {
+                            handStack.shrink(1);
+                        }
                     }
                 }
-                return InteractionResult.sidedSuccess(this.level.isClientSide());
             }
-        } else if (this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level.isClientSide()) {
-                this.setOrderedToSit(!this.isOrderedToSit());
-            }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
+            return super.mobInteract(player, interactionHand);
+        } else {
+            return InteractionResult.PASS;
         }
-        return this.isSleeping() ? InteractionResult.PASS : super.mobInteract(player, interactionHand);
     }
 
     @Override
