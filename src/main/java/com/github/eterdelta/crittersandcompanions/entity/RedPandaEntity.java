@@ -142,15 +142,14 @@ public class RedPandaEntity extends TamableAnimal implements IAnimatable {
                     return InteractionResult.sidedSuccess(this.level.isClientSide());
                 }
             } else if (this.isTame() && this.isOwnedBy(player)) {
-                if (!this.level.isClientSide()) {
-                    if (!this.isFood(handStack)) {
-                        this.setOrderedToSit(!this.isOrderedToSit());
-                    } else if (this.getHealth() < this.getMaxHealth()) {
-                        this.gameEvent(GameEvent.EAT, this);
-                        this.heal(2.0F);
-                        if (!player.getAbilities().instabuild) {
-                            handStack.shrink(1);
-                        }
+                if (!this.isFood(handStack)) {
+                    this.setOrderedToSit(!this.isOrderedToSit());
+                    return InteractionResult.sidedSuccess(this.level.isClientSide());
+                } else if (this.getHealth() < this.getMaxHealth()) {
+                    this.gameEvent(GameEvent.EAT, this);
+                    this.heal(2.0F);
+                    if (!player.getAbilities().instabuild) {
+                        handStack.shrink(1);
                     }
                 }
             }

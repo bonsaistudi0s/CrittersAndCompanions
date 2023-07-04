@@ -195,14 +195,15 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
                             }
                         }
                     }
-                    if (!this.isFood(handStack)) {
-                        this.setOrderedToSit(!this.isOrderedToSit());
-                    } else if (this.getHealth() < this.getMaxHealth()) {
-                        this.gameEvent(GameEvent.EAT, this);
-                        this.heal(handStack.getFoodProperties(this).getNutrition());
-                        if (!player.getAbilities().instabuild) {
-                            handStack.shrink(1);
-                        }
+                }
+                if (!this.isFood(handStack)) {
+                    this.setOrderedToSit(!this.isOrderedToSit());
+                    return InteractionResult.sidedSuccess(this.level.isClientSide());
+                } else if (this.getHealth() < this.getMaxHealth()) {
+                    this.gameEvent(GameEvent.EAT, this);
+                    this.heal(handStack.getFoodProperties(this).getNutrition());
+                    if (!player.getAbilities().instabuild) {
+                        handStack.shrink(1);
                     }
                 }
             }
