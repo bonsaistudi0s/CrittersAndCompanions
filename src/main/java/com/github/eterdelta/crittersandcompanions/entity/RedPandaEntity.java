@@ -142,7 +142,7 @@ public class RedPandaEntity extends TamableAnimal implements IAnimatable {
                     return InteractionResult.sidedSuccess(this.level.isClientSide());
                 }
             } else if (this.isTame() && this.isOwnedBy(player)) {
-                if (!this.isFood(handStack)) {
+                if (!this.isFood(handStack) && !handStack.is(Items.SWEET_BERRIES)) {
                     this.setOrderedToSit(!this.isOrderedToSit());
                     return InteractionResult.sidedSuccess(this.level.isClientSide());
                 } else if (this.getHealth() < this.getMaxHealth()) {
@@ -151,6 +151,7 @@ public class RedPandaEntity extends TamableAnimal implements IAnimatable {
                     if (!player.getAbilities().instabuild) {
                         handStack.shrink(1);
                     }
+                    return InteractionResult.sidedSuccess(this.level.isClientSide());
                 }
             }
             return super.mobInteract(player, interactionHand);

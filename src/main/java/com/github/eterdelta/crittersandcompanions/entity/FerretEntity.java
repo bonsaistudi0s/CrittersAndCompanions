@@ -205,6 +205,7 @@ public class FerretEntity extends TamableAnimal implements IAnimatable {
                     if (!player.getAbilities().instabuild) {
                         handStack.shrink(1);
                     }
+                    return InteractionResult.sidedSuccess(this.level.isClientSide());
                 }
             }
             return super.mobInteract(player, interactionHand);
