@@ -83,6 +83,7 @@ public class CrittersAndCompanions {
 
     private void onAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(CACEntities.OTTER.get(), OtterEntity.createAttributes().build());
+        event.put(CACEntities.JUMPING_SPIDER.get(), JumpingSpiderEntity.createAttributes().build());
         event.put(CACEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
         event.put(CACEntities.DRAGONFLY.get(), DragonflyEntity.createAttributes().build());
         event.put(CACEntities.SEA_BUNNY.get(), SeaBunnyEntity.createAttributes().build());
@@ -95,6 +96,7 @@ public class CrittersAndCompanions {
 
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(CACEntities.OTTER.get(), OtterRenderer::new);
+        event.registerEntityRenderer(CACEntities.JUMPING_SPIDER.get(), JumpingSpiderRenderer::new);
         event.registerEntityRenderer(CACEntities.KOI_FISH.get(), KoiFishRenderer::new);
         event.registerEntityRenderer(CACEntities.DRAGONFLY.get(), DragonflyRenderer::new);
         event.registerEntityRenderer(CACEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);

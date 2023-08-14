@@ -13,6 +13,12 @@
       "maxCount": 2,
       "minCount": 1,
       "weight": 8
+    },
+    {
+      "type": "crittersandcompanions:jumping_spider",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 2
     }
   ]
 }

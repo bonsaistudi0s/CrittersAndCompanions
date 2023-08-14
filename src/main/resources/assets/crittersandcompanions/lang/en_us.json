@@ -1,5 +1,6 @@
 {
     "entity.crittersandcompanions.otter": "Otter",
+    "entity.crittersandcompanions.jumping_spider": "Jumping Spider",
     "entity.crittersandcompanions.koi_fish": "Koi Fish",
     "entity.crittersandcompanions.dragonfly": "Dragonfly",
     "entity.crittersandcompanions.sea_bunny": "Sea Bunny",
@@ -10,6 +11,7 @@
     "entity.crittersandcompanions.leaf_insect": "Leaf Insect",
     "itemGroup.crittersandcompanions": "Critters and Companions",
     "item.crittersandcompanions.otter_spawn_egg": "Otter Spawn Egg",
+    "item.crittersandcompanions.jumping_spider_spawn_egg": "Jumping Spider Spawn Egg",
     "item.crittersandcompanions.koi_fish_spawn_egg": "Koi Fish Spawn Egg",
     "item.crittersandcompanions.dragonfly_spawn_egg": "Dragonfly Spawn Egg",
     "item.crittersandcompanions.sea_bunny_spawn_egg": "Sea Bunny Spawn Egg",
@@ -26,6 +28,7 @@
     "item.crittersandcompanions.iron_dragonfly_armor": "Iron Dragonfly Armor",
     "item.crittersandcompanions.koi_fish": "Koi Fish",
     "item.crittersandcompanions.clam": "Clam",
+    "item.crittersandcompanions.dragonfly_wing": "Dragonfly Wing",
     "item.crittersandcompanions.pearl": "Pearl",
     "item.crittersandcompanions.pearl_necklace_1": "Pearl Necklace 1",
     "item.crittersandcompanions.pearl_necklace_2": "Pearl Necklace 2",
