@@ -141,8 +141,8 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
         }
 
         public void tick() {
-            if (this.hasWanted() && this.spider.isOnGround() && this.spider.getRandom().nextFloat() <= 0.1F) {
-                this.spider.setDeltaMovement(this.spider.getDeltaMovement().add(0.0D, 0.4D, 0.0D));
+            if (this.hasWanted() && this.spider.isOnGround() && this.spider.getRandom().nextFloat() <= 0.05F) {
+                this.spider.setDeltaMovement(this.spider.getDeltaMovement().add(0.0D, 0.5D, 0.0D));
             }
             super.tick();
         }
