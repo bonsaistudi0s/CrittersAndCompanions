@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.registry;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
+import com.github.eterdelta.crittersandcompanions.item.GrapplingHookItem;
 import com.github.eterdelta.crittersandcompanions.item.PearlNecklaceItem;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.Foods;
@@ -21,6 +22,8 @@ public class CACItems {
     public static final RegistryObject<Item> DRAGONFLY_WING = ITEMS.register("dragonfly_wing", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> KOI_FISH = ITEMS.register("koi_fish", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).food(Foods.TROPICAL_FISH)));
     public static final RegistryObject<Item> PEARL = ITEMS.register("pearl", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
+
+    public static final RegistryObject<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
 
     public static final RegistryObject<Item> PEARL_NECKLACE_1 = ITEMS.register("pearl_necklace_1", () -> new PearlNecklaceItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).stacksTo(1), 1));
     public static final RegistryObject<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).stacksTo(1), 2));

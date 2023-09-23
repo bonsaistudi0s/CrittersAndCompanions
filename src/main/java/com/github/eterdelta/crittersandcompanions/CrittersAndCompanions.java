@@ -1,7 +1,9 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
+import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
+import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
@@ -102,6 +104,7 @@ public class CrittersAndCompanions {
         event.registerEntityRenderer(CACEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
         event.registerEntityRenderer(CACEntities.SHIMA_ENAGA.get(), ShimaEnagaRenderer::new);
         event.registerEntityRenderer(CACEntities.FERRET.get(), FerretRenderer::new);
+        event.registerEntityRenderer(CACEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
         event.registerEntityRenderer(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
         event.registerEntityRenderer(CACEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);
         event.registerEntityRenderer(CACEntities.RED_PANDA.get(), RedPandaRenderer::new);
@@ -109,6 +112,7 @@ public class CrittersAndCompanions {
 
     public void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(BubbleLayer.LAYER_LOCATION, BubbleModel::createLayer);
+        event.registerLayerDefinition(GrapplingHookRenderer.LAYER_LOCATION, GrapplingHookModel::createLayer);
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,13 +1,12 @@
 package com.github.eterdelta.crittersandcompanions.handler;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.capability.BubbleState;
-import com.github.eterdelta.crittersandcompanions.capability.CACCapabilities;
-import com.github.eterdelta.crittersandcompanions.capability.IBubbleStateCapability;
+import com.github.eterdelta.crittersandcompanions.capability.*;
 import com.github.eterdelta.crittersandcompanions.entity.DumboOctopusEntity;
 import com.github.eterdelta.crittersandcompanions.entity.KoiFishEntity;
 import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
 import com.github.eterdelta.crittersandcompanions.network.ClientboundBubbleStatePacket;
+import com.github.eterdelta.crittersandcompanions.network.ClientboundGrapplingStatePacket;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = CrittersAndCompanions.MODID)
 public class PlayerHandler {
@@ -47,12 +47,18 @@ public class PlayerHandler {
     @SubscribeEvent
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
         if (event.getTarget() instanceof Player trackedPlayer) {
-            LazyOptional<IBubbleStateCapability> capability = trackedPlayer.getCapability(CACCapabilities.BUBBLE_STATE);
+            LazyOptional<IBubbleStateCapability> bubbleCap = trackedPlayer.getCapability(CACCapabilities.BUBBLE_STATE);
 
-            // If a player with bubble cap is tracked, update client
-            capability.ifPresent(trackedState -> {
+            bubbleCap.ifPresent(trackedState -> {
                 CACPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()),
                         new ClientboundBubbleStatePacket(trackedState.isActive(), trackedPlayer.getId()));
+            });
+
+            LazyOptional<IGrapplingStateCapability> grappleCap = trackedPlayer.getCapability(CACCapabilities.GRAPPLING_STATE);
+
+            grappleCap.ifPresent(trackedState -> {
+                CACPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()),
+                        new ClientboundGrapplingStatePacket(trackedState.getHook() != null ? Optional.of(trackedState.getHook().getId()) : Optional.empty(), trackedPlayer.getId()));
             });
         }
     }
@@ -60,7 +66,6 @@ public class PlayerHandler {
     @SubscribeEvent
     public static void onPlayerStopTracking(PlayerEvent.StopTracking event) {
         if (event.getTarget() instanceof DumboOctopusEntity dumboOctopus) {
-            // If a player stops tracking his dumbo octopus, update
             if (dumboOctopus.getBubbledPlayer() == event.getEntity()) {
                 dumboOctopus.sendBubble((ServerPlayer) event.getEntity(), false);
             }
@@ -71,9 +76,7 @@ public class PlayerHandler {
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             LazyOptional<IBubbleStateCapability> bubbleState = LazyOptional.of(BubbleState::new);
-
             ICapabilityProvider bubbleStateProvider = new ICapabilityProvider() {
-                // This is a volatile cap. It shouldn't be saved
                 @Override
                 public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction direction) {
                     if (capability == CACCapabilities.BUBBLE_STATE) {
@@ -83,6 +86,18 @@ public class PlayerHandler {
                 }
             };
             event.addCapability(new ResourceLocation(CrittersAndCompanions.MODID, "bubble_state"), bubbleStateProvider);
+
+            LazyOptional<IGrapplingStateCapability> grapplingState = LazyOptional.of(GrapplingState::new);
+            ICapabilityProvider grapplingStateProvider = new ICapabilityProvider() {
+                @Override
+                public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction direction) {
+                    if (capability == CACCapabilities.GRAPPLING_STATE) {
+                        return grapplingState.cast();
+                    }
+                    return LazyOptional.empty();
+                }
+            };
+            event.addCapability(new ResourceLocation(CrittersAndCompanions.MODID, "grappling_state"), grapplingStateProvider);
         }
     }
 }
