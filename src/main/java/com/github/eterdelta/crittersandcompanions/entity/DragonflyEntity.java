@@ -160,7 +160,7 @@ public class DragonflyEntity extends TamableAnimal implements IAnimatable {
         if (this.isTame()) {
             if (handStack.is(Items.SPIDER_EYE) && this.getHealth() < this.getMaxHealth()) {
                 this.gameEvent(GameEvent.EAT, this);
-                this.heal(handStack.getFoodProperties(this).getNutrition());
+                this.heal(2.0F);
                 if (!player.getAbilities().instabuild) {
                     handStack.shrink(1);
                 }
