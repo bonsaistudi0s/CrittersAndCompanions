@@ -8,6 +8,8 @@ import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +49,7 @@ public class GrapplingHookEntity extends Projectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide() && !this.isFocused()) {
+        if (!this.level.isClientSide() && (!this.isFocused() || this.getOwner().distanceToSqr(this) > 1048)) {
             this.discard();
             return;
         }

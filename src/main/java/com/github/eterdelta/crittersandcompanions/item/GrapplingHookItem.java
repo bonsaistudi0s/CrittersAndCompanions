@@ -3,7 +3,6 @@ package com.github.eterdelta.crittersandcompanions.item;
 import com.github.eterdelta.crittersandcompanions.capability.CACCapabilities;
 import com.github.eterdelta.crittersandcompanions.capability.IGrapplingStateCapability;
 import com.github.eterdelta.crittersandcompanions.entity.GrapplingHookEntity;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -28,6 +27,7 @@ public class GrapplingHookItem extends Item {
         grappleCap.ifPresent(grapplingState -> {
             if (grapplingState.getHook() != null) {
                 grapplingState.getHook().pull();
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 0.25F, 1.0F + 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
                 player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
             } else {
                 if (!level.isClientSide()) {
