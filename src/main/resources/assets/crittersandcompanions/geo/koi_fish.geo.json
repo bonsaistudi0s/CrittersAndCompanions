@@ -1,202 +1,54 @@
 {
-    "format_version": "1.12.0",
-    "minecraft:geometry": [
-        {
-            "description": {
-                "identifier": "geometry.koi_fish",
-                "texture_width": 64,
-                "texture_height": 64,
-                "visible_bounds_width": 3,
-                "visible_bounds_height": 1.5,
-                "visible_bounds_offset": [
-                    0,
-                    0.25,
-                    0
-                ]
-            },
-            "bones": [
-                {
-                    "name": "body",
-                    "pivot": [
-                        0,
-                        0,
-                        -2
-                    ],
-                    "cubes": [
-                        {
-                            "origin": [
-                                -2.5,
-                                0,
-                                -10
-                            ],
-                            "size": [
-                                5,
-                                5,
-                                9
-                            ],
-                            "uv": [
-                                15,
-                                13
-                            ]
-                        },
-                        {
-                            "origin": [
-                                0,
-                                5,
-                                -8
-                            ],
-                            "size": [
-                                0,
-                                3,
-                                7
-                            ],
-                            "uv": [
-                                0,
-                                15
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "body2",
-                    "parent": "body",
-                    "pivot": [
-                        0,
-                        2.5,
-                        -1
-                    ],
-                    "cubes": [
-                        {
-                            "origin": [
-                                -2,
-                                0.5,
-                                -1
-                            ],
-                            "size": [
-                                4,
-                                4,
-                                6
-                            ],
-                            "uv": [
-                                18,
-                                2
-                            ]
-                        },
-                        {
-                            "origin": [
-                                1,
-                                0.5,
-                                -1
-                            ],
-                            "size": [
-                                4,
-                                0,
-                                8
-                            ],
-                            "uv": [
-                                8,
-                                0
-                            ]
-                        },
-                        {
-                            "origin": [
-                                -5,
-                                0.5,
-                                -1
-                            ],
-                            "size": [
-                                4,
-                                0,
-                                8
-                            ],
-                            "uv": [
-                                0,
-                                0
-                            ]
-                        },
-                        {
-                            "origin": [
-                                0,
-                                -2.5,
-                                -1
-                            ],
-                            "size": [
-                                0,
-                                10,
-                                12
-                            ],
-                            "uv": [
-                                0,
-                                0
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "right_fin",
-                    "parent": "body",
-                    "pivot": [
-                        -2.5,
-                        0,
-                        -5
-                    ],
-                    "rotation": [
-                        0,
-                        22.50005,
-                        -30.00007
-                    ],
-                    "cubes": [
-                        {
-                            "origin": [
-                                -7,
-                                0,
-                                -7
-                            ],
-                            "size": [
-                                6,
-                                0,
-                                4
-                            ],
-                            "uv": [
-                                0,
-                                27
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "left_fin",
-                    "parent": "body",
-                    "pivot": [
-                        2.5,
-                        0,
-                        -5
-                    ],
-                    "rotation": [
-                        0,
-                        -22.50005,
-                        30.00007
-                    ],
-                    "cubes": [
-                        {
-                            "origin": [
-                                1,
-                                0,
-                                -7
-                            ],
-                            "size": [
-                                6,
-                                0,
-                                4
-                            ],
-                            "uv": [
-                                0,
-                                8
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.koi_fish",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [0, 0, -2],
+					"cubes": [
+						{"origin": [-2.5, 0, -10], "size": [5, 5, 9], "uv": [15, 13]},
+						{"origin": [0, 5, -8], "size": [0, 3, 7], "uv": [0, 15]}
+					]
+				},
+				{
+					"name": "body2",
+					"parent": "body",
+					"pivot": [0, 2.5, -1],
+					"cubes": [
+						{"origin": [-2, 0.5, -1], "size": [4, 4, 6], "uv": [18, 2]},
+						{"origin": [1, 0.5, -1], "size": [4, 0, 8], "uv": [8, 0]},
+						{"origin": [-5, 0.5, -1], "size": [4, 0, 8], "uv": [0, 0]},
+						{"origin": [0, -1.5, -1], "size": [0, 8, 10], "uv": [2, 3]}
+					]
+				},
+				{
+					"name": "right_fin",
+					"parent": "body",
+					"pivot": [-2.5, 0, -5],
+					"rotation": [0, 22.50005, -30.00007],
+					"cubes": [
+						{"origin": [-7, 0, -7], "size": [6, 0, 4], "uv": [0, 27]}
+					]
+				},
+				{
+					"name": "left_fin",
+					"parent": "body",
+					"pivot": [2.5, 0, -5],
+					"rotation": [0, -22.50005, 30.00007],
+					"cubes": [
+						{"origin": [1, 0, -7], "size": [6, 0, 4], "uv": [0, 8]}
+					]
+				}
+			]
+		}
+	]
 }
