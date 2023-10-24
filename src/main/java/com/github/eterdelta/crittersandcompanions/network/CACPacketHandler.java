@@ -20,7 +20,7 @@ public class CACPacketHandler {
                 ClientboundBubbleStatePacket::write,
                 ClientboundBubbleStatePacket::new,
                 ClientboundBubbleStatePacket::handle);
-        INSTANCE.registerMessage(0,
+        INSTANCE.registerMessage(1,
                 ClientboundGrapplingStatePacket.class,
                 ClientboundGrapplingStatePacket::write,
                 ClientboundGrapplingStatePacket::new,
