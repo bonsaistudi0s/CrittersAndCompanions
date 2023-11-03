@@ -40,6 +40,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private PanicGoal panicGoal;
 
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
         super(entityType, level);
@@ -53,7 +54,10 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
+
+        this.panicGoal = new PanicGoal(this, 1.0D);
+        this.goalSelector.addGoal(1, this.panicGoal);
+
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
@@ -119,6 +123,12 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
         } else {
             return super.mobInteract(player, interactionHand);
         }
+    }
+
+    @Override
+    public void tame(Player player) {
+        super.tame(player);
+        this.goalSelector.removeGoal(this.panicGoal);
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
