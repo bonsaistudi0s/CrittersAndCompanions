@@ -78,8 +78,8 @@ public class GrapplingHookEntity extends Projectile {
             }
             this.setDeltaMovement(0.0D, 0.0D, 0.0D);
         } else {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.03D, 0.0D));
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.92D));
         }
         this.move(MoverType.SELF, this.getDeltaMovement());
     }
