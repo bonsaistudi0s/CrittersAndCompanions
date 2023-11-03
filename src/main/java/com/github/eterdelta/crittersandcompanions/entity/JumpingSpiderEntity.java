@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
@@ -46,13 +47,13 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Spider.createAttributes().add(Attributes.MAX_HEALTH, 14.0D).add(Attributes.ATTACK_DAMAGE, 2.0D);
+        return Spider.createAttributes().add(Attributes.MAX_HEALTH, 14.0D).add(Attributes.ATTACK_DAMAGE, 8.0D);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
@@ -63,6 +64,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(1, new NonTameRandomTargetGoal<>(this, Endermite.class, false, (LivingEntity::isAlive)));
         this.targetSelector.addGoal(1, new NonTameRandomTargetGoal<>(this, Silverfish.class, false, (LivingEntity::isAlive)));
         this.targetSelector.addGoal(2, new NonTameRandomTargetGoal<>(this, DragonflyEntity.class, false, (LivingEntity::isAlive)));
     }
@@ -150,7 +152,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
 
         public void tick() {
             if (this.hasWanted() && this.spider.isOnGround() && this.spider.getRandom().nextFloat() <= 0.05F) {
-                this.spider.setDeltaMovement(this.spider.getDeltaMovement().add(0.0D, 0.5D, 0.0D));
+                this.spider.setDeltaMovement(this.spider.getDeltaMovement().add(0.0D, 0.8D, 0.0D));
             }
             super.tick();
         }
