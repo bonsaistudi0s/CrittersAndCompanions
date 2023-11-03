@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SS ",
+        "SI ",
+        "  S"
+    ],
+    "key": {
+        "S": {
+            "item": "crittersandcompanions:silk"
+        },
+        "I": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "crittersandcompanions:grappling_hook",
+        "count": 1
+    }
+}

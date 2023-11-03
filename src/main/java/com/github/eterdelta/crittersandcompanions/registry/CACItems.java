@@ -22,6 +22,7 @@ public class CACItems {
     public static final RegistryObject<Item> DRAGONFLY_WING = ITEMS.register("dragonfly_wing", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> KOI_FISH = ITEMS.register("koi_fish", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).food(Foods.TROPICAL_FISH)));
     public static final RegistryObject<Item> PEARL = ITEMS.register("pearl", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
+    public static final RegistryObject<Item> SILK = ITEMS.register("silk", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
 
     public static final RegistryObject<Item> SILK_LEAD = ITEMS.register("silk_lead", () -> new SilkLeashItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).stacksTo(1)));
