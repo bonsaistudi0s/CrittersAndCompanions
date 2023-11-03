@@ -25,5 +25,10 @@ public class CACPacketHandler {
                 ClientboundGrapplingStatePacket::write,
                 ClientboundGrapplingStatePacket::new,
                 ClientboundGrapplingStatePacket::handle);
+        INSTANCE.registerMessage(2,
+                ClientboundSilkLeashStatePacket.class,
+                ClientboundSilkLeashStatePacket::write,
+                ClientboundSilkLeashStatePacket::new,
+                ClientboundSilkLeashStatePacket::handle);
     }
 }

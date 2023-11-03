@@ -15,7 +15,9 @@
         "ZombifiedPiglinMixin"
     ],
     "client": [
-        "ClientPacketListenerMixin"
+        "ClientPacketListenerMixin",
+        "GeoEntityRendererMixin",
+        "LivingEntityRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
