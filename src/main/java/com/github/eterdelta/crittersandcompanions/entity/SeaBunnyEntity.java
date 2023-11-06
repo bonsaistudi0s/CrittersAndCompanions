@@ -277,9 +277,10 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
         @Override
         protected Vec3 getPosition() {
             Vec3 randomPos = RandomPos.generateRandomPos(this.mob, () -> {
-                BlockPos blockPos = RandomPos.generateRandomDirection(this.mob.getRandom(), 10, 7);
-                BlockPos blockPos1 = RandomPos.generateRandomPosTowardDirection(this.mob, 10, this.mob.getRandom(), blockPos);
-                return RandomPos.moveUpOutOfSolid(blockPos1, this.mob.level.getMaxBuildHeight(), (blockPos2) -> GoalUtils.isSolid(this.mob, blockPos2));
+                BlockPos dirPos = RandomPos.generateRandomDirection(this.mob.getRandom(), 8, 6);
+                BlockPos dirRandomPos = RandomPos.generateRandomPosTowardDirection(this.mob, 8, this.mob.getRandom(), dirPos);
+                BlockPos finalPos = RandomPos.moveUpOutOfSolid(dirRandomPos, this.mob.level.getMaxBuildHeight(), (blockPos) -> GoalUtils.isSolid(this.mob, blockPos));
+                return this.mob.getLevel().getBlockState(finalPos).getFluidState().isEmpty() ? null : finalPos;
             });
             return randomPos;
         }
