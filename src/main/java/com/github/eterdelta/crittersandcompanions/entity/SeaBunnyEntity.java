@@ -45,8 +45,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.Random;
-
 public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatable {
     private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.INT);
@@ -277,8 +275,8 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
         @Override
         protected Vec3 getPosition() {
             Vec3 randomPos = RandomPos.generateRandomPos(this.mob, () -> {
-                BlockPos dirPos = RandomPos.generateRandomDirection(this.mob.getRandom(), 8, 6);
-                BlockPos dirRandomPos = RandomPos.generateRandomPosTowardDirection(this.mob, 8, this.mob.getRandom(), dirPos);
+                BlockPos dirPos = RandomPos.generateRandomDirection(this.mob.getRandom(), 2, 2);
+                BlockPos dirRandomPos = RandomPos.generateRandomPosTowardDirection(this.mob, 2, this.mob.getRandom(), dirPos);
                 BlockPos finalPos = RandomPos.moveUpOutOfSolid(dirRandomPos, this.mob.level.getMaxBuildHeight(), (blockPos) -> GoalUtils.isSolid(this.mob, blockPos));
                 return this.mob.getLevel().getBlockState(finalPos).getFluidState().isEmpty() ? null : finalPos;
             });
