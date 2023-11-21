@@ -269,7 +269,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
 
     static class RandomStrollGoal extends net.minecraft.world.entity.ai.goal.RandomStrollGoal {
         public RandomStrollGoal(SeaBunnyEntity seaBunny, double speedModifier) {
-            super(seaBunny, speedModifier);
+            super(seaBunny, speedModifier, 20);
         }
 
         @Override
