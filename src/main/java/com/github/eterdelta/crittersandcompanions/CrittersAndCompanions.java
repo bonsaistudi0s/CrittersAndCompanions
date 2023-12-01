@@ -8,6 +8,7 @@ import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
+import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
@@ -44,6 +45,7 @@ public class CrittersAndCompanions {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         CACEntities.ENTITIES.register(eventBus);
+        CACBlocks.BLOCKS.register(eventBus);
         CACItems.ITEMS.register(eventBus);
         CACSounds.SOUNDS.register(eventBus);
 

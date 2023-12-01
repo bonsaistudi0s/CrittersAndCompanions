@@ -2,25 +2,29 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath "org.parchmentmc:librarian:1.+"
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.19.2-2.0.3'
+version = '1.19.2-2.0.4'
 group = 'com.github.eterdelta.crittersandcompanions'
 archivesBaseName = 'crittersandcompanions'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'parchment', version: '2022.08.14-1.19.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -81,7 +85,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.37')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

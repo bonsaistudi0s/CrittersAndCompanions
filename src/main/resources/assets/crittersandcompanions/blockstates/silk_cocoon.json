@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "crittersandcompanions:block/silk_cocoon"
+    },
+    "hanging=true": {
+      "model": "crittersandcompanions:block/hanging_silk_cocoon"
+    }
+  }
+}
