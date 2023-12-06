@@ -1,4 +1,5 @@
 {
+    "block.crittersandcompanions.sea_bunny_slime_block": "Sea Bunny Slime Block",
     "entity.crittersandcompanions.otter": "Otter",
     "entity.crittersandcompanions.jumping_spider": "Jumping Spider",
     "entity.crittersandcompanions.koi_fish": "Koi Fish",
@@ -32,6 +33,7 @@
     "item.crittersandcompanions.dragonfly_wing": "Dragonfly Wing",
     "item.crittersandcompanions.pearl": "Pearl",
     "item.crittersandcompanions.silk": "Silk",
+    "item.crittersandcompanions.sea_bunny_slime_bottle": "Sea Bunny Slime Bottle",
     "item.crittersandcompanions.silk_lead": "Silk Lead",
     "item.crittersandcompanions.grappling_hook": "Grappling Hook",
     "item.crittersandcompanions.pearl_necklace_1": "Pearl Necklace 1",

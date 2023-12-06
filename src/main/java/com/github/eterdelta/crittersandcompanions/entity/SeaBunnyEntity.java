@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -31,9 +32,11 @@ import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -50,6 +53,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    protected int harvestCooldown;
 
     public SeaBunnyEntity(EntityType<? extends SeaBunnyEntity> entityType, Level level) {
         super(entityType, level);
@@ -107,6 +111,15 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     @Override
     public int getExperienceReward() {
         return this.random.nextInt(2, 5);
+    }
+
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if (this.harvestCooldown > 0) {
+            this.harvestCooldown--;
+        }
     }
 
     @Override
@@ -195,7 +208,23 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        return Bucketable.bucketMobPickup(player, interactionHand, this).orElse(super.mobInteract(player, interactionHand));
+        ItemStack handStack = player.getItemInHand(interactionHand);
+        if (handStack.is(Items.BUCKET) || handStack.is(Items.WATER_BUCKET)) {
+            return Bucketable.bucketMobPickup(player, interactionHand, this).orElse(super.mobInteract(player, interactionHand));
+        } else if (handStack.is(Items.GLASS_BOTTLE)) {
+            if (this.harvestCooldown <= 0) {
+                handStack.shrink(1);
+                this.level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
+                if (handStack.isEmpty()) {
+                    player.setItemInHand(interactionHand, new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()));
+                } else if (!player.getInventory().add(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()))) {
+                    player.drop(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()), false);
+                }
+                this.harvestCooldown = 6000;
+                return InteractionResult.sidedSuccess(this.level.isClientSide());
+            }
+        }
+        return super.mobInteract(player, interactionHand);
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {

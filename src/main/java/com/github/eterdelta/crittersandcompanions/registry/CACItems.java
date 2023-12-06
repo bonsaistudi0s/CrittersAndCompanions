@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -24,6 +25,9 @@ public class CACItems {
     public static final RegistryObject<Item> KOI_FISH = ITEMS.register("koi_fish", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).food(Foods.TROPICAL_FISH)));
     public static final RegistryObject<Item> PEARL = ITEMS.register("pearl", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> SILK = ITEMS.register("silk", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
+
+    public static final RegistryObject<Item> SEA_BUNNY_SLIME_BOTTLE = ITEMS.register("sea_bunny_slime_bottle", () -> new Item(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).craftRemainder(Items.GLASS_BOTTLE).stacksTo(16)));
+    public static final RegistryObject<Item> SEA_BUNNY_SLIME_BLOCK = ITEMS.register("sea_bunny_slime_block", () -> new BlockItem(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get(), new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
 
     public static final RegistryObject<Item> SILK_LEAD = ITEMS.register("silk_lead", () -> new SilkLeashItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB)));
     public static final RegistryObject<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem(new Item.Properties().tab(CrittersAndCompanions.CREATIVE_TAB).stacksTo(1)));
