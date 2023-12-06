@@ -46,7 +46,6 @@ public class CrittersAndCompanions {
 
         CACBlocks.BLOCKS.register(eventBus);
         CACEntities.ENTITIES.register(eventBus);
-        CACBlocks.BLOCKS.register(eventBus);
         CACItems.ITEMS.register(eventBus);
         CACSounds.SOUNDS.register(eventBus);
 
