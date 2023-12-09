@@ -15,7 +15,12 @@ import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -23,13 +28,20 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.forgespi.locating.IModFile;
+import net.minecraftforge.resource.PathPackResources;
 import software.bernie.geckolib3.GeckoLib;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 @Mod(CrittersAndCompanions.MODID)
 public class CrittersAndCompanions {
@@ -58,10 +70,31 @@ public class CrittersAndCompanions {
         }
 
         eventBus.addListener(this::gatherData);
+        eventBus.addListener(this::onAddPackFinders);
     }
 
     public void gatherData(GatherDataEvent event){
         SpawnHandler.datagenBiomeModifiers(event);
+    }
+
+    public void onAddPackFinders(AddPackFindersEvent event) {
+        try {
+            System.out.println("Hello");
+            if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+                IModFile modFile = ModList.get().getModFileById(MODID).getFile();
+                Path resourcePath = modFile.findResource("builtin/friendlyart");
+                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, resourcePath);
+                PackMetadataSection metadataSection = pack.getMetadataSection(PackMetadataSection.SERIALIZER);
+                if (metadataSection != null) {
+                    event.addRepositorySource((packConsumer, packConstructor) ->
+                            packConsumer.accept(packConstructor.create(
+                                    "builtin/" + MODID, Component.literal("Friendly Critter Art"), false,
+                                    () -> pack, metadataSection, Pack.Position.BOTTOM, PackSource.BUILT_IN, false)));
+                }
+            }
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     public void onSetup(FMLCommonSetupEvent event) {
