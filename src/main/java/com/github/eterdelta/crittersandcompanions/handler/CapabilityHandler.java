@@ -15,7 +15,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = CrittersAndCompanions.MODID)
-
 public class CapabilityHandler {
 
     @SubscribeEvent

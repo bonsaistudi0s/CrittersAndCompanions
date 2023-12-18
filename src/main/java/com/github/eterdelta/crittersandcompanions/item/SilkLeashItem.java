@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.item;
 
 import com.github.eterdelta.crittersandcompanions.capability.CACCapabilities;
 import com.github.eterdelta.crittersandcompanions.capability.ISilkLeashStateCapability;
+import com.github.eterdelta.crittersandcompanions.entity.ILeashStateEntity;
 import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
 import com.github.eterdelta.crittersandcompanions.network.ClientboundSilkLeashStatePacket;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
@@ -52,7 +53,7 @@ public class SilkLeashItem extends Item {
         Map<Entity, ISilkLeashStateCapability> modifiedEntities = new HashMap<>();
 
         if (leashOwner == null) {
-            LazyOptional<ISilkLeashStateCapability> leashedCap = leashedEntity.getCapability(CACCapabilities.SILK_LEASH_STATE);
+            LazyOptional<ISilkLeashStateCapability> leashedCap = ((ILeashStateEntity) leashedEntity).getLeashStateCache();
             ISilkLeashStateCapability leashedLeashState = leashedCap.orElseThrow(IllegalStateException::new);
 
             if (leashedLeashState.getLeashedByEntities().isEmpty()) {
@@ -68,7 +69,7 @@ public class SilkLeashItem extends Item {
             leashedLeashState.getLeashedByEntities().clear();
             modifiedEntities.put(leashedEntity, leashedLeashState);
         } else {
-            LazyOptional<ISilkLeashStateCapability> ownerCap = leashOwner.getCapability(CACCapabilities.SILK_LEASH_STATE);
+            LazyOptional<ISilkLeashStateCapability> ownerCap = ((ILeashStateEntity) leashOwner).getLeashStateCache();
             ISilkLeashStateCapability ownerLeashState = ownerCap.orElseThrow(IllegalStateException::new);
 
             if (leashedEntity == null) {
@@ -88,7 +89,7 @@ public class SilkLeashItem extends Item {
                     return Map.of();
                 }
 
-                LazyOptional<ISilkLeashStateCapability> leashedEntityCap = leashedEntity.getCapability(CACCapabilities.SILK_LEASH_STATE);
+                LazyOptional<ISilkLeashStateCapability> leashedEntityCap = ((ILeashStateEntity) leashedEntity).getLeashStateCache();
                 leashedEntityCap.ifPresent(leashedEntityLeashState -> {
                     leashedEntityLeashState.getLeashedByEntities().add(leashOwner);
                     ownerLeashState.getLeashingEntities().add(leashedEntity);
