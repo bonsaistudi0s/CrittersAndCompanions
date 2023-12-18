@@ -37,12 +37,14 @@ public abstract class GeoEntityRendererMixin<T extends LivingEntity & IAnimatabl
     @Inject(at = @At("TAIL"), method = "render", remap = false)
     private void onRender(T entity, float p_115456_, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int p_115460_, CallbackInfo callback) {
         LazyOptional<ISilkLeashStateCapability> silkLeashCap = ((ILeashStateEntity) entity).getLeashStateCache();
-        silkLeashCap.ifPresent(capability -> {
-            Set<LivingEntity> leashedByEntities = capability.getLeashedByEntities();
-            for (LivingEntity leashedBy : leashedByEntities) {
-                this.renderSilkLeash(entity, partialTicks, poseStack, bufferSource, leashedBy);
-            }
-        });
+        if (silkLeashCap != null) {
+            silkLeashCap.ifPresent(capability -> {
+                Set<LivingEntity> leashedByEntities = capability.getLeashedByEntities();
+                for (LivingEntity leashedBy : leashedByEntities) {
+                    this.renderSilkLeash(entity, partialTicks, poseStack, bufferSource, leashedBy);
+                }
+            });
+        }
     }
 
     @Unique
