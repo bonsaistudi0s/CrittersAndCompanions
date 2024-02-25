@@ -91,7 +91,7 @@ public class PlayerHandler {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             if (event.side.isServer()) {
-                List<KoiFishEntity> nearKoiFishes = event.player.getLevel().getEntitiesOfClass(KoiFishEntity.class, event.player.getBoundingBox().inflate(10.0D), EntitySelector.ENTITY_STILL_ALIVE);
+                List<KoiFishEntity> nearKoiFishes = event.player.level().getEntitiesOfClass(KoiFishEntity.class, event.player.getBoundingBox().inflate(10.0D), EntitySelector.ENTITY_STILL_ALIVE);
 
                 if (nearKoiFishes.size() >= 3) {
                     event.player.addEffect(new MobEffectInstance(MobEffects.LUCK, 210, 0, false, false));

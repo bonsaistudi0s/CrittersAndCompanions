@@ -3,9 +3,10 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.KoiFishEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class KoiFishModel extends AnimatedGeoModel<KoiFishEntity> {
+
+public class KoiFishModel extends GeoModel<KoiFishEntity> {
     private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "geo/koi_fish.geo.json");
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/koi_fish_1.png"),

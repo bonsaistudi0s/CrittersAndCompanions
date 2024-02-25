@@ -4,15 +4,15 @@
   "spawners": [
     {
       "type": "crittersandcompanions:sea_bunny",
-      "maxCount": 4,
+      "maxCount": 3,
       "minCount": 1,
-      "weight": 64
+      "weight": 32
     },
     {
       "type": "crittersandcompanions:dumbo_octopus",
       "maxCount": 1,
       "minCount": 1,
-      "weight": 8
+      "weight": 6
     }
   ]
 }

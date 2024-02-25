@@ -3,13 +3,10 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.FerretEntity;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
 
-public class FerretModel extends AnimatedGeoModel<FerretEntity> {
+public class FerretModel extends GeoModel<FerretEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "geo/ferret.geo.json"),
             new ResourceLocation(CrittersAndCompanions.MODID, "geo/baby_ferret.geo.json")};
@@ -39,14 +36,8 @@ public class FerretModel extends AnimatedGeoModel<FerretEntity> {
     }
 
     @Override
-    public void setCustomAnimations(FerretEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-
-        if (!entity.isSleeping()) {
-            IBone neck = this.getAnimationProcessor().getBone("body_2");
-            neck.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
-        }
-        entity.getFactory().getOrCreateAnimationData(uniqueID).setResetSpeedInTicks(4);
+    public void setCustomAnimations(FerretEntity animatable, long instanceId, AnimationState<FerretEntity> animationState) {
+        super.setCustomAnimations(animatable, instanceId, animationState);
     }
+
 }

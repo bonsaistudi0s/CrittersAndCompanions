@@ -2,14 +2,14 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.JumpingSpiderEntity;
-import com.github.eterdelta.crittersandcompanions.entity.RedPandaEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
-public class JumpingSpiderModel extends AnimatedGeoModel<JumpingSpiderEntity> {
+public class JumpingSpiderModel extends GeoModel<JumpingSpiderEntity> {
     private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "geo/jumping_spider.geo.json");
     private static final ResourceLocation TEXTURE = new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/jumping_spider.png");
     private static final ResourceLocation ANIMATION = new ResourceLocation(CrittersAndCompanions.MODID, "animations/jumping_spider.animation.json");
@@ -30,13 +30,14 @@ public class JumpingSpiderModel extends AnimatedGeoModel<JumpingSpiderEntity> {
     }
 
     @Override
-    public void setCustomAnimations(JumpingSpiderEntity entity, int uniqueID, AnimationEvent customPredicate) {
+    public void setCustomAnimations(JumpingSpiderEntity entity, long uniqueID, AnimationState<JumpingSpiderEntity> customPredicate) {
         super.setCustomAnimations(entity, uniqueID, customPredicate);
-        IBone headBone = this.getAnimationProcessor().getBone("head_rotation");
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        CoreGeoBone headBone = this.getAnimationProcessor().getBone("head_rotation");
+        EntityModelData extraData = customPredicate.getData(DataTickets.ENTITY_MODEL_DATA);
 
-        headBone.setRotationX(extraData.headPitch * ((float) Math.PI / 180.0F));
-        headBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
-        entity.getFactory().getOrCreateAnimationData(uniqueID).setResetSpeedInTicks(0);
+        headBone.setRotX(extraData.headPitch() * ((float) Math.PI / 180.0F));
+        headBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
+//        entity.getAnimatableInstanceCache().getOrCreateAnimationData(uniqueID).setResetSpeedInTicks(0);
+
     }
 }

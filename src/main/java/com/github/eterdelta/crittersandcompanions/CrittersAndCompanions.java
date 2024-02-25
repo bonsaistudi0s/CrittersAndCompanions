@@ -8,13 +8,11 @@ import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
-import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
-import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
-import com.github.eterdelta.crittersandcompanions.registry.CACItems;
-import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
+import com.github.eterdelta.crittersandcompanions.registry.*;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -22,8 +20,6 @@ import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -38,7 +34,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.forgespi.locating.IModFile;
 import net.minecraftforge.resource.PathPackResources;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -46,11 +42,6 @@ import java.nio.file.Path;
 @Mod(CrittersAndCompanions.MODID)
 public class CrittersAndCompanions {
     public static final String MODID = "crittersandcompanions";
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MODID) {
-        public ItemStack makeIcon() {
-            return new ItemStack(CACItems.PEARL_NECKLACE_1.get());
-        }
-    };
 
     public CrittersAndCompanions() {
         GeckoLib.initialize();
@@ -67,6 +58,7 @@ public class CrittersAndCompanions {
         eventBus.addListener(this::registerEntityLayers);
         if (FMLEnvironment.dist.isClient()) {
             eventBus.addListener(this::addEntityLayers);
+            CACCreativeTab.CREATIVE_TABS.register(eventBus);
         }
 
         eventBus.addListener(this::gatherData);
@@ -74,22 +66,29 @@ public class CrittersAndCompanions {
     }
 
     public void gatherData(GatherDataEvent event){
-        SpawnHandler.datagenBiomeModifiers(event);
+        SpawnHandler.gatherData(event);
     }
 
     public void onAddPackFinders(AddPackFindersEvent event) {
         try {
-            System.out.println("Hello");
             if (event.getPackType() == PackType.CLIENT_RESOURCES) {
                 IModFile modFile = ModList.get().getModFileById(MODID).getFile();
                 Path resourcePath = modFile.findResource("builtin/friendlyart");
-                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, resourcePath);
-                PackMetadataSection metadataSection = pack.getMetadataSection(PackMetadataSection.SERIALIZER);
+
+                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, true, resourcePath); // todo: check if builtin parameter works
+                PackMetadataSection metadataSection = pack.getMetadataSection(PackMetadataSection.TYPE);
+
                 if (metadataSection != null) {
-                    event.addRepositorySource((packConsumer, packConstructor) ->
-                            packConsumer.accept(packConstructor.create(
-                                    "builtin/" + MODID, Component.literal("Friendly Critter Art"), false,
-                                    () -> pack, metadataSection, Pack.Position.BOTTOM, PackSource.BUILT_IN, false)));
+                    event.addRepositorySource((packConsumer) ->
+                            packConsumer.accept(Pack.readMetaAndCreate(
+                                    "builtin/" + MODID,
+                                    Component.literal("Friendly Critter Art"),
+                                    false,
+                                    (e) -> pack,
+                                    PackType.CLIENT_RESOURCES,
+                                    Pack.Position.TOP,
+                                    PackSource.BUILT_IN
+                                    )));
                 }
             }
         } catch (IOException exception) {
@@ -101,20 +100,22 @@ public class CrittersAndCompanions {
         CACPacketHandler.registerPackets();
         event.enqueueWork(() -> {
             SpawnHandler.registerSpawnPlacements();
-            ItemProperties.register(CACItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
-                if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
-                    return stack.getTag().getInt("BucketVariant");
-                } else {
-                    return 0.0F;
-                }
-            });
-            ItemProperties.register(CACItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
-                if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
-                    return stack.getTag().getInt("BucketVariant");
-                } else {
-                    return 0.0F;
-                }
-            });
+            if (FMLEnvironment.dist.isClient()) {
+                ItemProperties.register(CACItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
+                    if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
+                        return stack.getTag().getInt("BucketVariant");
+                    } else {
+                        return 0.0F;
+                    }
+                });
+                ItemProperties.register(CACItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
+                    if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
+                        return stack.getTag().getInt("BucketVariant");
+                    } else {
+                        return 0.0F;
+                    }
+                });
+            }
         });
     }
 
@@ -130,7 +131,6 @@ public class CrittersAndCompanions {
         event.put(CACEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
         event.put(CACEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
     }
-
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(CACEntities.OTTER.get(), OtterRenderer::new);
         event.registerEntityRenderer(CACEntities.JUMPING_SPIDER.get(), JumpingSpiderRenderer::new);
