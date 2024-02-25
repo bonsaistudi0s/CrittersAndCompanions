@@ -72,7 +72,7 @@ public class BiomeModifierProvider extends DatapackBuiltinEntriesProvider {
 
                 context.register(ADD_WARM_OCEANS_SPAWNS, createSpawnModifier(
                         getBiomeHolderSet(registry, Biomes.WARM_OCEAN),
-                        new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 32, 1, 3),
+                        new MobSpawnSettings.SpawnerData(CACEntities.SEA_BUNNY.get(), 64, 1, 4),
                         new MobSpawnSettings.SpawnerData(CACEntities.DUMBO_OCTOPUS.get(), 6, 1, 1)
                                                                             ));
 
