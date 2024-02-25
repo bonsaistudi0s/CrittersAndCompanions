@@ -4,7 +4,6 @@ import com.github.eterdelta.crittersandcompanions.capability.ISilkLeashStateCapa
 import com.github.eterdelta.crittersandcompanions.entity.ILeashStateEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,12 +13,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -69,7 +70,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         poseStack.pushPose();
         Vec3 vec3 = leashedToEntity.getRopeHoldPosition(partialTicks);
         double d0 = (double) (Mth.lerp(partialTicks, entity.yBodyRotO, entity.yBodyRot) * ((float) Math.PI / 180F)) + (Math.PI / 2D);
-        Vec3 vec31 = entity.getLeashOffset();
+        Vec3 vec31 = entity.getLeashOffset(partialTicks);
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
         double d3 = Mth.lerp(partialTicks, entity.xo, entity.getX()) + d1;
@@ -81,14 +82,17 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         float f2 = (float) (vec3.z - d5);
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.leash());
         Matrix4f matrix4f = poseStack.last().pose();
-        float f4 = Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
+        float f4 = (float) Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = new BlockPos(entity.getEyePosition(partialTicks));
-        BlockPos blockpos1 = new BlockPos(leashedToEntity.getEyePosition(partialTicks));
+        Vec3 vec1 = entity.getEyePosition(partialTicks);
+        Vec3 vec2 = leashedToEntity.getEyePosition(partialTicks);
+        BlockPos blockpos = new BlockPos(new Vec3i((int) vec1.x, (int) vec1.y, (int) vec1.z));
+        BlockPos blockpos1 = new BlockPos(new Vec3i((int) vec2.x, (int) vec2.y, (int) vec2.z));
+
         int i = this.getBlockLightLevel(entity, blockpos);
-        int k = entity.level.getBrightness(LightLayer.SKY, blockpos);
-        int l = entity.level.getBrightness(LightLayer.SKY, blockpos1);
+        int k = entity.level().getBrightness(LightLayer.SKY, blockpos);
+        int l = entity.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for (int i1 = 0; i1 <= 24; ++i1) {
             addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, k, l, 0.025F, f5, f6, i1, false, 0.25F + 0.75F * (i1 / 24.0F));

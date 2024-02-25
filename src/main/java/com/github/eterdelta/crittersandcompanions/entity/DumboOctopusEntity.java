@@ -37,23 +37,23 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.PacketDistributor;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.EnumSet;
 
-public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Bucketable {
+public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucketable {
     private static final EntityDataAccessor<Boolean> RESTING = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache animatableInstanceCache = GeckoLibUtil.createInstanceCache(this);
     public int restTimer;
     protected boolean bubblingPlayer;
     protected ServerPlayer bubbledPlayer;
@@ -155,7 +155,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!level.isClientSide() && !this.bubblingPlayer && this.isEffectiveAi()) {
+        if (!level().isClientSide() && !this.bubblingPlayer && this.isEffectiveAi()) {
             if (this.isInWater()) {
                 if (this.isResting()) {
                     if (--this.restTimer <= 0) {
@@ -199,25 +199,26 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
         return spawnGroupData;
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+    private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> event) {
         if (this.isResting()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_idle", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("dumbo_octopus_idle"));
         } else if (this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_swim", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("dumbo_octopus_swim"));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dumbo_octopus_on_land", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("dumbo_octopus_on_land"));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 4, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
+        
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.animatableInstanceCache;
     }
 
     public void sendBubble(ServerPlayer player, boolean state) {
@@ -271,7 +272,7 @@ public class DumboOctopusEntity extends WaterAnimal implements IAnimatable, Buck
         private boolean bubbleSent;
 
         public BubblePlayerGoal() {
-            this.level = DumboOctopusEntity.this.level;
+            this.level = DumboOctopusEntity.this.level();
             this.navigation = DumboOctopusEntity.this.getNavigation();
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }

@@ -8,8 +8,6 @@ import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
@@ -49,13 +47,13 @@ public class GrapplingHookEntity extends Projectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide() && (!this.isFocused() || this.getOwner().distanceToSqr(this) > 1048)) {
+        if (!this.level().isClientSide() && (!this.isFocused() || this.getOwner().distanceToSqr(this) > 1048)) {
             this.discard();
             return;
         }
 
         AABB collidableBox = this.getBoundingBox().inflate(0.1D);
-        Iterable<VoxelShape> collisions = this.level.getBlockCollisions(this, collidableBox);
+        Iterable<VoxelShape> collisions = this.level().getBlockCollisions(this, collidableBox);
 
         isStick = false;
         for (VoxelShape shape : collisions) {
@@ -103,7 +101,7 @@ public class GrapplingHookEntity extends Projectile {
 
     public void pull() {
         if (this.getOwner() != null) {
-            if (this.level.isClientSide() && isStick) {
+            if (this.level().isClientSide() && isStick) {
                 this.getOwner().setDeltaMovement(this.position().subtract(this.getOwner().position())
                         .multiply(0.25D, 0.2D, 0.25D)
                         .add(0.0D, 0.25D, 0.0D)
@@ -114,7 +112,7 @@ public class GrapplingHookEntity extends Projectile {
     }
 
     public void updateOwnerState() {
-        if (!this.level.isClientSide() && this.getOwner() != null && this.getOwner() instanceof Player player) {
+        if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof Player player) {
             LazyOptional<IGrapplingStateCapability> capability = player.getCapability(CACCapabilities.GRAPPLING_STATE);
 
             capability.ifPresent(state -> {
@@ -127,7 +125,7 @@ public class GrapplingHookEntity extends Projectile {
 
     public boolean isFocused() {
         if (this.getOwner() instanceof Player player) {
-            if (this.level.isClientSide()) {
+            if (this.level().isClientSide()) {
                 return player.getMainHandItem().areShareTagsEqual(this.getOwnerStack()) || player.getOffhandItem().areShareTagsEqual(this.getOwnerStack());
             } else {
                 return player.getMainHandItem() == this.getOwnerStack() || player.getOffhandItem() == this.getOwnerStack();

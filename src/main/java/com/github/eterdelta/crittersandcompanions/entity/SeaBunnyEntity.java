@@ -36,23 +36,22 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatable {
+public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity {
     private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.BOOLEAN);
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache animatableInstanceCache = GeckoLibUtil.createInstanceCache(this);
     protected int harvestCooldown;
 
     public SeaBunnyEntity(EntityType<? extends SeaBunnyEntity> entityType, Level level) {
@@ -183,14 +182,14 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             this.setClimbing(this.horizontalCollision && this.getNavigation().isInProgress());
         }
     }
 
     @Override
     public float getWalkTargetValue(BlockPos blockPos) {
-        return this.level.getBlockState(blockPos).getFluidState().isEmpty() ? 1.0F : 5.0F;
+        return this.level().getBlockState(blockPos).getFluidState().isEmpty() ? 1.0F : 5.0F;
     }
 
     @Override
@@ -214,36 +213,37 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
         } else if (handStack.is(Items.GLASS_BOTTLE)) {
             if (this.harvestCooldown <= 0) {
                 handStack.shrink(1);
-                this.level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
+                this.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
                 if (handStack.isEmpty()) {
                     player.setItemInHand(interactionHand, new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()));
                 } else if (!player.getInventory().add(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()))) {
                     player.drop(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()), false);
                 }
                 this.harvestCooldown = 6000;
-                return InteractionResult.sidedSuccess(this.level.isClientSide());
+                return InteractionResult.sidedSuccess(this.level().isClientSide());
             }
         }
         return super.mobInteract(player, interactionHand);
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.animationSpeed > 0.03F) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("sea_bunny_move", ILoopType.EDefaultLoopTypes.LOOP));
+    private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> event) {
+        if (event.getController().getAnimationSpeed() > 0.03F) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("sea_bunny_move"));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("sea_bunny", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("sea_bunny"));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 4, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
+
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.animatableInstanceCache;
     }
 
     public boolean isClimbing() {
@@ -306,8 +306,8 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, IAnimatab
             Vec3 randomPos = RandomPos.generateRandomPos(this.mob, () -> {
                 BlockPos dirPos = RandomPos.generateRandomDirection(this.mob.getRandom(), 2, 2);
                 BlockPos dirRandomPos = RandomPos.generateRandomPosTowardDirection(this.mob, 2, this.mob.getRandom(), dirPos);
-                BlockPos finalPos = RandomPos.moveUpOutOfSolid(dirRandomPos, this.mob.level.getMaxBuildHeight(), (blockPos) -> GoalUtils.isSolid(this.mob, blockPos));
-                return this.mob.getLevel().getBlockState(finalPos).getFluidState().isEmpty() ? null : finalPos;
+                BlockPos finalPos = RandomPos.moveUpOutOfSolid(dirRandomPos, this.mob.level().getMaxBuildHeight(), (blockPos) -> GoalUtils.isSolid(this.mob, blockPos));
+                return this.mob.level().getBlockState(finalPos).getFluidState().isEmpty() ? null : finalPos;
             });
             return randomPos;
         }
