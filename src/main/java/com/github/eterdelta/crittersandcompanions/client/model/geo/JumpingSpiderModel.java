@@ -37,7 +37,6 @@ public class JumpingSpiderModel extends GeoModel<JumpingSpiderEntity> {
 
         headBone.setRotX(extraData.headPitch() * ((float) Math.PI / 180.0F));
         headBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
-//        entity.getAnimatableInstanceCache().getOrCreateAnimationData(uniqueID).setResetSpeedInTicks(0);
 
     }
 }

@@ -46,6 +46,5 @@ public class OtterModel extends GeoModel<OtterEntity> {
             rotBone.setRotX(extraData.headPitch() * ((float) Math.PI / 180.0F));
             rotBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
         }
-        //entity.getAnimatableInstanceCache().getManagerForId(uniqueID).setData(DataTickets.);
     }
 }

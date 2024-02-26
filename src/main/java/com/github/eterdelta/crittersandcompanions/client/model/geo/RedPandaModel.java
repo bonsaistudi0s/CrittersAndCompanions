@@ -50,6 +50,5 @@ public class RedPandaModel extends GeoModel<RedPandaEntity> {
             }
             headBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
         }
-//        entity.getAnimatableInstanceCache().getManagerForId(uniqueID).setData(DataTickets.);
     }
 }

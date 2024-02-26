@@ -33,14 +33,17 @@ public class SeaBunnyModel extends GeoModel<SeaBunnyEntity> {
     }
 
     @Override
-    public void setCustomAnimations(SeaBunnyEntity entity, long uniqueID, AnimationState<SeaBunnyEntity> customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(SeaBunnyEntity entity, long uniqueID, AnimationState<SeaBunnyEntity> animationState) {
+        super.setCustomAnimations(entity, uniqueID, animationState);
         CoreGeoBone mainBone = this.getAnimationProcessor().getBone("main");
-        EntityModelData extraData = customPredicate.getData(DataTickets.ENTITY_MODEL_DATA);
+        EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
         mainBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
+        System.out.println(entity.isClimbing());
         if (entity.isClimbing()) {
             mainBone.setRotX(90.0F * ((float) Math.PI / 180.0F));
+        } else {
+            mainBone.setRotX(0.0F);
         }
     }
 }

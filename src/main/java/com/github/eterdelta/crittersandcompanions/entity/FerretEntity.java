@@ -41,10 +41,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -357,7 +355,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public double getBoneResetTime() {
-        return 0;
+        return 4;
     }
 
     public class DigGoal extends Goal {

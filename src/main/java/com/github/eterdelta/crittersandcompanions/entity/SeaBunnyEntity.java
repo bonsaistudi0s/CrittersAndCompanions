@@ -74,6 +74,11 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     }
 
     @Override
+    public double getBoneResetTime() {
+        return 4;
+    }
+
+    @Override
     public boolean removeWhenFarAway(double distance) {
         return !this.fromBucket() && !this.hasCustomName();
     }

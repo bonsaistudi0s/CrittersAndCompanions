@@ -1,8 +1,8 @@
 package com.github.eterdelta.crittersandcompanions.handler;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.datagen.BiomeModifierProvider;
+import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.core.Direction;

@@ -3,8 +3,11 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.FerretEntity;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FerretModel extends GeoModel<FerretEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
@@ -37,7 +40,15 @@ public class FerretModel extends GeoModel<FerretEntity> {
 
     @Override
     public void setCustomAnimations(FerretEntity animatable, long instanceId, AnimationState<FerretEntity> animationState) {
+
         super.setCustomAnimations(animatable, instanceId, animationState);
+        EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+
+        if (!animatable.isSleeping()) {
+            CoreGeoBone neck = this.getAnimationProcessor().getBone("body_2");
+            neck.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
+        }
+
     }
 
 }

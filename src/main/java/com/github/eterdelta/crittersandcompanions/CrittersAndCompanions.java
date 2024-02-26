@@ -12,7 +12,6 @@ import com.github.eterdelta.crittersandcompanions.registry.*;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -75,7 +74,7 @@ public class CrittersAndCompanions {
                 IModFile modFile = ModList.get().getModFileById(MODID).getFile();
                 Path resourcePath = modFile.findResource("builtin/friendlyart");
 
-                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, true, resourcePath); // todo: check if builtin parameter works
+                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, true, resourcePath);
                 PackMetadataSection metadataSection = pack.getMetadataSection(PackMetadataSection.TYPE);
 
                 if (metadataSection != null) {
