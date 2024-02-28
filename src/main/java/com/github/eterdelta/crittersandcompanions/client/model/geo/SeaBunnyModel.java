@@ -39,7 +39,6 @@ public class SeaBunnyModel extends GeoModel<SeaBunnyEntity> {
         EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
         mainBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
-        System.out.println(entity.isClimbing());
         if (entity.isClimbing()) {
             mainBone.setRotX(90.0F * ((float) Math.PI / 180.0F));
         } else {
