@@ -30,9 +30,9 @@ public class OtterRenderer extends GeoEntityRenderer<OtterEntity> {
 
         if (bone.getName().equals("held_item")) {
             stack.pushPose();
-            stack.scale(0.15F, 0.15F, 0.15F);
-            stack.translate(0.05D, 0.2D, -0.9D);
-            stack.mulPose(new Quaternionf(1.5708F, 1.5708F, 0.0F, 0.0F));
+            stack.scale(0.5F, 0.5F, 0.5F);
+            stack.translate(0.0D, 0.0D, -0.5D);
+            stack.mulPose(new Quaternionf(-0.5, 0.5, 0.5, -0.5));
             Minecraft.getInstance().getItemRenderer().renderStatic(
                     this.animatable.getMainHandItem(),
                     ItemDisplayContext.FIXED, packedLight, packedOverlay, stack, bufferSource, animatable.level(), 0);
