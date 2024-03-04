@@ -64,6 +64,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.net.InetAddress;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -731,7 +732,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                 this.targetPos = this.findAirPosition();
                 this.goingLand = false;
             }
-            this.updatePosI();
+            if (this.targetPos != null) this.updatePosI();
         }
 
         @Override
@@ -744,7 +745,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                     this.targetPos = this.findAirPosition();
                     this.goingLand = false;
                 }
-                this.updatePosI();
+                if (this.targetPos != null) this.updatePosI();
                 this.tickTimeout();
             } else {
                 OtterEntity.this.getNavigation().moveTo(this.targetPos.x(), this.targetPos.y(), this.targetPos.z(), 1.0D);
