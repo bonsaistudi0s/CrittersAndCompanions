@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[40,)"
+loaderVersion = "[47,)"
 license = "MIT"
 [[mods]]
 modId = "crittersandcompanions"
@@ -12,20 +12,20 @@ Critters and Companions is a vanilla-style creature mod which fills the overworl
 '''
 
 [[dependencies.crittersandcompanions]]
-modId = "geckolib3"
+modId = "geckolib"
 mandatory = true
-versionRange = "[3.1.37,)"
+versionRange = "[4.4.2,)"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.crittersandcompanions]]
 modId = "forge"
 mandatory = true
-versionRange = "[43.2.0,)"
+versionRange = "[47.2.0,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.crittersandcompanions]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2,)"
+versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"

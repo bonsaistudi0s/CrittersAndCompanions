@@ -5,10 +5,10 @@
     "compatibilityLevel": "JAVA_17",
     "refmap": "crittersandcompanions.refmap.json",
     "mixins": [
-        "LootPoolAccessor",
-        "LootTableAccessor",
         "CatMixin",
         "LivingEntityMixin",
+        "LootPoolAccessor",
+        "LootTableAccessor",
         "NearestAttackableTargetGoalMixin",
         "NeutralMobsMixin",
         "OcelotMixin",

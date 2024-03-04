@@ -3,9 +3,9 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.DumboOctopusEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class DumboOctopusModel extends AnimatedGeoModel<DumboOctopusEntity> {
+public class DumboOctopusModel extends GeoModel<DumboOctopusEntity> {
     private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "geo/dumbo_octopus.geo.json");
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/dumbo_octopus_1.png"),

@@ -3,13 +3,13 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
-public class SeaBunnyModel extends AnimatedGeoModel<SeaBunnyEntity> {
+public class SeaBunnyModel extends GeoModel<SeaBunnyEntity> {
     private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "geo/sea_bunny.geo.json");
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/sea_bunny_white.png"),
@@ -33,14 +33,16 @@ public class SeaBunnyModel extends AnimatedGeoModel<SeaBunnyEntity> {
     }
 
     @Override
-    public void setCustomAnimations(SeaBunnyEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
-        IBone mainBone = this.getAnimationProcessor().getBone("main");
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+    public void setCustomAnimations(SeaBunnyEntity entity, long uniqueID, AnimationState<SeaBunnyEntity> animationState) {
+        super.setCustomAnimations(entity, uniqueID, animationState);
+        CoreGeoBone mainBone = this.getAnimationProcessor().getBone("main");
+        EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
-        mainBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
+        mainBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
         if (entity.isClimbing()) {
-            mainBone.setRotationX(90.0F * ((float) Math.PI / 180.0F));
+            mainBone.setRotX(90.0F * ((float) Math.PI / 180.0F));
+        } else {
+            mainBone.setRotX(0.0F);
         }
     }
 }

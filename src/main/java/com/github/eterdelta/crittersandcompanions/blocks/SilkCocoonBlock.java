@@ -8,6 +8,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -28,11 +29,16 @@ public class SilkCocoonBlock extends Block {
     public static final VoxelShape HANGING_SHAPE = Block.box(5, 5, 5, 11, 11, 11);
     public static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 6, 11);
 
+    public SilkCocoonBlock() {
+        super(BlockBehaviour.Properties.of());
+    }
+
     public SilkCocoonBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
             .setValue(HANGING, false)
             .setValue(WATERLOGGED, false));
+
     }
 
     @Nullable
