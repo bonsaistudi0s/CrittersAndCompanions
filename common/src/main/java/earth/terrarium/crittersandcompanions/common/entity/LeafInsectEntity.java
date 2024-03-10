@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -90,12 +90,12 @@ public class LeafInsectEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CACSounds.LEAF_INSECT_HURT.get();
+        return ModSounds.LEAF_INSECT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CACSounds.LEAF_INSECT_DEATH.get();
+        return ModSounds.LEAF_INSECT_DEATH.get();
     }
 
     @Override

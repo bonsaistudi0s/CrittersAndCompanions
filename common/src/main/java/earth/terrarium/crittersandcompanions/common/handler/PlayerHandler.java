@@ -1,12 +1,12 @@
 package earth.terrarium.crittersandcompanions.common.handler;
 
 import com.google.common.collect.Iterables;
-import earth.terrarium.crittersandcompanions.capability.Bubbleable;
-import earth.terrarium.crittersandcompanions.capability.Grapplable;
-import earth.terrarium.crittersandcompanions.capability.SilkLeashable;
+import earth.terrarium.crittersandcompanions.common.capability.Bubbleable;
+import earth.terrarium.crittersandcompanions.common.capability.Grapplable;
+import earth.terrarium.crittersandcompanions.common.capability.SilkLeashable;
 import earth.terrarium.crittersandcompanions.common.network.NetworkHandler;
 import earth.terrarium.crittersandcompanions.common.network.s2c.SilkLeashStatePacket;
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import earth.terrarium.crittersandcompanions.common.entity.DumboOctopusEntity;
 import earth.terrarium.crittersandcompanions.common.entity.KoiFishEntity;
 import earth.terrarium.crittersandcompanions.common.item.SilkLeashItem;
@@ -44,15 +44,15 @@ public class PlayerHandler {
             if (player instanceof SilkLeashable playerLeashState) {
                 Set<LivingEntity> playerLeashingEntities = playerLeashState.getLeashingEntities();
 
-                if (!otherHandStack.is(CACItems.SILK_LEAD.get())) {
+                if (!otherHandStack.is(ModItems.SILK_LEAD.get())) {
                     if ((playerLeashingEntities.isEmpty() || playerLeashingEntities.contains(entity))
-                        && !(handStack.is(CACItems.SILK_LEAD.get()) || handStack.is(Items.LEAD))
+                        && !(handStack.is(ModItems.SILK_LEAD.get()) || handStack.is(Items.LEAD))
                         && hand == InteractionHand.MAIN_HAND) {
                         int unleashedStates = 0;
                         unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(entity, null) - 1);
                         unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(null, entity) - 1);
                         if (unleashedStates > 0) {
-                            ItemEntity leadEntity = new ItemEntity(player.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedStates));
+                            ItemEntity leadEntity = new ItemEntity(player.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.SILK_LEAD.get(), unleashedStates));
                             player.level().addFreshEntity(leadEntity);
                             cancelAction.accept(true);
                             resultAction.accept(InteractionResult.SUCCESS);

@@ -3,7 +3,7 @@ package earth.terrarium.crittersandcompanions.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
-import earth.terrarium.crittersandcompanions.capability.Bubbleable;
+import earth.terrarium.crittersandcompanions.common.capability.Bubbleable;
 import earth.terrarium.crittersandcompanions.client.model.BubbleModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;

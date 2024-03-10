@@ -1,11 +1,21 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "earth.terrarium.crittersandcompanions.mixin",
+  "package": "earth.terrarium.crittersandcompanions.common.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CatMixin",
+    "LivingEntityMixin",
+    "NearestAttackableTargetGoalMixin",
+    "NeutralMobsMixin",
+    "OcelotMixin",
+    "PistonStructureResolverMixin",
+    "PlayerMixin",
+    "ZombifiedPiglinMixin"
   ],
   "client": [
+    "ClientPacketListenerMixin",
+    "GeoEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -5,7 +5,6 @@ architectury {
 loom {
     forge {
         mixinConfig("crittersandcompanions-common.mixins.json")
-        mixinConfig("crittersandcompanions.mixins.json")
     }
     runs {
         create("data") {

@@ -1,9 +1,9 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
 import earth.terrarium.crittersandcompanions.common.handler.AnimalHandler;
-import earth.terrarium.crittersandcompanions.common.registry.CACEntities;
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModEntities;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -184,7 +184,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                     ((ServerLevel) this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getMainHandItem()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
                     if (this.getRandom().nextDouble() < 0.5D) {
-                        this.playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
+                        this.playSound(ModSounds.OTTER_EAT.get(), 1.2F, 1.0F);
                     }
                     if (--this.eatTime <= 0) {
                         this.eat(this.level(), this.getMainHandItem());
@@ -213,10 +213,10 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public ItemStack eat(Level level, ItemStack itemStack) {
-        if (itemStack.is(CACItems.CLAM.get())) {
+        if (itemStack.is(ModItems.CLAM.get())) {
             if (this.random.nextFloat() <= 0.07F) {
                 Vec3 mouthPos = this.calculateMouthPos();
-                ItemEntity pearl = new ItemEntity(level, mouthPos.x(), mouthPos.y(), mouthPos.z(), new ItemStack(CACItems.PEARL.get()));
+                ItemEntity pearl = new ItemEntity(level, mouthPos.x(), mouthPos.y(), mouthPos.z(), new ItemStack(ModItems.PEARL.get()));
 
                 pearl.setDeltaMovement(this.getRandom().nextGaussian() * 0.05D, this.getRandom().nextGaussian() * 0.05D + 0.2D, this.getRandom().nextGaussian() * 0.05D);
                 level.addFreshEntity(pearl);
@@ -304,7 +304,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return (stack.isEdible() && stack.is(ItemTags.FISHES)) || stack.is(CACItems.CLAM.get());
+        return (stack.isEdible() && stack.is(ItemTags.FISHES)) || stack.is(ModItems.CLAM.get());
     }
 
     @Override
@@ -314,14 +314,14 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        OtterEntity otter = CACEntities.OTTER.get().create(level);
+        OtterEntity otter = ModEntities.OTTER.get().create(level);
         return otter;
     }
 
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (super.doHurtTarget(entity)) {
-            this.playSound(CACSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(ModSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
             return true;
         } else {
             return false;
@@ -330,22 +330,22 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return CACSounds.OTTER_AMBIENT.get();
+        return ModSounds.OTTER_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return CACSounds.OTTER_SWIM.get();
+        return ModSounds.OTTER_SWIM.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CACSounds.OTTER_HURT.get();
+        return ModSounds.OTTER_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CACSounds.OTTER_DEATH.get();
+        return ModSounds.OTTER_DEATH.get();
     }
 
     @Override
@@ -353,7 +353,7 @@ public class OtterEntity extends Animal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
-                OtterEntity baby = CACEntities.OTTER.get().create(this.level());
+                OtterEntity baby = ModEntities.OTTER.get().create(this.level());
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
@@ -372,7 +372,7 @@ public class OtterEntity extends Animal implements GeoEntity {
             return PlayState.CONTINUE;
         } else {
             if (this.isEating()) {
-                if (this.getMainHandItem().is(CACItems.CLAM.get())) {
+                if (this.getMainHandItem().is(ModItems.CLAM.get())) {
                     event.getController().setAnimation(RawAnimation.begin().then("otter_open", Animation.LoopType.PLAY_ONCE));
                 } else {
                     event.getController().setAnimation(RawAnimation.begin().then("otter_standing_eat", Animation.LoopType.PLAY_ONCE));
@@ -412,7 +412,7 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     public boolean isHungryAt(ItemStack foodStack) {
-        return foodStack.is(CACItems.CLAM.get()) || this.getInLoveTime() <= 0;
+        return foodStack.is(ModItems.CLAM.get()) || this.getInLoveTime() <= 0;
     }
 
     private void rejectFood() {
@@ -434,7 +434,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     private void startEating() {
         if (this.isFood(this.getMainHandItem())) {
-            this.eatDelay = this.getMainHandItem().is(CACItems.CLAM.get()) ? 35 : 12;
+            this.eatDelay = this.getMainHandItem().is(ModItems.CLAM.get()) ? 35 : 12;
             this.eatTime = 20;
             this.setEating(true);
         }
@@ -713,7 +713,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
         @Override
         public void start() {
-            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
+            if (OtterEntity.this.getMainHandItem().is(ModItems.CLAM.get())) {
                 this.targetPos = LandRandomPos.getPos(OtterEntity.this, 7, 15);
                 this.goingLand = true;
             } else {
@@ -725,7 +725,7 @@ public class OtterEntity extends Animal implements GeoEntity {
         @Override
         public void tick() {
             if (this.targetPos == null || !OtterEntity.this.level().getBlockState(BlockPos.containing(this.targetPos)).isAir()) {
-                if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
+                if (OtterEntity.this.getMainHandItem().is(ModItems.CLAM.get())) {
                     this.targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
                     this.goingLand = true;
                 } else {
@@ -764,7 +764,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                 ((ServerLevel) OtterEntity.this.level()).sendParticles(ParticleTypes.BUBBLE, OtterEntity.this.getRandomX(0.6D), OtterEntity.this.getY(), OtterEntity.this.getRandomZ(0.6D), 2, 0.0D, 0.1D, 0.0D, 0.0D);
             }
             if (this.timeoutTimer <= 0) {
-                OtterEntity.this.playSound(CACSounds.OTTER_AMBIENT.get(), OtterEntity.this.getSoundVolume(), 0.3F);
+                OtterEntity.this.playSound(ModSounds.OTTER_AMBIENT.get(), OtterEntity.this.getSoundVolume(), 0.3F);
                 OtterEntity.this.rejectFood();
                 this.stop();
             }

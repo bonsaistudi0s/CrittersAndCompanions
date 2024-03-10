@@ -2,7 +2,7 @@ package earth.terrarium.crittersandcompanions.common.entity;
 
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
 import earth.terrarium.crittersandcompanions.common.handler.AnimalHandler;
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -155,7 +155,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return CACSounds.SHIMA_ENAGA_AMBIENT.get();
+        return ModSounds.SHIMA_ENAGA_AMBIENT.get();
     }
 
     private PlayState predicate(AnimationState<?> event) {

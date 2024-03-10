@@ -10,7 +10,7 @@ import net.minecraft.world.entity.MobCategory;
 
 import java.util.function.Supplier;
 
-public class CACEntities {
+public class ModEntities {
     public static final ResourcefulRegistry<EntityType<?>> ENTITIES = ResourcefulRegistries.create(BuiltInRegistries.ENTITY_TYPE, CrittersAndCompanions.MODID);
 
     public static final Supplier<EntityType<DragonflyEntity>> DRAGONFLY = ENTITIES.register("dragonfly", () -> EntityType.Builder.of(DragonflyEntity::new, MobCategory.AMBIENT).sized(0.8F, 0.25F).build("dragonfly"));

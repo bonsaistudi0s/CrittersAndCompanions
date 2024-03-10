@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.mixin;
 
-import earth.terrarium.crittersandcompanions.common.registry.CACBlocks;
+import earth.terrarium.crittersandcompanions.common.registry.ModBlocks;
 import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,17 +19,17 @@ public abstract class PistonStructureResolverMixin {
 
     @Inject(method = "isSticky(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At("HEAD"), cancellable = true)
     private static void cac$isSticky(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (state.is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get())) {
+        if (state.is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get())) {
             cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "canStickToEachOther(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At("HEAD"), cancellable = true)
     private static void cac$canStickTo(BlockState state, BlockState other, CallbackInfoReturnable<Boolean> cir) {
-        if (state.is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && (!other.is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && isSticky(other))) {
+        if (state.is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && (!other.is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && isSticky(other))) {
             cir.setReturnValue(false);
         }
-        if (other.is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && (!state.is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && isSticky(state))) {
+        if (other.is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && (!state.is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && isSticky(state))) {
             cir.setReturnValue(false);
         }
     }

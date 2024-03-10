@@ -1,7 +1,7 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
 import earth.terrarium.crittersandcompanions.common.handler.AnimalHandler;
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -61,7 +61,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.of(CACItems.DRAGONFLY_WING.get()), false));
+        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.of(ModItems.DRAGONFLY_WING.get()), false));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -94,7 +94,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack handStack = player.getItemInHand(interactionHand);
 
-        if (!this.isTame() && handStack.is(CACItems.DRAGONFLY_WING.get())) {
+        if (!this.isTame() && handStack.is(ModItems.DRAGONFLY_WING.get())) {
             if (!player.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
@@ -109,7 +109,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
             return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else if (this.isTame() && this.isOwnedBy(player)) {
             if (!this.level().isClientSide()) {
-                if (handStack.is(CACItems.DRAGONFLY_WING.get()) && this.getHealth() < this.getMaxHealth()) {
+                if (handStack.is(ModItems.DRAGONFLY_WING.get()) && this.getHealth() < this.getMaxHealth()) {
                     this.gameEvent(GameEvent.EAT, this);
                     this.heal(1.0F);
                     if (!player.getAbilities().instabuild) {

@@ -2,8 +2,8 @@ package earth.terrarium.crittersandcompanions.common.entity;
 
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
 import earth.terrarium.crittersandcompanions.common.handler.AnimalHandler;
-import earth.terrarium.crittersandcompanions.common.registry.CACEntities;
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModEntities;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -134,7 +134,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        FerretEntity baby = CACEntities.FERRET.get().create(level);
+        FerretEntity baby = ModEntities.FERRET.get().create(level);
         UUID uuid = this.getOwnerUUID();
         if (ageableMob instanceof FerretEntity ferretEntity) {
             if (this.random.nextBoolean()) {
@@ -154,7 +154,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (super.doHurtTarget(entity)) {
-            this.playSound(CACSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(ModSounds.BITE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
             return true;
         } else {
             return false;
@@ -224,17 +224,17 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isSleeping() ? null : CACSounds.FERRET_AMBIENT.get();
+        return this.isSleeping() ? null : ModSounds.FERRET_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CACSounds.FERRET_HURT.get();
+        return ModSounds.FERRET_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CACSounds.FERRET_DEATH.get();
+        return ModSounds.FERRET_DEATH.get();
     }
 
     @Override
@@ -242,7 +242,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
-                FerretEntity baby = CACEntities.FERRET.get().create(this.level());
+                FerretEntity baby = ModEntities.FERRET.get().create(this.level());
                 baby.setVariant(this.random.nextInt(0, 2));
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);

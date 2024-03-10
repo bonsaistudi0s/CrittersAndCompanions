@@ -3,8 +3,8 @@ package earth.terrarium.crittersandcompanions.common.registry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
-import earth.terrarium.crittersandcompanions.block.SeaBunnySlimeBlock;
-import earth.terrarium.crittersandcompanions.blocks.SilkCocoonBlock;
+import earth.terrarium.crittersandcompanions.common.block.SeaBunnySlimeBlock;
+import earth.terrarium.crittersandcompanions.common.blocks.SilkCocoonBlock;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.material.PushReaction;
 
 import java.util.function.Supplier;
 
-public class CACBlocks {
+public class ModBlocks {
     public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(BuiltInRegistries.BLOCK, CrittersAndCompanions.MODID);
 
     public static final Supplier<Block> SILK_COCOON = BLOCKS.register("silk_cocoon", () -> new SilkCocoonBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).instabreak().sound(SoundType.WOOL)));

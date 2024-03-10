@@ -1,4 +1,4 @@
-package earth.terrarium.crittersandcompanions.capability;
+package earth.terrarium.crittersandcompanions.common.capability;
 
 import net.minecraft.world.entity.LivingEntity;
 

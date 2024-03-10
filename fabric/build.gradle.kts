@@ -25,4 +25,6 @@ dependencies {
     modApi(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "$fabricApiVersion+$minecraftVersion")
 
     modApi(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
+
+    modImplementation("maven.modrinth:additionalentityattributes:nFKDQePs")?.let { include(it) }
 }

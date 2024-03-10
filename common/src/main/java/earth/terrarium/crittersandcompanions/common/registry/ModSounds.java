@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.Supplier;
 
-public class CACSounds {
+public class ModSounds {
     public static final ResourcefulRegistry<SoundEvent> SOUNDS = ResourcefulRegistries.create(BuiltInRegistries.SOUND_EVENT, CrittersAndCompanions.MODID);
 
     public static final Supplier<SoundEvent> BITE_ATTACK = SOUNDS.register("entity.bite_attack", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(CrittersAndCompanions.MODID, "entity.bite_attack")));

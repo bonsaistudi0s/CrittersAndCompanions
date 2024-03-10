@@ -1,9 +1,9 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
-import earth.terrarium.crittersandcompanions.capability.Grapplable;
+import earth.terrarium.crittersandcompanions.common.capability.Grapplable;
 import earth.terrarium.crittersandcompanions.common.network.NetworkHandler;
 import earth.terrarium.crittersandcompanions.common.network.s2c.GrapplingStatePacket;
-import earth.terrarium.crittersandcompanions.common.registry.CACEntities;
+import earth.terrarium.crittersandcompanions.common.registry.ModEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -30,7 +30,7 @@ public class GrapplingHookEntity extends Projectile {
     }
 
     public GrapplingHookEntity(Player owner, ItemStack ownerStack, Level level) {
-        this(CACEntities.GRAPPLING_HOOK.get(), level);
+        this(ModEntities.GRAPPLING_HOOK.get(), level);
         this.moveTo(owner.getX(), owner.getEyeY(), owner.getZ(), owner.getYHeadRot(), owner.getXRot());
         this.setOwner(owner);
         this.setOwnerStack(ownerStack);

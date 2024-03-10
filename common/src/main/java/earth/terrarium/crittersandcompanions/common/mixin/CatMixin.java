@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.mixin;
 
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.apache.commons.lang3.ArrayUtils;
@@ -20,6 +20,6 @@ public class CatMixin {
 
     @Redirect(at = @At(value = "FIELD", target = "net/minecraft/world/entity/animal/Cat.TEMPT_INGREDIENT:Lnet/minecraft/world/item/crafting/Ingredient;", opcode = Opcodes.GETSTATIC), method = {"registerGoals()V", "isFood(Lnet/minecraft/world/item/ItemStack;)Z"})
     private Ingredient setTemptIngredient() {
-        return Ingredient.of(ArrayUtils.add(TEMPT_INGREDIENT.getItems(), CACItems.KOI_FISH.get().getDefaultInstance()));
+        return Ingredient.of(ArrayUtils.add(TEMPT_INGREDIENT.getItems(), ModItems.KOI_FISH.get().getDefaultInstance()));
     }
 }

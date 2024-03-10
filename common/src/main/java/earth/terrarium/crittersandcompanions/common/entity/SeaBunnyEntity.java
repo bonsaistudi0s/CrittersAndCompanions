@@ -1,7 +1,7 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -147,17 +147,17 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(CACItems.SEA_BUNNY_BUCKET.get());
+        return new ItemStack(ModItems.SEA_BUNNY_BUCKET.get());
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CACSounds.SEA_BUNNY_HURT.get();
+        return ModSounds.SEA_BUNNY_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CACSounds.SEA_BUNNY_DEATH.get();
+        return ModSounds.SEA_BUNNY_DEATH.get();
     }
 
     @Override
@@ -214,9 +214,9 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
                 handStack.shrink(1);
                 this.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
                 if (handStack.isEmpty()) {
-                    player.setItemInHand(interactionHand, new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()));
-                } else if (!player.getInventory().add(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()))) {
-                    player.drop(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()), false);
+                    player.setItemInHand(interactionHand, new ItemStack(ModItems.SEA_BUNNY_SLIME_BOTTLE.get()));
+                } else if (!player.getInventory().add(new ItemStack(ModItems.SEA_BUNNY_SLIME_BOTTLE.get()))) {
+                    player.drop(new ItemStack(ModItems.SEA_BUNNY_SLIME_BOTTLE.get()), false);
                 }
                 this.harvestCooldown = 6000;
                 return InteractionResult.sidedSuccess(this.level().isClientSide());

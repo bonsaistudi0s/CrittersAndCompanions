@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketT
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
-import earth.terrarium.crittersandcompanions.capability.SilkLeashable;
+import earth.terrarium.crittersandcompanions.common.capability.SilkLeashable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;

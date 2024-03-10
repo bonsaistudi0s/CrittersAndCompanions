@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketT
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
-import earth.terrarium.crittersandcompanions.capability.Grapplable;
+import earth.terrarium.crittersandcompanions.common.capability.Grapplable;
 import earth.terrarium.crittersandcompanions.common.entity.GrapplingHookEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;

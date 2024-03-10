@@ -2,7 +2,7 @@ package earth.terrarium.crittersandcompanions.common.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import earth.terrarium.crittersandcompanions.capability.SilkLeashable;
+import earth.terrarium.crittersandcompanions.common.capability.SilkLeashable;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

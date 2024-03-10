@@ -1,10 +1,10 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
-import earth.terrarium.crittersandcompanions.capability.Bubbleable;
+import earth.terrarium.crittersandcompanions.common.capability.Bubbleable;
 import earth.terrarium.crittersandcompanions.common.network.NetworkHandler;
 import earth.terrarium.crittersandcompanions.common.network.s2c.BubbleStatePacket;
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -136,7 +136,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(CACItems.DUMBO_OCTOPUS_BUCKET.get());
+        return new ItemStack(ModItems.DUMBO_OCTOPUS_BUCKET.get());
     }
 
     @Override
@@ -322,7 +322,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
             DumboOctopusEntity.this.bubblingPlayer = false;
             DumboOctopusEntity.this.sendBubble(DumboOctopusEntity.this.bubbledPlayer, false);
             this.bubbleSent = false;
-            DumboOctopusEntity.this.bubbledPlayer.playSound(CACSounds.BUBBLE_POP.get());
+            DumboOctopusEntity.this.bubbledPlayer.playSound(ModSounds.BUBBLE_POP.get());
             DumboOctopusEntity.this.bubbledPlayer = null;
             this.navigation.stop();
         }

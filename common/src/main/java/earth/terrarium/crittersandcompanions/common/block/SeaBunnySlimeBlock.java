@@ -1,6 +1,6 @@
-package earth.terrarium.crittersandcompanions.block;
+package earth.terrarium.crittersandcompanions.common.block;
 
-import earth.terrarium.crittersandcompanions.common.registry.CACBlocks;
+import earth.terrarium.crittersandcompanions.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
@@ -38,7 +38,7 @@ public class SeaBunnySlimeBlock extends HalfTransparentBlock {
 
     public boolean canStickTo(BlockState state, BlockState other) {
         //Todo, fix with mixin
-        if (state.is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && (other.is(Blocks.SLIME_BLOCK) || other.is(Blocks.HONEY_BLOCK))) {
+        if (state.is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get()) && (other.is(Blocks.SLIME_BLOCK) || other.is(Blocks.HONEY_BLOCK))) {
             return false;
         }
         return state.is(Blocks.SLIME_BLOCK) || state.is(Blocks.HONEY_BLOCK);

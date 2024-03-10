@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.mixin;
 
-import earth.terrarium.crittersandcompanions.capability.Bubbleable;
+import earth.terrarium.crittersandcompanions.common.capability.Bubbleable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

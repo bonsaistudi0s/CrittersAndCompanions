@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.item;
 
-import earth.terrarium.crittersandcompanions.capability.SilkLeashable;
+import earth.terrarium.crittersandcompanions.common.capability.SilkLeashable;
 import earth.terrarium.crittersandcompanions.common.network.NetworkHandler;
 import earth.terrarium.crittersandcompanions.common.network.s2c.SilkLeashStatePacket;
 import net.minecraft.world.InteractionHand;

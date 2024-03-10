@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.item;
 
-import earth.terrarium.crittersandcompanions.capability.Grapplable;
+import earth.terrarium.crittersandcompanions.common.capability.Grapplable;
 import earth.terrarium.crittersandcompanions.common.entity.GrapplingHookEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

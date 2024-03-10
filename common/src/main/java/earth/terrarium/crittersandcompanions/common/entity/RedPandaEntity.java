@@ -1,8 +1,8 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
 import earth.terrarium.crittersandcompanions.common.handler.AnimalHandler;
-import earth.terrarium.crittersandcompanions.common.registry.CACEntities;
-import earth.terrarium.crittersandcompanions.common.registry.CACSounds;
+import earth.terrarium.crittersandcompanions.common.registry.ModEntities;
+import earth.terrarium.crittersandcompanions.common.registry.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -115,7 +115,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        RedPandaEntity redPanda = CACEntities.RED_PANDA.get().create(level);
+        RedPandaEntity redPanda = ModEntities.RED_PANDA.get().create(level);
         return redPanda;
     }
 
@@ -165,17 +165,17 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isSleeping() ? null : CACSounds.RED_PANDA_AMBIENT.get();
+        return this.isSleeping() ? null : ModSounds.RED_PANDA_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CACSounds.RED_PANDA_HURT.get();
+        return ModSounds.RED_PANDA_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CACSounds.RED_PANDA_DEATH.get();
+        return ModSounds.RED_PANDA_DEATH.get();
     }
 
     @Override
@@ -183,7 +183,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && ((AgeableMobGroupData) spawnGroupData).getGroupSize() >= 2 && this.random.nextFloat() <= 0.4F) {
             for (int i = 0; i < this.random.nextInt(1, 3); i++) {
-                RedPandaEntity baby = CACEntities.RED_PANDA.get().create(this.level());
+                RedPandaEntity baby = ModEntities.RED_PANDA.get().create(this.level());
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);

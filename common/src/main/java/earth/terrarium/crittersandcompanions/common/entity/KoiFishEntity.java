@@ -1,6 +1,6 @@
 package earth.terrarium.crittersandcompanions.common.entity;
 
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -109,7 +109,7 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(CACItems.KOI_FISH_BUCKET.get());
+        return new ItemStack(ModItems.KOI_FISH_BUCKET.get());
     }
 
     @Override

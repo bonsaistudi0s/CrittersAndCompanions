@@ -1,12 +1,12 @@
 package earth.terrarium.crittersandcompanions.common.mixin;
 
-import earth.terrarium.crittersandcompanions.capability.SilkLeashable;
+import earth.terrarium.crittersandcompanions.common.capability.SilkLeashable;
 import earth.terrarium.crittersandcompanions.common.item.SilkLeashItem;
 import earth.terrarium.crittersandcompanions.common.network.NetworkHandler;
 import earth.terrarium.crittersandcompanions.common.network.s2c.SilkLeashStatePacket;
-import earth.terrarium.crittersandcompanions.common.registry.CACItems;
+import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import earth.terrarium.crittersandcompanions.common.item.PearlNecklaceItem;
-import earth.terrarium.crittersandcompanions.common.registry.CACBlocks;
+import earth.terrarium.crittersandcompanions.common.registry.ModBlocks;
 import net.minecraft.nbt.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -89,7 +89,7 @@ public abstract class LivingEntityMixin extends Entity implements SilkLeashable 
             }
 
             if (unleashedEntities > 0) {
-                ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedEntities));
+                ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.SILK_LEAD.get(), unleashedEntities));
                 this.level().addFreshEntity(leadEntity);
                 sendLeashState();
             }
@@ -102,19 +102,19 @@ public abstract class LivingEntityMixin extends Entity implements SilkLeashable 
         unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates((LivingEntity) ((Entity) this), null) - 1);
         unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(null, (LivingEntity) ((Entity) this)) - 1);
         if (unleashedStates > 0) {
-            ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedStates));
+            ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.SILK_LEAD.get(), unleashedStates));
             this.level().addFreshEntity(leadEntity);
         }
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.isInWater()Z"), method = "travel(Lnet/minecraft/world/phys/Vec3;)V")
     private boolean redirectIsInWater(LivingEntity entity) {
-        return this.isInWater() || this.getFeetBlockState().is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get());
+        return this.isInWater() || this.getFeetBlockState().is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get());
     }
 
     @ModifyVariable(at = @At(value = "LOAD"), method = "aiStep()V", ordinal = 0)
     private boolean modifyWaterFlag(boolean flag) {
-        return flag || this.getFeetBlockState().is(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get());
+        return flag || this.getFeetBlockState().is(ModBlocks.SEA_BUNNY_SLIME_BLOCK.get());
     }
 
     @ModifyVariable(at = @At(value = "LOAD", ordinal = 3), method = "travel(Lnet/minecraft/world/phys/Vec3;)V", ordinal = 1)

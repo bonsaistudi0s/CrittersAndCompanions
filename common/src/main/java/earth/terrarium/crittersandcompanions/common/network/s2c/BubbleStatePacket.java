@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketT
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
-import earth.terrarium.crittersandcompanions.capability.Bubbleable;
+import earth.terrarium.crittersandcompanions.common.capability.Bubbleable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;

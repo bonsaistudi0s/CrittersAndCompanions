@@ -1,4 +1,4 @@
-package earth.terrarium.crittersandcompanions.blocks;
+package earth.terrarium.crittersandcompanions.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
