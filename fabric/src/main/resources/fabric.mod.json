@@ -1,0 +1,35 @@
+ {
+    "schemaVersion": 1,
+    "id": "crittersandcompanions",
+    "version": "${version}",
+    "name": "CrittersAndCompanions",
+    "description": "Lil critters and also companions",
+    "authors": ["CodexAdrian"],
+    "contributors": [""],
+    "contact": {
+        "website": "",
+        "repo": "",
+        "issues": ""
+    },
+    "license": "ARR",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "earth.terrarium.crittersandcompanions.fabric.CrittersAndCompanionsFabric::init"
+        ]
+    },
+    "mixins": [
+        "crittersandcompanions-common.mixins.json",
+        "crittersandcompanions.mixins.json"
+    ],
+    "depends": {
+        "fabric": "*",
+        "minecraft": ">=1.20",
+        "java": ">=17"
+        ,
+        "resourcefullib": ">=2.1.23"
+        ,
+        "geckolib": ">=4.4.2"
+  }
+}

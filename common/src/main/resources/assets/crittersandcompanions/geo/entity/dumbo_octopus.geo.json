@@ -1,0 +1,397 @@
+{
+    "format_version": "1.12.0",
+    "minecraft:geometry": [
+        {
+            "description": {
+                "identifier": "geometry.dumbo_octopus",
+                "texture_width": 32,
+                "texture_height": 32,
+                "visible_bounds_width": 2,
+                "visible_bounds_height": 2.5,
+                "visible_bounds_offset": [
+                    0,
+                    0.75,
+                    0
+                ]
+            },
+            "bones": [
+                {
+                    "name": "main",
+                    "pivot": [
+                        0,
+                        1.8,
+                        0
+                    ]
+                },
+                {
+                    "name": "body",
+                    "parent": "main",
+                    "pivot": [
+                        0,
+                        1.5,
+                        -0.2
+                    ],
+                    "rotation": [
+                        -10,
+                        0,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -3,
+                                0.5,
+                                -3.2
+                            ],
+                            "size": [
+                                6,
+                                6,
+                                6
+                            ],
+                            "uv": [
+                                0,
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_fin",
+                    "parent": "body",
+                    "pivot": [
+                        -3,
+                        6,
+                        -0.2
+                    ],
+                    "rotation": [
+                        0,
+                        12.5,
+                        -47.5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -3.5,
+                                5.5,
+                                -1.7
+                            ],
+                            "size": [
+                                1,
+                                3,
+                                3
+                            ],
+                            "uv": [
+                                0,
+                                12
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "left_fin",
+                    "parent": "body",
+                    "pivot": [
+                        3,
+                        6,
+                        -0.2
+                    ],
+                    "rotation": [
+                        0,
+                        -12.5,
+                        47.5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                2.5,
+                                5.5,
+                                -1.7
+                            ],
+                            "size": [
+                                1,
+                                3,
+                                3
+                            ],
+                            "uv": [
+                                0,
+                                12
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "tentacles",
+                    "parent": "main",
+                    "pivot": [
+                        0,
+                        0.8,
+                        0
+                    ],
+                    "rotation": [
+                        -2.5,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "name": "right_leg4",
+                    "parent": "tentacles",
+                    "pivot": [
+                        1.2,
+                        1.1,
+                        3
+                    ],
+                    "rotation": [
+                        65,
+                        15,
+                        -5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                0.2,
+                                -0.4,
+                                2
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                14,
+                                14
+                            ],
+                            "mirror": true
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg2",
+                    "parent": "tentacles",
+                    "pivot": [
+                        -1.2,
+                        1.1,
+                        3
+                    ],
+                    "rotation": [
+                        65,
+                        -15,
+                        5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -2.2,
+                                -0.4,
+                                2
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                14,
+                                14
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg",
+                    "parent": "tentacles",
+                    "pivot": [
+                        -1.2,
+                        1.1,
+                        -3
+                    ],
+                    "rotation": [
+                        -65,
+                        20,
+                        5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -2.2,
+                                -0.4,
+                                -4
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                8,
+                                12
+                            ],
+                            "mirror": true
+                        }
+                    ]
+                },
+                {
+                    "name": "left_leg4",
+                    "parent": "tentacles",
+                    "pivot": [
+                        1.2,
+                        1.1,
+                        -3
+                    ],
+                    "rotation": [
+                        -65,
+                        -20,
+                        -5
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                0.2,
+                                -0.4,
+                                -4
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                8,
+                                12
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg7",
+                    "parent": "tentacles",
+                    "pivot": [
+                        3,
+                        1.1,
+                        -1.5
+                    ],
+                    "rotation": [
+                        -12.5,
+                        12.5,
+                        -65
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                2,
+                                -0.4,
+                                -2.5
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                6,
+                                16
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "left_leg7",
+                    "parent": "tentacles",
+                    "pivot": [
+                        3,
+                        1.1,
+                        1.5
+                    ],
+                    "rotation": [
+                        12.5,
+                        -12.5,
+                        -65
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                2,
+                                -0.4,
+                                0.5
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                6,
+                                16
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg6",
+                    "parent": "tentacles",
+                    "pivot": [
+                        -3,
+                        1.1,
+                        1.5
+                    ],
+                    "rotation": [
+                        12.5,
+                        12.5,
+                        65
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -4,
+                                -0.4,
+                                0.5
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                0,
+                                18
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "right_leg3",
+                    "parent": "tentacles",
+                    "pivot": [
+                        -3,
+                        1.3,
+                        -1.5
+                    ],
+                    "rotation": [
+                        -12.5,
+                        -12.5,
+                        65
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -4,
+                                -0.2,
+                                -2.5
+                            ],
+                            "size": [
+                                2,
+                                2,
+                                2
+                            ],
+                            "uv": [
+                                0,
+                                18
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

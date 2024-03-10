@@ -1,0 +1,24 @@
+{
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:loot_table",
+                    "weight": 80,
+                    "name": "crittersandcompanions:gameplay/digging/trash"
+                },
+                {
+                    "type": "minecraft:loot_table",
+                    "weight": 18,
+                    "name": "crittersandcompanions:gameplay/digging/common"
+                },
+                {
+                    "type": "minecraft:loot_table",
+                    "weight": 2,
+                    "name": "crittersandcompanions:gameplay/digging/treasure"
+                }
+            ]
+        }
+    ]
+}

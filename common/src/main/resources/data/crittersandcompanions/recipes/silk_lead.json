@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SS ",
+        "SB ",
+        "  S"
+    ],
+    "key": {
+        "S": {
+            "item": "crittersandcompanions:silk"
+        },
+        "B": {
+            "item": "minecraft:slime_ball"
+        }
+    },
+    "result": {
+        "item": "crittersandcompanions:silk_lead",
+        "count": 1
+    }
+}

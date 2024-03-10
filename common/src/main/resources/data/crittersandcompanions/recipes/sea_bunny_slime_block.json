@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {
+            "item": "crittersandcompanions:sea_bunny_slime_bottle"
+        }
+    },
+    "pattern": [
+        "SS",
+        "SS"
+    ],
+    "result": {
+        "item": "crittersandcompanions:sea_bunny_slime_block"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "  G",
+        " G ",
+        "G  "
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:gold_ingot"
+        }
+    },
+    "result": {
+        "item": "crittersandcompanions:gold_dragonfly_armor",
+        "count": 1
+    }
+}

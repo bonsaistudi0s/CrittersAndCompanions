@@ -1,0 +1,4 @@
+accessWidener v1 named
+
+accessible method net/minecraft/world/entity/ai/goal/FollowOwnerGoal canTeleportTo (Lnet/minecraft/core/BlockPos;)Z
+accessible method net/minecraft/world/entity/Entity getLeashOffset ()Lnet/minecraft/world/phys/Vec3;
