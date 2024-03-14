@@ -11,11 +11,13 @@ import earth.terrarium.crittersandcompanions.common.item.PearlNecklaceItem;
 import earth.terrarium.crittersandcompanions.common.item.SilkLeashItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.function.Supplier;
@@ -40,9 +42,9 @@ public class ModItems {
     public static final Supplier<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(new Item.Properties().stacksTo(1), 2));
     public static final Supplier<Item> PEARL_NECKLACE_3 = ITEMS.register("pearl_necklace_3", () -> new PearlNecklaceItem(new Item.Properties().stacksTo(1), 3));
 
-    public static final Supplier<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", () -> new MobBucketItem(ModEntities.DUMBO_OCTOPUS.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
-    public static final Supplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new MobBucketItem(ModEntities.KOI_FISH.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
-    public static final Supplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new MobBucketItem(ModEntities.SEA_BUNNY.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
+    public static final Supplier<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", createMobBucketItem(ModEntities.DUMBO_OCTOPUS, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
+    public static final Supplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", createMobBucketItem(ModEntities.KOI_FISH, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
+    public static final Supplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", createMobBucketItem(ModEntities.SEA_BUNNY, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
 
     public static final Supplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(16, "diamond", (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(8, "gold", (new Item.Properties()).stacksTo(1)));
@@ -65,6 +67,11 @@ public class ModItems {
 
     @ExpectPlatform
     public static Supplier<Item> createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> type, int primaryColor, int secondaryColor, Item.Properties properties) {
+        throw new NotImplementedException();
+    }
+
+    @ExpectPlatform
+    public static Supplier<Item> createMobBucketItem(Supplier<? extends EntityType<? extends Mob>> type, Fluid fluid, SoundEvent sound, Item.Properties properties) {
         throw new NotImplementedException();
     }
 }

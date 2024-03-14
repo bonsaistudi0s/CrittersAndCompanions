@@ -12,9 +12,4 @@ public class ShimaEnagaRenderer extends GeoEntityRenderer<ShimaEnagaEntity> {
     public ShimaEnagaRenderer(EntityRendererProvider.Context context) {
         super(context, new ShimaEnagaModel());
     }
-
-    @Override
-    public RenderType getRenderType(ShimaEnagaEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

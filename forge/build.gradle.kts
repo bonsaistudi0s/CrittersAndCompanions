@@ -23,6 +23,8 @@ val common: Configuration by configurations.creating {
 }
 
 dependencies {
+    val bytecodecsVersion: String by project
+
     common(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
@@ -34,4 +36,6 @@ dependencies {
     val forgeVersion: String by project
 
     forge(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
+    forgeRuntimeLibrary("com.teamresourceful:bytecodecs:$bytecodecsVersion")
+    forgeRuntimeLibrary("com.eliotlash.mclib:mclib:20")
 }

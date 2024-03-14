@@ -12,9 +12,4 @@ public class RedPandaRenderer extends GeoEntityRenderer<RedPandaEntity> {
     public RedPandaRenderer(EntityRendererProvider.Context context) {
         super(context, new RedPandaModel());
     }
-
-    @Override
-    public RenderType getRenderType(RedPandaEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

@@ -20,11 +20,6 @@ public class OtterRenderer extends GeoEntityRenderer<OtterEntity> {
     }
 
     @Override
-    public RenderType getRenderType(OtterEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
-
-    @Override
     public void renderRecursively(PoseStack stack, OtterEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("held_item")) {
             stack.pushPose();
@@ -34,7 +29,7 @@ public class OtterRenderer extends GeoEntityRenderer<OtterEntity> {
             Minecraft.getInstance().getItemRenderer().renderStatic(animatable.getMainHandItem(), ItemDisplayContext.FIXED, packedLight, packedOverlay, stack, bufferSource, animatable.level(), 0);
             stack.popPose();
 
-            buffer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(animatable)));
+            buffer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.getGeoModel().getTextureResource(animatable)));
         }
         super.renderRecursively(stack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }

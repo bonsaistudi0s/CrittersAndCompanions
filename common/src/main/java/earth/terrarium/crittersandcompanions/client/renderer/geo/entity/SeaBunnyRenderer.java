@@ -12,9 +12,4 @@ public class SeaBunnyRenderer extends GeoEntityRenderer<SeaBunnyEntity> {
     public SeaBunnyRenderer(EntityRendererProvider.Context context) {
         super(context, new SeaBunnyModel());
     }
-
-    @Override
-    public RenderType getRenderType(SeaBunnyEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

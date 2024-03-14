@@ -12,9 +12,4 @@ public class FerretRenderer extends GeoEntityRenderer<FerretEntity> {
     public FerretRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new FerretModel());
     }
-
-    @Override
-    public RenderType getRenderType(FerretEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

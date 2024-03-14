@@ -12,9 +12,4 @@ public class KoiFishRenderer extends GeoEntityRenderer<KoiFishEntity> {
     public KoiFishRenderer(EntityRendererProvider.Context context) {
         super(context, new KoiFishModel());
     }
-
-    @Override
-    public RenderType getRenderType(KoiFishEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

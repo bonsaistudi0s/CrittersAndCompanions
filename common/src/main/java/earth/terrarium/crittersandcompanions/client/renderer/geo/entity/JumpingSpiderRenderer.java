@@ -12,9 +12,4 @@ public class JumpingSpiderRenderer extends GeoEntityRenderer<JumpingSpiderEntity
     public JumpingSpiderRenderer(EntityRendererProvider.Context context) {
         super(context, new JumpingSpiderModel());
     }
-
-    @Override
-    public RenderType getRenderType(JumpingSpiderEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

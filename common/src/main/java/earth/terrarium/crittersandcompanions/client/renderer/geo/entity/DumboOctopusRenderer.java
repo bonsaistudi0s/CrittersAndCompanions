@@ -12,9 +12,4 @@ public class DumboOctopusRenderer extends GeoEntityRenderer<DumboOctopusEntity> 
     public DumboOctopusRenderer(EntityRendererProvider.Context context) {
         super(context, new DumboOctopusModel());
     }
-
-    @Override
-    public RenderType getRenderType(DumboOctopusEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

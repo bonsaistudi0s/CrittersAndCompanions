@@ -12,9 +12,4 @@ public class DragonflyRenderer extends GeoEntityRenderer<DragonflyEntity> {
     public DragonflyRenderer(EntityRendererProvider.Context context) {
         super(context, new DragonflyModel());
     }
-
-    @Override
-    public RenderType getRenderType(DragonflyEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }

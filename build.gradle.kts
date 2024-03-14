@@ -48,6 +48,7 @@ subprojects {
         val jeiVersion: String by project
         val reiVersion: String by project
         val geckolibVersion: String by project
+        val bytecodecsVersion: String by project
 
         "minecraft"("::$minecraftVersion")
 
@@ -66,7 +67,10 @@ subprojects {
             "modApi"(group = "mezz.jei", name = "jei-$minecraftVersion-$modLoader-api", version = jeiVersion)
             "modCompileOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-api", version = reiVersion)
             "modCompileOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-default-plugin", version = reiVersion)
-            "modImplementation"(group = "software.bernie.geckolib", name = "geckolib-fabric-$minecraftVersion", version = geckolibVersion)
+            "modCompileOnly"(group = "software.bernie.geckolib", name = "geckolib-forge-$minecraftVersion", version = geckolibVersion)
+            "api"("com.teamresourceful:bytecodecs:$bytecodecsVersion") {
+                isTransitive = false
+            }
         } else {
             "modRuntimeOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-$modLoader", version = reiVersion)
             "modCompileOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-api-$modLoader", version = reiVersion)

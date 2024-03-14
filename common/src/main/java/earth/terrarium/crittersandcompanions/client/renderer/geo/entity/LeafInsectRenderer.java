@@ -12,9 +12,4 @@ public class LeafInsectRenderer extends GeoEntityRenderer<LeafInsectEntity> {
     public LeafInsectRenderer(EntityRendererProvider.Context context) {
         super(context, new LeafInsectModel());
     }
-
-    @Override
-    public RenderType getRenderType(LeafInsectEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(this.getTextureLocation(animatable));
-    }
 }
