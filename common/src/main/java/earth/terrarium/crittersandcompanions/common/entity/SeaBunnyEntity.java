@@ -242,7 +242,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return null;
+        return cache;
     }
 
     public boolean isClimbing() {

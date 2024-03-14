@@ -220,7 +220,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return null;
+        return cache;
     }
 
     public boolean isSleeping() {

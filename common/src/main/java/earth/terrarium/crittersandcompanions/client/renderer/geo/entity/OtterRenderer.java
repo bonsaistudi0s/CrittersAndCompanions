@@ -2,6 +2,7 @@ package earth.terrarium.crittersandcompanions.client.renderer.geo.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import earth.terrarium.crittersandcompanions.client.model.geo.OtterModel;
 import earth.terrarium.crittersandcompanions.common.entity.OtterEntity;
 import net.minecraft.client.Minecraft;
@@ -23,10 +24,12 @@ public class OtterRenderer extends GeoEntityRenderer<OtterEntity> {
     public void renderRecursively(PoseStack stack, OtterEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("held_item")) {
             stack.pushPose();
-            stack.scale(0.5F, 0.5F, 0.5F);
+            stack.scale(0.5f, 0.5f, 0.5f);
             stack.translate(0.05D, 0.2D, -0.9D);
-            stack.mulPose(new Quaternionf(1.5708F, 1.5708F, 0.0F, 1));
-            Minecraft.getInstance().getItemRenderer().renderStatic(animatable.getMainHandItem(), ItemDisplayContext.FIXED, packedLight, packedOverlay, stack, bufferSource, animatable.level(), 0);
+            stack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            stack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            stack.translate(0.0D, -0.125D, 0.0D);
+            Minecraft.getInstance().getItemRenderer().renderStatic(animatable.getMainHandItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, packedOverlay, stack, bufferSource, animatable.level(), 0);
             stack.popPose();
 
             buffer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.getGeoModel().getTextureResource(animatable)));

@@ -47,8 +47,7 @@ public class FerretModel extends GeoModel<FerretEntity> {
 
         if (!animatable.isSleeping()) {
             CoreGeoBone neck = this.getAnimationProcessor().getBone("body_2");
-            neck.setRotX(data.headPitch() * Mth.DEG_TO_RAD);
-            neck.setRotY(data.netHeadYaw() * Mth.DEG_TO_RAD);
+            neck.setRotY(data.netHeadYaw() * ((float) Math.PI / 180.0F));
         }
     }
 }

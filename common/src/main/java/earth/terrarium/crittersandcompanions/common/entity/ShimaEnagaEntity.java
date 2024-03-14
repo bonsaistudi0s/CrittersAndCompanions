@@ -174,6 +174,6 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return null;
+        return cache;
     }
 }

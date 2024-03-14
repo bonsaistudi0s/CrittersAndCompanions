@@ -37,6 +37,7 @@ import java.util.function.Supplier;
 
 @Mod(CrittersAndCompanions.MODID)
 public class CrittersAndCompanionsForge {
+
     public CrittersAndCompanionsForge() {
         GeckoLib.initialize();
         CrittersAndCompanions.init();
