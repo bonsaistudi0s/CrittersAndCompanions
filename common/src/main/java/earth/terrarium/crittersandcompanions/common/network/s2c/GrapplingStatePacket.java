@@ -39,7 +39,7 @@ public record GrapplingStatePacket(int player, Optional<Integer> hook) implement
 
                 if (entity instanceof Player player && entity instanceof Grapplable grappleable) {
                     GrapplingHookEntity grapplingHook = message.hook().map(id -> (GrapplingHookEntity) Minecraft.getInstance().level.getEntity(id)).orElse(null);
-                    grappleable.setHook(grapplingHook);
+                    grappleable.crittersandcompanions$setHook(grapplingHook);
                 }
             };
         }

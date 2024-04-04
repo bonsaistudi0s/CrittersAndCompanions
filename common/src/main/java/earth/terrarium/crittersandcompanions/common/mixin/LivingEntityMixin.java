@@ -8,6 +8,7 @@ import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import earth.terrarium.crittersandcompanions.common.item.PearlNecklaceItem;
 import earth.terrarium.crittersandcompanions.common.registry.ModBlocks;
 import net.minecraft.nbt.*;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -31,9 +32,16 @@ import java.util.*;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements SilkLeashable {
     @Unique
-    private final Set<LivingEntity> leashingEntities = new HashSet<>();
+    private final Set<LivingEntity> crittersandcompanions$leashingEntities = new HashSet<>();
     @Unique
-    private final Set<LivingEntity> leashedByEntities = new HashSet<>();
+    private final Set<LivingEntity> crittersandcompanions$leashedByEntities = new HashSet<>();
+
+    @Unique
+    private final Set<UUID> crittersandcompanions$leashingIds = new HashSet<>();
+    @Unique
+    private final Set<UUID> crittersandcompanions$leashedByIds = new HashSet<>();
+    @Unique
+    private int crittersandcompanions$leashState = 0;
 
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -41,30 +49,68 @@ public abstract class LivingEntityMixin extends Entity implements SilkLeashable 
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
     private void onAddAdditionalSaveData(CompoundTag compoundTag, CallbackInfo callbackInfo) {
-        IntArrayTag leashingEntitiesList = new IntArrayTag(leashingEntities.stream().map(Entity::getId).toList());
+        ListTag leashingEntitiesList = new ListTag();
+        for (LivingEntity leashingEntity : crittersandcompanions$leashingEntities) {
+            leashingEntitiesList.add(NbtUtils.createUUID(leashingEntity.getUUID()));
+        }
         compoundTag.put("LeashingEntities", leashingEntitiesList);
 
-        IntArrayTag leashedByEntitiesList = new IntArrayTag(leashedByEntities.stream().map(Entity::getId).toList());
+        ListTag leashedByEntitiesList = new ListTag();
+        for (LivingEntity leashedByEntity : crittersandcompanions$leashedByEntities) {
+            leashedByEntitiesList.add(NbtUtils.createUUID(leashedByEntity.getUUID()));
+        }
         compoundTag.put("LeashedByEntities", leashedByEntitiesList);
         sendLeashState();
     }
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
     private void onReadAdditionalSaveData(CompoundTag compoundTag, CallbackInfo callbackInfo) {
-        int[] leashingEntitiesList = compoundTag.getIntArray("LeashingEntities");
-        for (int id : leashingEntitiesList) {
-            leashingEntities.add((LivingEntity) this.level().getEntity(id));
+        ListTag entities = compoundTag.getList("LeashingEntities", Tag.TAG_INT_ARRAY);
+        ListTag leashedByEntities = compoundTag.getList("LeashedByEntities", Tag.TAG_INT_ARRAY);
+
+        for (Tag tag : entities) {
+            UUID entityId = NbtUtils.loadUUID(tag);
+            crittersandcompanions$leashingIds.add(entityId);
         }
 
-        int[] leashedByEntitiesList = compoundTag.getIntArray("LeashedByEntities");
-        for (int id : leashedByEntitiesList) {
-            leashedByEntities.add((LivingEntity) this.level().getEntity(id));
+        for (Tag tag : leashedByEntities) {
+            UUID entityId = NbtUtils.loadUUID(tag);
+            crittersandcompanions$leashedByIds.add(entityId);
         }
     }
 
     @Inject(at = @At("TAIL"), method = "tick")
     private void onTick(CallbackInfo callbackInfo) {
         if (!this.level().isClientSide()) {
+            if (!crittersandcompanions$leashingIds.isEmpty() || !crittersandcompanions$leashedByIds.isEmpty()) {
+                crittersandcompanions$leashState++;
+
+                if (crittersandcompanions$leashState > 20) {
+                    crittersandcompanions$leashState = 0;
+                    crittersandcompanions$leashingEntities.clear();
+                    crittersandcompanions$leashedByEntities.clear();
+
+                    ServerLevel serverLevel = (ServerLevel) this.level();
+                    for (UUID entityId : crittersandcompanions$leashingIds) {
+                        Entity entity = serverLevel.getEntity(entityId);
+                        if (entity instanceof LivingEntity leashingEntity) {
+                            crittersandcompanions$leashingEntities.add(leashingEntity);
+                        }
+                    }
+
+                    for (UUID entityId : crittersandcompanions$leashedByIds) {
+                        Entity entity = serverLevel.getEntity(entityId);
+                        if (entity instanceof LivingEntity leashedByEntity) {
+                            crittersandcompanions$leashedByEntities.add(leashedByEntity);
+                        }
+                    }
+
+                    sendLeashState();
+                    crittersandcompanions$leashingIds.clear();
+                    crittersandcompanions$leashedByIds.clear();
+                }
+            }
+
             int unleashedEntities = 0;
 
             for (Iterator<LivingEntity> iterator = getLeashingEntities().iterator(); iterator.hasNext(); ) {
@@ -99,8 +145,8 @@ public abstract class LivingEntityMixin extends Entity implements SilkLeashable 
     @Inject(at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.gameEvent(Lnet/minecraft/world/level/gameevent/GameEvent;)V", ordinal = 0, shift = At.Shift.BY, by = 1), method = "die")
     private void onDie(DamageSource source, CallbackInfo callbackInfo) {
         int unleashedStates = 0;
-        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates((LivingEntity) ((Entity) this), null) - 1);
-        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(null, (LivingEntity) ((Entity) this)) - 1);
+        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(level(), blockPosition(), (LivingEntity) ((Entity) this), null) - 1);
+        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(level(), blockPosition(), null, (LivingEntity) ((Entity) this)) - 1);
         if (unleashedStates > 0) {
             ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.SILK_LEAD.get(), unleashedStates));
             this.level().addFreshEntity(leadEntity);
@@ -134,12 +180,12 @@ public abstract class LivingEntityMixin extends Entity implements SilkLeashable 
 
     @Override
     public Set<LivingEntity> getLeashingEntities() {
-        return leashingEntities;
+        return crittersandcompanions$leashingEntities;
     }
 
     @Override
     public Set<LivingEntity> getLeashedByEntities() {
-        return leashedByEntities;
+        return crittersandcompanions$leashedByEntities;
     }
 
     @Override

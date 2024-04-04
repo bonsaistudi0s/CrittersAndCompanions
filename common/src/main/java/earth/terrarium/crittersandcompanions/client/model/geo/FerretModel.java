@@ -38,16 +38,4 @@ public class FerretModel extends GeoModel<FerretEntity> {
     public ResourceLocation getAnimationResource(FerretEntity animatable) {
         return ANIMATIONS[animatable.isBaby() ? 1 : 0];
     }
-
-    @Override
-    public void setCustomAnimations(FerretEntity animatable, long instanceId, AnimationState<FerretEntity> animationState) {
-        super.setCustomAnimations(animatable, instanceId, animationState);
-
-        EntityModelData data = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-
-        if (!animatable.isSleeping()) {
-            CoreGeoBone neck = this.getAnimationProcessor().getBone("body_2");
-            neck.setRotY(data.netHeadYaw() * ((float) Math.PI / 180.0F));
-        }
-    }
 }

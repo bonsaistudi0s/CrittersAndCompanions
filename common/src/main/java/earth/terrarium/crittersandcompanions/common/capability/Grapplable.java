@@ -4,7 +4,7 @@ import earth.terrarium.crittersandcompanions.common.entity.GrapplingHookEntity;
 
 public interface Grapplable {
 
-    GrapplingHookEntity getHook();
+    GrapplingHookEntity crittersandcompanions$getHook();
 
-    void setHook(GrapplingHookEntity hook);
+    void crittersandcompanions$setHook(GrapplingHookEntity hook);
 }

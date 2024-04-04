@@ -209,7 +209,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
 
     public void sendBubble(ServerPlayer player, boolean state) {
         if (player instanceof Bubbleable bubbleState) {
-            bubbleState.setActive(state);
+            bubbleState.crittersandcompanions$setActive(state);
             NetworkHandler.CHANNEL.sendToAllLoaded(new BubbleStatePacket(player.getId(), state), player.level(), player.blockPosition());
         }
     }

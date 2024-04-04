@@ -45,13 +45,13 @@ public class GrapplingHookRenderer extends EntityRenderer<GrapplingHookEntity> {
     public void render(GrapplingHookEntity entity, float p_114706_, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         Player player = ((Player) entity.getOwner());
         if (player != null && entity.isFocused()) {
-            poseStack.pushPose();
 
             poseStack.pushPose();
             poseStack.translate(0.0D, -1.25D, 0.0D);
             VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutout(TEXTURE));
             this.hookModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             poseStack.popPose();
+            poseStack.pushPose();
 
             int handOffset = player.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
             if (!player.getMainHandItem().is(entity.getOwnerStack().getItem())) {

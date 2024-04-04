@@ -11,7 +11,6 @@ import earth.terrarium.crittersandcompanions.common.capability.Bubbleable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 
 public record BubbleStatePacket(int player, boolean state) implements Packet<BubbleStatePacket> {
     public static Handler HANDLER = new Handler();
@@ -33,9 +32,8 @@ public record BubbleStatePacket(int player, boolean state) implements Packet<Bub
         public Runnable handle(BubbleStatePacket message) {
             return () -> {
                Entity entity = Minecraft.getInstance().level.getEntity(message.player());
-
-                if (entity instanceof Player player && entity instanceof Bubbleable bubbleState) {
-                    bubbleState.setActive(message.state());
+                if (entity instanceof Bubbleable bubbleState) {
+                    bubbleState.crittersandcompanions$setActive(message.state());
                 }
             };
         }

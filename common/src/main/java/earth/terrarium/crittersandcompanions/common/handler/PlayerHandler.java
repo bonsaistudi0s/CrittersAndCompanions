@@ -49,8 +49,8 @@ public class PlayerHandler {
                         && !(handStack.is(ModItems.SILK_LEAD.get()) || handStack.is(Items.LEAD))
                         && hand == InteractionHand.MAIN_HAND) {
                         int unleashedStates = 0;
-                        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(entity, null) - 1);
-                        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(null, entity) - 1);
+                        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(entity.level(), entity.blockPosition(), entity, null) - 1);
+                        unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(entity.level(), entity.blockPosition(), null, entity) - 1);
                         if (unleashedStates > 0) {
                             ItemEntity leadEntity = new ItemEntity(player.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.SILK_LEAD.get(), unleashedStates));
                             player.level().addFreshEntity(leadEntity);
@@ -60,8 +60,8 @@ public class PlayerHandler {
                     } else {
                         LivingEntity uniqueLeash = Iterables.getFirst(playerLeashingEntities, null);
                         if (uniqueLeash != null) {
-                            if (SilkLeashItem.updateLeashStates(uniqueLeash, entity) != 0) {
-                                SilkLeashItem.updateLeashStates(player, null);
+                            if (SilkLeashItem.updateLeashStates(entity.level(), entity.blockPosition(), uniqueLeash, entity) != 0) {
+                                SilkLeashItem.updateLeashStates(entity.level(), entity.blockPosition(), player, null);
                                 cancelAction.accept(true);
                                 resultAction.accept(InteractionResult.SUCCESS);
                             }
@@ -95,11 +95,11 @@ public class PlayerHandler {
         }
 
         if (target instanceof Bubbleable bubbleCap) {
-            NetworkHandler.CHANNEL.sendToPlayer(new BubbleStatePacket(target.getId(), bubbleCap.isActive()), player);
+            NetworkHandler.CHANNEL.sendToPlayer(new BubbleStatePacket(target.getId(), bubbleCap.crittersandcompanions$isActive()), player);
         }
 
         if (target instanceof Grapplable grappleCap) {
-            NetworkHandler.CHANNEL.sendToPlayer(new GrapplingStatePacket(target.getId(), grappleCap.getHook() == null ? Optional.empty() : Optional.of(grappleCap.getHook().getId())), player);
+            NetworkHandler.CHANNEL.sendToPlayer(new GrapplingStatePacket(target.getId(), grappleCap.crittersandcompanions$getHook() == null ? Optional.empty() : Optional.of(grappleCap.crittersandcompanions$getHook().getId())), player);
         }
     }
 

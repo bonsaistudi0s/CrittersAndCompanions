@@ -3,6 +3,7 @@ package earth.terrarium.crittersandcompanions.common.item;
 import earth.terrarium.crittersandcompanions.common.capability.SilkLeashable;
 import earth.terrarium.crittersandcompanions.common.network.NetworkHandler;
 import earth.terrarium.crittersandcompanions.common.network.s2c.SilkLeashStatePacket;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -10,6 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +24,21 @@ public class SilkLeashItem extends Item {
         super(properties);
     }
 
-    public static int updateLeashStates(LivingEntity leashOwner, LivingEntity leashedEntity) {
+    public static int updateLeashStates(Level level, BlockPos pos, @Nullable LivingEntity leashOwner, @Nullable LivingEntity leashedEntity) {
         List<Entity> updatedStates = updateLeashStatesLocal(leashOwner, leashedEntity);
         if (!updatedStates.isEmpty()) {
             NetworkHandler.CHANNEL.sendToAllLoaded(
-                    new SilkLeashStatePacket(
-                            updatedStates.stream().map(entity ->
-                                    new SilkLeashStatePacket.LeashData(
-                                            entity.getId(),
-                                            ((SilkLeashable) entity).getLeashingEntities().stream().mapToInt(Entity::getId).boxed().toList(),
-                                            ((SilkLeashable) entity).getLeashedByEntities().stream().mapToInt(Entity::getId).boxed().toList()
-                                    )
-                            ).collect(Collectors.toList())
-                    ),
-                    leashedEntity.level(),
-                    leashedEntity.blockPosition()
+                new SilkLeashStatePacket(
+                    updatedStates.stream().map(entity ->
+                        new SilkLeashStatePacket.LeashData(
+                            entity.getId(),
+                            ((SilkLeashable) entity).getLeashingEntities().stream().mapToInt(Entity::getId).boxed().toList(),
+                            ((SilkLeashable) entity).getLeashedByEntities().stream().mapToInt(Entity::getId).boxed().toList()
+                        )
+                    ).collect(Collectors.toList())
+                ),
+                level,
+                pos
             );
         }
         return updatedStates.size();
@@ -48,42 +51,50 @@ public class SilkLeashItem extends Item {
 
         List<Entity> modifiedEntities = new ArrayList<>();
 
-        if (leashOwner instanceof SilkLeashable ownerLeashState) {
-            if (leashedEntity == null) {
-                if (ownerLeashState.getLeashingEntities().isEmpty()) return List.of();
+        if (leashOwner == null) {
+            SilkLeashable leashedLeashState = (SilkLeashable) leashedEntity;
 
-                for (Entity entity : ownerLeashState.getLeashingEntities()) {
-                    if (entity instanceof SilkLeashable state) {
-                        state.getLeashingEntities().remove(leashedEntity);
-                        modifiedEntities.add(entity);
-                    };
-                }
-                ownerLeashState.getLeashingEntities().clear();
-            } else {
-                if (!canLeash(leashOwner, leashedEntity)) return List.of();
-
-                if (leashedEntity instanceof SilkLeashable state) {
-                    state.getLeashingEntities().add(leashOwner);
-                    ownerLeashState.getLeashingEntities().add(leashedEntity);
-                    modifiedEntities.add(leashedEntity);
-                };
-            }
-            modifiedEntities.add(leashOwner);
-        } else if (leashedEntity instanceof SilkLeashable leashedLeashState) {
             if (leashedLeashState.getLeashedByEntities().isEmpty()) {
                 return List.of();
             }
 
             for (Entity entity : leashedLeashState.getLeashedByEntities()) {
-                if (entity instanceof SilkLeashable state) {
-                    state.getLeashingEntities().remove(leashedEntity);
+                if (entity instanceof SilkLeashable entityLeashState) {
+                    entityLeashState.getLeashingEntities().remove(leashedEntity);
                     modifiedEntities.add(entity);
-                };
+                }
             }
+
             leashedLeashState.getLeashedByEntities().clear();
             modifiedEntities.add(leashedEntity);
-        }
+        } else {
+            SilkLeashable ownerLeashState = (SilkLeashable) leashOwner;
 
+            if (leashedEntity == null) {
+                if (ownerLeashState.getLeashingEntities().isEmpty()) {
+                    return List.of();
+                }
+
+                for (Entity entity : ownerLeashState.getLeashingEntities()) {
+                    if (entity instanceof SilkLeashable entityLeashState) {
+                        entityLeashState.getLeashedByEntities().remove(leashOwner);
+                        modifiedEntities.add(entity);
+                    }
+                }
+                ownerLeashState.getLeashingEntities().clear();
+            } else {
+                if (!canLeash(leashOwner, leashedEntity)) {
+                    return List.of();
+                }
+
+                SilkLeashable leashedEntityLeashState = (SilkLeashable) leashedEntity;
+
+                leashedEntityLeashState.getLeashedByEntities().add(leashOwner);
+                ownerLeashState.getLeashingEntities().add(leashedEntity);
+                modifiedEntities.add(leashedEntity);
+            }
+            modifiedEntities.add(leashOwner);
+        }
         return List.copyOf(modifiedEntities);
     }
 
@@ -95,8 +106,8 @@ public class SilkLeashItem extends Item {
             return false;
         }
         return Stream.concat(
-                sourceLeashState.getLeashingEntities().stream(),
-                sourceLeashState.getLeashedByEntities().stream()
+            sourceLeashState.getLeashingEntities().stream(),
+            sourceLeashState.getLeashedByEntities().stream()
         ).noneMatch(entity -> entity == targetEntity);
     }
 
@@ -108,7 +119,7 @@ public class SilkLeashItem extends Item {
                     handStack.shrink(1);
                 }
                 if (!player.level().isClientSide()) {
-                    SilkLeashItem.updateLeashStates(player, entity);
+                    SilkLeashItem.updateLeashStates(entity.level(), entity.blockPosition(), player, entity);
                     return InteractionResult.CONSUME;
                 }
                 return InteractionResult.SUCCESS;

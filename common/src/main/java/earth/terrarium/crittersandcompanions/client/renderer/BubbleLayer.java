@@ -29,7 +29,7 @@ public class BubbleLayer extends RenderLayer<Player, PlayerModel<Player>> {
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, Player player, float limbSwing, float limbSwingAmount, float p_117355_, float ageInTicks, float netHeadYaw, float headPitch) {
         if (player instanceof Bubbleable bubbleable) {
-            if (bubbleable.isActive()) {
+            if (bubbleable.crittersandcompanions$isActive()) {
                 VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutout(TEXTURE));
                 this.bubbleModel.bubble.copyFrom(this.getParentModel().head);
                 this.bubbleModel.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);

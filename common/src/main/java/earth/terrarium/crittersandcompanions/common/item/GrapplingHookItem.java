@@ -22,8 +22,8 @@ public class GrapplingHookItem extends Item {
         ItemStack stack = player.getItemInHand(interactionHand);
 
         if (player instanceof Grapplable grapplingState) {
-            if (grapplingState.getHook() != null) {
-                grapplingState.getHook().pull();
+            if (grapplingState.crittersandcompanions$getHook() != null) {
+                grapplingState.crittersandcompanions$getHook().pull();
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 0.25F, 1.0F + 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
                 player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
             } else {

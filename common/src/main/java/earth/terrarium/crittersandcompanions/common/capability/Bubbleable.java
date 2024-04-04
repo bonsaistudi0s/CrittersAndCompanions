@@ -2,7 +2,7 @@ package earth.terrarium.crittersandcompanions.common.capability;
 
 public interface Bubbleable {
 
-    boolean isActive();
+    boolean crittersandcompanions$isActive();
 
-    void setActive(boolean active);
+    void crittersandcompanions$setActive(boolean active);
 }

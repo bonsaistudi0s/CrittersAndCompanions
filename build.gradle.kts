@@ -41,6 +41,7 @@ subprojects {
         maven(url = "https://maven.minecraftforge.net/")
         maven(url = "https://maven.resourcefulbees.com/repository/maven-public/")
         maven(url = "https://api.modrinth.com/maven")
+        maven(url = "https://maven.ladysnake.org/releases")
     }
 
     dependencies {
@@ -49,6 +50,7 @@ subprojects {
         val reiVersion: String by project
         val geckolibVersion: String by project
         val bytecodecsVersion: String by project
+        val baublyVersion: String by project
 
         "minecraft"("::$minecraftVersion")
 
@@ -63,6 +65,7 @@ subprojects {
 
         compileOnly(group = "com.teamresourceful", name = "yabn", version = "1.0.3")
         "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
+
         if (isCommon) {
             "modApi"(group = "mezz.jei", name = "jei-$minecraftVersion-$modLoader-api", version = jeiVersion)
             "modCompileOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-api", version = reiVersion)
@@ -71,11 +74,13 @@ subprojects {
             "api"("com.teamresourceful:bytecodecs:$bytecodecsVersion") {
                 isTransitive = false
             }
+            "modApi"(group = "earth.terrarium.baubly", name = "baubly-common-$minecraftVersion", version = baublyVersion)
         } else {
             "modRuntimeOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-$modLoader", version = reiVersion)
             "modCompileOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-api-$modLoader", version = reiVersion)
             "modCompileOnly"(group = "me.shedaniel", name = "RoughlyEnoughItems-default-plugin-$modLoader", version = reiVersion)
             "modImplementation"(group = "software.bernie.geckolib", name = "geckolib-$modLoader-$minecraftVersion", version = geckolibVersion)
+            "include"("modApi"(group = "earth.terrarium.baubly", name = "baubly-$modLoader-$minecraftVersion", version = baublyVersion))
         }
     }
 

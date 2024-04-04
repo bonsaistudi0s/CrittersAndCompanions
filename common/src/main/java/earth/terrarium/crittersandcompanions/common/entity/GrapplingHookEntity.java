@@ -113,7 +113,7 @@ public class GrapplingHookEntity extends Projectile {
     public void updateOwnerState() {
         if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof Player player) {
             if (player instanceof Grapplable state) {
-                state.setHook(this.isAlive() ? this : null);
+                state.crittersandcompanions$setHook(this.isAlive() ? this : null);
                 NetworkHandler.CHANNEL.sendToAllLoaded(new GrapplingStatePacket(player.getId(), this.isAlive() ? Optional.of(this.getId()) : Optional.empty()), this.level(), this.blockPosition());
             }
         }
@@ -123,7 +123,7 @@ public class GrapplingHookEntity extends Projectile {
         if (this.getOwner() instanceof Player player) {
             if (this.level().isClientSide()) {
                 //TODO look at when less tired
-                return player.getMainHandItem() == this.getOwnerStack() || player.getOffhandItem() == this.getOwnerStack();
+                return ItemStack.isSameItemSameTags(player.getMainHandItem(), this.getOwnerStack()) || ItemStack.isSameItemSameTags(player.getOffhandItem(), this.getOwnerStack());
             } else {
                 return player.getMainHandItem() == this.getOwnerStack() || player.getOffhandItem() == this.getOwnerStack();
             }
