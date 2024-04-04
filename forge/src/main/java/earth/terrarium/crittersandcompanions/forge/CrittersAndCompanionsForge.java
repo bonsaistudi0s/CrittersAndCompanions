@@ -15,6 +15,7 @@ import earth.terrarium.crittersandcompanions.common.registry.ModEntities;
 import earth.terrarium.crittersandcompanions.common.registry.ModItems;
 import earth.terrarium.crittersandcompanions.datagen.server.SpawnData;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -73,37 +74,13 @@ public class CrittersAndCompanionsForge {
         forgeBus.addListener(this::stopTrackingPlayer);
 
         eventBus.addListener(this::gatherData);
-        // eventBus.addListener(this::onAddPackFinders);
     }
 
     public void gatherData(GatherDataEvent event) {
         SpawnData.datagenBiomeModifiers(event);
     }
 
-    /*
-    public void onAddPackFinders(AddPackFindersEvent event) {
-        try {
-            System.out.println("Hello");
-            if (event.getPackType() == PackType.CLIENT_RESOURCES) {
-                IModFile modFile = ModList.get().getModFileById(MODID).getFile();
-                Path resourcePath = modFile.findResource("builtin/friendlyart");
-                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, resourcePath);
-                PackMetadataSection metadataSection = pack.getMetadataSection(PackMetadataSection.SERIALIZER);
-                if (metadataSection != null) {
-                    event.addRepositorySource((packConsumer, packConstructor) ->
-                        packConsumer.accept(packConstructor.create(
-                            "builtin/" + MODID, Component.literal("Friendly Critter Art"), false,
-                            () -> pack, metadataSection, Pack.Position.BOTTOM, PackSource.BUILT_IN, false)));
-                }
-            }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-     */
-
     public void onSetup(FMLCommonSetupEvent event) {
-        NetworkHandler.registerPackets();
         event.enqueueWork(() -> {
             SpawnHandler.registerSpawnPlacements();
             ItemProperties.register(ModItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
@@ -159,7 +136,7 @@ public class CrittersAndCompanionsForge {
     public void addEntityLayers(EntityRenderersEvent.AddLayers event) {
         if (FMLEnvironment.dist.isClient()) {
             for (String skinName : event.getSkins()) {
-                LivingEntityRenderer<Player, PlayerModel<Player>> skinRenderer = event.getSkin(skinName);
+                LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> skinRenderer = event.getSkin(skinName);
                 skinRenderer.addLayer(new BubbleLayer(skinRenderer, event.getEntityModels()));
             }
         }

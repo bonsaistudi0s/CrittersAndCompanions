@@ -19,18 +19,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import java.util.Arrays;
 
 public class SpawnHandler {
-
-    public static void onLivingCheckSpawn(LivingEntity entity, boolean isNaturalSpawn, MobSpawnType spawnReason) {
-        if (entity instanceof Drowned drowned && spawnReason == MobSpawnType.NATURAL && drowned.getRandom().nextFloat() <= 0.05F) {
-            drowned.setItemInHand(InteractionHand.OFF_HAND, ModItems.CLAM.get().getDefaultInstance());
-        }
-    }
-
-    @SafeVarargs
-    public static HolderSet<Biome> getBiomeHolderSet(Registry<Biome> registry, ResourceKey<Biome>... biomes) {
-        return HolderSet.direct(Arrays.stream(biomes).map(registry::getHolderOrThrow).toList());
-    }
-
     public static void registerSpawnPlacements() {
         SpawnPlacements.register(ModEntities.OTTER.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
         SpawnPlacements.register(ModEntities.KOI_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);

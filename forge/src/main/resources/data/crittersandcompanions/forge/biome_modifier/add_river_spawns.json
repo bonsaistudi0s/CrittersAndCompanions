@@ -1,0 +1,24 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:river",
+  "spawners": [
+    {
+      "type": "crittersandcompanions:otter",
+      "maxCount": 5,
+      "minCount": 3,
+      "weight": 2
+    },
+    {
+      "type": "crittersandcompanions:koi_fish",
+      "maxCount": 5,
+      "minCount": 2,
+      "weight": 4
+    },
+    {
+      "type": "crittersandcompanions:dragonfly",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 6
+    }
+  ]
+}
