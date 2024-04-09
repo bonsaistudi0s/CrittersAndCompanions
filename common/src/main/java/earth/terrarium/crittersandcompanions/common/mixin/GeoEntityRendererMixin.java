@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
@@ -32,12 +33,12 @@ public abstract class GeoEntityRendererMixin<T extends Entity & GeoAnimatable> e
         super(context);
     }
 
-    @Inject(at = @At("TAIL"), method = "render", remap = false)
-    private void onRender(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
-        if (entity instanceof SilkLeashable silkLeashable) {
+    @Inject(at = @At("TAIL"), method = "renderFinal(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/Entity;Lsoftware/bernie/geckolib/cache/object/BakedGeoModel;Lnet/minecraft/client/renderer/MultiBufferSource;Lcom/mojang/blaze3d/vertex/VertexConsumer;FIIFFFF)V", remap = false)
+    private void onRender(PoseStack poseStack, T animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, CallbackInfo ci) {
+        if (animatable instanceof SilkLeashable silkLeashable) {
             Set<LivingEntity> leashedByEntities = silkLeashable.getLeashedByEntities();
             for (LivingEntity leashedBy : leashedByEntities) {
-                this.renderSilkLeash(entity, partialTick, poseStack, bufferSource, leashedBy);
+                this.renderSilkLeash(animatable, partialTick, poseStack, bufferSource, leashedBy);
             }
         }
     }

@@ -28,12 +28,12 @@ public abstract class PlayerMixin extends LivingEntity implements Bubbleable, Gr
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void readCorrupted(CompoundTag compoundTag, CallbackInfo ci) {
+    private void crittersandcompanions$load(CompoundTag compoundTag, CallbackInfo ci) {
         crittersandcompanions$setActive(compoundTag.getBoolean(BUBBLE_TAG));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void saveCorrupted(CompoundTag compoundTag, CallbackInfo ci) {
+    private void crittersandcompanions$save(CompoundTag compoundTag, CallbackInfo ci) {
         compoundTag.putBoolean(BUBBLE_TAG, crittersandcompanions$isActive());
     }
 

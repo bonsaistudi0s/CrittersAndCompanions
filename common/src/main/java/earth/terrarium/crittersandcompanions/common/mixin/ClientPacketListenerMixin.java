@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
 
-    @Inject(at = @At("HEAD"), method = "postAddEntitySoundInstance", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "postAddEntitySoundInstance")
     private void handleAddMob(Entity packetEntity, CallbackInfo callback) {
         if (packetEntity instanceof DragonflyEntity dragonflyEntity) {
             Minecraft.getInstance().getSoundManager().queueTickingSound(new DragonflySoundInstance(dragonflyEntity));

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PistonStructureResolverMixin {
 
     @Shadow
-    protected static boolean isSticky(BlockState par1) {
+    private static boolean isSticky(BlockState par1) {
         return false;
     }
 

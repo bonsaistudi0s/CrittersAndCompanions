@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import earth.terrarium.crittersandcompanions.CrittersAndCompanions;
 import earth.terrarium.crittersandcompanions.common.block.SeaBunnySlimeBlock;
-import earth.terrarium.crittersandcompanions.common.blocks.SilkCocoonBlock;
+import earth.terrarium.crittersandcompanions.common.block.SilkCocoonBlock;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;

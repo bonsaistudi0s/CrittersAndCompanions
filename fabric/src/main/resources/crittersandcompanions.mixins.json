@@ -7,7 +7,6 @@
         "PlayerMixin"
     ],
     "client": [
-        "LayerDefinitionsMixin",
         "PlayerRendererMixin"
     ],
     "injectors": {

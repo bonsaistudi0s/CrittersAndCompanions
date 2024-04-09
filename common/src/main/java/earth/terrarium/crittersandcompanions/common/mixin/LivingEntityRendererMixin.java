@@ -32,7 +32,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         super(context);
     }
 
-    @Inject(at = @At("TAIL"), method = "render")
+    @Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
     private void onRender(T entity, float p_115456_, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int p_115460_, CallbackInfo callback) {
         if (entity instanceof SilkLeashable silkLeashable) {
             Set<LivingEntity> leashedByEntities = silkLeashable.getLeashedByEntities();

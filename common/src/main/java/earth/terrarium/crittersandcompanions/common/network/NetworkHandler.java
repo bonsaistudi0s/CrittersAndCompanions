@@ -6,6 +6,7 @@ import earth.terrarium.crittersandcompanions.common.network.s2c.SilkLeashStatePa
 import earth.terrarium.crittersandcompanions.common.network.s2c.BubbleStatePacket;
 import earth.terrarium.crittersandcompanions.common.network.s2c.GrapplingStatePacket;
 
+@SuppressWarnings("UnstableApiUsage")
 public class NetworkHandler {
     public static final NetworkChannel CHANNEL = new NetworkChannel(CrittersAndCompanions.MODID, 0, "main");
 
