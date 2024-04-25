@@ -37,6 +37,7 @@ public class SpawnData {
 
         Map<ResourceLocation, BiomeModifier> modifierMap = new HashMap<>();
 
+        /*
         modifierMap.put(new ResourceLocation(CrittersAndCompanions.MODID, "add_river_spawns"),
             createSpawnModifier(getBiomeHolderSet(registry, Biomes.RIVER),
                 new MobSpawnSettings.SpawnerData(ModEntities.OTTER.get(), 2, 3, 5),
@@ -99,6 +100,7 @@ public class SpawnData {
                 new MobSpawnSettings.SpawnerData(ModEntities.JUMPING_SPIDER.get(), 2, 1, 1)
             )
         );
+         */
 
         final RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
 

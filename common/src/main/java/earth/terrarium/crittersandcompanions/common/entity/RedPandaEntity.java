@@ -115,8 +115,8 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        RedPandaEntity redPanda = ModEntities.RED_PANDA.get().create(level);
-        return redPanda;
+        // RedPandaEntity redPanda = ModEntities.RED_PANDA.get().create(level);
+        return null;
     }
 
     @Override
@@ -183,10 +183,12 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && ((AgeableMobGroupData) spawnGroupData).getGroupSize() >= 2 && this.random.nextFloat() <= 0.4F) {
             for (int i = 0; i < this.random.nextInt(1, 3); i++) {
+                /*
                 RedPandaEntity baby = ModEntities.RED_PANDA.get().create(this.level());
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
+                 */
             }
         }
         return spawnGroupData;

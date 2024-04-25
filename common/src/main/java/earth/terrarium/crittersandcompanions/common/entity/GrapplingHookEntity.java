@@ -30,7 +30,7 @@ public class GrapplingHookEntity extends Projectile {
     }
 
     public GrapplingHookEntity(Player owner, ItemStack ownerStack, Level level) {
-        this(ModEntities.GRAPPLING_HOOK.get(), level);
+        this(null, level);
         this.moveTo(owner.getX(), owner.getEyeY(), owner.getZ(), owner.getYHeadRot(), owner.getXRot());
         this.setOwner(owner);
         this.setOwnerStack(ownerStack);

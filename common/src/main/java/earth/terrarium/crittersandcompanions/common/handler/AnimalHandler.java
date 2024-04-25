@@ -31,6 +31,7 @@ public class AnimalHandler {
     }
 
     public static void onAttributeCreation(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier> event) {
+        /*
         event.accept(ModEntities.OTTER.get(), OtterEntity.createAttributes().build());
         event.accept(ModEntities.JUMPING_SPIDER.get(), JumpingSpiderEntity.createAttributes().build());
         event.accept(ModEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
@@ -41,9 +42,11 @@ public class AnimalHandler {
         event.accept(ModEntities.DUMBO_OCTOPUS.get(), DumboOctopusEntity.createAttributes().build());
         event.accept(ModEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
         event.accept(ModEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
+        */
     }
 
     public static void registerSpawnPlacements() {
+        /*
         SpawnPlacements.register(ModEntities.OTTER.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
         SpawnPlacements.register(ModEntities.KOI_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacements.register(ModEntities.DRAGONFLY.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DragonflyEntity::checkDragonflySpawnRules);
@@ -52,5 +55,6 @@ public class AnimalHandler {
         SpawnPlacements.register(ModEntities.DUMBO_OCTOPUS.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DumboOctopusEntity::checkDumboOctopusSpawnRules);
         SpawnPlacements.register(ModEntities.LEAF_INSECT.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, LeafInsectEntity::checkLeafInsectSpawnRules);
         SpawnPlacements.register(ModEntities.RED_PANDA.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
+        */
     }
 }

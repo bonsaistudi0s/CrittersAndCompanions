@@ -136,7 +136,8 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(ModItems.DUMBO_OCTOPUS_BUCKET.get());
+        //return new ItemStack(ModItems.DUMBO_OCTOPUS_BUCKET.get());
+        return ItemStack.EMPTY;
     }
 
     @Override

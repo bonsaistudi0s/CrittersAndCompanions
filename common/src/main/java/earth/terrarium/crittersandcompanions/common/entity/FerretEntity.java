@@ -134,6 +134,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
+        /*
         FerretEntity baby = ModEntities.FERRET.get().create(level);
         UUID uuid = this.getOwnerUUID();
         if (ageableMob instanceof FerretEntity ferretEntity) {
@@ -149,6 +150,8 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
             }
         }
         return baby;
+         */
+        return null;
     }
 
     @Override
@@ -242,11 +245,13 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
+                /*
                 FerretEntity baby = ModEntities.FERRET.get().create(this.level());
                 baby.setVariant(this.random.nextInt(0, 2));
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
+                 */
             }
         }
         this.setVariant(this.random.nextInt(0, 2));

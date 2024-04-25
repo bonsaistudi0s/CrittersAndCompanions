@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 
 public class CrittersAndCompanionsClient {
     public static  <T extends Entity> void registerEntityRenderers(RendererRegistry registry) {
+    /*
         registry.register(ModEntities.OTTER.get(), OtterRenderer::new);
         registry.register(ModEntities.JUMPING_SPIDER.get(), JumpingSpiderRenderer::new);
         registry.register(ModEntities.KOI_FISH.get(), KoiFishRenderer::new);
@@ -35,6 +36,7 @@ public class CrittersAndCompanionsClient {
         registry.register(ModEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
         registry.register(ModEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);
         registry.register(ModEntities.RED_PANDA.get(), RedPandaRenderer::new);
+     */
     }
 
     public static void registerEntityLayer(LayerDefinitionRegistry event) {
@@ -43,6 +45,7 @@ public class CrittersAndCompanionsClient {
     }
 
     public static void registerItemProperties(ItemPropertyRegistry registry) {
+    /*
         registry.register(ModItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
             if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
                 return stack.getTag().getInt("BucketVariant");
@@ -57,6 +60,7 @@ public class CrittersAndCompanionsClient {
                 return 0.0F;
             }
         });
+     */
     }
 
     public interface RendererRegistry {

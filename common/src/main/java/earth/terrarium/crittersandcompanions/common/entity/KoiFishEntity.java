@@ -109,7 +109,8 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(ModItems.KOI_FISH_BUCKET.get());
+        //return new ItemStack(ModItems.KOI_FISH_BUCKET.get());
+        return ItemStack.EMPTY;
     }
 
     @Override

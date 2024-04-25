@@ -147,7 +147,8 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(ModItems.SEA_BUNNY_BUCKET.get());
+        //return new ItemStack(ModItems.SEA_BUNNY_BUCKET.get());
+        return ItemStack.EMPTY;
     }
 
     @Override

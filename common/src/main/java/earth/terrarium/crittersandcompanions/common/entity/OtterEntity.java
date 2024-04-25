@@ -314,8 +314,8 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        OtterEntity otter = ModEntities.OTTER.get().create(level);
-        return otter;
+        // OtterEntity otter = ModEntities.OTTER.get().create(level);
+        return null;
     }
 
     @Override
@@ -353,10 +353,12 @@ public class OtterEntity extends Animal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
+                /*
                 OtterEntity baby = ModEntities.OTTER.get().create(this.level());
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
+                 */
             }
         }
         return spawnGroupData;

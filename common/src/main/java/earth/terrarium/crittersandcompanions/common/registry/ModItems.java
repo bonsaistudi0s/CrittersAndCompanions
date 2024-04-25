@@ -42,14 +42,17 @@ public class ModItems {
     public static final Supplier<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(new Item.Properties().stacksTo(1), 2));
     public static final Supplier<Item> PEARL_NECKLACE_3 = ITEMS.register("pearl_necklace_3", () -> new PearlNecklaceItem(new Item.Properties().stacksTo(1), 3));
 
+    /*
     public static final Supplier<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", createMobBucketItem(ModEntities.DUMBO_OCTOPUS, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", createMobBucketItem(ModEntities.KOI_FISH, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", createMobBucketItem(ModEntities.SEA_BUNNY, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
-
+     */
+    
     public static final Supplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(16, "diamond", (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(8, "gold", (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> IRON_DRAGONFLY_ARMOR = ITEMS.register("iron_dragonfly_armor", () -> new DragonflyArmorItem(4, "iron", (new Item.Properties()).stacksTo(1)));
 
+    /*
     public static final Supplier<Item> DRAGONFLY_SPAWN_EGG = ITEMS.register("dragonfly_spawn_egg", createSpawnEggItem(ModEntities.DRAGONFLY, 0x08EECF, 0xD3FF96, (new Item.Properties())));
     public static final Supplier<Item> FERRET_SPAWN_EGG = ITEMS.register("ferret_spawn_egg", createSpawnEggItem(ModEntities.FERRET, 0xC5AC88, 0x37212D, (new Item.Properties())));
     public static final Supplier<Item> DUMBO_OCTOPUS_SPAWN_EGG = ITEMS.register("dumbo_octopus_spawn_egg", createSpawnEggItem(ModEntities.DUMBO_OCTOPUS, 0xFCDC4C, 0x162630, (new Item.Properties())));
@@ -60,6 +63,7 @@ public class ModItems {
     public static final Supplier<Item> RED_PANDA_SPAWN_EGG = ITEMS.register("red_panda_spawn_egg", createSpawnEggItem(ModEntities.RED_PANDA, 0xF4943C, 0x13131B, (new Item.Properties())));
     public static final Supplier<Item> SEA_BUNNY_SPAWN_EGG = ITEMS.register("sea_bunny_spawn_egg", createSpawnEggItem(ModEntities.SEA_BUNNY, 0xF4ECE4, 0x453337, (new Item.Properties())));
     public static final Supplier<Item> SHIMA_ENAGA_SPAWN_EGG = ITEMS.register("shima_enaga_spawn_egg", createSpawnEggItem(ModEntities.SHIMA_ENAGA, 0xFCFCEC, 0x5C3C34, (new Item.Properties())));
+     */
 
     public static final Supplier<Item> SILK_COCOON = ITEMS.register("silk_cocoon", () -> new BlockItem(ModBlocks.SILK_COCOON.get(), new Item.Properties()));
 
