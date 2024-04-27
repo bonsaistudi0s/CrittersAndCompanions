@@ -1,4 +1,4 @@
-package com.github.eterdelta.crittersandcompanions.blocks;
+package com.github.eterdelta.crittersandcompanions.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

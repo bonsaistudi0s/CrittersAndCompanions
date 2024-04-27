@@ -64,7 +64,7 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
     private void onAddAdditionalSaveData(CompoundTag compoundTag, CallbackInfo callbackInfo) {
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             this.getLeashStateCache().ifPresent(state -> {
                 ListTag leashingEntitiesList = new ListTag();
                 for (Entity entity : state.getLeashingEntities()) {
@@ -83,7 +83,7 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
     private void onReadAdditionalSaveData(CompoundTag compoundTag, CallbackInfo callbackInfo) {
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             this.getLeashStateCache().ifPresent(state -> {
                 ListTag leashingEntitiesList = compoundTag.getList("LeashingEntities", 11);
                 for (Tag tag : leashingEntitiesList) {
@@ -106,7 +106,7 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
 
     @Inject(at = @At("TAIL"), method = "tick")
     private void onTick(CallbackInfo callbackInfo) {
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             this.getLeashStateCache().ifPresent(leashState -> {
                 if (this.needsLeashStateLoad) {
                     leashStateLoadDelay++;
@@ -116,7 +116,7 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
                         Set<LivingEntity> leashedByEntities = leashState.getLeashedByEntities();
 
                         for (UUID uuid : this.savedLeashState.first()) {
-                            LivingEntity entity = (LivingEntity) ((ServerLevel) this.level).getEntity(uuid);
+                            LivingEntity entity = (LivingEntity) ((ServerLevel) this.level()).getEntity(uuid);
                             if (entity != null) {
                                 leashingEntities.add(entity);
                             }
@@ -124,7 +124,7 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
                         this.savedLeashState.first().clear();
 
                         for (UUID uuid : this.savedLeashState.second()) {
-                            LivingEntity entity = (LivingEntity) ((ServerLevel) this.level).getEntity(uuid);
+                            LivingEntity entity = (LivingEntity) ((ServerLevel) this.level()).getEntity(uuid);
                             if (entity != null) {
                                 leashedByEntities.add(entity);
                             }
@@ -162,8 +162,8 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
                 }
 
                 if (unleashedEntities > 0) {
-                    ItemEntity leadEntity = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedEntities));
-                    this.getLevel().addFreshEntity(leadEntity);
+                    ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedEntities));
+                    this.level().addFreshEntity(leadEntity);
                     this.sendLeashState();
                 }
             });
@@ -177,8 +177,8 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
             unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates((LivingEntity) ((Entity) this), null) - 1);
             unleashedStates += Math.max(0, SilkLeashItem.updateLeashStates(null, (LivingEntity) ((Entity) this)) - 1);
             if (unleashedStates > 0) {
-                ItemEntity leadEntity = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedStates));
-                this.getLevel().addFreshEntity(leadEntity);
+                ItemEntity leadEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(CACItems.SILK_LEAD.get(), unleashedStates));
+                this.level().addFreshEntity(leadEntity);
             }
         });
     }

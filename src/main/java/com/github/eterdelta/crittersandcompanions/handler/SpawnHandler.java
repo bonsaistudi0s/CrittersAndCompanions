@@ -4,17 +4,11 @@ import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.MobSpawnType;
@@ -24,29 +18,24 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = CrittersAndCompanions.MODID)
 public class SpawnHandler {
 
     @SubscribeEvent
-    public static void onLivingCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
-        if (event.getEntity() instanceof Drowned drowned && event.getSpawnReason() == MobSpawnType.NATURAL && drowned.getRandom().nextFloat() <= 0.05F) {
+    public static void onLivingCheckSpawn(MobSpawnEvent.PositionCheck event) {
+        if (event.getEntity() instanceof Drowned drowned && event.getSpawnType() == MobSpawnType.NATURAL && drowned.getRandom().nextFloat() <= 0.05F) {
             drowned.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(CACItems.CLAM.get()));
         }
     }
@@ -55,6 +44,7 @@ public class SpawnHandler {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
+        /*
         RegistryAccess registryAccess = RegistryAccess.builtinCopy();
         Registry<Biome> registry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
 
@@ -127,6 +117,7 @@ public class SpawnHandler {
 
         generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
                 generator, existingFileHelper, CrittersAndCompanions.MODID, ops, ForgeRegistries.Keys.BIOME_MODIFIERS, modifierMap));
+         */
     }
 
     @SafeVarargs

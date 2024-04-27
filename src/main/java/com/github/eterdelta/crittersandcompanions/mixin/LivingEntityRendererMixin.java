@@ -4,7 +4,6 @@ import com.github.eterdelta.crittersandcompanions.capability.ISilkLeashStateCapa
 import com.github.eterdelta.crittersandcompanions.entity.ILeashStateEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +34,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         super(context);
     }
 
-    @Inject(at = @At("TAIL"), method = "render")
+    @Inject(at = @At("TAIL"), method = "render*")
     private void onRender(T entity, float p_115456_, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int p_115460_, CallbackInfo callback) {
         LazyOptional<ISilkLeashStateCapability> silkLeashCap = ((ILeashStateEntity) entity).getLeashStateCache();
         if (silkLeashCap != null) {
@@ -81,14 +81,14 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         float f2 = (float) (vec3.z - d5);
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.leash());
         Matrix4f matrix4f = poseStack.last().pose();
-        float f4 = Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
+        float f4 = (float) (Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F);
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = new BlockPos(entity.getEyePosition(partialTicks));
-        BlockPos blockpos1 = new BlockPos(leashedToEntity.getEyePosition(partialTicks));
+        BlockPos blockpos = BlockPos.containing(entity.getEyePosition(partialTicks));
+        BlockPos blockpos1 = BlockPos.containing(leashedToEntity.getEyePosition(partialTicks));
         int i = this.getBlockLightLevel(entity, blockpos);
-        int k = entity.level.getBrightness(LightLayer.SKY, blockpos);
-        int l = entity.level.getBrightness(LightLayer.SKY, blockpos1);
+        int k = entity.level().getBrightness(LightLayer.SKY, blockpos);
+        int l = entity.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for (int i1 = 0; i1 <= 24; ++i1) {
             addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, k, l, 0.025F, f5, f6, i1, false, 0.25F + 0.75F * (i1 / 24.0F));

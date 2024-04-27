@@ -3,22 +3,23 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
-public class OtterModel extends AnimatedGeoModel<OtterEntity> {
+public class OtterModel extends GeoModel<OtterEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/otter.geo.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/baby_otter.geo.json")};
+            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/otter.geo.json"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/baby_otter.geo.json")};
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/otter.png"),
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_otter.png")};
     private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/otter.animation.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/baby_otter.animation.json")};
+            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/otter.animation.json"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/baby_otter.animation.json")};
 
     @Override
     public ResourceLocation getModelResource(OtterEntity object) {
@@ -36,14 +37,15 @@ public class OtterModel extends AnimatedGeoModel<OtterEntity> {
     }
 
     @Override
-    public void setCustomAnimations(OtterEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
-        IBone rotBone = this.getAnimationProcessor().getBone(entity.isInWater() ? "main" : "head");
+    public void setCustomAnimations(OtterEntity animatable, long instanceId, AnimationState<OtterEntity> animationState) {
+        super.setCustomAnimations(animatable, instanceId, animationState);
+        CoreGeoBone head = getAnimationProcessor().getBone(animatable.isInWater() ? "main" : "head");
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (!entity.isEating() && !entity.isFloating()) {
-            rotBone.setRotationX(extraData.headPitch * ((float) Math.PI / 180.0F));
-            rotBone.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180.0F));
+        if (head != null && !animatable.isEating() && !animatable.isFloating()) {
+            EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+
+            head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
+            head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
         }
     }
 }

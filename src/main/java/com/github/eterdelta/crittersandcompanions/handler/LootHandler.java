@@ -13,7 +13,6 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,7 +32,8 @@ public class LootHandler {
 
             ((LootTableAccessor) table).getPools().remove(0);
             table.addPool(addPoolEntries(fishPool,
-                    LootItem.lootTableItem(CACItems.CLAM.get()).setWeight(10).when(AlternativeLootItemCondition.alternative(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(Biomes.RIVER)))).build(),
+                    //todo sanity check
+                    LootItem.lootTableItem(CACItems.CLAM.get()).setWeight(10).when(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(Biomes.RIVER))).build(),
                     LootItem.lootTableItem(CACItems.KOI_FISH.get()).setWeight(5).build()));
         } else if (tableName.equals(EntityType.DROWNED.getDefaultLootTable())) {
             LootPool deathPool = ((LootTableAccessor) table).getPools().get(0);

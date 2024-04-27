@@ -1,15 +1,12 @@
-package com.github.eterdelta.crittersandcompanions.mixin;
+package com.github.eterdelta.crittersandcompanions.client.renderer;
 
 import com.github.eterdelta.crittersandcompanions.capability.ISilkLeashStateCapability;
 import com.github.eterdelta.crittersandcompanions.entity.ILeashStateEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -17,38 +14,30 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
-import org.spongepowered.asm.mixin.Mixin;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib.event.GeoRenderEvent;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import java.util.Set;
 
-@Mixin(GeoEntityRenderer.class)
-public abstract class GeoEntityRendererMixin<T extends LivingEntity & IAnimatable> extends EntityRenderer<T> implements IGeoRenderer<T> {
-    public GeoEntityRendererMixin(EntityRendererProvider.Context context) {
-        super(context);
-    }
-
-    @Inject(at = @At("TAIL"), method = "render", remap = false)
-    private void onRender(T entity, float p_115456_, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int p_115460_, CallbackInfo callback) {
-        LazyOptional<ISilkLeashStateCapability> silkLeashCap = ((ILeashStateEntity) entity).getLeashStateCache();
-        if (silkLeashCap != null) {
-            silkLeashCap.ifPresent(capability -> {
-                Set<LivingEntity> leashedByEntities = capability.getLeashedByEntities();
-                for (LivingEntity leashedBy : leashedByEntities) {
-                    this.renderSilkLeash(entity, partialTicks, poseStack, bufferSource, leashedBy);
-                }
-            });
+public class SilkLeashRenderer {
+    public static void renderSilkLeash(GeoRenderEvent.Entity.Post event) {
+        if (event.getEntity() instanceof LivingEntity livingEntity) {
+            LazyOptional<ISilkLeashStateCapability> silkLeashCap = ((ILeashStateEntity) livingEntity).getLeashStateCache();
+            if (silkLeashCap != null) {
+                silkLeashCap.ifPresent(capability -> {
+                    Set<LivingEntity> leashedByEntities = capability.getLeashedByEntities();
+                    for (LivingEntity leashedBy : leashedByEntities) {
+                        renderSilkLeash(event.getRenderer(), livingEntity, event.getPartialTick(), event.getPoseStack(), event.getBufferSource(), leashedBy);
+                    }
+                });
+            }
         }
     }
 
     @Unique
-    private static void addVertexPair(VertexConsumer vertexConsumer, Matrix4f matrix4f, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174315_, int p_174316_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float gradient) {
+    private static void crittersAndCompanions$addVertexPair(VertexConsumer vertexConsumer, Matrix4f matrix4f, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174315_, int p_174316_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float gradient) {
         float f = (float) p_174321_ / 24.0F;
         int i = (int) Mth.lerp(f, (float) p_174313_, (float) 1);
         int j = (int) Mth.lerp(f, (float) p_174315_, (float) p_174316_);
@@ -65,7 +54,7 @@ public abstract class GeoEntityRendererMixin<T extends LivingEntity & IAnimatabl
     }
 
     @Unique
-    private <E extends Entity> void renderSilkLeash(T entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, E leashedToEntity) {
+    private static <E extends Entity> void renderSilkLeash(GeoEntityRenderer<?> renderer, LivingEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, E leashedToEntity) {
         poseStack.pushPose();
         Vec3 vec3 = leashedToEntity.getRopeHoldPosition(partialTicks);
         double d0 = (double) (Mth.lerp(partialTicks, entity.yBodyRotO, entity.yBodyRot) * ((float) Math.PI / 180F)) + (Math.PI / 2D);
@@ -81,20 +70,20 @@ public abstract class GeoEntityRendererMixin<T extends LivingEntity & IAnimatabl
         float f2 = (float) (vec3.z - d5);
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.leash());
         Matrix4f matrix4f = poseStack.last().pose();
-        float f4 = Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
+        float f4 = (float) (Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F);
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = new BlockPos(entity.getEyePosition(partialTicks));
-        BlockPos blockpos1 = new BlockPos(leashedToEntity.getEyePosition(partialTicks));
-        int i = this.getBlockLightLevel(entity, blockpos);
-        int k = entity.level.getBrightness(LightLayer.SKY, blockpos);
-        int l = entity.level.getBrightness(LightLayer.SKY, blockpos1);
+        BlockPos blockpos = BlockPos.containing(entity.getEyePosition(partialTicks));
+        BlockPos blockpos1 = BlockPos.containing(leashedToEntity.getEyePosition(partialTicks));
+        int i = entity.level().getBrightness(LightLayer.BLOCK, blockpos);
+        int k = entity.level().getBrightness(LightLayer.SKY, blockpos);
+        int l = entity.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for (int i1 = 0; i1 <= 24; ++i1) {
-            addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, k, l, 0.025F, f5, f6, i1, false, 0.25F + 0.75F * (i1 / 24.0F));
+            crittersAndCompanions$addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, k, l, 0.025F, f5, f6, i1, false, 0.25F + 0.75F * (i1 / 24.0F));
         }
         for (int j1 = 24; j1 >= 0; --j1) {
-            addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, k, l, 0.0F, f5, f6, j1, true, 0.25F + 0.75F * (j1 / 24.0F));
+            crittersAndCompanions$addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, k, l, 0.0F, f5, f6, j1, true, 0.25F + 0.75F * (j1 / 24.0F));
         }
 
         poseStack.popPose();

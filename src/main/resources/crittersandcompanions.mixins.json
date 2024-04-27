@@ -16,7 +16,6 @@
     ],
     "client": [
         "ClientPacketListenerMixin",
-        "GeoEntityRendererMixin",
         "LivingEntityRendererMixin"
     ],
     "injectors": {

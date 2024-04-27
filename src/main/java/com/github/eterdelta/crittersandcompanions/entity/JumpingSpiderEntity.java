@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -28,18 +29,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private PanicGoal panicGoal;
 
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
@@ -98,17 +99,17 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
             if (!player.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
-            if (!this.level.isClientSide()) {
+            if (!this.level().isClientSide()) {
                 if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.tame(player);
-                    this.level.broadcastEntityEvent(this, (byte) 7);
+                    this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
-                    this.level.broadcastEntityEvent(this, (byte) 6);
+                    this.level().broadcastEntityEvent(this, (byte) 6);
                 }
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else if (this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level.isClientSide()) {
+            if (!this.level().isClientSide()) {
                 if (handStack.is(CACItems.DRAGONFLY_WING.get()) && this.getHealth() < this.getMaxHealth()) {
                     this.gameEvent(GameEvent.EAT, this);
                     this.heal(1.0F);
@@ -119,7 +120,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
                     this.setOrderedToSit(!this.isOrderedToSit());
                 }
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else {
             return super.mobInteract(player, interactionHand);
         }
@@ -131,25 +132,25 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
         this.goalSelector.removeGoal(this.panicGoal);
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+    private PlayState predicate(AnimationState<?> event) {
         if (this.isInSittingPose()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("jumping_spider_sit", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("jumping_spider_sit"));
         } else if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("jumping_spider_walk", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("jumping_spider_walk"));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("jumping_spider_idle", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("jumping_spider_idle"));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<GeoAnimatable>(this, "controller", 0, this::predicate));
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 
     static class JumpingSpiderMoveControl extends MoveControl {
@@ -161,7 +162,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements IAnimatable {
         }
 
         public void tick() {
-            if (this.hasWanted() && this.spider.isOnGround() && this.spider.getRandom().nextFloat() <= 0.05F) {
+            if (this.hasWanted() && this.spider.onGround() && this.spider.getRandom().nextFloat() <= 0.05F) {
                 this.spider.setDeltaMovement(this.spider.getDeltaMovement().add(0.0D, 0.6D, 0.0D));
             }
             super.tick();

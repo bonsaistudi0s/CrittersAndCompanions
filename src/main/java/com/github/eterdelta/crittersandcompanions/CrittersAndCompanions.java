@@ -2,8 +2,10 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
 import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.*;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
+import com.github.eterdelta.crittersandcompanions.client.renderer.SilkLeashRenderer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
@@ -15,42 +17,37 @@ import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.forgespi.locating.IModFile;
-import net.minecraftforge.resource.PathPackResources;
-import software.bernie.geckolib3.GeckoLib;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+import software.bernie.geckolib.GeckoLib;
+import software.bernie.geckolib.event.GeoRenderEvent;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-import java.io.IOException;
-import java.nio.file.Path;
+import java.util.function.Supplier;
 
 @Mod(CrittersAndCompanions.MODID)
 public class CrittersAndCompanions {
     public static final String MODID = "crittersandcompanions";
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MODID) {
-        public ItemStack makeIcon() {
-            return new ItemStack(CACItems.PEARL_NECKLACE_1.get());
-        }
-    };
+
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
+    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("main", CreativeModeTab.builder().icon(() -> CACItems.PEARL_NECKLACE_1.get().getDefaultInstance())::build);
 
     public CrittersAndCompanions() {
         GeckoLib.initialize();
@@ -59,6 +56,7 @@ public class CrittersAndCompanions {
         CACBlocks.BLOCKS.register(eventBus);
         CACEntities.ENTITIES.register(eventBus);
         CACItems.ITEMS.register(eventBus);
+        CREATIVE_TABS.register(eventBus);
         CACSounds.SOUNDS.register(eventBus);
 
         eventBus.addListener(this::onSetup);
@@ -67,16 +65,19 @@ public class CrittersAndCompanions {
         eventBus.addListener(this::registerEntityLayers);
         if (FMLEnvironment.dist.isClient()) {
             eventBus.addListener(this::addEntityLayers);
+            MinecraftForge.EVENT_BUS.addListener(SilkLeashRenderer::renderSilkLeash);
         }
 
         eventBus.addListener(this::gatherData);
-        eventBus.addListener(this::onAddPackFinders);
+        eventBus.addListener(this::addItemsToTab);
+        //eventBus.addListener(this::onAddPackFinders);
     }
 
     public void gatherData(GatherDataEvent event){
         SpawnHandler.datagenBiomeModifiers(event);
     }
 
+    /*
     public void onAddPackFinders(AddPackFindersEvent event) {
         try {
             System.out.println("Hello");
@@ -96,6 +97,7 @@ public class CrittersAndCompanions {
             throw new RuntimeException(exception);
         }
     }
+     */
 
     public void onSetup(FMLCommonSetupEvent event) {
         CACPacketHandler.registerPackets();
@@ -133,16 +135,16 @@ public class CrittersAndCompanions {
 
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(CACEntities.OTTER.get(), OtterRenderer::new);
-        event.registerEntityRenderer(CACEntities.JUMPING_SPIDER.get(), JumpingSpiderRenderer::new);
-        event.registerEntityRenderer(CACEntities.KOI_FISH.get(), KoiFishRenderer::new);
-        event.registerEntityRenderer(CACEntities.DRAGONFLY.get(), DragonflyRenderer::new);
-        event.registerEntityRenderer(CACEntities.SEA_BUNNY.get(), SeaBunnyRenderer::new);
-        event.registerEntityRenderer(CACEntities.SHIMA_ENAGA.get(), ShimaEnagaRenderer::new);
-        event.registerEntityRenderer(CACEntities.FERRET.get(), FerretRenderer::new);
+        event.registerEntityRenderer(CACEntities.JUMPING_SPIDER.get(), context -> new GeoEntityRenderer<>(context, new JumpingSpiderModel()));
+        event.registerEntityRenderer(CACEntities.KOI_FISH.get(), context -> new GeoEntityRenderer<>(context, new KoiFishModel()));
+        event.registerEntityRenderer(CACEntities.DRAGONFLY.get(), context -> new GeoEntityRenderer<>(context, new DragonflyModel()));
+        event.registerEntityRenderer(CACEntities.SEA_BUNNY.get(), context -> new GeoEntityRenderer<>(context, new SeaBunnyModel()));
+        event.registerEntityRenderer(CACEntities.SHIMA_ENAGA.get(), context -> new GeoEntityRenderer<>(context, new ShimaEnagaModel()));
+        event.registerEntityRenderer(CACEntities.FERRET.get(), context -> new GeoEntityRenderer<>(context, new FerretModel()));
         event.registerEntityRenderer(CACEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
-        event.registerEntityRenderer(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusRenderer::new);
-        event.registerEntityRenderer(CACEntities.LEAF_INSECT.get(), LeafInsectRenderer::new);
-        event.registerEntityRenderer(CACEntities.RED_PANDA.get(), RedPandaRenderer::new);
+        event.registerEntityRenderer(CACEntities.DUMBO_OCTOPUS.get(), context -> new GeoEntityRenderer<>(context, new DumboOctopusModel()));
+        event.registerEntityRenderer(CACEntities.LEAF_INSECT.get(), context -> new GeoEntityRenderer<>(context, new LeafInsectModel()));
+        event.registerEntityRenderer(CACEntities.RED_PANDA.get(), context -> new GeoEntityRenderer<>(context, new RedPandaModel()));
     }
 
     public void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -157,6 +159,12 @@ public class CrittersAndCompanions {
                 LivingEntityRenderer<Player, PlayerModel<Player>> skinRenderer = event.getSkin(skinName);
                 skinRenderer.addLayer(new BubbleLayer(skinRenderer, event.getEntityModels()));
             }
+        }
+    }
+
+    public void addItemsToTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTab() == CREATIVE_TAB.get()) {
+            CACItems.ITEMS.getEntries().stream().map(Supplier::get).forEach(event::accept);
         }
     }
 }

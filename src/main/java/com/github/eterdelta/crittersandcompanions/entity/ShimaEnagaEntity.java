@@ -3,10 +3,10 @@ package com.github.eterdelta.crittersandcompanions.entity;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,19 +28,18 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, IAnimatable {
-    private static final TagKey<Item> FOODS_TAG = ItemTags.create(new ResourceLocation(CrittersAndCompanions.MODID, "shima_enaga_food"));
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, GeoEntity {
+    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(CrittersAndCompanions.MODID, "shima_enaga_food"));
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ShimaEnagaEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -94,7 +93,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, IAn
     public void travel(Vec3 speed) {
         super.travel(speed);
         Vec3 movement = this.getDeltaMovement();
-        if (!this.isOnGround() && movement.y() < 0.0D) {
+        if (!this.onGround() && movement.y() < 0.0D) {
             this.setDeltaMovement(movement.multiply(1.0D, 0.5D, 1.0D));
         }
     }
@@ -117,17 +116,17 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, IAn
             if (!player.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
-            if (!this.level.isClientSide()) {
+            if (!this.level().isClientSide()) {
                 if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.tame(player);
-                    this.level.broadcastEntityEvent(this, (byte) 7);
+                    this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
-                    this.level.broadcastEntityEvent(this, (byte) 6);
+                    this.level().broadcastEntityEvent(this, (byte) 6);
                 }
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else if (this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level.isClientSide()) {
+            if (!this.level().isClientSide()) {
                 if (handStack.is(FOODS_TAG) && this.getHealth() < this.getMaxHealth()) {
                     this.gameEvent(GameEvent.EAT, this);
                     this.heal(1.0F);
@@ -138,7 +137,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, IAn
                     this.setOrderedToSit(!this.isOrderedToSit());
                 }
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide());
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else {
             return super.mobInteract(player, interactionHand);
         }
@@ -151,7 +150,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, IAn
 
     @Override
     public boolean isFlying() {
-        return !this.onGround;
+        return !this.onGround();
     }
 
     @Override
@@ -159,22 +158,22 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, IAn
         return CACSounds.SHIMA_ENAGA_AMBIENT.get();
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.isOnGround()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("shima_enaga_idle", ILoopType.EDefaultLoopTypes.LOOP));
+    private PlayState predicate(AnimationState<?> event) {
+        if (this.onGround()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_idle"));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("shima_enaga_fly", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_fly"));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 5, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 }

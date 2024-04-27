@@ -128,7 +128,7 @@ public class SilkLeashItem extends Item {
                     if (!player.getAbilities().instabuild) {
                         handStack.shrink(1);
                     }
-                    if (!player.getLevel().isClientSide()) {
+                    if (!player.level().isClientSide()) {
                         SilkLeashItem.updateLeashStates(player, entity);
                         return InteractionResult.CONSUME;
                     }
