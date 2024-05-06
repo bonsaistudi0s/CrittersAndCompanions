@@ -38,7 +38,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     @Inject(at = @At("TAIL"), method = "render")
     private void onRender(T entity, float p_115456_, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int p_115460_, CallbackInfo callback) {
         LazyOptional<ISilkLeashStateCapability> silkLeashCap = ((ILeashStateEntity) entity).getLeashStateCache();
-        if (silkLeashCap != null) {
+        if (silkLeashCap.isPresent()) {
             silkLeashCap.ifPresent(capability -> {
                 Set<LivingEntity> leashedByEntities = capability.getLeashedByEntities();
                 for (LivingEntity leashedBy : leashedByEntities) {
@@ -50,9 +50,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 
     @Unique
     private static void addVertexPair(VertexConsumer vertexConsumer, Matrix4f matrix4f, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174315_, int p_174316_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float gradient) {
-        float f = (float) p_174321_ / 24.0F;
-        int i = (int) Mth.lerp(f, (float) p_174313_, (float) 1);
-        int j = (int) Mth.lerp(f, (float) p_174315_, (float) p_174316_);
+        float f = p_174321_ / 24.0F;
+        int i = (int) Mth.lerp(f, p_174313_, 1);
+        int j = (int) Mth.lerp(f, p_174315_, p_174316_);
         int k = LightTexture.pack(i, j);
         float f1 = p_174321_ % 2 == (p_174322_ ? 1 : 0) ? 0.7F : 1.0F;
         float r = 0.75F * f1 * gradient;

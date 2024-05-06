@@ -169,7 +169,7 @@ public abstract class LivingEntityMixin extends Entity implements ILeashStateEnt
         }
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.gameEvent(Lnet/minecraft/world/level/gameevent/GameEvent;)V", ordinal = 0, shift = At.Shift.BY, by = 1), method = "die")
+    @Inject(at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.gameEvent(Lnet/minecraft/world/level/gameevent/GameEvent;)V", ordinal = 0), method = "die")
     private void onDie(DamageSource source, CallbackInfo callbackInfo) {
         this.getLeashStateCache().ifPresent(state -> {
             int unleashedStates = 0;

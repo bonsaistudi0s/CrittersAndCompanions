@@ -3,6 +3,7 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -41,10 +42,10 @@ public class OtterModel extends GeoModel<OtterEntity> {
         super.setCustomAnimations(entity, uniqueID, customPredicate);
         CoreGeoBone rotBone = this.getAnimationProcessor().getBone(entity.isInWater() ? "main" : "head");
 
-        EntityModelData extraData = customPredicate.getData(DataTickets.ENTITY_MODEL_DATA);
-        if (!entity.isEating() && !entity.isFloating()) {
-            rotBone.setRotX(extraData.headPitch() * ((float) Math.PI / 180.0F));
-            rotBone.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180.0F));
+        if (rotBone != null && !entity.isEating() && !entity.isFloating()) {
+            EntityModelData extraData = customPredicate.getData(DataTickets.ENTITY_MODEL_DATA);
+            rotBone.setRotX(extraData.headPitch() * Mth.DEG_TO_RAD);
+            rotBone.setRotY(extraData.netHeadYaw() * Mth.DEG_TO_RAD);
         }
     }
 }
