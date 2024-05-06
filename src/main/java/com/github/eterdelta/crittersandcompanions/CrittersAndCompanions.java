@@ -18,7 +18,11 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,19 +30,25 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.forgespi.locating.IModFile;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.resource.PathPackResources;
 import software.bernie.geckolib.GeckoLib;
-import software.bernie.geckolib.event.GeoRenderEvent;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
+import java.nio.file.Path;
 import java.util.function.Supplier;
 
 @Mod(CrittersAndCompanions.MODID)
@@ -47,7 +57,10 @@ public class CrittersAndCompanions {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("main", CreativeModeTab.builder().icon(() -> CACItems.PEARL_NECKLACE_1.get().getDefaultInstance())::build);
+    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("main", CreativeModeTab.builder()
+            .icon(() -> CACItems.PEARL_NECKLACE_1.get().getDefaultInstance())
+            .title(Component.translatable("itemGroup.crittersandcompanions"))
+            ::build);
 
     public CrittersAndCompanions() {
         GeckoLib.initialize();
@@ -59,50 +72,44 @@ public class CrittersAndCompanions {
         CREATIVE_TABS.register(eventBus);
         CACSounds.SOUNDS.register(eventBus);
 
-        eventBus.addListener(this::onSetup);
-        eventBus.addListener(this::onAttributeCreation);
-        eventBus.addListener(this::registerEntityRenderers);
-        eventBus.addListener(this::registerEntityLayers);
         if (FMLEnvironment.dist.isClient()) {
-            eventBus.addListener(this::addEntityLayers);
             MinecraftForge.EVENT_BUS.addListener(SilkLeashRenderer::renderSilkLeash);
         }
-
-        eventBus.addListener(this::gatherData);
-        eventBus.addListener(this::addItemsToTab);
-        //eventBus.addListener(this::onAddPackFinders);
     }
 
+    @SubscribeEvent
     public void gatherData(GatherDataEvent event){
         SpawnHandler.datagenBiomeModifiers(event);
     }
 
-    /*
+    @SubscribeEvent
     public void onAddPackFinders(AddPackFindersEvent event) {
-        try {
-            System.out.println("Hello");
-            if (event.getPackType() == PackType.CLIENT_RESOURCES) {
-                IModFile modFile = ModList.get().getModFileById(MODID).getFile();
-                Path resourcePath = modFile.findResource("builtin/friendlyart");
-                PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, resourcePath);
-                PackMetadataSection metadataSection = pack.getMetadataSection(PackMetadataSection.SERIALIZER);
-                if (metadataSection != null) {
-                    event.addRepositorySource((packConsumer, packConstructor) ->
-                            packConsumer.accept(packConstructor.create(
-                                    "builtin/" + MODID, Component.literal("Friendly Critter Art"), false,
-                                    () -> pack, metadataSection, Pack.Position.BOTTOM, PackSource.BUILT_IN, false)));
-                }
+        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+            IModFile modFile = ModList.get().getModFileById(MODID).getFile();
+            Path resourcePath = modFile.findResource("builtin/friendlyart");
+            try (PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, true, resourcePath)) {
+                event.addRepositorySource(consumer -> consumer.accept(Pack.readMetaAndCreate(
+                        "builtin/" + MODID,
+                        Component.literal("Friendly Critter Art"),
+                        false,
+                        (ignored) -> pack,
+                        PackType.CLIENT_RESOURCES,
+                        Pack.Position.BOTTOM,
+                        PackSource.BUILT_IN)));
             }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
         }
     }
-     */
 
+    @SubscribeEvent
     public void onSetup(FMLCommonSetupEvent event) {
         CACPacketHandler.registerPackets();
+        event.enqueueWork(SpawnHandler::registerSpawnPlacements);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            SpawnHandler.registerSpawnPlacements();
             ItemProperties.register(CACItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
                 if (stack.getTag() != null && stack.getTag().contains("BucketVariant")) {
                     return stack.getTag().getInt("BucketVariant");
@@ -120,7 +127,8 @@ public class CrittersAndCompanions {
         });
     }
 
-    private void onAttributeCreation(EntityAttributeCreationEvent event) {
+    @SubscribeEvent
+    public void onAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(CACEntities.OTTER.get(), OtterEntity.createAttributes().build());
         event.put(CACEntities.JUMPING_SPIDER.get(), JumpingSpiderEntity.createAttributes().build());
         event.put(CACEntities.KOI_FISH.get(), KoiFishEntity.createAttributes().build());
@@ -133,6 +141,8 @@ public class CrittersAndCompanions {
         event.put(CACEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(CACEntities.OTTER.get(), OtterRenderer::new);
         event.registerEntityRenderer(CACEntities.JUMPING_SPIDER.get(), context -> new GeoEntityRenderer<>(context, new JumpingSpiderModel()));
@@ -147,12 +157,15 @@ public class CrittersAndCompanions {
         event.registerEntityRenderer(CACEntities.RED_PANDA.get(), context -> new GeoEntityRenderer<>(context, new RedPandaModel()));
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
     public void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(BubbleLayer.LAYER_LOCATION, BubbleModel::createLayer);
         event.registerLayerDefinition(GrapplingHookRenderer.LAYER_LOCATION, GrapplingHookModel::createLayer);
     }
 
     @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
     public void addEntityLayers(EntityRenderersEvent.AddLayers event) {
         if (FMLEnvironment.dist.isClient()) {
             for (String skinName : event.getSkins()) {
@@ -162,6 +175,7 @@ public class CrittersAndCompanions {
         }
     }
 
+    @SubscribeEvent
     public void addItemsToTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == CREATIVE_TAB.get()) {
             CACItems.ITEMS.getEntries().stream().map(Supplier::get).forEach(event::accept);
