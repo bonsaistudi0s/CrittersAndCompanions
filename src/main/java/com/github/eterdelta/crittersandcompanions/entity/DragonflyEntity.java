@@ -191,7 +191,7 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
                     handStack.shrink(1);
                 }
                 if (!this.level().isClientSide()) {
-                    if (this.random.nextInt(10) == 0 && ForgeEventFactory.onAnimalTame(this, player)) {
+                    if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                         this.tame(player);
                         this.level().broadcastEntityEvent(this, (byte) 7);
                     } else {

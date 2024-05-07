@@ -73,6 +73,7 @@ public class GrapplingHookEntity extends Projectile {
             Vec3 offset = this.position().subtract(this.getOwner().position());
             if (offset.lengthSqr() > stickLength) {
                 this.getOwner().setDeltaMovement(this.getOwner().getDeltaMovement().add(offset.scale(0.02D)));
+                this.getOwner().hurtMarked = true;
             }
             this.setDeltaMovement(0.0D, 0.0D, 0.0D);
         } else {
@@ -82,13 +83,11 @@ public class GrapplingHookEntity extends Projectile {
         this.move(MoverType.SELF, this.getDeltaMovement());
     }
 
-    /*
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
         this.updateOwnerState();
     }
-     */
 
     @Override
     public void remove(RemovalReason removalReason) {

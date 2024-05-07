@@ -65,6 +65,7 @@ public class CrittersAndCompanions {
     public CrittersAndCompanions() {
         GeckoLib.initialize();
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        eventBus.register(this);
 
         CACBlocks.BLOCKS.register(eventBus);
         CACEntities.ENTITIES.register(eventBus);
