@@ -45,6 +45,10 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
         this.entityData.define(VARIANT, 0);
     }
 
+    public MobType getMobType() {
+        return MobType.WATER;
+    }
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
