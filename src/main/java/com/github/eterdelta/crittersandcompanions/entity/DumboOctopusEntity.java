@@ -90,6 +90,10 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
         this.entityData.define(FROM_BUCKET, false);
     }
 
+    public MobType getMobType() {
+        return MobType.WATER;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BubblePlayerGoal());
