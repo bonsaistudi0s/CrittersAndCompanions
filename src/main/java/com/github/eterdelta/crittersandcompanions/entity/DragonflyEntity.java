@@ -71,6 +71,10 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         this.entityData.define(ARMOR_ITEM, ItemStack.EMPTY);
     }
 
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
@@ -139,7 +143,7 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         flyingPathNavigation.setCanFloat(true);
         return flyingPathNavigation;
     }
-
+    
     @Override
     public boolean causeFallDamage(float p_147187_, float p_147188_, DamageSource p_147189_) {
         return false;
