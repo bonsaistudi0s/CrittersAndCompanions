@@ -33,6 +33,8 @@ public class SeaBunnyModel extends DefaultedEntityGeoModel<SeaBunnyEntity> {
         mainBone.setRotY(data.netHeadYaw() * ((float) Math.PI / 180.0F));
         if (animatable.isClimbing()) {
             mainBone.setRotX(90.0F * ((float) Math.PI / 180.0F));
+        } else {
+            mainBone.setRotX(0F);
         }
     }
 }
