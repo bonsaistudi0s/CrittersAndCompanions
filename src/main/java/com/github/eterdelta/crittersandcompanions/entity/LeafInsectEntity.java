@@ -47,7 +47,7 @@ public class LeafInsectEntity extends PathfinderMob implements GeoEntity {
 
     public static boolean checkLeafInsectSpawnRules(EntityType<LeafInsectEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
         BlockState blockState = levelAccessor.getBlockState(blockPos.below());
-        return blockPos.getY() > levelAccessor.getSeaLevel() && (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.LEAVES));
+        return blockPos.getY() > levelAccessor.getSeaLevel() - 16 && (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.LEAVES));
     }
 
     @Override

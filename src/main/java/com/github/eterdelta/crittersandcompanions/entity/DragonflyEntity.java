@@ -62,7 +62,8 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     }
 
     public static boolean checkDragonflySpawnRules(EntityType<DragonflyEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
-        return blockPos.getY() > 63 && blockPos.getY() <= levelAccessor.getSeaLevel() + 16 && levelAccessor.getBlockState(blockPos).isAir() && levelAccessor.getRawBrightness(blockPos, 0) > 8;
+        int seaLevel = levelAccessor.getSeaLevel();
+        return blockPos.getY() > seaLevel - 10 && blockPos.getY() <= seaLevel + 16 && levelAccessor.getBlockState(blockPos).isAir() && levelAccessor.getRawBrightness(blockPos, 0) > 8;
     }
 
     @Override
