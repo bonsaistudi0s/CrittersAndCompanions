@@ -156,6 +156,10 @@ public class OtterEntity extends Animal implements GeoEntity {
                 this.setLastHurtMob(null);
             }
         }
+
+        if (this.tickCount % 60 == 0) {
+            heal(0.5F);
+        }
     }
 
     @Override
