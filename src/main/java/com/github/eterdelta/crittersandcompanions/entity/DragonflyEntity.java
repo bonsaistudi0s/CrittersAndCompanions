@@ -21,7 +21,11 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.entity.ai.util.AirRandomPos;
+import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +58,10 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new DragonflyMoveControl(this);
-        this.setPathfindingMalus(BlockPathTypes.OPEN, 1.0F);
+
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -268,37 +275,38 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
             if (this.operation == Operation.MOVE_TO) {
                 this.operation = Operation.WAIT;
                 this.mob.setNoGravity(true);
-                double d0 = this.wantedX - this.mob.getX();
-                double d1 = this.wantedY - this.mob.getY();
-                double d2 = this.wantedZ - this.mob.getZ();
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                if (d3 < (double) 2.5000003E-7F) {
-                    this.mob.setYya(0.0F);
+                double deltaX = this.wantedX - this.mob.getX();
+                double deltaY = this.wantedY - this.mob.getY();
+                double deltaZ = this.wantedZ - this.mob.getZ();
+                double distanceSqrt = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+                if (distanceSqrt < 0.1) {
+                    this.mob.setYya(mob.getRandom().nextFloat() - 0.5F);
                     this.mob.setZza(0.0F);
                     return;
                 }
 
-                float f = (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
+                float f = (float) (Mth.atan2(deltaZ, deltaX) * (180F / (float) Math.PI)) - 90.0F;
                 this.mob.setYRot(this.rotlerp(this.mob.getYRot(), f, 360.0F));
 
                 float speed = (float) (this.speedModifier * this.mob.getAttributeValue(Attributes.FLYING_SPEED));
 
                 this.mob.setSpeed(speed);
-                double d4 = Math.sqrt(d0 * d0 + d2 * d2);
-                if (Math.abs(d1) > (double) 1.0E-5F || Math.abs(d4) > (double) 1.0E-5F) {
-                    float f2 = (float) (-(Mth.atan2(d1, d4) * (double) (180F / (float) Math.PI)));
+                double horizontalDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+                if (Math.abs(deltaY) > 1.0E-5F || Math.abs(horizontalDistance) > 1.0E-5F) {
+                    float f2 = (float) (-(Mth.atan2(deltaY, horizontalDistance) * (180F / (float) Math.PI)));
                     this.mob.setXRot(this.rotlerp(this.mob.getXRot(), f2, 20.0F));
-                    this.mob.setYya(d1 > 0.0D ? speed : -speed);
+                    this.mob.setYya(deltaY > 0.0D ? speed : -speed);
                 }
             } else {
-                this.mob.setYya(0.0F);
+                this.mob.setYya(mob.getRandom().nextFloat() - 0.5F);
                 this.mob.setZza(0.0F);
             }
         }
     }
 
     public class RandomFlyGoal extends Goal {
-        private BlockPos targetPosition;
+        private static final int horizontalRange = 14;
+        private static final int verticalRange = 4;
 
         public RandomFlyGoal() {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -306,40 +314,27 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public boolean canUse() {
-            return !DragonflyEntity.this.isOrderedToSit();
+            return !DragonflyEntity.this.isOrderedToSit() && DragonflyEntity.this.navigation.isDone() && DragonflyEntity.this.random.nextInt(10) == 0;
         }
 
         @Override
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
-
-        @Override
-        public void tick() {
-            if (this.targetPosition != null && (!DragonflyEntity.this.level().isEmptyBlock(this.targetPosition) || this.targetPosition.getY() <= DragonflyEntity.this.level().getMinBuildHeight())) {
-                this.targetPosition = null;
+        public void start() {
+            //Vec3 randomPos = RandomPos.generateRandomPos(DragonflyEntity.this, () ->
+            //        new BlockPos(
+            //                DragonflyEntity.this.getBlockX() + DragonflyEntity.this.random.nextIntBetweenInclusive(-horizontalRange, horizontalRange),
+            //                DragonflyEntity.this.getBlockY() + DragonflyEntity.this.random.nextInt(verticalRange) - 2,
+            //                DragonflyEntity.this.getBlockZ() + DragonflyEntity.this.random.nextIntBetweenInclusive(-horizontalRange, horizontalRange)
+            //        )
+            //);
+            var view = DragonflyEntity.this.getViewVector(0.0F);
+            var randomPos = HoverRandomPos.getPos(DragonflyEntity.this, horizontalRange, verticalRange, view.x, view.z, 2, 3, 1);
+            if (randomPos == null) {
+                var y = DragonflyEntity.this.isInWater() ? 2 : -2;
+                randomPos = AirAndWaterRandomPos.getPos(DragonflyEntity.this, horizontalRange, verticalRange, y, view.x, view.y, 2);
             }
-
-            if (this.targetPosition == null || DragonflyEntity.this.random.nextInt(30) == 0 || this.targetPosition.closerToCenterThan(DragonflyEntity.this.position(), 2.0D)) {
-                Vec3 randomPos = RandomPos.generateRandomPos(DragonflyEntity.this, () ->
-                        new BlockPos(DragonflyEntity.this.getBlockX() + DragonflyEntity.this.random.nextInt(7) - DragonflyEntity.this.random.nextInt(7), DragonflyEntity.this.getBlockY() + DragonflyEntity.this.random.nextInt(6) - 2, DragonflyEntity.this.getBlockZ() + DragonflyEntity.this.random.nextInt(7) - DragonflyEntity.this.random.nextInt(7)));
-                this.targetPosition = randomPos == null ? DragonflyEntity.this.blockPosition() : BlockPos.containing(randomPos);
+            if (randomPos != null) {
+                DragonflyEntity.this.navigation.moveTo(DragonflyEntity.this.navigation.createPath(BlockPos.containing(randomPos), 1), 1.0);
             }
-
-            double d0 = (double) this.targetPosition.getX() + 0.5D - DragonflyEntity.this.getX();
-            double d1 = (double) this.targetPosition.getY() + 0.1D - DragonflyEntity.this.getY();
-            double d2 = (double) this.targetPosition.getZ() + 0.5D - DragonflyEntity.this.getZ();
-
-            double speed = DragonflyEntity.this.getAttributeValue(Attributes.FLYING_SPEED);
-
-            Vec3 deltaMovement = DragonflyEntity.this.getDeltaMovement();
-            Vec3 signumDeltaMovement = deltaMovement.add((Math.signum(d0) * 0.5D - deltaMovement.x) * speed, (Math.signum(d1) * (double) 0.7F - deltaMovement.y) * speed, (Math.signum(d2) * 0.5D - deltaMovement.z) * speed);
-            DragonflyEntity.this.setDeltaMovement(signumDeltaMovement);
-
-            float angle = (float) (Mth.atan2(signumDeltaMovement.z, signumDeltaMovement.x) * (double) (180F / (float) Math.PI)) - 90.0F;
-            float wrappedAngle = Mth.wrapDegrees(angle - DragonflyEntity.this.getYRot());
-            DragonflyEntity.this.zza = 0.5F;
-            DragonflyEntity.this.setYRot(DragonflyEntity.this.getYRot() + wrappedAngle);
         }
     }
 }
