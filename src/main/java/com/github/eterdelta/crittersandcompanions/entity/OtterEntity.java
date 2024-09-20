@@ -406,7 +406,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 20, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
         controllers.add(new AnimationController<>(this, "floating_hands_controller", 10, this::floatingHandsPredicate));
     }
 
