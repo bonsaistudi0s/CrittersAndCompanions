@@ -319,13 +319,6 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public void start() {
-            //Vec3 randomPos = RandomPos.generateRandomPos(DragonflyEntity.this, () ->
-            //        new BlockPos(
-            //                DragonflyEntity.this.getBlockX() + DragonflyEntity.this.random.nextIntBetweenInclusive(-horizontalRange, horizontalRange),
-            //                DragonflyEntity.this.getBlockY() + DragonflyEntity.this.random.nextInt(verticalRange) - 2,
-            //                DragonflyEntity.this.getBlockZ() + DragonflyEntity.this.random.nextIntBetweenInclusive(-horizontalRange, horizontalRange)
-            //        )
-            //);
             var view = DragonflyEntity.this.getViewVector(0.0F);
             var randomPos = HoverRandomPos.getPos(DragonflyEntity.this, horizontalRange, verticalRange, view.x, view.z, 2, 3, 1);
             if (randomPos == null) {

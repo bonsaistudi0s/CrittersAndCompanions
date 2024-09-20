@@ -169,7 +169,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", 20, this::predicate));
     }
 
     @Override

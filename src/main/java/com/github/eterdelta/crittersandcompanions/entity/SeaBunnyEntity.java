@@ -237,7 +237,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", 20, this::predicate));
     }
 
     @Override
