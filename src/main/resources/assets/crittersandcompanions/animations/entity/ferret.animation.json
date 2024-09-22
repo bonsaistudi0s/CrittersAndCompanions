@@ -465,7 +465,8 @@
 				"body_2": {
 					"rotation": {
 						"0.0": {
-							"vector": [52, 0, 0]
+							"vector": [52, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"0.12": {
 							"vector": [57.5, 0, 0],
@@ -482,23 +483,28 @@
 					},
 					"position": {
 						"0.0": {
-							"vector": [0, 0, 0]
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"0.12": {
-							"vector": [0, 0.3, 0]
+							"vector": [0, 0.3, 0],
+							"easing": "easeInOutSine"
 						},
 						"0.24": {
-							"vector": [0, 0, 0]
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"0.36": {
-							"vector": [0, 0, 0]
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
 						}
 					}
 				},
 				"head": {
 					"rotation": {
 						"0.0": {
-							"vector": [-58, 0, 0]
+							"vector": [-58, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"0.12": {
 							"vector": [-70, 0, 0],
@@ -514,7 +520,8 @@
 						}
 					},
 					"position": {
-						"vector": [0, -0.6, 0]
+						"vector": [0, -0.6, 0],
+						"easing": "easeInOutSine"
 					}
 				},
 				"left_arm": {

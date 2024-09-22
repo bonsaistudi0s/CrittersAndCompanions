@@ -37,19 +37,19 @@
 					"name": "body_2",
 					"parent": "body",
 					"pivot": [0, 5.5, -4],
-					"rotation": [-77.5, 0, 0],
+					"rotation": [-77.5, 0, 0]
+				},
+				{
+					"name": "head_rotation",
+					"parent": "body_2",
+					"pivot": [0, 5.5, -4],
 					"cubes": [
 						{"origin": [-2, 3.4, -10.8], "size": [4, 4, 8], "uv": [23, 0]}
 					]
 				},
 				{
 					"name": "head",
-					"parent": "body_2",
-					"pivot": [-0.5, 6.1, -9.2]
-				},
-				{
-					"name": "head_rotation",
-					"parent": "head",
+					"parent": "head_rotation",
 					"pivot": [-0.5, 6.1, -9.2],
 					"cubes": [
 						{"origin": [-2.5, 4.6, -13.6], "size": [5, 4, 5], "pivot": [-0.5, 6.1, -9.2], "rotation": [82.5, 0, 0], "uv": [16, 18]},

@@ -60,6 +60,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
         this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     @Override
