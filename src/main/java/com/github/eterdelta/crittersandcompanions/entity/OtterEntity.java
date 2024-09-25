@@ -240,26 +240,11 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected void pickUpItem(ItemEntity itemEntity) {
-        ItemStack itemStack = itemEntity.getItem();
-
         if (this.rejectedItem(itemEntity)) {
             return;
         }
 
-        ItemStack itemsEquipped = this.equipItemIfPossible(itemStack);
-        if (!itemsEquipped.isEmpty()) {
-            int count = itemsEquipped.getCount();
-
-            if (count > 1) {
-                var leftover = itemStack.copy();
-                leftover.shrink(itemsEquipped.getCount());
-                ItemEntity extraItems = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), leftover);
-                this.level().addFreshEntity(extraItems);
-            }
-            this.onItemPickup(itemEntity);
-            this.take(itemEntity, itemsEquipped.getCount());
-            itemEntity.discard();
-        }
+        pickUpItem(itemEntity);
     }
 
     @Override
@@ -421,10 +406,11 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     private void rejectFood() {
         if (!this.getMainHandItem().isEmpty()) {
-            ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getMainHandItem().copy());
+            ItemStack thrownAway = this.getMainHandItem().copy();
+            ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), thrownAway);
             itemEntity.setPickUpDelay(40);
             itemEntity.setThrower(this.getUUID());
-            this.getMainHandItem().shrink(1);
+            this.getMainHandItem().shrink(thrownAway.getCount());
             this.level().addFreshEntity(itemEntity);
         }
     }
