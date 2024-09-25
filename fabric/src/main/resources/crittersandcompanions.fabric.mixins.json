@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.eterdelta.crittersandcompanions.mixin.fabric",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "${mod_id}.refmap.json",
+  "mixins": [
+    "PistonStructureResolverMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

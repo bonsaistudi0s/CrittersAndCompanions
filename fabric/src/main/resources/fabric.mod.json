@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+
+  "name": "${mod_name}",
+  "description": "Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.",
+  "authors": ["${mod_author}"],
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.github.eterdelta.crittersandcompanions.CrittersAndCompanionsFabric"],
+    "client": ["com.github.eterdelta.crittersandcompanions.CrittersAndCompanionsFabric"]
+  },
+
+  "mixins": [
+    "${mod_id}.mixins.json",
+    "${mod_id}.fabric.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": "1.20.x",
+    "java": ">=17",
+    "geckolib": "*"
+  }
+}
