@@ -57,6 +57,10 @@ public class LeafInsectEntity extends PathfinderMob implements GeoEntity {
         this.entityData.define(VARIANT, 0);
     }
 
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new WaterAvoidingRandomStrollGoal(this, 1.0D));
