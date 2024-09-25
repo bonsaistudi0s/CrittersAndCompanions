@@ -83,7 +83,7 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ATTACK_DAMAGE, 3.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.DAM);
     }
 
     public static boolean checkOtterSpawnRules(EntityType<OtterEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
@@ -244,7 +244,7 @@ public class OtterEntity extends Animal implements GeoEntity {
             return;
         }
 
-        pickUpItem(itemEntity);
+        super.pickUpItem(itemEntity);
     }
 
     @Override
@@ -261,7 +261,7 @@ public class OtterEntity extends Animal implements GeoEntity {
     protected void jumpInLiquid(TagKey<Fluid> fluidTag) {
         this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double) 0.08F * this.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
     }
-    
+
 
     @Override
     public void travel(Vec3 speed) {
@@ -269,7 +269,7 @@ public class OtterEntity extends Animal implements GeoEntity {
             this.moveRelative(this.getSpeed(), speed);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
-            this.calculateEntityAnimation( false);
+            this.calculateEntityAnimation(false);
         } else {
             super.travel(speed);
         }
@@ -701,27 +701,30 @@ public class OtterEntity extends Animal implements GeoEntity {
             return OtterEntity.this.isAlive() && OtterEntity.this.needsSurface() && !OtterEntity.this.onGround();
         }
 
+        private void searchTargetPos() {
+            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
+                targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
+
+                if (targetPos != null) {
+                    goingLand = true;
+                    return;
+                }
+            }
+
+            targetPos = findAirPosition();
+
+            goingLand = false;
+        }
+
         @Override
         public void start() {
-            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
-                this.targetPos = LandRandomPos.getPos(OtterEntity.this, 7, 15);
-                this.goingLand = true;
-            } else {
-                this.targetPos = this.findAirPosition();
-                this.goingLand = false;
-            }
+            searchTargetPos();
         }
 
         @Override
         public void tick() {
             if (this.targetPos == null || !OtterEntity.this.level().getBlockState(BlockPos.containing(this.targetPos)).isAir()) {
-                if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
-                    this.targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
-                    this.goingLand = true;
-                } else {
-                    this.targetPos = this.findAirPosition();
-                    this.goingLand = false;
-                }
+                searchTargetPos();
                 this.tickTimeout();
             } else {
                 OtterEntity.this.getNavigation().moveTo(this.targetPos.x(), this.targetPos.y(), this.targetPos.z(), 1.0D);
