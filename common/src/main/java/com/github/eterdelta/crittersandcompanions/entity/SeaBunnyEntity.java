@@ -88,7 +88,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0D));
     }
 
     @Override

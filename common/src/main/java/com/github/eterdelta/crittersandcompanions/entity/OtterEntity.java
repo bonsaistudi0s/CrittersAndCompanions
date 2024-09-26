@@ -249,26 +249,11 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected void pickUpItem(ItemEntity itemEntity) {
-        ItemStack itemStack = itemEntity.getItem();
-
         if (this.rejectedItem(itemEntity)) {
             return;
         }
 
-        ItemStack itemsEquipped = this.equipItemIfPossible(itemStack);
-        if (!itemsEquipped.isEmpty()) {
-            int count = itemsEquipped.getCount();
-
-            if (count > 1) {
-                var leftover = itemStack.copy();
-                leftover.shrink(itemsEquipped.getCount());
-                ItemEntity extraItems = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), leftover);
-                this.level().addFreshEntity(extraItems);
-            }
-            this.onItemPickup(itemEntity);
-            this.take(itemEntity, itemsEquipped.getCount());
-            itemEntity.discard();
-        }
+        super.pickUpItem(itemEntity);
     }
 
     @Override
@@ -285,7 +270,7 @@ public class OtterEntity extends Animal implements GeoEntity {
     protected void jumpInLiquid(TagKey<Fluid> fluidTag) {
         this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double) 0.08F * this.getAttribute(Services.PLATFORM.getSwimSpeedAttribute()).getValue(), 0.0D));
     }
-    
+
 
     @Override
     public void travel(Vec3 speed) {
@@ -293,7 +278,7 @@ public class OtterEntity extends Animal implements GeoEntity {
             this.moveRelative(this.getSpeed(), speed);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
-            this.calculateEntityAnimation( false);
+            this.calculateEntityAnimation(false);
         } else {
             super.travel(speed);
         }
@@ -415,7 +400,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
         controllers.add(new AnimationController<>(this, "floating_hands_controller", 10, this::floatingHandsPredicate));
     }
 
@@ -430,10 +415,11 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     private void rejectFood() {
         if (!this.getMainHandItem().isEmpty()) {
-            ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getMainHandItem().copy());
+            ItemStack thrownAway = this.getMainHandItem().copy();
+            ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), thrownAway);
             itemEntity.setPickUpDelay(40);
             itemEntity.setThrower(this.getUUID());
-            this.getMainHandItem().shrink(1);
+            this.getMainHandItem().shrink(thrownAway.getCount());
             this.level().addFreshEntity(itemEntity);
         }
     }
@@ -724,27 +710,30 @@ public class OtterEntity extends Animal implements GeoEntity {
             return OtterEntity.this.isAlive() && OtterEntity.this.needsSurface() && !OtterEntity.this.onGround();
         }
 
+        private void searchTargetPos() {
+            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
+                targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
+
+                if (targetPos != null) {
+                    goingLand = true;
+                    return;
+                }
+            }
+
+            targetPos = findAirPosition();
+
+            goingLand = false;
+        }
+
         @Override
         public void start() {
-            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
-                this.targetPos = LandRandomPos.getPos(OtterEntity.this, 7, 15);
-                this.goingLand = true;
-            } else {
-                this.targetPos = this.findAirPosition();
-                this.goingLand = false;
-            }
+            searchTargetPos();
         }
 
         @Override
         public void tick() {
             if (this.targetPos == null || !OtterEntity.this.level().getBlockState(BlockPos.containing(this.targetPos)).isAir()) {
-                if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
-                    this.targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
-                    this.goingLand = true;
-                } else {
-                    this.targetPos = this.findAirPosition();
-                    this.goingLand = false;
-                }
+                searchTargetPos();
                 this.tickTimeout();
             } else {
                 OtterEntity.this.getNavigation().moveTo(this.targetPos.x(), this.targetPos.y(), this.targetPos.z(), 1.0D);
