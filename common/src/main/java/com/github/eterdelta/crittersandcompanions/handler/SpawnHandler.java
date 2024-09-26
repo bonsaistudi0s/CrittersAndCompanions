@@ -20,12 +20,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 
 public class SpawnHandler {
 
-    public static void onLivingCheckSpawn(MobSpawnType type, LivingEntity entity) {
-        if (entity instanceof Drowned drowned && type == MobSpawnType.NATURAL && drowned.getRandom().nextFloat() <= 0.05F) {
-            drowned.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(CACItems.CLAM.get()));
-        }
-    }
-
     public static void registerSpawnPlacements() {
         SpawnPlacementsAccessor.invokeRegister(CACEntities.OTTER.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
         SpawnPlacementsAccessor.invokeRegister(CACEntities.KOI_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);

@@ -47,7 +47,7 @@ public class CrittersAndCompanionsForge {
     public void onAddPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.CLIENT_RESOURCES) {
             IModFile modFile = ModList.get().getModFileById(CrittersAndCompanions.MODID).getFile();
-            Path resourcePath = modFile.findResource("builtin/friendlyart");
+            Path resourcePath = modFile.findResource("resourcepacks/friendlyart");
             try (PathPackResources pack = new PathPackResources(modFile.getFileName() + ":" + resourcePath, true, resourcePath)) {
                 event.addRepositorySource(consumer -> consumer.accept(Pack.readMetaAndCreate(
                         "builtin/" + CrittersAndCompanions.MODID,
@@ -68,11 +68,6 @@ public class CrittersAndCompanionsForge {
 
     @Mod.EventBusSubscriber(modid = CrittersAndCompanions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ForgeEvents {
-
-        @SubscribeEvent
-        public static void onLivingCheckSpawn(MobSpawnEvent.PositionCheck event) {
-            SpawnHandler.onLivingCheckSpawn(event.getSpawnType(), event.getEntity());
-        }
 
         @SubscribeEvent
         public static void onPlayerEntityInteract(PlayerInteractEvent.EntityInteract event) {

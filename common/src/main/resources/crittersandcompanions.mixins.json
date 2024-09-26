@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "${mod_id}.refmap.json",
   "mixins": [
-    "CatMixin", "EntityAccessor", "LivingEntityMixin", "NearestAttackableTargetGoalMixin", "NeutralMobsMixin",
-    "OcelotMixin", "PlayerMixin", "SpawnPlacementsAccessor", "ZombifiedPiglinMixin"
+    "CatMixin", "DrownedMixin", "EntityAccessor", "LivingEntityMixin", "NearestAttackableTargetGoalMixin",
+    "NeutralMobsMixin", "OcelotMixin", "PlayerMixin", "SpawnPlacementsAccessor", "ZombifiedPiglinMixin"
   ],
   "client": ["ClientPacketListenerMixin", "ItemPropertiesAccessor", "LivingEntityRendererMixin"],
   "injectors": {

@@ -8,6 +8,7 @@ fabric {
     enableMixins()
 
     includesMod("io.github.fabricators_of_create.Porting-Lib:attributes:${porting_lib_version}+${mc_version}")
+    includesMod("io.github.fabricators_of_create.Porting-Lib:entity:${porting_lib_version}+${mc_version}")
 }
 
 dependencies {
