@@ -20,6 +20,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -58,6 +59,11 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
         super(entityType, level);
         this.moveControl = new SeaBunnyMoveControl(this);
         this.jumpControl = new SeaBunnyJumpControl(this);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.WATER;
     }
 
     public static AttributeSupplier.Builder createAttributes() {

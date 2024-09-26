@@ -35,6 +35,11 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
         super(entityType, level);
     }
 
+    @Override
+    public MobType getMobType() {
+        return MobType.WATER;
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.1D);
     }

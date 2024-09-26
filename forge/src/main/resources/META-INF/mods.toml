@@ -11,6 +11,7 @@ authors = "${mod_author}"
 description = '''
 Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.
 '''
+updateJSONURL = 'https://api.modrinth.com/updates/critters-and-companions/forge_updates.json'
 
 [[dependencies.${mod_id}]]
 modId = "geckolib"

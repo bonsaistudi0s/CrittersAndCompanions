@@ -6,6 +6,7 @@
   "name": "${mod_name}",
   "description": "Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.",
   "authors": ["${mod_author}"],
+  "icon": "logo.png",
 
   "license": "CC0-1.0",
 

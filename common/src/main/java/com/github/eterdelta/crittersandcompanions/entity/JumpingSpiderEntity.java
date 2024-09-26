@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -54,6 +55,11 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new JumpingSpiderMoveControl(this);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 
     public static AttributeSupplier.Builder createAttributes() {

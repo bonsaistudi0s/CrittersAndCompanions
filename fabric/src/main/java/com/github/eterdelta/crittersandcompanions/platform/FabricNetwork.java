@@ -24,10 +24,10 @@ public class FabricNetwork implements INetwork {
             client.execute(() -> handler.handle(packet));
         });
 
-        return new Sender<T>() {
+        return new Sender<>() {
             private FriendlyByteBuf write(T packet) {
-                var buf = PacketByteBufs.empty();
-                handler.write(packet, PacketByteBufs.empty());
+                var buf = PacketByteBufs.create();
+                handler.write(packet, buf);
                 return buf;
             }
 

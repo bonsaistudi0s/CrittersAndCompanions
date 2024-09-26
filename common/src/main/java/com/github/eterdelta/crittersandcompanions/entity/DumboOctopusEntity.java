@@ -22,6 +22,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -65,6 +66,11 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
         super(entityType, level);
         this.moveControl = new DumboOctopusMoveControl(90, 90, 1.0F, 1.0F, false);
         this.lookControl = new SmoothSwimmingLookControl(this, 180);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.WATER;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
