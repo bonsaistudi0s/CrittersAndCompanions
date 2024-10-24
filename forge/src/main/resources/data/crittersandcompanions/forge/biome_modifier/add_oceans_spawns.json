@@ -9,7 +9,7 @@
       "type": "crittersandcompanions:sea_bunny",
       "maxCount": 2,
       "minCount": 1,
-      "weight": 32
+      "weight": 16
     },
     {
       "type": "crittersandcompanions:dumbo_octopus",

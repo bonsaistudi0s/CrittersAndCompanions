@@ -19,8 +19,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-import java.util.function.Supplier;
-
 public class CACEntities {
     private static final RegistryHelper<EntityType<?>> ENTITIES = Services.PLATFORM.createRegistryHelper(Registries.ENTITY_TYPE, CrittersAndCompanions.MODID);
 

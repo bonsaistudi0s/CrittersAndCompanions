@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
@@ -38,7 +39,9 @@ public class FabricNetwork implements INetwork {
 
             @Override
             public void sendToTracking(Entity entity, T packet) {
-                if(entity instanceof ServerPlayer player) sendToPlayer(player, packet);
+                if(entity.getCommandSenderWorld().getChunkSource() instanceof ServerChunkCache chunk) {
+                    chunk.broadcastAndSend(entity, ServerPlayNetworking.createS2CPacket(id, write(packet)));
+                }
             }
         };
     }

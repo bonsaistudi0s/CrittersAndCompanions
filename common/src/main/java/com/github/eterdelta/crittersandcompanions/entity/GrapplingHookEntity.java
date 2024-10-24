@@ -24,6 +24,7 @@ public class GrapplingHookEntity extends Projectile {
     protected boolean isStick;
     protected boolean wasStick;
     protected double stickLength;
+    private boolean addedToWorld;
 
     public GrapplingHookEntity(EntityType<? extends GrapplingHookEntity> entityType, Level level) {
         super(entityType, level);
@@ -44,6 +45,12 @@ public class GrapplingHookEntity extends Projectile {
     @Override
     public void tick() {
         super.tick();
+
+        if (!addedToWorld) {
+            updateOwnerState();
+            addedToWorld = true;
+        }
+
         if (!this.level().isClientSide() && (!this.isFocused() || this.getOwner().distanceToSqr(this) > 1048)) {
             this.discard();
             return;
@@ -78,11 +85,6 @@ public class GrapplingHookEntity extends Projectile {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.03D, 0.0D));
         }
         this.move(MoverType.SELF, this.getDeltaMovement());
-    }
-
-    // TODO not run on fabric yet
-    public void onAddedToWorld() {
-        this.updateOwnerState();
     }
 
     @Override

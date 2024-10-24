@@ -24,7 +24,7 @@ public class SilkLeashItem extends Item {
     }
 
     public static int updateLeashStates(LivingEntity leashOwner, LivingEntity leashedEntity) {
-        Map<Entity, ISilkLeashState> updatedStates = updateLeashStatesLocal(leashOwner, leashedEntity);
+         Map<Entity, ISilkLeashState> updatedStates = updateLeashStatesLocal(leashOwner, leashedEntity);
         if (!updatedStates.isEmpty()) {
             CACPacketHandler.SILK_LEASH_STATE.sendToTracking(leashOwner == null ? leashedEntity : leashOwner,
                     new ClientboundSilkLeashStatePacket(

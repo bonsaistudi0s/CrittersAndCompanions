@@ -38,7 +38,7 @@ public class ForgeNetwork implements INetwork {
                 }
         );
 
-        return new Sender<T>() {
+        return new Sender<>() {
             @Override
             public void sendToPlayer(ServerPlayer player, T packet) {
                 channel.send(PacketDistributor.PLAYER.with(() -> player), packet);
@@ -46,6 +46,7 @@ public class ForgeNetwork implements INetwork {
 
             @Override
             public void sendToTracking(Entity entity, T packet) {
+                if (entity.level().isClientSide()) return;
                 channel.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), packet);
             }
         };

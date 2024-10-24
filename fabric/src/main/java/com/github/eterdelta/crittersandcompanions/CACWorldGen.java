@@ -24,18 +24,22 @@ public class CACWorldGen {
         addSpawnsTo(BiomeTags.IS_JUNGLE, CACEntities.RED_PANDA, 8, 1, 2);
         addSpawnsTo(BiomeTags.IS_JUNGLE, CACEntities.JUMPING_SPIDER, 2, 1, 1);
         addSpawnsTo(Biomes.LUSH_CAVES, CACEntities.JUMPING_SPIDER, 2, 1, 1);
-        addSpawnsTo(Biomes.OCEAN, CACEntities.SEA_BUNNY, 32, 1, 2);
+        addSpawnsTo(Biomes.OCEAN, CACEntities.SEA_BUNNY, 16, 1, 2);
         addSpawnsTo(Biomes.OCEAN, CACEntities.DUMBO_OCTOPUS, 4, 1, 1);
-        addSpawnsTo(Biomes.DEEP_OCEAN, CACEntities.SEA_BUNNY, 32, 1, 2);
+        addSpawnsTo(Biomes.DEEP_OCEAN, CACEntities.SEA_BUNNY, 16, 1, 2);
         addSpawnsTo(Biomes.DEEP_OCEAN, CACEntities.DUMBO_OCTOPUS, 4, 1, 1);
         addSpawnsTo(BiomeTags.HAS_VILLAGE_PLAINS, CACEntities.FERRET, 4, 2, 3);
         addSpawnsTo(Biomes.SUNFLOWER_PLAINS, CACEntities.FERRET, 4, 2, 3);
-        addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.OTTER, 2, 3, 5);
+        addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.OTTER, 1, 3, 5);
         addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.KOI_FISH, 4, 2, 5);
         addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.DRAGONFLY, 14, 1, 1);
         addSpawnsTo(Biomes.SNOWY_PLAINS, CACEntities.SHIMA_ENAGA, 3, 2, 3);
-        addSpawnsTo(Biomes.WARM_OCEAN, CACEntities.SEA_BUNNY, 64, 1, 4);
+        addSpawnsTo(Biomes.WARM_OCEAN, CACEntities.SEA_BUNNY, 32, 1, 4);
         addSpawnsTo(Biomes.WARM_OCEAN, CACEntities.DUMBO_OCTOPUS, 8, 1, 1);
+        addSpawnsTo(Biomes.LUKEWARM_OCEAN, CACEntities.SEA_BUNNY, 16, 1, 4);
+        addSpawnsTo(Biomes.LUKEWARM_OCEAN, CACEntities.DUMBO_OCTOPUS, 6, 1, 1);
+        addSpawnsTo(Biomes.DEEP_LUKEWARM_OCEAN, CACEntities.SEA_BUNNY, 16, 1, 4);
+        addSpawnsTo(Biomes.DEEP_LUKEWARM_OCEAN, CACEntities.DUMBO_OCTOPUS, 6, 1, 1);
 
         addFeatureTo(CACTags.SILK_COCOON_SPAWNS, "silk_cocoon");
         addFeatureTo(CACTags.SILK_COCOON_LUSH_SPAWNS, "silk_cocoon_lush");

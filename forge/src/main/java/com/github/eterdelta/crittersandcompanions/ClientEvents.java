@@ -23,7 +23,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void addEntityLayers(EntityRenderersEvent.AddLayers event) {
+    public static void addEntityLayers(EntityRenderersEvent.AddLayers event) {
         for (String skinName : event.getSkins()) {
             LivingEntityRenderer<Player, PlayerModel<Player>> skinRenderer = event.getSkin(skinName);
             if (skinRenderer != null) {

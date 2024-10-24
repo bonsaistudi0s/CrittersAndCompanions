@@ -2,18 +2,15 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.renderer.SilkLeashRenderer;
 import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
-import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,7 +41,7 @@ public class CrittersAndCompanionsForge {
     }
 
     @SubscribeEvent
-    public void onAddPackFinders(AddPackFindersEvent event) {
+    public static void onAddPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.CLIENT_RESOURCES) {
             IModFile modFile = ModList.get().getModFileById(CrittersAndCompanions.MODID).getFile();
             Path resourcePath = modFile.findResource("resourcepacks/friendlyart");
@@ -73,9 +70,9 @@ public class CrittersAndCompanionsForge {
         public static void onPlayerEntityInteract(PlayerInteractEvent.EntityInteract event) {
             var context = new UseOnContext(event.getEntity(), event.getHand(), null);
             var result = PlayerHandler.onPlayerEntityInteract(event.getTarget(), context);
-            if (result != InteractionResult.PASS) {
-                event.setCanceled(true);
+            if (result != null) {
                 event.setCancellationResult(result);
+                event.setCanceled(true);
             }
         }
 
