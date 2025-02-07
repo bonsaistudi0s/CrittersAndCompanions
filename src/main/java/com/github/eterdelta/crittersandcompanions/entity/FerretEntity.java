@@ -243,13 +243,13 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
                 FerretEntity baby = CACEntities.FERRET.get().create(this.level());
-                baby.setVariant(this.random.nextInt(0, 2));
+                baby.setVariant(this.random.nextInt(0, 6));
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
             }
         }
-        this.setVariant(this.random.nextInt(0, 2));
+        this.setVariant(this.random.nextInt(0, 6));
         return spawnGroupData;
     }
 
@@ -299,7 +299,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     }
 
     public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 1));
+        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 5));
     }
 
     public class SleepGoal extends Goal {

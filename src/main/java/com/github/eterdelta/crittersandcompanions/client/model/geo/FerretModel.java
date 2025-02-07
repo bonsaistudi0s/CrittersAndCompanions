@@ -17,10 +17,18 @@ public class FerretModel extends GeoModel<FerretEntity> {
             new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/baby_ferret.geo.json")};
     private static final ResourceLocation[] ADULT_TEXTURES = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_1.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_2.png")};
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_2.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_3.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_4.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_5.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_6.png"),};
     private static final ResourceLocation[] BABY_TEXTURES = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_1.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_2.png")};
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_2.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_3.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_4.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_5.png"),
+            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_6.png"),};
     private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
             new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/ferret.animation.json"),
             new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/baby_ferret.animation.json")};
