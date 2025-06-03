@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "crittersandcompanions:item/silk_lead"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "crittersandcompanions:item/silk_lead"
+  }
 }

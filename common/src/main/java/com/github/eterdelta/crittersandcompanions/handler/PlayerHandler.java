@@ -13,6 +13,9 @@ import com.github.eterdelta.crittersandcompanions.network.ClientboundSilkLeashSt
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.google.common.collect.Iterables;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,10 +30,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public class PlayerHandler {
 

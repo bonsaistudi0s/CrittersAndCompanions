@@ -38,4 +38,3 @@ public class SeaBunnyModel extends DefaultedEntityGeoModel<SeaBunnyEntity> {
         }
     }
 }
-

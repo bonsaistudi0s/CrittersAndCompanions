@@ -1,5 +1,5 @@
 plugins {
-    id("com.possible-triangle.gradle") version ("0.1.5")
+    id("com.possible-triangle.gradle") version ("0.2.11")
 }
 
 subprojects {
@@ -18,7 +18,7 @@ subprojects {
             url = uri("https://mvn.devos.one/releases/")
             content {
                 includeGroup("io.github.fabricators_of_create.Porting-Lib")
-                //includeGroup("io.github.tropheusj")
+                // includeGroup("io.github.tropheusj")
             }
         }
 
@@ -58,3 +58,5 @@ subprojects {
         }
     }
 }
+
+enableSpotless()

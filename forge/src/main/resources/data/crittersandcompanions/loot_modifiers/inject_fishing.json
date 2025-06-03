@@ -4,7 +4,8 @@
     {
       "condition": "forge:loot_table_id",
       "loot_table_id": "minecraft:gameplay/fishing/fish"
-    }, {
+    },
+    {
       "chance": 0.15,
       "condition": "minecraft:random_chance"
     }
@@ -16,7 +17,8 @@
         "id": "crittersandcompanions:koi_fish",
         "Count": 1
       }
-    }, {
+    },
+    {
       "weight": 10,
       "data": {
         "id": "crittersandcompanions:clam",

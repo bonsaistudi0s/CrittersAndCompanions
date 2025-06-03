@@ -1,6 +1,8 @@
 package com.github.eterdelta.crittersandcompanions.platform.service;
 
 import com.github.eterdelta.crittersandcompanions.platform.RegistryHelper;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -13,9 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.material.Fluid;
-
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public interface IPlatformHelper {
 

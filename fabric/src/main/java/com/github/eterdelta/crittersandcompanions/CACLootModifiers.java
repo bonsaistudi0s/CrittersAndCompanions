@@ -1,6 +1,8 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import net.fabricmc.fabric.api.loot.v2.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.mixin.loot.LootTableAccessor;
@@ -12,9 +14,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class CACLootModifiers {
 

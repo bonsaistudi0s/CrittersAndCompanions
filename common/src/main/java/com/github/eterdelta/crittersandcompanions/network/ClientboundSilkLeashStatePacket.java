@@ -2,15 +2,14 @@ package com.github.eterdelta.crittersandcompanions.network;
 
 import com.github.eterdelta.crittersandcompanions.extension.ISilkLeashState;
 import it.unimi.dsi.fastutil.ints.IntList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public record ClientboundSilkLeashStatePacket(List<LeashData> leashDataList) {
 

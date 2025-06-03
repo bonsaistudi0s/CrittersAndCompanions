@@ -3,7 +3,6 @@ package com.github.eterdelta.crittersandcompanions.platform;
 import com.github.eterdelta.crittersandcompanions.platform.service.IEvents;
 import com.github.eterdelta.crittersandcompanions.platform.service.INetwork;
 import com.github.eterdelta.crittersandcompanions.platform.service.IPlatformHelper;
-
 import java.util.ServiceLoader;
 
 public class Services {

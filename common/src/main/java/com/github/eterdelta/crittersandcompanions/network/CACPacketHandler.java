@@ -1,7 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.network;
 
-import com.github.eterdelta.crittersandcompanions.platform.service.INetwork;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.platform.service.INetwork;
 
 public class CACPacketHandler {
 

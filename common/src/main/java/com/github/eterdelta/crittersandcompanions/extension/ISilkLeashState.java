@@ -1,8 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.extension;
 
-import net.minecraft.world.entity.LivingEntity;
-
 import java.util.Set;
+import net.minecraft.world.entity.LivingEntity;
 
 public interface ISilkLeashState {
 

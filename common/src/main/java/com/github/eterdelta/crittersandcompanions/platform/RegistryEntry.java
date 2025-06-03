@@ -1,8 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.platform;
 
-import net.minecraft.resources.ResourceKey;
-
 import java.util.function.Supplier;
+import net.minecraft.resources.ResourceKey;
 
 public interface RegistryEntry<T> extends Supplier<T> {
 

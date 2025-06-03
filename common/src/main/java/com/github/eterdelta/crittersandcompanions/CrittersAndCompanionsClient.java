@@ -18,13 +18,12 @@ import com.github.eterdelta.crittersandcompanions.mixin.ItemPropertiesAccessor;
 import com.github.eterdelta.crittersandcompanions.platform.event.RegisterEntityRenderers;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 public class CrittersAndCompanionsClient {
     public static void clientSetup() {

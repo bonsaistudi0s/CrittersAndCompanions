@@ -4,6 +4,7 @@ import com.github.eterdelta.crittersandcompanions.extension.ISilkLeashState;
 import com.github.eterdelta.crittersandcompanions.mixin.EntityAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Set;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -17,8 +18,6 @@ import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib.event.GeoRenderEvent;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-
-import java.util.Set;
 
 public class SilkLeashRenderer {
     public static void renderSilkLeash(GeoRenderEvent.Entity.Post event) {

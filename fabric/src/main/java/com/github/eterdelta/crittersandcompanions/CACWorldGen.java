@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACTags;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -12,8 +13,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
-
-import java.util.function.Supplier;
 
 public class CACWorldGen {
 
