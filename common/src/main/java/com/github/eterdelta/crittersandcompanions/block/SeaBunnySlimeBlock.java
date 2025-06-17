@@ -31,7 +31,7 @@ public class SeaBunnySlimeBlock extends HalfTransparentBlock {
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        entity.makeStuckInBlock(state, new Vec3(0.75, 0.5, 0.75));
+        entity.resetFallDistance();
     }
 
     // Used by forge see IForgeBlock
