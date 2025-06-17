@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -29,7 +30,8 @@ public class SeaBunnySlimeBlock extends HalfTransparentBlock {
     }
 
     @Override
-    public void fallOn(Level level, BlockState blockState, BlockPos blockPos, Entity entity, float p_154571_) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        entity.makeStuckInBlock(state, new Vec3(0.75, 0.5, 0.75));
     }
 
     // Used by forge see IForgeBlock

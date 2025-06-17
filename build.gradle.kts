@@ -2,7 +2,7 @@ val mod_version: String by extra
 val mc_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version ("0.2.12")
+    id("com.possible-triangle.gradle") version ("0.2.13")
 }
 
 mod {

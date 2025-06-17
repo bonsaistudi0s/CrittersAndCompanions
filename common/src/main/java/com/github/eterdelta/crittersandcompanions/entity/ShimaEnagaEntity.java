@@ -171,7 +171,9 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     }
 
     private PlayState predicate(AnimationState<?> event) {
-        if (this.onGround()) {
+        if (isInSittingPose()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_sit"));
+        } else if (onGround()) {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_idle"));
         } else {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_fly"));

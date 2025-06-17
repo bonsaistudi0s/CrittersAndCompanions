@@ -9,6 +9,7 @@
     "DrownedMixin",
     "EntityAccessor",
     "LivingEntityMixin",
+    "MobMixin",
     "NearestAttackableTargetGoalMixin",
     "NeutralMobsMixin",
     "OcelotMixin",
