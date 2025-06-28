@@ -1,7 +1,5 @@
 package com.github.eterdelta.crittersandcompanions;
 
-import static com.github.eterdelta.crittersandcompanions.CrittersAndCompanions.MODID;
-
 import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
 import java.nio.file.Path;
 import net.minecraft.network.chat.Component;
@@ -25,6 +23,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.resource.PathPackResources;
 
+import static com.github.eterdelta.crittersandcompanions.CrittersAndCompanions.MODID;
+
 @Mod(MODID)
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CrittersAndCompanionsForge {
@@ -38,6 +38,7 @@ public class CrittersAndCompanionsForge {
 
         var lootModifiers = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MODID);
         lootModifiers.register("replace_item", () -> ReplaceItemModifier.CODEC);
+        lootModifiers.register("add_item", () -> AddItemModifier.CODEC);
         lootModifiers.register(modBus);
     }
 

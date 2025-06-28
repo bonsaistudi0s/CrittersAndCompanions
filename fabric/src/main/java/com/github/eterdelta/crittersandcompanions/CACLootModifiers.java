@@ -10,9 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class CACLootModifiers {
@@ -27,6 +29,19 @@ public class CACLootModifiers {
 
         addEntriesTo(EntityType.DROWNED.getDefaultLootTable(), 0, builder -> {
             builder.accept(10, new ItemStack(CACItems.CLAM.get()));
+        });
+
+        LootTableEvents.MODIFY.register((resources, manager, key, builder, source) -> {
+            if (
+                    key.equals(BuiltInLootTables.SHIPWRECK_TREASURE)
+                            || key.equals(BuiltInLootTables.UNDERWATER_RUIN_SMALL)
+                            || key.equals(BuiltInLootTables.UNDERWATER_RUIN_BIG)
+            ) builder.withPool(
+                    LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1F))
+                            .when(LootItemRandomChanceCondition.randomChance(0.1F))
+                            .add(LootItem.lootTableItem(CACItems.CLAM.get()))
+            );
         });
     }
 

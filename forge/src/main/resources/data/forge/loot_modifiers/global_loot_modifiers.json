@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
+    "crittersandcompanions:inject_clams",
     "crittersandcompanions:inject_fishing",
     "crittersandcompanions:replace_drowned_flesh"
   ]
