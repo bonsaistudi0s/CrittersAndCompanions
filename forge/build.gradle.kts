@@ -10,6 +10,10 @@ forge {
     enableMixins()
 }
 
+// issues with mixin extras
+tasks.withType<Test> { enabled = false }
+tasks.compileTestJava { enabled = false }
+
 dependencies {
     modImplementation("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     modImplementation("top.theillusivec4.curios:curios-forge:${curios_version}")

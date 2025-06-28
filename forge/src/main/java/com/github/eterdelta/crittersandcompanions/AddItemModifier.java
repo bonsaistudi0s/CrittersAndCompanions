@@ -1,7 +1,6 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AddItemModifier extends LootModifier {
 
-    public static final MapCodec<AddItemModifier> CODEC = RecordCodecBuilder.create(builder ->
+    public static final Codec<AddItemModifier> CODEC = RecordCodecBuilder.create(builder ->
             codecStart(builder).and(
                     ItemStack.CODEC.fieldOf("item").forGetter(it -> it.item)
             ).apply(builder, AddItemModifier::new)
