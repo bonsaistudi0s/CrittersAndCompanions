@@ -529,7 +529,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                             BlockPos wantedPos = BlockPos.containing(this.wantedX, this.wantedY, this.wantedZ);
                             BlockState wantedBlockState = this.mob.level().getBlockState(wantedPos);
 
-                            if (d1 > (double) this.mob.maxUpStep() && d0 * d0 + d2 * d2 < 4.0F && d1 <= 1.0D && wantedBlockState.getFluidState().isEmpty()) {
+                            if (d1 > 0.6 && d0 * d0 + d2 * d2 < 4.0F && d1 <= 1.0D && wantedBlockState.getFluidState().isEmpty()) {
                                 this.mob.getJumpControl().jump();
                                 this.mob.setSpeed(speed);
                             }
