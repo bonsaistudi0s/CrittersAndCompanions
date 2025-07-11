@@ -12,6 +12,13 @@ mod {
 subprojects {
     repositories {
         modrinthMaven()
+        mavenLocal()
+
+        nexus {
+            content {
+                includeGroup("com.possible-triangle")
+            }
+        }
 
         maven {
             url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")

@@ -173,7 +173,7 @@ public class OtterEntity extends Animal implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.isAlive() && this.isEffectiveAi()) {
+        if (this.isAlive() && this.isControlledByLocalInstance()) {
             if (this.isFloating()) {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
                 this.setYya(0.0F);
@@ -273,7 +273,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public void travel(Vec3 speed) {
-        if (this.isEffectiveAi() && this.isInWater()) {
+        if (this.isControlledByLocalInstance() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), speed);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
@@ -476,6 +476,17 @@ public class OtterEntity extends Animal implements GeoEntity {
         this.entityData.set(FLOATING, floating);
     }
 
+    @Override
+    public float maxUpStep() {
+        if (isUnderWater()) return 5;
+        return super.maxUpStep();
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
     static class OtterMoveControl extends MoveControl {
         private final OtterEntity otter;
 
@@ -588,8 +599,8 @@ public class OtterEntity extends Animal implements GeoEntity {
         }
 
         @Override
-        protected Vec3 getTempMobPos() {
-            return new Vec3(this.otter.getX(), this.otter.getY(0.5D), this.otter.getZ());
+        public boolean canCutCorner(PathType p_326951_) {
+            return p_326951_ != PathType.WATER_BORDER && super.canCutCorner(p_326951_);
         }
 
         @Override
@@ -781,16 +792,14 @@ public class OtterEntity extends Animal implements GeoEntity {
 
         private Vec3 findAirPosition() {
             Iterable<BlockPos> blocksInRadius = BlockPos.betweenClosed(Mth.floor(OtterEntity.this.getX() - 1.0D), OtterEntity.this.getBlockY(), Mth.floor(OtterEntity.this.getZ() - 1.0D), Mth.floor(OtterEntity.this.getX() + 1.0D), Mth.floor(OtterEntity.this.getY() + 16.0D), Mth.floor(OtterEntity.this.getZ() + 1.0D));
-            BlockPos airPos = null;
 
-            for (BlockPos blockPos : blocksInRadius) {
-                if (OtterEntity.this.level().getBlockState(blockPos).isAir()) {
-                    airPos = blockPos;
-                    break;
+            for (BlockPos pos : blocksInRadius) {
+                if (OtterEntity.this.level().getBlockState(pos).isAir()) {
+                    return Vec3.atBottomCenterOf(pos);
                 }
             }
 
-            return airPos != null ? Vec3.atBottomCenterOf(airPos) : null;
+            return null;
         }
     }
 
