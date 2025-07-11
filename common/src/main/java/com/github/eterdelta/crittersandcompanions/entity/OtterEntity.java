@@ -599,11 +599,6 @@ public class OtterEntity extends Animal implements GeoEntity {
         }
 
         @Override
-        public boolean canCutCorner(PathType p_326951_) {
-            return p_326951_ != PathType.WATER_BORDER && super.canCutCorner(p_326951_);
-        }
-
-        @Override
         protected boolean canUpdatePath() {
             return true;
         }
