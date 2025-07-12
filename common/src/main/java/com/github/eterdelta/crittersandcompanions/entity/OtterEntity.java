@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.entity.brain.OtterNodeEvaluator;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
@@ -7,6 +8,7 @@ import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.EnumSet;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -56,7 +58,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathFinder;
@@ -75,6 +76,8 @@ public class OtterEntity extends Animal implements GeoEntity {
     private static final EntityDataAccessor<Boolean> FLOATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    private static final Vec3i UNDERWATER_PICKUP_REACH = new Vec3i(1, 1, 1);
 
     private boolean needsSurface;
     private int huntDelay;
@@ -477,9 +480,15 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     @Override
-    public float maxUpStep() {
-        if (isUnderWater()) return 5;
-        return super.maxUpStep();
+    public int getMaxFallDistance() {
+        if (isUnderWater()) return 16;
+        return super.getMaxFallDistance();
+    }
+
+    @Override
+    protected Vec3i getPickupReach() {
+        if (isUnderWater()) return UNDERWATER_PICKUP_REACH;
+        return super.getPickupReach();
     }
 
     @Override
@@ -594,7 +603,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
         @Override
         protected PathFinder createPathFinder(int p_26531_) {
-            this.nodeEvaluator = new AmphibiousNodeEvaluator(true);
+            this.nodeEvaluator = new OtterNodeEvaluator();
             return new PathFinder(this.nodeEvaluator, p_26531_);
         }
 
@@ -786,7 +795,7 @@ public class OtterEntity extends Animal implements GeoEntity {
         }
 
         private Vec3 findAirPosition() {
-            Iterable<BlockPos> blocksInRadius = BlockPos.betweenClosed(Mth.floor(OtterEntity.this.getX() - 1.0D), OtterEntity.this.getBlockY(), Mth.floor(OtterEntity.this.getZ() - 1.0D), Mth.floor(OtterEntity.this.getX() + 1.0D), Mth.floor(OtterEntity.this.getY() + 16.0D), Mth.floor(OtterEntity.this.getZ() + 1.0D));
+            Iterable<BlockPos> blocksInRadius = BlockPos.betweenClosed(Mth.floor(OtterEntity.this.getX() - 1.0D), OtterEntity.this.getBlockY(), Mth.floor(OtterEntity.this.getZ() - 1.0D), Mth.floor(OtterEntity.this.getX() + 1.0D), Mth.floor(OtterEntity.this.getY() + 32.0D), Mth.floor(OtterEntity.this.getZ() + 1.0D));
 
             for (BlockPos pos : blocksInRadius) {
                 if (OtterEntity.this.level().getBlockState(pos).isAir()) {

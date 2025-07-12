@@ -210,10 +210,16 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
                             if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Blocks.GRAVEL)) {
                                 this.setDigging(true);
                                 this.digCooldown = 6000;
+                                if (!player.getAbilities().instabuild) {
+                                    handStack.shrink(1);
+                                }
+                                return InteractionResult.sidedSuccess(level().isClientSide());
                             } else {
                                 this.stateToDig = null;
                             }
                         }
+
+                        return InteractionResult.FAIL;
                     }
                 }
                 if (!this.isFood(handStack)) {
