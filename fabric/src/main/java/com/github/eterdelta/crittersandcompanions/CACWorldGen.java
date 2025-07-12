@@ -17,11 +17,14 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 public class CACWorldGen {
 
     public static void register() {
-        // should always reflect the values in forge/biome_modifiers/..
+        // should always reflect the values in neoforge/biome_modifiers/..
 
         addSpawnsTo(BiomeTags.IS_JUNGLE, CACEntities.LEAF_INSECT, 14, 1, 1);
         addSpawnsTo(BiomeTags.IS_JUNGLE, CACEntities.RED_PANDA, 8, 1, 2);
         addSpawnsTo(BiomeTags.IS_JUNGLE, CACEntities.JUMPING_SPIDER, 2, 1, 1);
+        addSpawnsTo(BiomeTags.IS_FOREST, CACEntities.LEAF_INSECT, 14, 1, 1);
+        addSpawnsTo(BiomeTags.IS_FOREST, CACEntities.FERRET, 3, 2, 3);
+        addSpawnsTo(BiomeTags.IS_FOREST, CACEntities.JUMPING_SPIDER, 2, 1, 1);
         addSpawnsTo(Biomes.LUSH_CAVES, CACEntities.JUMPING_SPIDER, 2, 1, 1);
         addSpawnsTo(Biomes.OCEAN, CACEntities.SEA_BUNNY, 16, 1, 2);
         addSpawnsTo(Biomes.OCEAN, CACEntities.DUMBO_OCTOPUS, 4, 1, 1);

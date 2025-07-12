@@ -193,7 +193,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                     --this.eatDelay;
                 } else {
                     Vec3 mouthPos = this.calculateMouthPos();
-                    ((ServerLevel) this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getMainHandItem()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
+                    ((ServerLevel) this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getMainHandItem().copy()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
                     if (this.getRandom().nextDouble() < 0.5D) {
                         this.playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
