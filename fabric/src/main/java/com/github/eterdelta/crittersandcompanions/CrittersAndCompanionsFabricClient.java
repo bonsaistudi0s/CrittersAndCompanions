@@ -2,7 +2,9 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.SilkLeashRenderer;
+import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
@@ -10,6 +12,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -39,6 +42,9 @@ public class CrittersAndCompanionsFabricClient implements ClientModInitializer {
         FabricLoader.getInstance().getModContainer(resourcePack.getNamespace()).ifPresent(mod -> {
             ResourceManagerHelper.registerBuiltinResourcePack(resourcePack, mod, ResourcePackActivationType.NORMAL);
         });
+
+        BlockRenderLayerMap.INSTANCE.putBlock(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get(), RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(CACBlocks.SILK_COCOON.get(), RenderType.cutout());
     }
 
 }
