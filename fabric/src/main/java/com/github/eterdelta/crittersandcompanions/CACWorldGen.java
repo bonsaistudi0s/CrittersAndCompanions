@@ -45,6 +45,8 @@ public class CACWorldGen {
 
         addFeatureTo(CACTags.SILK_COCOON_SPAWNS, "silk_cocoon");
         addFeatureTo(CACTags.SILK_COCOON_LUSH_SPAWNS, "silk_cocoon_lush");
+        addFeatureTo(CACTags.SILK_COCOON_SPAWNS, "hanging_silk_cocoon");
+        addFeatureTo(CACTags.SILK_COCOON_LUSH_SPAWNS, "hanging_silk_cocoon_lush");
     }
 
     private static void addFeatureTo(TagKey<Biome> biome, String feature) {
