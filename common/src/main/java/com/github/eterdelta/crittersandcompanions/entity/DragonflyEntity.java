@@ -2,7 +2,10 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
+
 import java.util.EnumSet;
+import java.util.UUID;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,6 +19,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -49,6 +59,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<ItemStack> ARMOR_ITEM = SynchedEntityData.defineId(DragonflyEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final UUID TAME_HEALTH_UUID = UUID.fromString("143884b6-e085-451b-ac11-fc920356dfb4");
+    ;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
@@ -172,8 +184,6 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
             } else if (this.isOwnedBy(player)) {
                 if (!this.level().isClientSide()) {
                     if (handStack.getItem() instanceof DragonflyArmorItem armorItem && this.getArmor().isEmpty()) {
-                        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(armorItem.getHealthBuff());
-                        this.setHealth(armorItem.getHealthBuff());
                         this.setArmor(handStack.copy());
                         handStack.shrink(1);
                         if (!player.getAbilities().instabuild) {
@@ -182,8 +192,6 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
                         this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 0.4F, 1.5F);
 
                     } else if (player.isCrouching() && !this.getArmor().isEmpty()) {
-                        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0D);
-                        this.setHealth(8.0F);
                         this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getArmor().copy()));
                         this.setArmor(ItemStack.EMPTY);
                         this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, 1.0F);
@@ -217,10 +225,10 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     public void setTame(boolean tame) {
         super.setTame(tame);
         if (tame) {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0D);
-            this.setHealth(8.0F);
+            getAttribute(Attributes.MAX_HEALTH)
+                    .addPermanentModifier(new AttributeModifier(TAME_HEALTH_UUID, "health boost", 4.0, AttributeModifier.Operation.ADDITION));
         } else {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(4.0D);
+            getAttribute(Attributes.MAX_HEALTH).removeModifier(TAME_HEALTH_UUID);
         }
     }
 

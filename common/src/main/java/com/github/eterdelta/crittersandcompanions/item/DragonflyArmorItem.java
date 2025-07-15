@@ -1,27 +1,50 @@
 package com.github.eterdelta.crittersandcompanions.item;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-public class DragonflyArmorItem extends Item {
-    private final ResourceLocation texture;
-    private final int healthBuff;
+import com.google.common.base.Suppliers;
 
-    public DragonflyArmorItem(int healthBuff, String tierName, Item.Properties properties) {
-        this(healthBuff, new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
+import java.util.UUID;
+import java.util.function.Supplier;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+
+public class DragonflyArmorItem extends Item {
+
+    private static final UUID ARMOR_UUID = UUID.fromString("23a017ef-23f2-4e6c-ab8e-8e8d881519ab");
+    private static final UUID TOUGHNESS_UUID = UUID.fromString("001f5774-a240-4bbb-903b-f63ebef4076a");
+
+    private final ResourceLocation texture;
+    private final Multimap<Attribute, AttributeModifier> attributes;
+
+    public DragonflyArmorItem(ArmorMaterial material, String tierName, Item.Properties properties) {
+        this(material, new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
     }
 
-    public DragonflyArmorItem(int healthBuff, ResourceLocation tierName, Item.Properties properties) {
+    public DragonflyArmorItem(ArmorMaterial material, ResourceLocation tierName, Item.Properties properties) {
         super(properties);
-        this.healthBuff = healthBuff;
         this.texture = tierName;
+        this.attributes = ImmutableMultimap.<Attribute, AttributeModifier>builder()
+                .put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "armor", material.getDefenseForType(ArmorItem.Type.CHESTPLATE), AttributeModifier.Operation.ADDITION))
+                .put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(TOUGHNESS_UUID, "toughness", material.getToughness(), AttributeModifier.Operation.ADDITION))
+                .build();
     }
 
     public ResourceLocation getTexture() {
         return this.texture;
     }
 
-    public int getHealthBuff() {
-        return this.healthBuff;
+    @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+        return attributes;
     }
+
 }
