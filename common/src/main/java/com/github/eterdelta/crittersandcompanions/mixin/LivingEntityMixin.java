@@ -5,14 +5,17 @@ import com.github.eterdelta.crittersandcompanions.item.PearlNecklaceItem;
 import com.github.eterdelta.crittersandcompanions.item.SilkLeashItem;
 import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
 import com.github.eterdelta.crittersandcompanions.network.ClientboundSilkLeashStatePacket;
+import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -185,7 +188,7 @@ public abstract class LivingEntityMixin extends Entity implements ISilkLeashStat
     private float modifySwimSpeed(float original) {
         return PearlNecklaceItem.getWearing(this)
                 .map(PearlNecklaceItem::getLevel)
-                .map(level -> original + (original * (level / 5.0F)))
+                .map(level -> original + (float) (original * (level * Services.CONFIGS.common().necklaceSwimSpeed.get())))
                 .orElse(original);
     }
 

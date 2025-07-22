@@ -25,7 +25,7 @@ public class PearlNecklaceItem extends Item {
     }
 
     public static Optional<PearlNecklaceItem> getWearing(Entity entity) {
-        if(!(entity instanceof Player player)) return Optional.empty();
+        if (!(entity instanceof Player player)) return Optional.empty();
         return getEquipment(player)
                 .map(ItemStack::getItem)
                 .filter(it -> it instanceof PearlNecklaceItem)
@@ -45,10 +45,10 @@ public class PearlNecklaceItem extends Item {
         components.add(Component.translatable("pearl_necklace.level", this.level).withStyle(ChatFormatting.DARK_GRAY));
         components.add(Component.empty());
 
-        components.add(Component.translatable("pearl_necklace.swim_speed", this.level * 10).withStyle(ChatFormatting.GRAY));
-        components.add(Component.translatable("pearl_necklace.drowned_range", this.level * 20).withStyle(ChatFormatting.GRAY));
-        if (this.level > 1) {
-            components.add(Component.translatable("pearl_necklace.guardian_range", this.level * 20).withStyle(ChatFormatting.GRAY));
+        components.add(Component.translatable("pearl_necklace.swim_speed", level * 100 * Services.CONFIGS.common().necklaceSwimSpeed.get()).withStyle(ChatFormatting.GRAY));
+        components.add(Component.translatable("pearl_necklace.drowned_range", level * 100 * Services.CONFIGS.common().necklaceDrownedDebuff.get()).withStyle(ChatFormatting.GRAY));
+        if (level > 1) {
+            components.add(Component.translatable("pearl_necklace.guardian_range", level * 100 * Services.CONFIGS.common().necklaceDrownedDebuff.get()).withStyle(ChatFormatting.GRAY));
         }
     }
 
