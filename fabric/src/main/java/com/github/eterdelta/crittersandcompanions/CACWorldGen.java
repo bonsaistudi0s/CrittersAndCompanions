@@ -34,7 +34,7 @@ public class CACWorldGen {
         addSpawnsTo(Biomes.SUNFLOWER_PLAINS, CACEntities.FERRET, 4, 2, 3);
         addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.OTTER, 1, 3, 5);
         addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.KOI_FISH, 4, 2, 5);
-        addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.DRAGONFLY, 10, 1, 1);
+        addSpawnsTo(BiomeTags.IS_RIVER, CACEntities.DRAGONFLY, 7, 1, 1);
         addSpawnsTo(Biomes.SNOWY_PLAINS, CACEntities.SHIMA_ENAGA, 3, 2, 3);
         addSpawnsTo(Biomes.WARM_OCEAN, CACEntities.SEA_BUNNY, 32, 1, 4);
         addSpawnsTo(Biomes.WARM_OCEAN, CACEntities.DUMBO_OCTOPUS, 8, 1, 1);
