@@ -28,7 +28,7 @@ public class CACLootModifiers {
         });
 
         addEntriesTo(EntityType.DROWNED.getDefaultLootTable(), 0, builder -> {
-            builder.accept(10, new ItemStack(CACItems.CLAM.get()));
+            builder.accept(1, new ItemStack(CACItems.CLAM.get()));
         });
 
         LootTableEvents.MODIFY.register((resources, manager, key, builder, source) -> {
