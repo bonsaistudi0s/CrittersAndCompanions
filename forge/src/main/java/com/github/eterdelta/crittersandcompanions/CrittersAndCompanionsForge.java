@@ -4,6 +4,8 @@ import static com.github.eterdelta.crittersandcompanions.CrittersAndCompanions.M
 
 import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
 import java.nio.file.Path;
+
+import com.github.eterdelta.crittersandcompanions.platform.ForgeConfigs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
@@ -16,6 +18,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -30,6 +33,7 @@ import net.minecraftforge.resource.PathPackResources;
 public class CrittersAndCompanionsForge {
 
     public CrittersAndCompanionsForge() {
+        ForgeConfigs.register(ModLoadingContext.get());
         CrittersAndCompanions.init();
 
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
