@@ -1,13 +1,17 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.config.FabricCommonConfig;
+import com.github.eterdelta.crittersandcompanions.platform.FabricConfigs;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryEntry;
+import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACTags;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.minecraft.core.registries.Registries;
@@ -63,8 +67,6 @@ public class CACWorldGen {
         );
     }
 
-    private static final List<Consumer<FabricCommonConfig>> SPAWN_REGISTERS = new ArrayList<>();
-
     private static void addSpawnsTo(ResourceKey<Biome> biome, RegistryEntry<? extends EntityType<?>> entry) {
         addSpawnsTo(it -> it.getBiomeKey().equals(biome), entry);
     }
@@ -75,16 +77,10 @@ public class CACWorldGen {
 
     private static void addSpawnsTo(Predicate<BiomeSelectionContext> biome, RegistryEntry<? extends EntityType<?>> entry) {
         var type = entry.get();
-        SPAWN_REGISTERS.add(config -> {
-            var values = config.getSpawnValues(entry.getKey());
-            if (values.weight() <= 0) return;
-            BiomeModifications.addSpawn(biome, type.getCategory(), type, values.weight(), values.min(), values.max());
-        });
-    }
-
-    public static void registerSpawns(FabricCommonConfig config) {
-        SPAWN_REGISTERS.forEach(it -> it.accept(config));
-        SPAWN_REGISTERS.clear();
+        var config = (FabricCommonConfig) Services.CONFIGS.common();
+        var values = config.getSpawnValues(entry.getKey());
+        if (values.weight() <= 0) return;
+        BiomeModifications.addSpawn(biome, type.getCategory(), type, values.weight(), values.min(), values.max());
     }
 
     public record SpawnValues(int weight, int min, int max) {

@@ -62,8 +62,6 @@ public class FabricCommonConfig extends CACCommonConfig {
         registerSpawns(builder, CACEntities.DUMBO_OCTOPUS.getKey(), new CACWorldGen.SpawnValues(6, 1, 1));
 
         builder.pop();
-
-        CACWorldGen.registerSpawns(this);
     }
 
 }
