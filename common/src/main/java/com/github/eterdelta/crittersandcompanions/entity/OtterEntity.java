@@ -363,16 +363,15 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<?> event) {
-        if (this.isInWater()) {
-            if (this.isFloating()) {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_float"));
-            } else {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_swim"));
-            }
+        if (isFloating()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_float"));
+            return PlayState.CONTINUE;
+        } else if (isInWater()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_swim"));
             return PlayState.CONTINUE;
         } else {
-            if (this.isEating()) {
-                if (this.getMainHandItem().is(CACItems.CLAM.get())) {
+            if (isEating()) {
+                if (getMainHandItem().is(CACItems.CLAM.get())) {
                     event.getController().setAnimation(RawAnimation.begin().then("otter_open", Animation.LoopType.PLAY_ONCE));
                 } else {
                     event.getController().setAnimation(RawAnimation.begin().then("otter_standing_eat", Animation.LoopType.PLAY_ONCE));
@@ -389,8 +388,8 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     private PlayState floatingHandsPredicate(AnimationState<?> event) {
-        if (this.isFloating()) {
-            if (this.isEating() && this.eatDelay <= 0) {
+        if (isFloating()) {
+            if (isEating() && eatDelay <= 0) {
                 event.getController().setAnimation(RawAnimation.begin().then("otter_hands_float_eat", Animation.LoopType.PLAY_ONCE));
             } else {
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_hands_float_idle"));

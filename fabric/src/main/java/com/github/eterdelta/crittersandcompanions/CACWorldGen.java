@@ -1,17 +1,11 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.config.FabricCommonConfig;
-import com.github.eterdelta.crittersandcompanions.platform.FabricConfigs;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryEntry;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACTags;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.minecraft.core.registries.Registries;
