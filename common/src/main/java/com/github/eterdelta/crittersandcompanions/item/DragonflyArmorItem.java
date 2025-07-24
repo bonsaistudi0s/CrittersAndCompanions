@@ -1,13 +1,9 @@
 package com.github.eterdelta.crittersandcompanions.item;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.google.common.base.Suppliers;
-
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import java.util.UUID;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;

@@ -3,9 +3,8 @@ package com.github.eterdelta.crittersandcompanions;
 import static com.github.eterdelta.crittersandcompanions.CrittersAndCompanions.MODID;
 
 import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
-import java.nio.file.Path;
-
 import com.github.eterdelta.crittersandcompanions.platform.ForgeConfigs;
+import java.nio.file.Path;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;

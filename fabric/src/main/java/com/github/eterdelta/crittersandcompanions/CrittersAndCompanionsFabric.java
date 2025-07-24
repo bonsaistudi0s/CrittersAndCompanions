@@ -1,9 +1,9 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
+import com.github.eterdelta.crittersandcompanions.platform.FabricConfigs;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityInteractCallback;
 import io.github.fabricators_of_create.porting_lib.entity.events.PlayerTickEvents;
-import com.github.eterdelta.crittersandcompanions.platform.FabricConfigs;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
