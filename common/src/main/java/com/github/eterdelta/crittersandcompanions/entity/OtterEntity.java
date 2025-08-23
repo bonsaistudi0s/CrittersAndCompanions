@@ -174,6 +174,18 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+
+        // Forces body local pitch to 0 when out of water
+        if (!this.isInWater()) {
+            this.setXRot(0);
+            this.xRotO = 0;
+        }
+
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.isAlive() && this.isControlledByLocalInstance()) {
