@@ -4,7 +4,6 @@ import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
 import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DragonflyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DumboOctopusModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.FerretModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpiderModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.KoiFishModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
@@ -13,6 +12,7 @@ import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
+import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.FerretRenderer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.OtterRenderer;
 import com.github.eterdelta.crittersandcompanions.mixin.ItemPropertiesAccessor;
 import com.github.eterdelta.crittersandcompanions.platform.event.RegisterEntityRenderers;
@@ -51,7 +51,7 @@ public class CrittersAndCompanionsClient {
         event.accept(CACEntities.DRAGONFLY.get(), context -> new GeoEntityRenderer<>(context, new DragonflyModel()));
         event.accept(CACEntities.SEA_BUNNY.get(), context -> new GeoEntityRenderer<>(context, new SeaBunnyModel()));
         event.accept(CACEntities.SHIMA_ENAGA.get(), context -> new GeoEntityRenderer<>(context, new ShimaEnagaModel()));
-        event.accept(CACEntities.FERRET.get(), context -> new GeoEntityRenderer<>(context, new FerretModel()));
+        event.accept(CACEntities.FERRET.get(), FerretRenderer::new);
         event.accept(CACEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
         event.accept(CACEntities.DUMBO_OCTOPUS.get(), context -> new GeoEntityRenderer<>(context, new DumboOctopusModel()));
         event.accept(CACEntities.LEAF_INSECT.get(), context -> new GeoEntityRenderer<>(context, new LeafInsectModel()));

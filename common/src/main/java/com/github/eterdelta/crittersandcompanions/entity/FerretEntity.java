@@ -4,9 +4,11 @@ import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
+
 import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
+
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -57,6 +59,8 @@ import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -69,6 +73,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -83,6 +88,8 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_COLLAR_COLOR = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
+
     private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(CrittersAndCompanions.MODID, "ferret_food"));
     private static final ResourceLocation DIGGABLES = new ResourceLocation(CrittersAndCompanions.MODID, "gameplay/digging");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -105,6 +112,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         this.entityData.define(SLEEPING, false);
         this.entityData.define(DIGGING, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(DATA_COLLAR_COLOR, DyeColor.RED.getId());
     }
 
     @Override
@@ -157,6 +165,8 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
         FerretEntity baby = CACEntities.FERRET.get().create(level);
+        if (baby == null) return null;
+
         UUID uuid = this.getOwnerUUID();
         if (ageableMob instanceof FerretEntity ferretEntity) {
             if (this.random.nextBoolean()) {
@@ -164,6 +174,9 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
             } else {
                 baby.setVariant(ferretEntity.getVariant());
             }
+
+            var color = random.nextBoolean() ? getCollarColor() : ferretEntity.getCollarColor();
+            if (color != null) baby.setCollarColor(color);
 
             if (uuid != null) {
                 baby.setOwnerUUID(uuid);
@@ -185,59 +198,76 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        if (!this.isSleeping()) {
-            ItemStack handStack = player.getItemInHand(interactionHand);
+        if (this.isSleeping()) return InteractionResult.PASS;
 
-            if (!this.isTame() && handStack.is(Items.RABBIT)) {
+        ItemStack handStack = player.getItemInHand(interactionHand);
+
+        if (!this.isTame() && handStack.is(Items.RABBIT)) {
+            if (!player.getAbilities().instabuild) {
+                handStack.shrink(1);
+            }
+            if (!level().isClientSide()) {
+                if (random.nextInt(10) == 0 && Services.EVENTS.canTame(this, player)) {
+                    tame(player);
+                    level().broadcastEntityEvent(this, (byte) 7);
+                } else {
+                    level().broadcastEntityEvent(this, (byte) 6);
+                }
+            }
+            return InteractionResult.sidedSuccess(level().isClientSide());
+        }
+
+        if (isTame() && isOwnedBy(player)) {
+            var digResult = startDigging(player, handStack);
+            if (digResult != InteractionResult.PASS) return digResult;
+
+            if (handStack.getItem() instanceof DyeItem dyeItem && getCollarColor() != dyeItem.getDyeColor()) {
+                setCollarColor(dyeItem.getDyeColor());
                 if (!player.getAbilities().instabuild) {
                     handStack.shrink(1);
                 }
-                if (!this.level().isClientSide()) {
-                    if (this.random.nextInt(10) == 0 && Services.EVENTS.canTame(this, player)) {
-                        this.tame(player);
-                        this.level().broadcastEntityEvent(this, (byte) 7);
-                    } else {
-                        this.level().broadcastEntityEvent(this, (byte) 6);
-                    }
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
-            } else if (this.isTame() && this.isOwnedBy(player)) {
-                if (!this.level().isClientSide()) {
-                    if (handStack.is(Items.CHICKEN) && !this.isBaby() && !this.isInSittingPose()) {
-                        if (this.digCooldown <= 0) {
-                            this.stateToDig = this.level().getBlockState(this.blockPosition().below());
+                return InteractionResult.SUCCESS;
+            }
 
-                            if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Blocks.GRAVEL)) {
-                                this.setDigging(true);
-                                this.digCooldown = 6000;
-                                if (!player.getAbilities().instabuild) {
-                                    handStack.shrink(1);
-                                }
-                                return InteractionResult.sidedSuccess(level().isClientSide());
-                            } else {
-                                this.stateToDig = null;
-                            }
-                        }
-
-                        return InteractionResult.FAIL;
-                    }
-                }
-                if (!this.isFood(handStack)) {
-                    this.setOrderedToSit(!this.isOrderedToSit());
-                    return InteractionResult.sidedSuccess(this.level().isClientSide());
-                } else if (this.getHealth() < this.getMaxHealth()) {
-                    this.gameEvent(GameEvent.EAT, this);
-                    this.heal(handStack.getItem().getFoodProperties().getNutrition());
+            if (this.isFood(handStack)) {
+                if (getHealth() < getMaxHealth()) {
+                    gameEvent(GameEvent.EAT, this);
+                    heal(handStack.getItem().getFoodProperties().getNutrition());
                     if (!player.getAbilities().instabuild) {
                         handStack.shrink(1);
                     }
-                    return InteractionResult.sidedSuccess(this.level().isClientSide());
+                    return InteractionResult.sidedSuccess(level().isClientSide());
+                }
+            } else {
+                setOrderedToSit(!isOrderedToSit());
+                return InteractionResult.sidedSuccess(level().isClientSide());
+            }
+        }
+
+        return super.mobInteract(player, interactionHand);
+    }
+
+    private InteractionResult startDigging(Player player, ItemStack handStack) {
+        if (handStack.is(Items.CHICKEN) && !isBaby() && !isInSittingPose()) {
+            if (digCooldown <= 0) {
+                stateToDig = level().getBlockState(blockPosition().below());
+
+                if (stateToDig.is(BlockTags.DIRT) || stateToDig.is(BlockTags.SAND) || stateToDig.is(Blocks.GRAVEL)) {
+                    setDigging(true);
+                    digCooldown = 6000;
+                    if (!player.getAbilities().instabuild) {
+                        handStack.shrink(1);
+                    }
+                    return InteractionResult.sidedSuccess(level().isClientSide());
+                } else {
+                    stateToDig = null;
                 }
             }
-            return super.mobInteract(player, interactionHand);
-        } else {
-            return InteractionResult.PASS;
+
+            return InteractionResult.FAIL;
         }
+
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -266,7 +296,8 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CompoundTag p_146750_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance
+            difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CompoundTag p_146750_) {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, p_146750_);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
@@ -328,6 +359,16 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     public void setVariant(int variant) {
         this.entityData.set(VARIANT, Mth.clamp(variant, 0, 1));
+    }
+
+    @Nullable
+    public DyeColor getCollarColor() {
+        if (!isTame()) return null;
+        return DyeColor.byId(entityData.get(DATA_COLLAR_COLOR));
+    }
+
+    private void setCollarColor(DyeColor color) {
+        entityData.set(DATA_COLLAR_COLOR, color.getId());
     }
 
     public class SleepGoal extends Goal {
@@ -412,7 +453,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
                     }
                 }
                 if (this.digTime == 10) {
-                    LootTable digTable = FerretEntity.this.level().getServer().getLootData().getLootTable(DIGGABLES);
+                    var digTable = FerretEntity.this.level().getServer().getLootData().getLootTable(DIGGABLES);
                     List<ItemStack> dugItems = digTable.getRandomItems(new LootParams.Builder((ServerLevel) level()).create(LootContextParamSets.EMPTY));
 
                     if (!dugItems.isEmpty()) {
@@ -423,6 +464,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
                         ItemEntity itemEntity = new ItemEntity(FerretEntity.this.level(), FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), stack);
                         FerretEntity.this.level().addFreshEntity(itemEntity);
                     }
+
                     ExperienceOrb xp = new ExperienceOrb(FerretEntity.this.level(), FerretEntity.this.getX(), FerretEntity.this.getY(), FerretEntity.this.getZ(), FerretEntity.this.random.nextInt(1, 6));
                     FerretEntity.this.level().addFreshEntity(xp);
                 }
