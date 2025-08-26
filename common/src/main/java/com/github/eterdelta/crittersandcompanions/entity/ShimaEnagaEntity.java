@@ -170,6 +170,11 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
         return CACSounds.SHIMA_ENAGA_AMBIENT.get();
     }
 
+    @Override
+    protected float getSoundVolume() {
+        return 0.8F;
+    }
+
     private PlayState predicate(AnimationState<?> event) {
         if (isInSittingPose()) {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_sit"));
