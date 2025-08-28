@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.entity.brain.OtterNavigation;
 import com.github.eterdelta.crittersandcompanions.entity.brain.OtterNodeEvaluator;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
@@ -46,7 +47,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.entity.animal.Animal;
@@ -121,7 +121,7 @@ public class OtterEntity extends Animal implements GeoEntity {
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, AbstractFish.class, 20, false, false, (fish) -> fish instanceof AbstractSchoolingFish && this.getHuntDelay() <= 0));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, AbstractFish.class, 20, false, false, (fish) -> fish instanceof AbstractSchoolingFish && this.getHuntDelay() <= 0 && this.getMainHandItem().isEmpty()));
     }
 
     @Override
@@ -272,7 +272,8 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        return new OtterPathNavigation(this, level);
+        return new OtterNavigation(this, level);
+
     }
 
     @Override
@@ -507,6 +508,31 @@ public class OtterEntity extends Animal implements GeoEntity {
         return false;
     }
 
+    private boolean isReadyToFloat() {
+        BlockPos eye = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
+        return !this.isUnderWater() && this.level().getBlockState(eye).isAir() && this.level().getFluidState(eye.below()).is(FluidTags.WATER);
+    }
+
+    private Vec3 findSurfacePosStraightUp() {
+        BlockPos.MutableBlockPos curr = new BlockPos.MutableBlockPos(Mth.floor(this.getX()), Mth.floor(this.getEyeY()), Mth.floor(this.getZ()));
+
+        boolean waterInSight = false;
+        for (int i = 0; i < 40; i++) {
+            BlockPos pos = curr.above(i);
+            if (this.level().getFluidState(pos).is(FluidTags.WATER)) {
+                waterInSight = true;
+                continue;
+            }
+
+            if (waterInSight && this.level().getBlockState(pos).isAir()) {
+                return Vec3.atCenterOf(pos).add(0.0D, 0.1D, 0.0D);
+            }
+
+        }
+
+        return null;
+    }
+
     static class OtterMoveControl extends MoveControl {
         private final OtterEntity otter;
 
@@ -543,6 +569,12 @@ public class OtterEntity extends Animal implements GeoEntity {
                             if (Math.abs(d1) > (double) 1.0E-5F || Math.abs(horizontalDistance) > (double) 1.0E-5F) {
                                 float xRot = -((float) (Mth.atan2(d1, horizontalDistance) * (double) (180F / (float) Math.PI)));
                                 xRot = Mth.clamp(Mth.wrapDegrees(xRot), -180.0F, 180.0F);
+
+                                // Fallback for the otter going to the abyss of the sea after hunting a fish when it failed to float (although this should not happen)
+                                if (this.otter.needsSurface() && xRot > 0.0F) {
+                                    xRot = 0.0F;
+                                }
+
                                 this.mob.setXRot(this.rotlerp(this.mob.getXRot(), xRot, 45.0F));
                             }
 
@@ -551,7 +583,14 @@ public class OtterEntity extends Animal implements GeoEntity {
 
                             if (d1 > 0.6 && d0 * d0 + d2 * d2 < 4.0F && d1 <= 1.0D && wantedBlockState.getFluidState().isEmpty()) {
                                 this.mob.getJumpControl().jump();
-                                this.mob.setSpeed(speed);
+
+                                // Decreased speed factor if it's inside water
+                                float waterFactor = 0.14F;
+                                if (this.otter.needsSurface()) {
+                                    waterFactor = 0.08F;
+                                }
+
+                                this.mob.setSpeed(speed * waterFactor);
                             }
 
                             float f0 = Mth.cos(this.mob.getXRot() * ((float) Math.PI / 180F));
@@ -604,6 +643,7 @@ public class OtterEntity extends Animal implements GeoEntity {
         }
     }
 
+    // No longer used
     static class OtterPathNavigation extends WaterBoundPathNavigation {
         private final OtterEntity otter;
 
@@ -720,9 +760,11 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     public class GoToSurfaceGoal extends Goal {
         private final int timeoutTime;
-        private boolean goingLand;
         private Vec3 targetPos;
         private int timeoutTimer;
+
+        private int stuckTicks;
+        private double lastDist = Double.MAX_VALUE;
 
         public GoToSurfaceGoal(int timeoutTime) {
             this.timeoutTime = timeoutTime;
@@ -732,61 +774,134 @@ public class OtterEntity extends Animal implements GeoEntity {
 
         @Override
         public boolean canUse() {
-            return OtterEntity.this.isAlive() && OtterEntity.this.needsSurface() && !OtterEntity.this.onGround();
+            return OtterEntity.this.isAlive() && OtterEntity.this.needsSurface() && !OtterEntity.this.onGround() && !OtterEntity.this.isFloating();
         }
 
         private void searchTargetPos() {
-            if (OtterEntity.this.getMainHandItem().is(CACItems.CLAM.get())) {
-                targetPos = LandRandomPos.getPos(OtterEntity.this, 15, 7);
-
-                if (targetPos != null) {
-                    goingLand = true;
+            if (OtterEntity.this.isInWater() && OtterEntity.this.isFood(OtterEntity.this.getMainHandItem())) {
+                Vec3 surface = OtterEntity.this.findSurfacePosStraightUp();
+                if (surface != null) {
+                    this.targetPos = surface;
                     return;
                 }
+
             }
 
-            targetPos = findAirPosition();
+            Vec3 surface = OtterEntity.this.findSurfacePosStraightUp();
+            if (surface != null) {
+                this.targetPos = surface;
+                return;
+            }
 
-            goingLand = false;
+            this.targetPos = findAirPosition();
         }
 
         @Override
         public void start() {
+            this.stuckTicks = 0;
+            this.lastDist = Double.MAX_VALUE;
             searchTargetPos();
         }
 
         @Override
         public void tick() {
+            // Embed goals sometimes computee client sided ticks due to a sync error, although this happens in singleplayer
+            // it's better to encapsulate the method
+            if (OtterEntity.this.level().isClientSide) {
+                return;
+            }
+
+            if (OtterEntity.this.isReadyToFloat()) {
+                OtterEntity.this.setDeltaMovement(OtterEntity.this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
+                OtterEntity.this.setYya(0.0F);
+                OtterEntity.this.setSpeed(0.0F);
+
+                OtterEntity.this.startFloating(OtterEntity.this.getRandom().nextInt(80, 201));
+
+                this.stop();
+
+                return;
+            }
+
             if (this.targetPos == null || !OtterEntity.this.level().getBlockState(BlockPos.containing(this.targetPos)).isAir()) {
                 searchTargetPos();
                 this.tickTimeout();
-            } else {
-                OtterEntity.this.getNavigation().moveTo(this.targetPos.x(), this.targetPos.y(), this.targetPos.z(), 1.0D);
-                OtterEntity.this.moveRelative(0.02F, new Vec3(OtterEntity.this.xxa, OtterEntity.this.yya, OtterEntity.this.zza));
-                OtterEntity.this.move(MoverType.SELF, OtterEntity.this.getDeltaMovement());
-
-                if (this.goingLand) {
-                    if (!OtterEntity.this.isInWater() && OtterEntity.this.onGround()) {
-                        this.stop();
-                    }
-                } else {
-                    if (this.targetPos.y() > OtterEntity.this.getY() && targetPos.distanceToSqr(OtterEntity.this.position()) <= 3.0D) {
-                        OtterEntity.this.push(0.0D, 0.02D, 0.0D);
-                    }
-
-                    double d0 = this.targetPos.y() - OtterEntity.this.getEyePosition().y();
-                    if (Math.sqrt(d0 * d0) <= 0.1D) {
-                        OtterEntity.this.setDeltaMovement(OtterEntity.this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
-                        OtterEntity.this.setYya(0.0F);
-                        OtterEntity.this.setSpeed(0.0F);
-                        OtterEntity.this.startFloating(OtterEntity.this.getRandom().nextInt(80, 201));
-                        this.stop();
-                    }
-                }
+                return;
             }
+
+            OtterEntity.this.getLookControl().setLookAt(this.targetPos.x(), this.targetPos.y(), this.targetPos.z(), 85.0F, 85.0F);
+            // When the entity goes up it sometimes has a LOT of velocity, so this may help (I hope)
+            OtterEntity.this.getNavigation().moveTo(this.targetPos.x(), this.targetPos.y(), this.targetPos.z(), 0.5);
+
+            double dx = this.targetPos.x() - OtterEntity.this.getX();
+            double dy = this.targetPos.y() - OtterEntity.this.getEyePosition().y();
+            double dz = this.targetPos.z() - OtterEntity.this.getZ();
+
+            double horiz = dx * dx + dz * dz;
+            // Pushes the entity to Y+ in case it's near the surface 'line'
+            boolean navDone = OtterEntity.this.getNavigation().isDone();
+            double basePush = 0.02D;
+            if ((dy > 0.0D) && OtterEntity.this.isUnderWater()) {
+                if (navDone || horiz <= 0.25D) {
+                    Vec3 v = OtterEntity.this.getDeltaMovement();
+                    OtterEntity.this.setDeltaMovement(v.x * 0.6D, v.y + 0.01D, v.z * 0.6D);
+                }
+                else if (horiz <= 9.0D) {
+                    OtterEntity.this.push(0.0D, basePush, 0.0D);
+                }
+
+            }
+
+            // Hardcoded velocity clamp near the desired surface as high velocity tends to push the otter far away from the
+            // relevant pos, thus making it fly in the air
+            double absDy = Math.abs(dy);
+            if (absDy <= 0.85725D) {
+                OtterEntity.this.setDeltaMovement(OtterEntity.this.getDeltaMovement().scale(0.35D));
+            }
+
+            // Starts the floating state
+            if (absDy <= 0.1D && OtterEntity.this.isReadyToFloat()) {
+                OtterEntity.this.setDeltaMovement(OtterEntity.this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
+                OtterEntity.this.setYya(0.0F);
+                OtterEntity.this.setSpeed(0.0F);
+                OtterEntity.this.startFloating(OtterEntity.this.getRandom().nextInt(80, 201));
+
+                this.stop();
+
+                return;
+            }
+
+            double dist  = dx * dx + dy * dy + dz * dz;
+            if (dist > this.lastDist - 0.0001D) {
+                this.stuckTicks++;
+            }
+            else {
+                this.stuckTicks = 0;
+            }
+
+            this.lastDist = dist;
+
+            // Fallback if the entity isn't near of the desired pos
+            if ((navDone && dist > 2.25D) || this.stuckTicks > 20) {
+                if (OtterEntity.this.isReadyToFloat()) {
+                    OtterEntity.this.startFloating(OtterEntity.this.getRandom().nextInt(80, 201));
+                    this.stop();
+                    return;
+                }
+
+                searchTargetPos();
+                this.tickTimeout();
+                this.stuckTicks = 0;
+            }
+
         }
 
-        public void tickTimeout() {
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        private void tickTimeout() {
             if (this.timeoutTimer % 2 == 0) {
                 ((ServerLevel) OtterEntity.this.level()).sendParticles(ParticleTypes.BUBBLE, OtterEntity.this.getRandomX(0.6D), OtterEntity.this.getY(), OtterEntity.this.getRandomZ(0.6D), 2, 0.0D, 0.1D, 0.0D, 0.0D);
             }
@@ -794,6 +909,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                 OtterEntity.this.playSound(CACSounds.OTTER_AMBIENT.get(), OtterEntity.this.getSoundVolume(), 0.3F);
                 OtterEntity.this.rejectFood();
                 this.stop();
+                return;
             }
             --this.timeoutTimer;
         }
@@ -803,10 +919,14 @@ public class OtterEntity extends Animal implements GeoEntity {
             OtterEntity.this.setNeedsSurface(false);
             OtterEntity.this.getNavigation().stop();
             this.timeoutTimer = this.timeoutTime;
+
+            this.targetPos = null;
+            this.stuckTicks = 0;
+            this.lastDist = Double.MAX_VALUE;
         }
 
         private Vec3 findAirPosition() {
-            Iterable<BlockPos> blocksInRadius = BlockPos.betweenClosed(Mth.floor(OtterEntity.this.getX() - 1.0D), OtterEntity.this.getBlockY(), Mth.floor(OtterEntity.this.getZ() - 1.0D), Mth.floor(OtterEntity.this.getX() + 1.0D), Mth.floor(OtterEntity.this.getY() + 32.0D), Mth.floor(OtterEntity.this.getZ() + 1.0D));
+            Iterable<BlockPos> blocksInRadius = BlockPos.betweenClosed(Mth.floor(OtterEntity.this.getX() - 1.0D), Mth.floor(OtterEntity.this.getBlockY()), Mth.floor(OtterEntity.this.getZ() - 1.0D), Mth.floor(OtterEntity.this.getX() + 1.0D), Mth.floor(OtterEntity.this.getY() + 32.0D), Mth.floor(OtterEntity.this.getZ() + 1.0D));
 
             for (BlockPos pos : blocksInRadius) {
                 if (OtterEntity.this.level().getBlockState(pos).isAir()) {
