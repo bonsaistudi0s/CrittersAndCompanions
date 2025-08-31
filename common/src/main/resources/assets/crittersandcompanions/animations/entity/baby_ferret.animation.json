@@ -1,7 +1,7 @@
 {
   "format_version": "1.8.0",
   "animations": {
-    "ferret_idle": {
+    "idle": {
       "loop": true,
       "animation_length": 0.64,
       "bones": {
@@ -193,7 +193,7 @@
         }
       }
     },
-    "baby_ferret_sleep": {
+    "sleep": {
       "loop": true,
       "animation_length": 1,
       "bones": {
@@ -487,7 +487,7 @@
         }
       }
     },
-    "baby_ferret_sit": {
+    "sit": {
       "loop": true,
       "animation_length": 0.64,
       "bones": {
@@ -747,7 +747,7 @@
         }
       }
     },
-    "ferret_run": {
+    "run": {
       "loop": true,
       "animation_length": 0.36,
       "bones": {

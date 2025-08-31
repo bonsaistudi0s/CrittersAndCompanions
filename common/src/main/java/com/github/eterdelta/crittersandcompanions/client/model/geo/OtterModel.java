@@ -39,13 +39,22 @@ public class OtterModel extends GeoModel<OtterEntity> {
     @Override
     public void setCustomAnimations(OtterEntity animatable, long instanceId, AnimationState<OtterEntity> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
-        CoreGeoBone head = getAnimationProcessor().getBone(animatable.isInWater() ? "main" : "head");
+        var head = getAnimationProcessor().getBone("head");
+        var body = getAnimationProcessor().getBone("main");
 
-        if (head != null && !animatable.isEating() && !animatable.isFloating()) {
-            EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+        if (head == null || body == null) return;
 
-            head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
-            head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
+        var rotating = animatable.isInWater() ? body : head;
+
+        if (!animatable.isInWater()) {
+            body.setRotX(0);
+        }
+
+        if (!animatable.isEating() && !animatable.isFloating()) {
+            var entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+
+            rotating.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
+            rotating.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
         }
     }
 }

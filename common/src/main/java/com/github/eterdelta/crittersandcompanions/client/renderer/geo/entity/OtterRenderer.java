@@ -26,7 +26,13 @@ public class OtterRenderer extends GeoEntityRenderer<OtterEntity> {
             stack.translate(0.05D, 0.2D, -0.9D);
             stack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             stack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            stack.translate(0.0D, -0.125D, 0.0D);
+
+            if (animatable.isBaby()) {
+                stack.translate(0.0D, -0.6D, 0.0D);
+            } else {
+                stack.translate(0.0D, -0.125D, 0.0D);
+            }
+
             Minecraft.getInstance().getItemRenderer().renderStatic(animatable.getMainHandItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, packedOverlay, stack, bufferSource, animatable.level(), 0);
             stack.popPose();
 

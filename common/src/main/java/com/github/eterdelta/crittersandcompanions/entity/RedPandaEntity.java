@@ -100,7 +100,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(4, new SleepGoal(140));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.0D, Ingredient.of(Items.SWEET_BERRIES), false));
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -219,7 +219,6 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("red_panda_sleeping"));
         } else if (event.isMoving()) {
             if (this.getSpeed() >= 0.8F) {
-                // TODO double check this, this used to be animation speed
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("red_panda_run"));
             } else {
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("red_panda_walk"));

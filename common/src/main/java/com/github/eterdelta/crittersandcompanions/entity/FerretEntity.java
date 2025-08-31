@@ -126,7 +126,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(8, new TemptGoal(this, 1.0D, Ingredient.of(FOODS_TAG), false));
-        this.goalSelector.addGoal(9, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(9, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(10, new FollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -198,11 +198,11 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        if (this.isSleeping()) return InteractionResult.PASS;
+        if (isSleeping()) return InteractionResult.PASS;
 
         ItemStack handStack = player.getItemInHand(interactionHand);
 
-        if (!this.isTame() && handStack.is(Items.RABBIT)) {
+        if (!isTame() && handStack.is(Items.RABBIT)) {
             if (!player.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
@@ -214,6 +214,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
                     level().broadcastEntityEvent(this, (byte) 6);
                 }
             }
+
             return InteractionResult.sidedSuccess(level().isClientSide());
         }
 
@@ -229,7 +230,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
                 return InteractionResult.SUCCESS;
             }
 
-            if (this.isFood(handStack)) {
+            if (isFood(handStack)) {
                 if (getHealth() < getMaxHealth()) {
                     gameEvent(GameEvent.EAT, this);
                     heal(handStack.getItem().getFoodProperties().getNutrition());
@@ -314,15 +315,17 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     private PlayState predicate(AnimationState<?> event) {
         if (this.isDigging()) {
-            event.getController().setAnimation(RawAnimation.begin().then("ferret_dig", Animation.LoopType.PLAY_ONCE));
+            event.getController().setAnimation(RawAnimation.begin().then("dig", Animation.LoopType.PLAY_ONCE));
         } else if (this.isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("ferret_sit"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
         } else if (this.isSleeping()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("ferret_sleep"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("sleep"));
+        } else if (isInWater()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("swim"));
         } else if (event.isMoving()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("ferret_run"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("run"));
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("ferret_idle"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
         }
         return PlayState.CONTINUE;
     }
