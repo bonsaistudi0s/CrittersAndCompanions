@@ -18,30 +18,36 @@ import com.github.eterdelta.crittersandcompanions.mixin.ItemPropertiesAccessor;
 import com.github.eterdelta.crittersandcompanions.platform.event.RegisterEntityRenderers;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrittersAndCompanionsClient {
-    public static void clientSetup() {
+
+    private static final ItemPropertyFunction BUCKET_VARIANT = (stack, clientLevel, entity, seed) -> {
         var tagKey = "BucketVariant";
-        ItemPropertiesAccessor.invokeRegister(CACItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
-            if (stack.getTag() != null && stack.getTag().contains(tagKey)) {
-                return stack.getTag().getInt(tagKey);
-            } else {
-                return 0.0F;
-            }
-        });
-        ItemPropertiesAccessor.invokeRegister(CACItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), (stack, clientLevel, entity, seed) -> {
-            if (stack.getTag() != null && stack.getTag().contains(tagKey)) {
-                return stack.getTag().getInt(tagKey);
-            } else {
-                return 0.0F;
-            }
-        });
+        if (stack.getTag() != null && stack.getTag().contains(tagKey)) {
+            return stack.getTag().getInt(tagKey);
+        } else {
+            return 0.0F;
+        }
+    };
+
+    private static void registerProperty(Item item, ResourceLocation id, ItemPropertyFunction function) {
+        ItemPropertiesAccessor.getPROPERTIES().computeIfAbsent(item, $ -> new HashMap<>()).put(id, function);
+    }
+
+    public static void init() {
+        registerProperty(CACItems.DUMBO_OCTOPUS_BUCKET.get(), new ResourceLocation("variant"), BUCKET_VARIANT);
+        registerProperty(CACItems.SEA_BUNNY_BUCKET.get(), new ResourceLocation("variant"), BUCKET_VARIANT);
     }
 
     public static void registerEntityRenderers(RegisterEntityRenderers event) {
