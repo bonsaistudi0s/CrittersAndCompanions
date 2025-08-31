@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.brain.OtterNodeEvaluator;
+import com.github.eterdelta.crittersandcompanions.entity.brain.OtterPanicGoal;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
@@ -42,7 +43,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
@@ -109,17 +109,17 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, Player.class, 32.0F, 0.9D, 1.5D, (livingEntity -> livingEntity.equals(this.getLastHurtMob()))));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
-        this.goalSelector.addGoal(2, new GoToSurfaceGoal(60));
-        this.goalSelector.addGoal(3, new BreedGoal(this));
-        this.goalSelector.addGoal(4, new SearchFoodGoal());
-        this.goalSelector.addGoal(5, new FollowParentGoal(this));
-        this.goalSelector.addGoal(6, new RandomStrollGoal(this));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(0, new OtterPanicGoal(this, 2.5F));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 32.0F, 0.9D, 1.5D, (livingEntity -> livingEntity.equals(this.getLastHurtMob()))));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(3, new GoToSurfaceGoal(60));
+        this.goalSelector.addGoal(4, new BreedGoal(this));
+        this.goalSelector.addGoal(5, new SearchFoodGoal());
+        this.goalSelector.addGoal(6, new FollowParentGoal(this));
+        this.goalSelector.addGoal(7, new RandomStrollGoal(this));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, AbstractFish.class, 20, false, false, (fish) -> fish instanceof AbstractSchoolingFish && this.getHuntDelay() <= 0));
     }
 
@@ -402,7 +402,7 @@ public class OtterEntity extends Animal implements GeoEntity {
         return foodStack.is(CACItems.CLAM.get()) || this.getInLoveTime() <= 0;
     }
 
-    private void rejectFood() {
+    public void rejectFood() {
         if (!this.getMainHandItem().isEmpty()) {
             ItemStack thrownAway = this.getMainHandItem().copy();
             ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), thrownAway);
