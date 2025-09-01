@@ -6,8 +6,10 @@ import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
+
 import java.util.EnumSet;
 import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -188,19 +190,20 @@ public class OtterEntity extends Animal implements GeoEntity {
                 this.setNeedsSurface(true);
             }
 
-            if (this.isEating()) {
-                if (this.eatDelay > 0) {
-                    --this.eatDelay;
-                } else if (level() instanceof ServerLevel level) {
-                    Vec3 mouthPos = calculateMouthPos();
-                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, getMainHandItem().copy()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
+            var held = getMainHandItem();
+            if (this.isFood(held)) {
+                if (this.isEating()) {
+                    if (this.eatDelay > 0) {
+                        --this.eatDelay;
+                    } else if (level() instanceof ServerLevel level) {
+                        Vec3 mouthPos = calculateMouthPos();
+                        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, held.copy()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
-                    playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
-                    eatOrOpen(level, getMainHandItem());
-                    setEating(false);
-                }
-            } else {
-                if (this.isFood(this.getMainHandItem())) {
+                        playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
+                        eatOrOpen(level, held);
+                        setEating(false);
+                    }
+                } else {
                     if (this.isInWater()) {
                         if (this.isFloating()) {
                             this.startEating();
