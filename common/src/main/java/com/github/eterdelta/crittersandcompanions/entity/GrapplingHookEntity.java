@@ -8,6 +8,7 @@ import java.util.Optional;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
@@ -68,6 +69,7 @@ public class GrapplingHookEntity extends Projectile {
 
         if (isStick && !wasStick) {
             stickLength = this.position().subtract(this.getOwner().position()).lengthSqr();
+            playSound(SoundEvents.SLIME_SQUISH);
         }
 
         wasStick = isStick;
@@ -99,7 +101,7 @@ public class GrapplingHookEntity extends Projectile {
 
     public void pull() {
         if (this.getOwner() != null) {
-            if (this.level().isClientSide() && isStick) {
+            if (isStick) {
                 this.getOwner().setDeltaMovement(this.position().subtract(this.getOwner().position())
                         .multiply(0.25D, 0.2D, 0.25D)
                         .add(0.0D, 0.25D, 0.0D)
@@ -122,12 +124,8 @@ public class GrapplingHookEntity extends Projectile {
 
     public boolean isFocused() {
         if (this.getOwner() instanceof Player player) {
-            if (this.level().isClientSide()) {
-                //TODO look at when less tired
-                return ItemStack.isSameItemSameTags(player.getMainHandItem(), this.getOwnerStack()) || ItemStack.isSameItemSameTags(player.getOffhandItem(), this.getOwnerStack());
-            } else {
-                return player.getMainHandItem() == this.getOwnerStack() || player.getOffhandItem() == this.getOwnerStack();
-            }
+            return ItemStack.isSameItemSameTags(player.getMainHandItem(), getOwnerStack())
+                    || ItemStack.isSameItemSameTags(player.getOffhandItem(), getOwnerStack());
         }
         return false;
     }
