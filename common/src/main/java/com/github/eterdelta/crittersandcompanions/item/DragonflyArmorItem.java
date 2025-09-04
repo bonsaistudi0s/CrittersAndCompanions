@@ -3,7 +3,9 @@ package com.github.eterdelta.crittersandcompanions.item;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+
 import java.util.UUID;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -39,8 +41,9 @@ public class DragonflyArmorItem extends Item {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return attributes;
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
+        if (slot == EquipmentSlot.CHEST) return attributes;
+        return ImmutableMultimap.of();
     }
 
 }

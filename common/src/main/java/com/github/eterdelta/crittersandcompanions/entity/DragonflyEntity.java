@@ -181,7 +181,7 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
                 }
             } else if (this.isOwnedBy(player)) {
                 if (!this.level().isClientSide()) {
-                    if (handStack.getItem() instanceof DragonflyArmorItem armorItem && this.getArmor().isEmpty()) {
+                    if (handStack.getItem() instanceof DragonflyArmorItem && this.getArmor().isEmpty()) {
                         this.setArmor(handStack.copy());
                         handStack.shrink(1);
                         if (!player.getAbilities().instabuild) {
