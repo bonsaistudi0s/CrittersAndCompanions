@@ -10,7 +10,6 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -57,7 +56,7 @@ public class CACWorldGen {
         BiomeModifications.addFeature(
                 it -> it.hasTag(biome),
                 GenerationStep.Decoration.TOP_LAYER_MODIFICATION,
-                ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(CrittersAndCompanions.MODID, feature))
+                ResourceKey.create(Registries.PLACED_FEATURE, CrittersAndCompanions.createId(feature))
         );
     }
 

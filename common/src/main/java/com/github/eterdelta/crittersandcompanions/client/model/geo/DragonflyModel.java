@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
 public class DragonflyModel extends DefaultedEntityGeoModel<DragonflyEntity> {
-    private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "dragonfly");
+    private static final ResourceLocation MODEL = CrittersAndCompanions.createId("dragonfly");
 
     public DragonflyModel() {
         super(MODEL, false);

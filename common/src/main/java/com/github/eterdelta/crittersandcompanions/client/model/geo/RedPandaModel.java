@@ -12,15 +12,15 @@ import software.bernie.geckolib.model.data.EntityModelData;
 
 public class RedPandaModel extends GeoModel<RedPandaEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/red_panda.geo.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/baby_red_panda.geo.json")};
+            CrittersAndCompanions.createId("geo/entity/red_panda.geo.json"),
+            CrittersAndCompanions.createId("geo/entity/baby_red_panda.geo.json")};
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/red_panda.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/red_panda_sleeping.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_red_panda.png")};
+            CrittersAndCompanions.createId("textures/entity/red_panda.png"),
+            CrittersAndCompanions.createId("textures/entity/red_panda_sleeping.png"),
+            CrittersAndCompanions.createId("textures/entity/baby_red_panda.png")};
     private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/red_panda.animation.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/baby_red_panda.animation.json")};
+            CrittersAndCompanions.createId("animations/entity/red_panda.animation.json"),
+            CrittersAndCompanions.createId("animations/entity/baby_red_panda.animation.json")};
 
     @Override
     public ResourceLocation getModelResource(RedPandaEntity object) {

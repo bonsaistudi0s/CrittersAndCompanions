@@ -11,7 +11,7 @@ import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ShimaEnagaModel extends DefaultedEntityGeoModel<ShimaEnagaEntity> {
-    private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "shima_enaga");
+    private static final ResourceLocation MODEL = CrittersAndCompanions.createId("shima_enaga");
 
     public ShimaEnagaModel() {
         super(MODEL, false);

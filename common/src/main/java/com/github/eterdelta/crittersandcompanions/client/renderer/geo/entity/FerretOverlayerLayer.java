@@ -51,7 +51,6 @@ public class FerretOverlayerLayer extends GeoRenderLayer<FerretEntity> {
         if (texture == null) return;
         renderType = RenderType.entityCutout(texture);
         buffer = bufferSource.getBuffer(renderType);
-        var color = getRenderer().getRenderColor(animatable, partialTick, packedLight).argbInt();
-        getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, renderType, buffer, partialTick, packedLight, packedOverlay, color);
+        getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, renderType, buffer, partialTick, packedLight, packedOverlay, 1F, 1F, 1F, 1F);
     }
 }

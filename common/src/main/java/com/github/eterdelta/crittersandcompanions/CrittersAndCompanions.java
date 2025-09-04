@@ -19,14 +19,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.CreativeModeTab;
-import software.bernie.geckolib.GeckoLib;
 import net.minecraft.world.item.DyeColor;
+import software.bernie.geckolib.GeckoLib;
 
 public class CrittersAndCompanions {
     public static final String MODID = "crittersandcompanions";
 
     public static ResourceLocation createId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+        return new ResourceLocation(MODID, path);
     }
 
     private static final RegistryHelper<CreativeModeTab> CREATIVE_TABS = Services.PLATFORM.createRegistryHelper(Registries.CREATIVE_MODE_TAB, MODID);

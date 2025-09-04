@@ -14,7 +14,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import software.bernie.geckolib.event.GeoRenderEvent;
@@ -23,7 +22,7 @@ public class CrittersAndCompanionsFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        CrittersAndCompanionsClient.clientSetup();
+        CrittersAndCompanionsClient.init();
 
         GeoRenderEvent.Entity.Post.EVENT.register(SilkLeashRenderer::renderSilkLeash);
 
@@ -38,7 +37,7 @@ public class CrittersAndCompanionsFabricClient implements ClientModInitializer {
             registrationHelper.register(new BubbleLayer(playerRenderer, context.getModelSet()));
         });
 
-        var resourcePack = new ResourceLocation(CrittersAndCompanions.MODID, "friendlyart");
+        var resourcePack = CrittersAndCompanions.createId("friendlyart");
         FabricLoader.getInstance().getModContainer(resourcePack.getNamespace()).ifPresent(mod -> {
             ResourceManagerHelper.registerBuiltinResourcePack(resourcePack, mod, ResourcePackActivationType.NORMAL);
         });

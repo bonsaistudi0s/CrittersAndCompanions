@@ -5,21 +5,19 @@ import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OtterModel extends GeoModel<OtterEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/otter.geo.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/baby_otter.geo.json")};
+            CrittersAndCompanions.createId("geo/entity/otter.geo.json"),
+            CrittersAndCompanions.createId("geo/entity/baby_otter.geo.json")};
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/otter.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_otter.png")};
+            CrittersAndCompanions.createId("textures/entity/otter.png"),
+            CrittersAndCompanions.createId("textures/entity/baby_otter.png")};
     private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/otter.animation.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/baby_otter.animation.json")};
+            CrittersAndCompanions.createId("animations/entity/otter.animation.json"),
+            CrittersAndCompanions.createId("animations/entity/baby_otter.animation.json")};
 
     @Override
     public ResourceLocation getModelResource(OtterEntity object) {

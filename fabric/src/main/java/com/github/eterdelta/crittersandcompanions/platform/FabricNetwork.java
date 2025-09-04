@@ -26,7 +26,7 @@ public class FabricNetwork implements INetwork {
 
     @Override
     public <T> Sender<T> createSender(Class<T> clazz, IPacketHandler<T> handler) {
-        var id = new ResourceLocation(CrittersAndCompanions.MODID, clazz.getSimpleName().toLowerCase(Locale.ROOT));
+        var id = CrittersAndCompanions.createId(clazz.getSimpleName().toLowerCase(Locale.ROOT));
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             registerReceiver(id, handler);

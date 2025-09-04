@@ -6,10 +6,8 @@ import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
-
 import java.util.EnumSet;
 import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -200,7 +198,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                         level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, held.copy()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
                         playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
-                        eatOrOpen(level, held);
+                        eat(level, held);
                         setEating(false);
                     }
                 } else {
@@ -410,7 +408,7 @@ public class OtterEntity extends Animal implements GeoEntity {
             ItemStack thrownAway = this.getMainHandItem().copy();
             ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), thrownAway);
             itemEntity.setPickUpDelay(40);
-            itemEntity.setThrower(this);
+            itemEntity.setThrower(uuid);
             this.getMainHandItem().shrink(thrownAway.getCount());
             this.level().addFreshEntity(itemEntity);
         }

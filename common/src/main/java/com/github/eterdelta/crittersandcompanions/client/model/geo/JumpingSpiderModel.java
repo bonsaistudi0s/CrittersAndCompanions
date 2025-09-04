@@ -11,7 +11,7 @@ import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class JumpingSpiderModel extends DefaultedEntityGeoModel<JumpingSpiderEntity> {
-    private static final ResourceLocation MODEL = new ResourceLocation(CrittersAndCompanions.MODID, "jumping_spider");
+    private static final ResourceLocation MODEL = CrittersAndCompanions.createId("jumping_spider");
 
     public JumpingSpiderModel() {
         super(MODEL);

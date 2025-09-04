@@ -17,8 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 public class BubbleLayer extends RenderLayer<Player, PlayerModel<Player>> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CrittersAndCompanions.MODID, "bubble"), "main");
-    private static final ResourceLocation TEXTURE = new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/bubble.png");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(CrittersAndCompanions.createId("bubble"), "main");
+    private static final ResourceLocation TEXTURE = CrittersAndCompanions.createId("textures/entity/bubble.png");
     private final BubbleModel<Player> bubbleModel;
 
     public BubbleLayer(RenderLayerParent<Player, PlayerModel<Player>> parent, EntityModelSet modelSet) {

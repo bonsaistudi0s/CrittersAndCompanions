@@ -19,8 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class GrapplingHookRenderer extends EntityRenderer<GrapplingHookEntity> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CrittersAndCompanions.MODID, "grappling_hook"), "main");
-    private static final ResourceLocation TEXTURE = new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/grappling_hook.png");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(CrittersAndCompanions.createId("grappling_hook"), "main");
+    private static final ResourceLocation TEXTURE = CrittersAndCompanions.createId("textures/entity/grappling_hook.png");
     private final GrapplingHookModel<GrapplingHookEntity> hookModel;
 
     public GrapplingHookRenderer(EntityRendererProvider.Context context) {

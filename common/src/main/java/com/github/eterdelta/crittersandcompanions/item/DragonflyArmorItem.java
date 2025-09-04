@@ -3,9 +3,7 @@ package com.github.eterdelta.crittersandcompanions.item;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-
 import java.util.UUID;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -24,7 +22,7 @@ public class DragonflyArmorItem extends Item {
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public DragonflyArmorItem(ArmorMaterial material, String tierName, Item.Properties properties) {
-        this(material, new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
+        this(material, CrittersAndCompanions.createId("textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
     }
 
     public DragonflyArmorItem(ArmorMaterial material, ResourceLocation tierName, Item.Properties properties) {
