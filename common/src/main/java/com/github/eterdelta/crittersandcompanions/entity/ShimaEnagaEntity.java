@@ -5,7 +5,6 @@ import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -49,7 +48,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, GeoEntity {
-    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(CrittersAndCompanions.MODID, "shima_enaga_food"));
+    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("shima_enaga_food"));
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ShimaEnagaEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
@@ -168,6 +167,11 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     @Override
     protected SoundEvent getAmbientSound() {
         return CACSounds.SHIMA_ENAGA_AMBIENT.get();
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.8F;
     }
 
     private PlayState predicate(AnimationState<?> event) {

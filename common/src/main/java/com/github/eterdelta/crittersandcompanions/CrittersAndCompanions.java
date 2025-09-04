@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions;
 
+import com.github.eterdelta.crittersandcompanions.api.CACColors;
 import com.github.eterdelta.crittersandcompanions.entity.*;
 import com.github.eterdelta.crittersandcompanions.handler.SpawnHandler;
 import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
@@ -13,14 +14,20 @@ import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.function.BiConsumer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
 import software.bernie.geckolib.GeckoLib;
 
 public class CrittersAndCompanions {
     public static final String MODID = "crittersandcompanions";
+
+    public static ResourceLocation createId(String path) {
+        return new ResourceLocation(MODID, path);
+    }
 
     private static final RegistryHelper<CreativeModeTab> CREATIVE_TABS = Services.PLATFORM.createRegistryHelper(Registries.CREATIVE_MODE_TAB, MODID);
     public static final RegistryEntry<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("main", () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
@@ -36,6 +43,7 @@ public class CrittersAndCompanions {
         CACEntities.init();
         CACItems.init();
         CACSounds.init();
+        registerColors();
     }
 
     public static void setup() {
@@ -54,6 +62,25 @@ public class CrittersAndCompanions {
         event.accept(CACEntities.DUMBO_OCTOPUS.get(), DumboOctopusEntity.createAttributes().build());
         event.accept(CACEntities.LEAF_INSECT.get(), LeafInsectEntity.createAttributes().build());
         event.accept(CACEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
+    }
+
+    private static void registerColors() {
+        CACColors.register(DyeColor.WHITE);
+        CACColors.register(DyeColor.ORANGE);
+        CACColors.register(DyeColor.MAGENTA);
+        CACColors.register(DyeColor.LIGHT_BLUE);
+        CACColors.register(DyeColor.YELLOW);
+        CACColors.register(DyeColor.LIME);
+        CACColors.register(DyeColor.PINK);
+        CACColors.register(DyeColor.GRAY);
+        CACColors.register(DyeColor.LIGHT_GRAY);
+        CACColors.register(DyeColor.CYAN);
+        CACColors.register(DyeColor.PURPLE);
+        CACColors.register(DyeColor.BLUE);
+        CACColors.register(DyeColor.BROWN);
+        CACColors.register(DyeColor.GREEN);
+        CACColors.register(DyeColor.RED);
+        CACColors.register(DyeColor.BLACK);
     }
 
 }

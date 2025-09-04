@@ -3,7 +3,6 @@ package com.github.eterdelta.crittersandcompanions.platform;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.network.IPacketHandler;
 import com.github.eterdelta.crittersandcompanions.platform.service.INetwork;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkRegistry;
@@ -15,7 +14,7 @@ public class ForgeNetwork implements INetwork {
     private final String protocol = "2";
 
     private final SimpleChannel channel = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(CrittersAndCompanions.MODID, "main"),
+            CrittersAndCompanions.createId("main"),
             () -> protocol,
             protocol::equals,
             protocol::equals

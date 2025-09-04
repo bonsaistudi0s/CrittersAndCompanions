@@ -4,8 +4,8 @@
     {
       "description": {
         "identifier": "geometry.baby_ferret",
-        "texture_width": 32,
-        "texture_height": 32,
+        "texture_width": 64,
+        "texture_height": 64,
         "visible_bounds_width": 3,
         "visible_bounds_height": 2.5,
         "visible_bounds_offset": [
@@ -91,14 +91,14 @@
                 0
               ],
               "uv": [
-                16,
-                4
+                0,
+                11
               ]
             }
           ]
         },
         {
-          "name": "body_2",
+          "name": "neck",
           "parent": "body",
           "pivot": [
             0,
@@ -113,7 +113,7 @@
         },
         {
           "name": "head_rotation",
-          "parent": "body_2",
+          "parent": "neck",
           "pivot": [
             -0.5,
             3,
@@ -133,7 +133,24 @@
               ],
               "uv": [
                 0,
-                10
+                20
+              ]
+            },
+            {
+              "origin": [
+                -1.5,
+                1.3,
+                -7.3
+              ],
+              "size": [
+                3,
+                3,
+                5
+              ],
+              "inflate": 0.15,
+              "uv": [
+                0,
+                29
               ]
             }
           ]
@@ -169,8 +186,8 @@
                 0
               ],
               "uv": [
-                12,
-                14
+                17,
+                11
               ]
             },
             {
@@ -195,8 +212,8 @@
                 0
               ],
               "uv": [
-                15,
-                0
+                23,
+                5
               ]
             },
             {
@@ -221,8 +238,8 @@
                 0
               ],
               "uv": [
-                0,
-                0
+                17,
+                26
               ]
             },
             {
@@ -247,8 +264,8 @@
                 0
               ],
               "uv": [
-                0,
-                0
+                17,
+                26
               ],
               "mirror": true
             }
@@ -280,8 +297,8 @@
                 2
               ],
               "uv": [
-                0,
-                18
+                17,
+                20
               ]
             }
           ]
@@ -312,8 +329,8 @@
                 2
               ],
               "uv": [
-                0,
-                18
+                17,
+                20
               ],
               "mirror": true
             }
@@ -345,8 +362,8 @@
                 2
               ],
               "uv": [
-                6,
-                21
+                23,
+                0
               ]
             }
           ]
@@ -377,8 +394,8 @@
                 2
               ],
               "uv": [
-                6,
-                21
+                23,
+                0
               ],
               "mirror": true
             }

@@ -5,21 +5,19 @@ import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OtterModel extends GeoModel<OtterEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/otter.geo.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/baby_otter.geo.json")};
+            CrittersAndCompanions.createId("geo/entity/otter.geo.json"),
+            CrittersAndCompanions.createId("geo/entity/baby_otter.geo.json")};
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/otter.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_otter.png")};
+            CrittersAndCompanions.createId("textures/entity/otter.png"),
+            CrittersAndCompanions.createId("textures/entity/baby_otter.png")};
     private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/otter.animation.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/baby_otter.animation.json")};
+            CrittersAndCompanions.createId("animations/entity/otter.animation.json"),
+            CrittersAndCompanions.createId("animations/entity/baby_otter.animation.json")};
 
     @Override
     public ResourceLocation getModelResource(OtterEntity object) {
@@ -41,7 +39,7 @@ public class OtterModel extends GeoModel<OtterEntity> {
         super.setCustomAnimations(animatable, instanceId, animationState);
 
         // This bone rotation predicate should be done separately as it could be overlapped with the net head azimuth
-        CoreGeoBone root = getAnimationProcessor().getBone("main");
+        var root = getAnimationProcessor().getBone("main");
         if (root != null) {
             if (!animatable.isInWater()) {
                 // Hard bypasses all rotations of the core bone on land so the whole body stays in the default rotation,
@@ -55,9 +53,9 @@ public class OtterModel extends GeoModel<OtterEntity> {
         }
 
         // Enables the yaw by default everywhere everytime, while the pitch is only computed inside water
-        CoreGeoBone headOrMain = getAnimationProcessor().getBone(animatable.isInWater() ? "main" : "head");
+        var headOrMain = getAnimationProcessor().getBone(animatable.isInWater() ? "main" : "head");
         if (headOrMain != null && !animatable.isEating() && !animatable.isFloating()) {
-            EntityModelData data = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+            var data = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
             // Yaw is clamped within a minimal side rotation to avoid jittery which could lead to the head bone
             // to tweak a bit

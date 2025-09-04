@@ -12,17 +12,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FerretModel extends GeoModel<FerretEntity> {
     private static final ResourceLocation[] MODELS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/ferret.geo.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "geo/entity/baby_ferret.geo.json")};
+            CrittersAndCompanions.createId("geo/entity/ferret.geo.json"),
+            CrittersAndCompanions.createId("geo/entity/baby_ferret.geo.json")};
     private static final ResourceLocation[] ADULT_TEXTURES = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_1.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/ferret_2.png")};
+            CrittersAndCompanions.createId("textures/entity/ferret_1.png"),
+            CrittersAndCompanions.createId("textures/entity/ferret_2.png")};
     private static final ResourceLocation[] BABY_TEXTURES = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_1.png"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/baby_ferret_2.png")};
+            CrittersAndCompanions.createId("textures/entity/baby_ferret_1.png"),
+            CrittersAndCompanions.createId("textures/entity/baby_ferret_2.png")};
     private static final ResourceLocation[] ANIMATIONS = new ResourceLocation[]{
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/ferret.animation.json"),
-            new ResourceLocation(CrittersAndCompanions.MODID, "animations/entity/baby_ferret.animation.json")};
+            CrittersAndCompanions.createId("animations/entity/ferret.animation.json"),
+            CrittersAndCompanions.createId("animations/entity/baby_ferret.animation.json")};
 
     @Override
     public ResourceLocation getModelResource(FerretEntity object) {

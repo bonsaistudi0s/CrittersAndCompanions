@@ -37,7 +37,7 @@ public class CrittersAndCompanionsForge {
 
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(CrittersAndCompanions::setup));
-        modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(CrittersAndCompanionsClient::clientSetup));
+        modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(CrittersAndCompanionsClient::init));
 
         var lootModifiers = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MODID);
         lootModifiers.register("replace_item", () -> ReplaceItemModifier.CODEC);

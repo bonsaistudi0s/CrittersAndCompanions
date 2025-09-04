@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.entity.brain;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import java.util.concurrent.TimeUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
@@ -17,8 +18,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Custom hybrid navigator (that works for both liquid and ground sources)

@@ -40,15 +40,19 @@ public class PearlNecklaceItem extends Item {
         this.level = necklaceLevel;
     }
 
+    private String percentage(int level, double base) {
+        return String.format("%.0f", level * 100 * base);
+    }
+
     @Override
     public void appendHoverText(ItemStack itemStack, Level level, List<Component> components, TooltipFlag tooltipFlag) {
         components.add(Component.translatable("pearl_necklace.level", this.level).withStyle(ChatFormatting.DARK_GRAY));
         components.add(Component.empty());
 
-        components.add(Component.translatable("pearl_necklace.swim_speed", this.level * 100 * Services.CONFIGS.common().necklaceSwimSpeed.get()).withStyle(ChatFormatting.GRAY));
-        components.add(Component.translatable("pearl_necklace.drowned_range", this.level * 100 * Services.CONFIGS.common().necklaceDrownedDebuff.get()).withStyle(ChatFormatting.GRAY));
+        components.add(Component.translatable("pearl_necklace.swim_speed", percentage(this.level, Services.CONFIGS.common().necklaceSwimSpeed.get())).withStyle(ChatFormatting.GRAY));
+        components.add(Component.translatable("pearl_necklace.drowned_range", percentage(this.level, Services.CONFIGS.common().necklaceDrownedDebuff.get())).withStyle(ChatFormatting.GRAY));
         if (this.level > 1) {
-            components.add(Component.translatable("pearl_necklace.guardian_range", this.level * 100 * Services.CONFIGS.common().necklaceDrownedDebuff.get()).withStyle(ChatFormatting.GRAY));
+            components.add(Component.translatable("pearl_necklace.guardian_range", percentage(this.level, Services.CONFIGS.common().necklaceGuardianDebuff.get())).withStyle(ChatFormatting.GRAY));
         }
     }
 

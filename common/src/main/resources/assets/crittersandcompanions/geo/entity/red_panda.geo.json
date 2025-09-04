@@ -30,6 +30,15 @@
             0,
             5.5,
             3
+          ]
+        },
+        {
+          "name": "body_2",
+          "parent": "body",
+          "pivot": [
+            0,
+            5.5,
+            3
           ],
           "cubes": [
             {
@@ -52,7 +61,7 @@
         },
         {
           "name": "tail",
-          "parent": "body",
+          "parent": "body_2",
           "pivot": [
             0,
             8,
@@ -78,8 +87,17 @@
           ]
         },
         {
+          "name": "head_rotation",
+          "parent": "body_2",
+          "pivot": [
+            -0.5,
+            7.1,
+            -5
+          ]
+        },
+        {
           "name": "head",
-          "parent": "body",
+          "parent": "head_rotation",
           "pivot": [
             -0.5,
             7.1,

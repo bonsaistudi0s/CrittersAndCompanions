@@ -22,7 +22,7 @@ public class DragonflyArmorItem extends Item {
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public DragonflyArmorItem(ArmorMaterial material, String tierName, Item.Properties properties) {
-        this(material, new ResourceLocation(CrittersAndCompanions.MODID, "textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
+        this(material, CrittersAndCompanions.createId("textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
     }
 
     public DragonflyArmorItem(ArmorMaterial material, ResourceLocation tierName, Item.Properties properties) {
@@ -39,8 +39,9 @@ public class DragonflyArmorItem extends Item {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return attributes;
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
+        if (slot == EquipmentSlot.CHEST) return attributes;
+        return ImmutableMultimap.of();
     }
 
 }

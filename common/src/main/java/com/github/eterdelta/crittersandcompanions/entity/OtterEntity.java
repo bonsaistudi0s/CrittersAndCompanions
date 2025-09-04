@@ -1,7 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.brain.OtterNavigation;
-import com.github.eterdelta.crittersandcompanions.entity.brain.OtterNodeEvaluator;
+import com.github.eterdelta.crittersandcompanions.entity.brain.OtterPanicGoal;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
@@ -43,10 +43,8 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.entity.animal.Animal;
@@ -60,7 +58,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -82,7 +79,6 @@ public class OtterEntity extends Animal implements GeoEntity {
     private boolean needsSurface;
     private int huntDelay;
     private int eatDelay;
-    private int eatTime;
     private int floatTime;
 
     public OtterEntity(EntityType<? extends OtterEntity> entityType, Level level) {
@@ -110,18 +106,18 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, Player.class, 32.0F, 0.9D, 1.5D, (livingEntity -> livingEntity.equals(this.getLastHurtMob()))));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
-        this.goalSelector.addGoal(2, new GoToSurfaceGoal(60));
-        this.goalSelector.addGoal(3, new BreedGoal(this));
-        this.goalSelector.addGoal(4, new SearchFoodGoal());
-        this.goalSelector.addGoal(5, new FollowParentGoal(this));
-        this.goalSelector.addGoal(6, new RandomStrollGoal(this));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(0, new OtterPanicGoal(this, 2.5F));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 32.0F, 0.9D, 1.5D, (livingEntity -> livingEntity.equals(this.getLastHurtMob()))));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(3, new GoToSurfaceGoal(60));
+        this.goalSelector.addGoal(4, new BreedGoal(this));
+        this.goalSelector.addGoal(5, new SearchFoodGoal());
+        this.goalSelector.addGoal(6, new FollowParentGoal(this));
+        this.goalSelector.addGoal(7, new RandomStrollGoal(this));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, AbstractFish.class, 20, false, false, (fish) -> fish instanceof AbstractSchoolingFish && this.getHuntDelay() <= 0 && this.getMainHandItem().isEmpty()));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, AbstractFish.class, 20, false, false, (fish) -> fish instanceof AbstractSchoolingFish && this.getHuntDelay() <= 0));
     }
 
     @Override
@@ -131,7 +127,6 @@ public class OtterEntity extends Animal implements GeoEntity {
         compound.putBoolean("Floating", this.isFloating());
         compound.putInt("FloatTime", this.floatTime);
         compound.putBoolean("Eating", this.isEating());
-        compound.putInt("EatTime", this.eatTime);
         compound.putInt("EatDelay", this.eatDelay);
     }
 
@@ -142,7 +137,6 @@ public class OtterEntity extends Animal implements GeoEntity {
         this.setFloating(compound.getBoolean("Floating"));
         this.floatTime = compound.getInt("FloatTime");
         this.setEating(compound.getBoolean("Eating"));
-        this.eatTime = compound.getInt("EatTime");
         this.eatDelay = compound.getInt("EatDelay");
     }
 
@@ -203,23 +197,20 @@ public class OtterEntity extends Animal implements GeoEntity {
                 this.setNeedsSurface(true);
             }
 
-            if (this.isEating()) {
-                if (this.eatDelay > 0) {
-                    --this.eatDelay;
-                } else {
-                    Vec3 mouthPos = this.calculateMouthPos();
-                    ((ServerLevel) this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getMainHandItem().copy()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
+            var held = getMainHandItem();
+            if (this.isFood(held)) {
+                if (this.isEating()) {
+                    if (this.eatDelay > 0) {
+                        --this.eatDelay;
+                    } else if (level() instanceof ServerLevel level) {
+                        Vec3 mouthPos = calculateMouthPos();
+                        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, held.copy()), mouthPos.x(), mouthPos.y(), mouthPos.z(), 2, 0.0D, 0.1D, 0.0D, 0.05D);
 
-                    if (this.getRandom().nextDouble() < 0.5D) {
-                        this.playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
+                        playSound(CACSounds.OTTER_EAT.get(), 1.2F, 1.0F);
+                        eat(level, held);
+                        setEating(false);
                     }
-                    if (--this.eatTime <= 0) {
-                        this.eat(this.level(), this.getMainHandItem());
-                        this.setEating(false);
-                    }
-                }
-            } else {
-                if (this.isFood(this.getMainHandItem())) {
+                } else {
                     if (this.isInWater()) {
                         if (this.isFloating()) {
                             this.startEating();
@@ -273,7 +264,6 @@ public class OtterEntity extends Animal implements GeoEntity {
     @Override
     protected PathNavigation createNavigation(Level level) {
         return new OtterNavigation(this, level);
-
     }
 
     @Override
@@ -375,47 +365,42 @@ public class OtterEntity extends Animal implements GeoEntity {
         return spawnGroupData;
     }
 
-    private PlayState predicate(AnimationState<?> event) {
-        if (isFloating()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_float"));
-            return PlayState.CONTINUE;
-        } else if (isInWater()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_swim"));
-            return PlayState.CONTINUE;
-        } else {
-            if (isEating()) {
-                if (getMainHandItem().is(CACItems.CLAM.get())) {
-                    event.getController().setAnimation(RawAnimation.begin().then("otter_open", Animation.LoopType.PLAY_ONCE));
-                } else {
-                    event.getController().setAnimation(RawAnimation.begin().then("otter_standing_eat", Animation.LoopType.PLAY_ONCE));
-                }
-                return PlayState.CONTINUE;
-            } else if (event.isMoving()) {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_walk"));
-                return PlayState.CONTINUE;
-            } else {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_idle"));
-                return PlayState.CONTINUE;
+    private RawAnimation animation(AnimationState<?> event) {
+        if (isEating()) {
+            if (isFloating()) {
+                return RawAnimation.begin().then("floating_eat", Animation.LoopType.PLAY_ONCE);
             }
+
+            if (getMainHandItem().is(CACItems.CLAM.get())) {
+                return RawAnimation.begin().then("standing_eat_clam", Animation.LoopType.PLAY_ONCE);
+            }
+
+            return RawAnimation.begin().then("standing_eat", Animation.LoopType.PLAY_ONCE);
         }
+
+        if (isFloating()) {
+            return RawAnimation.begin().thenLoop("swim_2");
+        }
+
+        if (isInWater()) {
+            return RawAnimation.begin().thenLoop("swim");
+        }
+
+        if (event.isMoving()) {
+            return RawAnimation.begin().thenLoop("walk");
+        }
+
+        return RawAnimation.begin().thenLoop("idle");
     }
 
-    private PlayState floatingHandsPredicate(AnimationState<?> event) {
-        if (isFloating()) {
-            if (isEating() && eatDelay <= 0) {
-                event.getController().setAnimation(RawAnimation.begin().then("otter_hands_float_eat", Animation.LoopType.PLAY_ONCE));
-            } else {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("otter_hands_float_idle"));
-            }
-            return PlayState.CONTINUE;
-        }
-        return PlayState.STOP;
+    private PlayState predicate(AnimationState<?> event) {
+        event.getController().setAnimation(animation(event));
+        return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
-        controllers.add(new AnimationController<>(this, "floating_hands_controller", 10, this::floatingHandsPredicate));
     }
 
     @Override
@@ -427,12 +412,12 @@ public class OtterEntity extends Animal implements GeoEntity {
         return foodStack.is(CACItems.CLAM.get()) || this.getInLoveTime() <= 0;
     }
 
-    private void rejectFood() {
+    public void rejectFood() {
         if (!this.getMainHandItem().isEmpty()) {
             ItemStack thrownAway = this.getMainHandItem().copy();
             ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), thrownAway);
             itemEntity.setPickUpDelay(40);
-            itemEntity.setThrower(this.getUUID());
+            itemEntity.setThrower(uuid);
             this.getMainHandItem().shrink(thrownAway.getCount());
             this.level().addFreshEntity(itemEntity);
         }
@@ -448,7 +433,6 @@ public class OtterEntity extends Animal implements GeoEntity {
     private void startEating() {
         if (this.isFood(this.getMainHandItem())) {
             this.eatDelay = this.getMainHandItem().is(CACItems.CLAM.get()) ? 35 : 12;
-            this.eatTime = 20;
             this.setEating(true);
         }
     }
@@ -643,36 +627,6 @@ public class OtterEntity extends Animal implements GeoEntity {
         }
     }
 
-    // No longer used
-    static class OtterPathNavigation extends WaterBoundPathNavigation {
-        private final OtterEntity otter;
-
-        public OtterPathNavigation(OtterEntity otterEntity, Level level) {
-            super(otterEntity, level);
-            this.otter = otterEntity;
-        }
-
-        @Override
-        protected PathFinder createPathFinder(int p_26531_) {
-            this.nodeEvaluator = new OtterNodeEvaluator();
-            return new PathFinder(this.nodeEvaluator, p_26531_);
-        }
-
-        @Override
-        protected boolean canUpdatePath() {
-            return true;
-        }
-
-        @Override
-        public boolean isStableDestination(BlockPos destination) {
-            if (this.otter.isInWater() && this.level.getBlockState(destination).isAir()) {
-                return !(this.level.getBlockState(destination.below()).isAir() || this.level.getBlockState(destination.below()).getFluidState().is(FluidTags.WATER));
-            } else {
-                return !this.level.getBlockState(destination.below()).isAir();
-            }
-        }
-    }
-
     static class BreedGoal extends net.minecraft.world.entity.ai.goal.BreedGoal {
         private final OtterEntity otter;
 
@@ -760,6 +714,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     public class GoToSurfaceGoal extends Goal {
         private final int timeoutTime;
+        private boolean goingLand;
         private Vec3 targetPos;
         private int timeoutTimer;
 
