@@ -2,8 +2,10 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
+
 import java.util.EnumSet;
 import java.util.UUID;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -56,9 +58,10 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class DragonflyEntity extends TamableAnimal implements GeoEntity {
+
+    @Deprecated(since = "4.2.2", forRemoval = true)
     private static final EntityDataAccessor<ItemStack> ARMOR_ITEM = SynchedEntityData.defineId(DragonflyEntity.class, EntityDataSerializers.ITEM_STACK);
-    private static final UUID TAME_HEALTH_UUID = UUID.fromString("143884b6-e085-451b-ac11-fc920356dfb4");
-    ;
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
@@ -68,6 +71,11 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
+
+        var legacyArmorStack = this.entityData.get(ARMOR_ITEM);
+        if (!legacyArmorStack.isEmpty() && getArmor().isEmpty()) {
+            setArmor(legacyArmorStack);
+        }
     }
 
     @Override
@@ -79,15 +87,15 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.FLYING_SPEED, 0.25D);
     }
 
-    public static boolean checkDragonflySpawnRules(EntityType<DragonflyEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
-        int seaLevel = levelAccessor.getSeaLevel();
-        return blockPos.getY() > seaLevel - 10 && blockPos.getY() <= seaLevel + 16 && levelAccessor.getBlockState(blockPos).isAir() && levelAccessor.getRawBrightness(blockPos, 0) > 8;
-    }
-
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ARMOR_ITEM, ItemStack.EMPTY);
+    }
+
+    public static boolean checkDragonflySpawnRules(EntityType<DragonflyEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
+        int seaLevel = levelAccessor.getSeaLevel();
+        return blockPos.getY() > seaLevel - 10 && blockPos.getY() <= seaLevel + 16 && levelAccessor.getBlockState(blockPos).isAir() && levelAccessor.getRawBrightness(blockPos, 0) > 8;
     }
 
     @Override
@@ -99,18 +107,6 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(4, new RandomFlyGoal());
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.put("ArmorItem", this.getArmor().save(new CompoundTag()));
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.setArmor(ItemStack.of(compound.getCompound("ArmorItem")));
     }
 
     @Override
@@ -220,17 +216,6 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public void setTame(boolean tame) {
-        super.setTame(tame);
-        if (tame) {
-            getAttribute(Attributes.MAX_HEALTH)
-                    .addPermanentModifier(new AttributeModifier(TAME_HEALTH_UUID, "health boost", 4.0, AttributeModifier.Operation.ADDITION));
-        } else {
-            getAttribute(Attributes.MAX_HEALTH).removeModifier(TAME_HEALTH_UUID);
-        }
-    }
-
-    @Override
     public boolean isFood(ItemStack itemStack) {
         return false;
     }
@@ -255,11 +240,11 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     }
 
     public ItemStack getArmor() {
-        return this.entityData.get(ARMOR_ITEM);
+        return getItemBySlot(EquipmentSlot.CHEST);
     }
 
     public void setArmor(ItemStack armorItem) {
-        this.entityData.set(ARMOR_ITEM, armorItem);
+        setItemSlot(EquipmentSlot.CHEST, armorItem);
     }
 
     @Override
