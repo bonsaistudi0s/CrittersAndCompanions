@@ -106,7 +106,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new OtterPanicGoal(this, 2.5F));
+        this.goalSelector.addGoal(0, new OtterPanicGoal(this, 1.4F));
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 32.0F, 0.9D, 1.5D, (livingEntity -> livingEntity.equals(this.getLastHurtMob()))));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new GoToSurfaceGoal(60));
@@ -441,7 +441,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     private void startEating() {
         if (this.isFood(this.getMainHandItem())) {
-            this.eatDelay = this.getMainHandItem().is(CACItems.CLAM.get()) ? 35 : 12;
+            this.eatDelay = this.getMainHandItem().is(CACItems.CLAM.get()) ? 45 : 12;
             this.setEating(true);
         }
     }
