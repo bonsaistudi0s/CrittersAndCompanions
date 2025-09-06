@@ -366,11 +366,11 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     private RawAnimation animation(AnimationState<?> event) {
-        if (isEating()) {
-            if (isFloating()) {
-                return RawAnimation.begin().then("floating_eat", Animation.LoopType.PLAY_ONCE);
-            }
+        if (isFloating()) {
+            return RawAnimation.begin().thenLoop("swim_2");
+        }
 
+        if (isEating()) {
             if (getMainHandItem().is(CACItems.CLAM.get())) {
                 return RawAnimation.begin().then("standing_eat_clam", Animation.LoopType.PLAY_ONCE);
             }
@@ -378,16 +378,16 @@ public class OtterEntity extends Animal implements GeoEntity {
             return RawAnimation.begin().then("standing_eat", Animation.LoopType.PLAY_ONCE);
         }
 
-        if (isFloating()) {
-            return RawAnimation.begin().thenLoop("swim_2");
-        }
-
         if (isInWater()) {
             return RawAnimation.begin().thenLoop("swim");
         }
 
         if (event.isMoving()) {
-            return RawAnimation.begin().thenLoop("walk");
+            if (getDeltaMovement().length() >= 0.2F) {
+                return RawAnimation.begin().thenLoop("run");
+            } else {
+                return RawAnimation.begin().thenLoop("walk");
+            }
         }
 
         return RawAnimation.begin().thenLoop("idle");
@@ -398,9 +398,18 @@ public class OtterEntity extends Animal implements GeoEntity {
         return PlayState.CONTINUE;
     }
 
+    private PlayState floatingHandsPredicate(AnimationState<?> event) {
+        if (isFloating() && isEating()) {
+            event.getController().setAnimation(RawAnimation.begin().then("floating_eat", Animation.LoopType.PLAY_ONCE));
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
+        controllers.add(new AnimationController<>(this, "floating_hands_controller", 4, this::floatingHandsPredicate));
     }
 
     @Override
@@ -493,7 +502,7 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     private boolean isReadyToFloat() {
-        BlockPos eye = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
+        BlockPos eye = BlockPos.containing(this.getX(), this.getEyeY() + 0.25, this.getZ());
         return !this.isUnderWater() && this.level().getBlockState(eye).isAir() && this.level().getFluidState(eye.below()).is(FluidTags.WATER);
     }
 
@@ -509,7 +518,7 @@ public class OtterEntity extends Animal implements GeoEntity {
             }
 
             if (waterInSight && this.level().getBlockState(pos).isAir()) {
-                return Vec3.atCenterOf(pos).add(0.0D, 0.1D, 0.0D);
+                return Vec3.atCenterOf(pos).add(0.0D, 0.25D, 0.0D);
             }
 
         }
@@ -800,8 +809,7 @@ public class OtterEntity extends Animal implements GeoEntity {
                 if (navDone || horiz <= 0.25D) {
                     Vec3 v = OtterEntity.this.getDeltaMovement();
                     OtterEntity.this.setDeltaMovement(v.x * 0.6D, v.y + 0.01D, v.z * 0.6D);
-                }
-                else if (horiz <= 9.0D) {
+                } else if (horiz <= 9.0D) {
                     OtterEntity.this.push(0.0D, basePush, 0.0D);
                 }
 
@@ -826,11 +834,10 @@ public class OtterEntity extends Animal implements GeoEntity {
                 return;
             }
 
-            double dist  = dx * dx + dy * dy + dz * dz;
+            double dist = dx * dx + dy * dy + dz * dz;
             if (dist > this.lastDist - 0.0001D) {
                 this.stuckTicks++;
-            }
-            else {
+            } else {
                 this.stuckTicks = 0;
             }
 

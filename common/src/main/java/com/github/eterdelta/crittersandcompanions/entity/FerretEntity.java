@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
+import com.github.eterdelta.crittersandcompanions.entity.brain.SprintingFollowParentGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.TameableFollowParentGoal;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
@@ -42,7 +43,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -123,7 +123,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(8, new TemptGoal(this, 1.0D, Ingredient.of(FOODS_TAG), false));
-        this.goalSelector.addGoal(9, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(7, new SprintingFollowParentGoal(this, 1.4D, 10.0F, 5.0F, 2.0F));
         this.goalSelector.addGoal(10, new TameableFollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 8.0F));

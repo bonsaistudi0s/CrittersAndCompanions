@@ -229,7 +229,7 @@ public class OtterNavigation extends AmphibiousPathNavigation {
      * 3D DDA algorithm to check if a straight line to a node is clear
      */
     private boolean catchF(Vec3 from, Vec3 to) {
-        Vec3 vec = to.subtract(from);
+        var vec = to.subtract(from);
 
         float maxT = (float) vec.length();
         if (maxT < 1.0E-6F) return true; // too close to worry about
@@ -290,7 +290,7 @@ public class OtterNavigation extends AmphibiousPathNavigation {
             tNextZ = (float) ((voxelBoundaryZ - from.z) / dz);
         }
 
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        var pos = new BlockPos.MutableBlockPos();
         float t = 0.0F;
 
         // March along the ray until we exceed the target distance
@@ -320,20 +320,20 @@ public class OtterNavigation extends AmphibiousPathNavigation {
             }
 
             pos.set(currentX, currentY, currentZ);
-            BlockPos immutablePos = pos.immutable();
+            var immutablePos = pos.immutable();
 
             // Caches nodes to avoid recomputing them again
-            Boolean isPathfindable = cache.getIfPresent(immutablePos);
+            var isPathfindable = cache.getIfPresent(immutablePos);
             if (isPathfindable == null) {
-                BlockState blockStatet = this.level.getBlockState(pos);
-                isPathfindable = blockStatet.isPathfindable(this.level, pos, PathComputationType.LAND);
+                BlockState blockState = this.level.getBlockState(pos);
+                isPathfindable = blockState.isPathfindable(level, pos, PathComputationType.LAND);
                 cache.put(immutablePos, isPathfindable);
             }
             if (!isPathfindable)
                 return false;
 
             // Also rejects if the block's path type is not okie dokie
-            BlockPathTypes pathType = this.nodeEvaluator.getBlockPathType(this.level, currentX, currentY, currentZ, this.mob);
+            var pathType = this.nodeEvaluator.getBlockPathType(level, currentX, currentY, currentZ, mob);
             float malus = this.mob.getPathfindingMalus(pathType);
 
             if (malus < 0.0F

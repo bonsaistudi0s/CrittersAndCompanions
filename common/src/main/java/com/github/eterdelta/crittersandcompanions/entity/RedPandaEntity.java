@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.entity.brain.SprintingFollowParentGoal;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -100,7 +100,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(4, new SleepGoal(140));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.0D, Ingredient.of(Items.SWEET_BERRIES), false));
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(7, new SprintingFollowParentGoal(this, 1.4D, 10.0F, 5.0F, 2.0F));
         this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -220,7 +220,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         } else if (isInWater()) {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("swim"));
         } else if (event.isMoving()) {
-            if (this.getSpeed() >= 0.8F) {
+            if (getDeltaMovement().length() >= 0.2F) {
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("run"));
             } else {
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("walk"));
@@ -328,7 +328,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public boolean canUse() {
-            if (!RedPandaEntity.this.isSleeping() && ! RedPandaEntity.this.isInWater()) {
+            if (!RedPandaEntity.this.isSleeping() && !RedPandaEntity.this.isInWater()) {
                 List<LivingEntity> nearAlerters = RedPandaEntity.this.level().getEntitiesOfClass(LivingEntity.class, RedPandaEntity.this.getBoundingBox().inflate(4.0D),
                         (livingEntity) -> RedPandaEntity.this.isTame() ? SCAREABLES.contains(livingEntity.getType()) && ((Mob) livingEntity).isAggressive() : livingEntity instanceof Player);
                 LivingEntity nearestAlerter = RedPandaEntity.this.level().getNearestEntity(nearAlerters, TargetingConditions.forNonCombat().range(4.0D), RedPandaEntity.this, RedPandaEntity.this.getX(), RedPandaEntity.this.getY(), RedPandaEntity.this.getZ());
