@@ -13,3 +13,4 @@
 *.pyd binary
 *.cfg text eol=lf
 *.jks binary
+*.ogg filter=lfs diff=lfs merge=lfs -text

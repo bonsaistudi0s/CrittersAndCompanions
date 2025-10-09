@@ -94,7 +94,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new AlertGoal());
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(4, new SleepGoal(140));
@@ -220,7 +220,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         } else if (isInWater()) {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("swim"));
         } else if (event.isMoving()) {
-            if (getDeltaMovement().length() >= 0.2F) {
+            if (getDeltaMovement().length() >= 0.16F) {
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("run"));
             } else {
                 event.getController().setAnimation(RawAnimation.begin().thenLoop("walk"));

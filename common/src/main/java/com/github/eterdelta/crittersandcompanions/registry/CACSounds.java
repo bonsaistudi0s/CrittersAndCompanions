@@ -21,6 +21,8 @@ public class CACSounds {
     public static final RegistryEntry<SoundEvent> OTTER_AMBIENT = SOUNDS.register("entity.otter.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.ambient")));
     public static final RegistryEntry<SoundEvent> OTTER_DEATH = SOUNDS.register("entity.otter.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.death")));
     public static final RegistryEntry<SoundEvent> OTTER_EAT = SOUNDS.register("entity.otter.eat", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.eat")));
+    public static final RegistryEntry<SoundEvent> OTTER_CLAM_BREAK = SOUNDS.register("entity.otter.clam_break", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.clam_break")));
+    public static final RegistryEntry<SoundEvent> OTTER_CLAM_BREAK_LAND = SOUNDS.register("entity.otter.clam_break_land", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.clam_break_land")));
     public static final RegistryEntry<SoundEvent> OTTER_HURT = SOUNDS.register("entity.otter.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.hurt")));
     public static final RegistryEntry<SoundEvent> OTTER_SWIM = SOUNDS.register("entity.otter.swim", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.swim")));
     public static final RegistryEntry<SoundEvent> RED_PANDA_AMBIENT = SOUNDS.register("entity.red_panda.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.red_panda.ambient")));

@@ -66,7 +66,41 @@
   "entity.otter.eat": {
     "sounds": [
       "crittersandcompanions:entity/otter/eat_1",
-      "crittersandcompanions:entity/otter/eat_2"
+      "crittersandcompanions:entity/otter/eat_2",
+      "crittersandcompanions:entity/otter/eat_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.eat"
+  },
+  "entity.otter.clam_break": {
+    "sounds": [
+      {
+        "name": "mob/turtle/egg/egg_crack1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/turtle/egg/egg_crack2",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/turtle/egg/egg_crack3",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/turtle/egg/egg_crack4",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/turtle/egg/egg_crack5",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.crittersandcompanions.otter.eat"
+  },
+  "entity.otter.clam_break_land": {
+    "sounds": [
+      "crittersandcompanions:entity/otter/clam_break_land_1",
+      "crittersandcompanions:entity/otter/clam_break_land_2",
+      "crittersandcompanions:entity/otter/clam_break_land_3"
     ],
     "subtitle": "subtitles.crittersandcompanions.otter.eat"
   },
