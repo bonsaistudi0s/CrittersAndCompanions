@@ -6,15 +6,15 @@ val curios_version: String by extra
 val jade_version: String by extra
 val pathfinding_renderer_version: String by extra
 
+plugins {
+    id("com.possible-triangle.forge")
+}
+
 forge {
     dependOn(project(":common"))
 
     enableMixins()
 }
-
-// issues with mixin extras
-tasks.withType<Test> { enabled = false }
-tasks.compileTestJava { enabled = false }
 
 dependencies {
     modImplementation("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")

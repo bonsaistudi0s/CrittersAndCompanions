@@ -2,7 +2,7 @@ val mod_version: String by extra
 val mc_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version ("0.2.18")
+    id("com.possible-triangle.core")
 }
 
 mod {
@@ -11,12 +11,10 @@ mod {
 
 subprojects {
     repositories {
-        modrinthMaven()
-        mavenLocal()
-
         nexus {
             content {
                 includeGroup("com.possible-triangle")
+                includeGroup("com.ninni.dye_depot")
             }
         }
 
