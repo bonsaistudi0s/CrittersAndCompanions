@@ -70,7 +70,7 @@ public class GrapplingHookEntity extends Projectile {
         }
 
         if (willStick && !isStick) {
-            stickLength = maxDistanceSqr;
+            stickLength = offsetLengthSqr;
             playSound(SoundEvents.SLIME_SQUISH);
         }
 
