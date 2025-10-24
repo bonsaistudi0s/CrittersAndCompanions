@@ -14,7 +14,7 @@ public class Services {
     public static final IConfigs CONFIGS = load(IConfigs.class);
 
     private static <T> T load(Class<T> clazz) {
-        return ServiceLoader.load(clazz)
+        return ServiceLoader.load(clazz, clazz.getClassLoader())
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
     }
