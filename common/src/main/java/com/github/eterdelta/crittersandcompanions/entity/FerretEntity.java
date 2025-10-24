@@ -135,8 +135,11 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("Sleeping", this.isSleeping());
-        compound.putInt("Variant", this.getVariant());
+        compound.putBoolean("Sleeping", isSleeping());
+        compound.putInt("Variant", getVariant());
+        if (getCollarColor() != null) {
+            compound.putInt("CollarColor", getCollarColor().getId());
+        }
     }
 
     @Override
@@ -144,6 +147,9 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         super.readAdditionalSaveData(compound);
         this.setSleeping(compound.getBoolean("Sleeping"));
         this.setVariant(compound.getInt("Variant"));
+        if (compound.contains("CollarColor", 99)) {
+            this.setCollarColor(DyeColor.byId(compound.getInt("CollarColor")));
+        }
     }
 
     @Override
