@@ -1,12 +1,5 @@
-val mod_version: String by extra
-val mc_version: String by extra
-
 plugins {
     id("com.possible-triangle.core")
-}
-
-mod {
-    version = "$mc_version-$mod_version"
 }
 
 subprojects {
