@@ -29,7 +29,7 @@ jobs:
          - name: Build and upload
            uses: gradle/gradle-build-action@v2
            with:
-              arguments: build curseforge modrinth publish
+              arguments: build publish
            env:
               MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
               CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
