@@ -1,12 +1,12 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         mavenLocal()
+        gradlePluginPortal()
     }
 }
 
 plugins {
-    id("com.possible-triangle.helper") version ("1.0.59")
+    id("com.possible-triangle.helper") version ("1.1")
 }
 
 include("common", "fabric", "forge")
