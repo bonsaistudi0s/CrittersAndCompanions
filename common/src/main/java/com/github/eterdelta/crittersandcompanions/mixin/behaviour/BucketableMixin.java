@@ -1,6 +1,5 @@
 package com.github.eterdelta.crittersandcompanions.mixin.behaviour;
 
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Mob;

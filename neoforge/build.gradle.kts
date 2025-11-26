@@ -10,12 +10,12 @@ plugins {
     id("com.possible-triangle.neoforge")
 }
 
-neoForge {
-    interfaceInjectionData.from(project(":common").file("interfaces.json"))
-}
-
 neoforge {
     dependOn(project(":common"))
+    injectInterfaces()
+    dataGen {
+        splitSourceSet()
+    }
 }
 
 dependencies {

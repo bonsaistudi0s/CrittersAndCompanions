@@ -6,8 +6,8 @@ plugins {
     id("com.possible-triangle.common")
 }
 
-neoForge {
-    interfaceInjectionData.from(file("interfaces.json"))
+common {
+    injectInterfaces()
 }
 
 dependencies {
