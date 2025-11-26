@@ -1,5 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -8,20 +10,16 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
+import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -44,41 +42,14 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(VARIANT, 0);
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new VariantBehaviour(this, VARIANT, 21));
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, OtterEntity.class, 8.0F, 1.7D, 1.4D));
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("Variant", this.getVariant());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.setVariant(compound.getInt("Variant"));
-    }
-
-    @Override
-    public void saveToBucketTag(ItemStack bucketStack) {
-        super.saveToBucketTag(bucketStack);
-        CustomData.update(DataComponents.BUCKET_ENTITY_DATA, bucketStack, nbt -> {
-            nbt.putInt("Variant", getVariant());
-        });
-    }
-
-    @Override
-    public void loadFromBucketTag(CompoundTag bucketCompound) {
-        super.loadFromBucketTag(bucketCompound);
-        setVariant(bucketCompound.getInt("Variant"));
     }
 
     @Override
@@ -101,14 +72,6 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
         return new ItemStack(CACItems.KOI_FISH_BUCKET.get());
     }
 
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData) {
-        if (mobSpawnType == MobSpawnType.BUCKET) return spawnGroupData;
-        this.setVariant(this.random.nextInt(0, 21));
-        return super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
-    }
-
-
     private PlayState predicate(AnimationState<?> event) {
         if (this.isInWater()) {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("koi_fish_swim"));
@@ -128,11 +91,4 @@ public class KoiFishEntity extends AbstractSchoolingFish implements GeoEntity {
         return cache;
     }
 
-    public int getVariant() {
-        return this.entityData.get(VARIANT);
-    }
-
-    public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 21));
-    }
 }

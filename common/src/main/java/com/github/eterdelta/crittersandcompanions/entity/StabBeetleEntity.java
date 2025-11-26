@@ -2,10 +2,9 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
+import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -29,7 +28,7 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class StabBeetleEntity extends TamableAnimal implements GeoEntity, BehaviourDriven {
+public class StabBeetleEntity extends TamableAnimal implements GeoEntity {
 
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(StabBeetleEntity.class, EntityDataSerializers.INT);
 
@@ -37,28 +36,21 @@ public class StabBeetleEntity extends TamableAnimal implements GeoEntity, Behavi
     private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("stag_beetle_food"));
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private final Behaviours behaviours = new Behaviours()
-            .add(new VariantBehaviour(this, VARIANT, 6))
-            .add(new DancingBehaviour(this));
 
-    @Override
-    public Behaviours getBehaviours() {
-        return behaviours;
+    public StabBeetleEntity(EntityType<? extends TamableAnimal> type, Level level) {
+        super(type, level);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        behaviours.forEach(it -> defineSynchedData(builder));
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new VariantBehaviour(this, VARIANT, 6));
+        behaviours.add(new DancingBehaviour(this));
     }
 
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-    }
-
-    public StabBeetleEntity(EntityType<? extends TamableAnimal> type, Level level) {
-        super(type, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -77,7 +69,7 @@ public class StabBeetleEntity extends TamableAnimal implements GeoEntity, Behavi
 
     @Override
     public void setRecordPlayingNearby(BlockPos pos, boolean active) {
-        behaviours.the(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
+        behaviour(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
     }
 
     @Override

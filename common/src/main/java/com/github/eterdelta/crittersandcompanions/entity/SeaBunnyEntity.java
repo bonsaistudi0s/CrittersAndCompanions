@@ -1,5 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
@@ -12,14 +14,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.JumpControl;
@@ -35,7 +34,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -74,10 +72,14 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     }
 
     @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new VariantBehaviour(this, VARIANT, 3));
+    }
+
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(CLIMBING, false);
-        builder.define(VARIANT, 0);
         builder.define(FROM_BUCKET, false);
     }
 
@@ -90,7 +92,6 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Climbing", this.isClimbing());
-        compound.putInt("Variant", this.getVariant());
         compound.putBoolean("FromBucket", this.fromBucket());
     }
 
@@ -98,7 +99,6 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setClimbing(compound.getBoolean("Climbing"));
-        this.setVariant(compound.getInt("Variant"));
         this.setFromBucket(compound.getBoolean("FromBucket"));
     }
 
@@ -128,15 +128,11 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     @Override
     public void saveToBucketTag(ItemStack bucketStack) {
         Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
-        CustomData.update(DataComponents.BUCKET_ENTITY_DATA, bucketStack, nbt -> {
-            nbt.putInt("Variant", this.getVariant());
-        });
     }
 
     @Override
     public void loadFromBucketTag(CompoundTag bucketCompound) {
         Bucketable.loadDefaultDataFromBucketTag(this, bucketCompound);
-        setVariant(bucketCompound.getInt("Variant"));
     }
 
     @Override
@@ -152,13 +148,6 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     @Override
     protected SoundEvent getDeathSound() {
         return CACSounds.SEA_BUNNY_DEATH.get();
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData) {
-        if (mobSpawnType == MobSpawnType.BUCKET) return spawnGroupData;
-        this.setVariant(this.random.nextInt(0, 3));
-        return super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -243,14 +232,6 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     public void setClimbing(boolean climbing) {
         this.entityData.set(CLIMBING, climbing);
-    }
-
-    public int getVariant() {
-        return this.entityData.get(VARIANT);
-    }
-
-    public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 2));
     }
 
     static class SeaBunnyMoveControl extends MoveControl {

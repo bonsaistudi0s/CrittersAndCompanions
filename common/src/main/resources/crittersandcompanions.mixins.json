@@ -4,28 +4,12 @@
   "package": "com.github.eterdelta.crittersandcompanions.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "DrownedMixin",
-    "EntityAccessor",
-    "LivingEntityMixin",
-    "NearestAttackableTargetGoalMixin",
-    "NeutralMobsMixin",
-    "PlayerMixin",
-    "SpawnPlacementsAccessor",
-    "ZombifiedPiglinMixin",
-    "DrownedMixin",
-    "EntityAccessor",
-    "LivingEntityMixin",
-    "MobMixin",
-    "NearestAttackableTargetGoalMixin",
-    "NeutralMobsMixin",
-    "PlayerMixin",
-    "SpawnPlacementsAccessor",
-    "ZombifiedPiglinMixin"
+    "DrownedMixin", "EntityAccessor", "LivingEntityMixin", "MobMixin", "NearestAttackableTargetGoalMixin",
+    "NeutralMobsMixin", "PlayerMixin", "SpawnPlacementsAccessor", "ZombifiedPiglinMixin", "behaviour.BucketableMixin",
+    "behaviour.EntityMixin", "behaviour.MobMixin"
   ],
   "client": [
-    "ClientPacketListenerMixin",
-    "ItemPropertiesAccessor",
-    "LivingEntityRendererMixin"
+    "ClientPacketListenerMixin", "ItemPropertiesAccessor", "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

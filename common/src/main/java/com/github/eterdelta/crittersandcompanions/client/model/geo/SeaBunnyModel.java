@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
@@ -21,7 +22,7 @@ public class SeaBunnyModel extends DefaultedEntityGeoModel<SeaBunnyEntity> {
 
     @Override
     public ResourceLocation getTextureResource(SeaBunnyEntity object) {
-        return TEXTURES[object.getVariant()];
+        return TEXTURES[object.behaviour(VariantBehaviour.class).getVariant()];
     }
 
     @Override

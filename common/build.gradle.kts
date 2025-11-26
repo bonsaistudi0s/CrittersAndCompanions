@@ -6,6 +6,10 @@ plugins {
     id("com.possible-triangle.common")
 }
 
+neoForge {
+    interfaceInjectionData.from(file("interfaces.json"))
+}
+
 dependencies {
     compileOnly("software.bernie.geckolib:geckolib-common-${mc_version}:${geckolib_version}")
     compileOnly("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${forge_config_port_version}")

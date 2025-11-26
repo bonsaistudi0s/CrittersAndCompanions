@@ -3,6 +3,8 @@ package com.github.eterdelta.crittersandcompanions.entity;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.brain.SprintingFollowParentGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.TameableFollowParentGoal;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
@@ -23,7 +25,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -102,6 +103,11 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         this.moveControl = new FerretMoveControl();
     }
 
+    @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new VariantBehaviour(this, VARIANT, 2));
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.28D).add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
@@ -111,7 +117,6 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         super.defineSynchedData(builder);
         builder.define(SLEEPING, false);
         builder.define(DIGGING, false);
-        builder.define(VARIANT, 0);
         builder.define(DATA_COLLAR_COLOR, DyeColor.RED.getId());
     }
 
@@ -139,7 +144,6 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Sleeping", isSleeping());
-        compound.putInt("Variant", getVariant());
         if (getCollarColor() != null) {
             compound.putInt("CollarColor", getCollarColor().getId());
         }
@@ -149,7 +153,6 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSleeping(compound.getBoolean("Sleeping"));
-        this.setVariant(compound.getInt("Variant"));
         if (compound.contains("CollarColor", 99)) {
             this.setCollarColor(DyeColor.byId(compound.getInt("CollarColor")));
         }
@@ -169,19 +172,15 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        FerretEntity baby = CACEntities.FERRET.get().create(level);
+    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
+        var baby = CACEntities.FERRET.get().create(level);
         if (baby == null) return null;
 
         UUID uuid = this.getOwnerUUID();
-        if (ageableMob instanceof FerretEntity ferretEntity) {
-            if (this.random.nextBoolean()) {
-                baby.setVariant(this.getVariant());
-            } else {
-                baby.setVariant(ferretEntity.getVariant());
-            }
+        if (other instanceof FerretEntity otherFerret) {
+            baby.behaviour(VariantBehaviour.class).inherit(this, otherFerret);
 
-            var color = random.nextBoolean() ? getCollarColor() : ferretEntity.getCollarColor();
+            var color = random.nextBoolean() ? getCollarColor() : otherFerret.getCollarColor();
             if (color != null) baby.setCollarColor(color);
 
             if (uuid != null) {
@@ -300,14 +299,13 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         spawnGroupData = super.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
         if (mobSpawnType.equals(MobSpawnType.SPAWNER) && this.random.nextFloat() <= 0.2F) {
             for (int i = 0; i < this.random.nextInt(1, 4); i++) {
-                FerretEntity baby = CACEntities.FERRET.get().create(this.level());
-                baby.setVariant(this.random.nextInt(0, 2));
+                var baby = CACEntities.FERRET.get().create(this.level());
+                baby.finalizeSpawn(levelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
                 baby.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 baby.setBaby(true);
                 levelAccessor.addFreshEntity(baby);
             }
         }
-        this.setVariant(this.random.nextInt(0, 2));
         return spawnGroupData;
     }
 
@@ -352,14 +350,6 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     public void setDigging(boolean digging) {
         this.entityData.set(DIGGING, digging);
-    }
-
-    public int getVariant() {
-        return this.entityData.get(VARIANT);
-    }
-
-    public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Mth.clamp(variant, 0, 1));
     }
 
     @Nullable

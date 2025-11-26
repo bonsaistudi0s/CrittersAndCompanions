@@ -1,9 +1,7 @@
 {
   "itemGroup.crittersandcompanions": "Critters and Companions",
-
   "block.crittersandcompanions.silk_cocoon": "Cocon de soie",
   "block.crittersandcompanions.sea_bunny_slime_block": "Bloc de gélatine de lapin de mer",
-  
   "entity.crittersandcompanions.otter": "Loutre",
   "entity.crittersandcompanions.jumping_spider": "Araignée sauteuse",
   "entity.crittersandcompanions.koi_fish": "Poisson koï",
@@ -14,7 +12,6 @@
   "entity.crittersandcompanions.dumbo_octopus": "Poulpe Dumbo",
   "entity.crittersandcompanions.red_panda": "Panda roux",
   "entity.crittersandcompanions.leaf_insect": "Phasme feuille",
-
   "item.crittersandcompanions.otter_spawn_egg": "Œuf d’apparition de loutre",
   "item.crittersandcompanions.jumping_spider_spawn_egg": "Œuf d’apparition d’araignée sauteuse",
   "item.crittersandcompanions.koi_fish_spawn_egg": "Œuf d’apparition de poisson koï",
@@ -25,15 +22,12 @@
   "item.crittersandcompanions.dumbo_octopus_spawn_egg": "Œuf d’apparition de poulpe Dumbo",
   "item.crittersandcompanions.red_panda_spawn_egg": "Œuf d’apparition de panda roux",
   "item.crittersandcompanions.leaf_insect_spawn_egg": "Œuf d’apparition de phasme feuille",
-
   "item.crittersandcompanions.dumbo_octopus_bucket": "Seau de poulpe Dumbo",
   "item.crittersandcompanions.koi_fish_bucket": "Seau de poisson koï",
   "item.crittersandcompanions.sea_bunny_bucket": "Seau de lapin de mer",
-
   "item.crittersandcompanions.diamond_dragonfly_armor": "Armure de libellule en diamant",
   "item.crittersandcompanions.gold_dragonfly_armor": "Armure de libellule en or",
   "item.crittersandcompanions.iron_dragonfly_armor": "Armure de libellule en fer",
-
   "item.crittersandcompanions.koi_fish": "Poisson koï",
   "item.crittersandcompanions.clam": "Palourde",
   "item.crittersandcompanions.dragonfly_wing": "Aile de libellule",
@@ -42,16 +36,13 @@
   "item.crittersandcompanions.sea_bunny_slime_bottle": "Fiole de gélatine de lapin de mer",
   "item.crittersandcompanions.silk_lead": "Laisse en soie",
   "item.crittersandcompanions.grappling_hook": "Grappin",
-
   "item.crittersandcompanions.pearl_necklace_1": "Collier de perles 1",
   "item.crittersandcompanions.pearl_necklace_2": "Collier de perles 2",
   "item.crittersandcompanions.pearl_necklace_3": "Collier de perles 3",
-
   "pearl_necklace.level": "Niveau %s",
   "pearl_necklace.swim_speed": "+%s%% de vitesse de nage de base",
   "pearl_necklace.drowned_range": "-%s%% de portée de détection des noyés",
   "pearl_necklace.guardian_range": "-%s%% de portée de détection des Gardiens",
-
   "subtitles.crittersandcompanions.dragonfly.ambient": "La libellule bourdonne",
   "subtitles.crittersandcompanions.ferret.ambient": "Le furet couine",
   "subtitles.crittersandcompanions.ferret.death": "Le furet meurt",

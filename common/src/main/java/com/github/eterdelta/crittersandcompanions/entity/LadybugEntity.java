@@ -2,10 +2,9 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
+import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -25,18 +24,16 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class LadybugEntity extends TamableAnimal implements GeoEntity, BehaviourDriven {
+public class LadybugEntity extends TamableAnimal implements GeoEntity {
 
     private static final TagKey<Item> TAME_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("ladybug_tempt_items"));
     private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("ladybug_food"));
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private final Behaviours behaviours = new Behaviours()
-            .add(new DancingBehaviour(this));
 
     @Override
-    public Behaviours getBehaviours() {
-        return behaviours;
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new DancingBehaviour(this));
     }
 
     @Override
@@ -65,7 +62,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, Behaviour
 
     @Override
     public void setRecordPlayingNearby(BlockPos pos, boolean active) {
-        behaviours.the(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
+        behaviour(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
     }
 
     @Override

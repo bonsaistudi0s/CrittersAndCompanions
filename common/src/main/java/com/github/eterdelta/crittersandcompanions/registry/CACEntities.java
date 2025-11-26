@@ -17,12 +17,11 @@ import com.github.eterdelta.crittersandcompanions.entity.StabBeetleEntity;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryEntry;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryHelper;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
+import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-
-import java.util.function.Supplier;
 
 public class CACEntities {
     private static final RegistryHelper<EntityType<?>> ENTITIES = Services.PLATFORM.createRegistryHelper(Registries.ENTITY_TYPE, CrittersAndCompanions.MODID);

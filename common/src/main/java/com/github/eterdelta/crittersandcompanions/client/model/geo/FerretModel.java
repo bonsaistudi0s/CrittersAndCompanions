@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.FerretEntity;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animation.AnimationState;
@@ -30,7 +31,8 @@ public class FerretModel extends GeoModel<FerretEntity> {
 
     @Override
     public ResourceLocation getTextureResource(FerretEntity object) {
-        return object.isBaby() ? BABY_TEXTURES[object.getVariant()] : ADULT_TEXTURES[object.getVariant()];
+        var variant = object.behaviour(VariantBehaviour.class).getVariant();
+        return object.isBaby() ? BABY_TEXTURES[variant] : ADULT_TEXTURES[variant];
     }
 
     @Override

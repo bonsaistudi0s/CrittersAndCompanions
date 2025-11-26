@@ -1,8 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
-import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.ShimaEnagaEntity;
-import net.minecraft.resources.ResourceLocation;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
@@ -10,10 +9,9 @@ import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ShimaEnagaModel extends DefaultedEntityGeoModel<ShimaEnagaEntity> {
-    private static final ResourceLocation MODEL = CrittersAndCompanions.createId("shima_enaga");
 
     public ShimaEnagaModel() {
-        super(MODEL, false);
+        super(CACEntities.SHIMA_ENAGA.getKey().location(), false);
     }
 
     @Override

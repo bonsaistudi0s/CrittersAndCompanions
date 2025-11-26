@@ -18,7 +18,7 @@ public interface Behaviour {
     default void read(CompoundTag nbt) {
     }
 
-    default void defineSynchedData(SynchedEntityData.Builder builder) {
+    default void defineSyncedData(SynchedEntityData.Builder builder) {
 
     }
 

@@ -1,10 +1,9 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
+import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
@@ -30,26 +29,25 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class LeafInsectEntity extends PathfinderMob implements GeoEntity, BehaviourDriven {
+public class LeafInsectEntity extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(LeafInsectEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private final Behaviours behaviours = new Behaviours()
-            .add(new VariantBehaviour(this, VARIANT, 3))
-            .add(new DancingBehaviour(this));
-
-    @Override
-    public Behaviours getBehaviours() {
-        return behaviours;
-    }
 
     public LeafInsectEntity(EntityType<? extends LeafInsectEntity> entityType, Level level) {
         super(entityType, level);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        behaviours.forEach(it -> defineSynchedData(builder));
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new VariantBehaviour(this, VARIANT, 3));
+        behaviours.add(new DancingBehaviour(this));
+    }
+
+    @Override
+    protected void registerGoals() {
+        goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -60,13 +58,6 @@ public class LeafInsectEntity extends PathfinderMob implements GeoEntity, Behavi
         BlockState blockState = levelAccessor.getBlockState(blockPos.below());
         return blockPos.getY() > levelAccessor.getSeaLevel() - 16 && (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.LEAVES));
     }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-    }
-
 
     @Override
     public void setRecordPlayingNearby(BlockPos pos, boolean active) {

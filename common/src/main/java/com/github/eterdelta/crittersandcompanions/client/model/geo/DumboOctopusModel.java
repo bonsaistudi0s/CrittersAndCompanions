@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.DumboOctopusEntity;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
@@ -19,6 +20,6 @@ public class DumboOctopusModel extends DefaultedEntityGeoModel<DumboOctopusEntit
 
     @Override
     public ResourceLocation getTextureResource(DumboOctopusEntity object) {
-        return TEXTURES[object.getVariant()];
+        return TEXTURES[object.behaviour(VariantBehaviour.class).getVariant()];
     }
 }

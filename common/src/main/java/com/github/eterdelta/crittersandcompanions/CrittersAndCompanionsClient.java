@@ -5,13 +5,10 @@ import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookMode
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DragonflyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DumboOctopusModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpiderModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.KoiFishModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.LadybugModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.RedPandaModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.StagBeetleModel;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.FerretRenderer;
@@ -52,20 +49,20 @@ public class CrittersAndCompanionsClient {
     }
 
     public static void registerEntityRenderers(RegisterEntityRenderers event) {
-        event.accept(CACEntities.OTTER.get(), OtterRenderer::new);
-        event.accept(CACEntities.JUMPING_SPIDER.get(), context -> new GeoEntityRenderer<>(context, new JumpingSpiderModel()));
-        event.accept(CACEntities.KOI_FISH.get(), context -> new GeoEntityRenderer<>(context, new KoiFishModel()));
-        event.accept(CACEntities.DRAGONFLY.get(), context -> new GeoEntityRenderer<>(context, new DragonflyModel()));
-        event.accept(CACEntities.SEA_BUNNY.get(), context -> new GeoEntityRenderer<>(context, new SeaBunnyModel()));
-        event.accept(CACEntities.SHIMA_ENAGA.get(), context -> new GeoEntityRenderer<>(context, new ShimaEnagaModel()));
-        event.accept(CACEntities.FERRET.get(), FerretRenderer::new);
-        event.accept(CACEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
-        event.accept(CACEntities.DUMBO_OCTOPUS.get(), context -> new GeoEntityRenderer<>(context, new DumboOctopusModel()));
-        event.accept(CACEntities.LEAF_INSECT.get(), context -> new GeoEntityRenderer<>(context, new LeafInsectModel()));
-        event.accept(CACEntities.RED_PANDA.get(), context -> new GeoEntityRenderer<>(context, new RedPandaModel()));
+        event.accept(CACEntities.OTTER, OtterRenderer::new);
+        event.accept(CACEntities.JUMPING_SPIDER, context -> new GeoEntityRenderer<>(context, new JumpingSpiderModel()));
+        event.variant(CACEntities.KOI_FISH);
+        event.accept(CACEntities.DRAGONFLY, context -> new GeoEntityRenderer<>(context, new DragonflyModel()));
+        event.accept(CACEntities.SEA_BUNNY, context -> new GeoEntityRenderer<>(context, new SeaBunnyModel()));
+        event.accept(CACEntities.SHIMA_ENAGA, context -> new GeoEntityRenderer<>(context, new ShimaEnagaModel()));
+        event.accept(CACEntities.FERRET, FerretRenderer::new);
+        event.accept(CACEntities.GRAPPLING_HOOK, GrapplingHookRenderer::new);
+        event.accept(CACEntities.DUMBO_OCTOPUS, context -> new GeoEntityRenderer<>(context, new DumboOctopusModel()));
+        event.accept(CACEntities.LEAF_INSECT, context -> new GeoEntityRenderer<>(context, new LeafInsectModel()));
+        event.accept(CACEntities.RED_PANDA, context -> new GeoEntityRenderer<>(context, new RedPandaModel()));
 
-        event.accept(CACEntities.LADYBUG.get(), context -> new GeoEntityRenderer<>(context, new LadybugModel()));
-        event.accept(CACEntities.STAG_BEETLE.get(), context -> new GeoEntityRenderer<>(context, new StagBeetleModel()));
+        event.simple(CACEntities.LADYBUG);
+        event.variant(CACEntities.STAG_BEETLE);
     }
 
     public static void registerEntityLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> event) {
