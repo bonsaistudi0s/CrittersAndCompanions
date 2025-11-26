@@ -1,41 +1,44 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
-import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class LeafInsectEntity extends PathfinderMob implements GeoEntity, BehaviourDriven {
-    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(LeafInsectEntity.class, EntityDataSerializers.INT);
+public class StabBeetleEntity extends TamableAnimal implements GeoEntity, BehaviourDriven {
+
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(StabBeetleEntity.class, EntityDataSerializers.INT);
+
+    private static final TagKey<Item> TAME_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("stag_beetle_tempt_items"));
+    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("stag_beetle_food"));
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final Behaviours behaviours = new Behaviours()
-            .add(new VariantBehaviour(this, VARIANT, 3))
+            .add(new VariantBehaviour(this, VARIANT, 6))
             .add(new DancingBehaviour(this));
 
     @Override
@@ -43,44 +46,38 @@ public class LeafInsectEntity extends PathfinderMob implements GeoEntity, Behavi
         return behaviours;
     }
 
-    public LeafInsectEntity(EntityType<? extends LeafInsectEntity> entityType, Level level) {
-        super(entityType, level);
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         behaviours.forEach(it -> defineSynchedData(builder));
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.2D);
+    @Override
+    protected void registerGoals() {
+        goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
-    public static boolean checkLeafInsectSpawnRules(EntityType<LeafInsectEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
-        BlockState blockState = levelAccessor.getBlockState(blockPos.below());
-        return blockPos.getY() > levelAccessor.getSeaLevel() - 16 && (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.LEAVES));
+    public StabBeetleEntity(EntityType<? extends TamableAnimal> type, Level level) {
+        super(type, level);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.2D);
     }
 
     @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+    public boolean isFood(ItemStack stack) {
+        return stack.is(FOODS_TAG);
     }
 
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
+        return null;
+    }
 
     @Override
     public void setRecordPlayingNearby(BlockPos pos, boolean active) {
-        behaviour(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CACSounds.LEAF_INSECT_HURT.get();
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return CACSounds.LEAF_INSECT_DEATH.get();
+        behaviours.the(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
     }
 
     @Override

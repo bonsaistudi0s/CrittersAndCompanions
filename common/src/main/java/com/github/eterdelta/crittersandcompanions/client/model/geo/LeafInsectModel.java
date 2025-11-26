@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.LeafInsectEntity;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animation.AnimationState;
@@ -21,8 +22,8 @@ public class LeafInsectModel extends DefaultedEntityGeoModel<LeafInsectEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureResource(LeafInsectEntity object) {
-        return TEXTURES[object.getVariant()];
+    public ResourceLocation getTextureResource(LeafInsectEntity entity) {
+        return TEXTURES[entity.behaviour(VariantBehaviour.class).getVariant()];
     }
 
     @Override
