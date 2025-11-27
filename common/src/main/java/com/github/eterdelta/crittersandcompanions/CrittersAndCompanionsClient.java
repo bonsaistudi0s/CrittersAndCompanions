@@ -8,6 +8,7 @@ import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpider
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.OtterModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.RedPandaModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.RollyPollyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.VariantGeoModel;
@@ -28,7 +29,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import software.bernie.geckolib.model.DefaultedBlockGeoModel;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrittersAndCompanionsClient {
@@ -64,8 +65,9 @@ public class CrittersAndCompanionsClient {
         event.accept(CACEntities.LEAF_INSECT, GeoEntityRenderer::new, LeafInsectModel::new);
         event.accept(CACEntities.RED_PANDA, GeoEntityRenderer::new, RedPandaModel::new);
 
-        event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedBlockGeoModel::new);
+        event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
         event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
+        event.accept(CACEntities.ROLLYPOLLY, GeoEntityRenderer::new, RollyPollyModel::new);
     }
 
     public static void registerEntityLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> event) {

@@ -1,9 +1,9 @@
 package com.github.eterdelta.crittersandcompanions.entity.brain.behaviour;
 
-import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
 public class DancingBehaviour implements Behaviour {
 

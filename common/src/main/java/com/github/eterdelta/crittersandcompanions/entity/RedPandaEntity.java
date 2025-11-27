@@ -140,8 +140,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        RedPandaEntity redPanda = CACEntities.RED_PANDA.get().create(level);
-        return redPanda;
+        return CACEntities.RED_PANDA.get().create(level);
     }
 
     @Override

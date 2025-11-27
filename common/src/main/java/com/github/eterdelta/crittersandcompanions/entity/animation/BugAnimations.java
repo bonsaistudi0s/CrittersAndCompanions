@@ -3,7 +3,7 @@ package com.github.eterdelta.crittersandcompanions.entity.animation;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;

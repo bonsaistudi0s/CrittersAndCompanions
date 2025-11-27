@@ -11,6 +11,7 @@ import com.github.eterdelta.crittersandcompanions.entity.LadybugEntity;
 import com.github.eterdelta.crittersandcompanions.entity.LeafInsectEntity;
 import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import com.github.eterdelta.crittersandcompanions.entity.RedPandaEntity;
+import com.github.eterdelta.crittersandcompanions.entity.RollypollyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.ShimaEnagaEntity;
 import com.github.eterdelta.crittersandcompanions.entity.StabBeetleEntity;
@@ -40,6 +41,7 @@ public class CACEntities {
 
     public static final RegistryEntry<EntityType<LadybugEntity>> LADYBUG = register("ladybug", () -> EntityType.Builder.of(LadybugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
     public static final RegistryEntry<EntityType<StabBeetleEntity>> STAG_BEETLE = register("stag_beetle", () -> EntityType.Builder.of(StabBeetleEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
+    public static final RegistryEntry<EntityType<RollypollyEntity>> ROLLYPOLLY = register("rollypolly", () -> EntityType.Builder.of(RollypollyEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
 
     private static <T extends Entity> RegistryEntry<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> factory) {
         return ENTITIES.register(name, () -> factory.get().build(name));

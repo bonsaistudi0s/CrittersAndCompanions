@@ -62,6 +62,7 @@ public class CrittersAndCompanions {
 
         event.accept(CACEntities.LADYBUG.get(), LadybugEntity.createAttributes().build());
         event.accept(CACEntities.STAG_BEETLE.get(), StabBeetleEntity.createAttributes().build());
+        event.accept(CACEntities.ROLLYPOLLY.get(), RollypollyEntity.createAttributes().build());
     }
 
     private static void registerColors() {
