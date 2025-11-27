@@ -1,15 +1,16 @@
 package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.entity.LeafInsectEntity;
-import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class LeafInsectModel extends VariantGeoModel<LeafInsectEntity> {
-    public LeafInsectModel() {
-        super(CACEntities.LEAF_INSECT.getKey().location());
+
+    public LeafInsectModel(ResourceLocation id) {
+        super(id);
     }
 
     @Override

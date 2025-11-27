@@ -1,6 +1,5 @@
 package com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity;
 
-import com.github.eterdelta.crittersandcompanions.client.model.geo.OtterModel;
 import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,11 +10,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.item.ItemDisplayContext;
 import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class OtterRenderer extends GeoEntityRenderer<OtterEntity> {
-    public OtterRenderer(EntityRendererProvider.Context context) {
-        super(context, new OtterModel());
+
+    public OtterRenderer(EntityRendererProvider.Context context, GeoModel<OtterEntity> model) {
+        super(context, model);
     }
 
     @Override

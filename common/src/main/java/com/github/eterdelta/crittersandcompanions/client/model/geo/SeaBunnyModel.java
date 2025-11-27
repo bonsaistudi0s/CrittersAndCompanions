@@ -1,6 +1,5 @@
 package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
-import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.resources.ResourceLocation;
@@ -10,19 +9,20 @@ import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SeaBunnyModel extends DefaultedEntityGeoModel<SeaBunnyEntity> {
-    private static final ResourceLocation MODEL = CrittersAndCompanions.createId("sea_bunny");
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-            CrittersAndCompanions.createId("textures/entity/sea_bunny_white.png"),
-            CrittersAndCompanions.createId("textures/entity/sea_bunny_blue.png"),
-            CrittersAndCompanions.createId("textures/entity/sea_bunny_yellow.png")};
+    private final ResourceLocation[] textures;
 
-    public SeaBunnyModel() {
-        super(MODEL);
+    public SeaBunnyModel(ResourceLocation id) {
+        super(id);
+        this.textures = new ResourceLocation[]{
+                buildFormattedTexturePath(id.withSuffix("_white")),
+                buildFormattedTexturePath(id.withSuffix("_blue")),
+                buildFormattedTexturePath(id.withSuffix("_yellow"))
+        };
     }
 
     @Override
     public ResourceLocation getTextureResource(SeaBunnyEntity object) {
-        return TEXTURES[object.behaviour(VariantBehaviour.class).getVariant()];
+        return textures[object.behaviour(VariantBehaviour.class).getVariant()];
     }
 
     @Override

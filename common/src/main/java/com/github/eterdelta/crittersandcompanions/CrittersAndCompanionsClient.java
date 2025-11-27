@@ -3,12 +3,14 @@ package com.github.eterdelta.crittersandcompanions;
 import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
 import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DragonflyModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.DumboOctopusModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.FerretModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpiderModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.OtterModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.RedPandaModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.VariantGeoModel;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.FerretRenderer;
@@ -26,6 +28,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import software.bernie.geckolib.model.DefaultedBlockGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrittersAndCompanionsClient {
@@ -49,20 +52,20 @@ public class CrittersAndCompanionsClient {
     }
 
     public static void registerEntityRenderers(RegisterEntityRenderers event) {
-        event.accept(CACEntities.OTTER, OtterRenderer::new);
-        event.accept(CACEntities.JUMPING_SPIDER, context -> new GeoEntityRenderer<>(context, new JumpingSpiderModel()));
-        event.variant(CACEntities.KOI_FISH);
-        event.accept(CACEntities.DRAGONFLY, context -> new GeoEntityRenderer<>(context, new DragonflyModel()));
-        event.accept(CACEntities.SEA_BUNNY, context -> new GeoEntityRenderer<>(context, new SeaBunnyModel()));
-        event.accept(CACEntities.SHIMA_ENAGA, context -> new GeoEntityRenderer<>(context, new ShimaEnagaModel()));
-        event.accept(CACEntities.FERRET, FerretRenderer::new);
+        event.accept(CACEntities.OTTER, OtterRenderer::new, OtterModel::new);
+        event.accept(CACEntities.JUMPING_SPIDER, GeoEntityRenderer::new, JumpingSpiderModel::new);
+        event.accept(CACEntities.KOI_FISH, GeoEntityRenderer::new, VariantGeoModel::new);
+        event.accept(CACEntities.DRAGONFLY, GeoEntityRenderer::new, DragonflyModel::new);
+        event.accept(CACEntities.SEA_BUNNY, GeoEntityRenderer::new, SeaBunnyModel::new);
+        event.accept(CACEntities.SHIMA_ENAGA, GeoEntityRenderer::new, ShimaEnagaModel::new);
+        event.accept(CACEntities.FERRET, FerretRenderer::new, FerretModel::new);
         event.accept(CACEntities.GRAPPLING_HOOK, GrapplingHookRenderer::new);
-        event.accept(CACEntities.DUMBO_OCTOPUS, context -> new GeoEntityRenderer<>(context, new DumboOctopusModel()));
-        event.accept(CACEntities.LEAF_INSECT, context -> new GeoEntityRenderer<>(context, new LeafInsectModel()));
-        event.accept(CACEntities.RED_PANDA, context -> new GeoEntityRenderer<>(context, new RedPandaModel()));
+        event.accept(CACEntities.DUMBO_OCTOPUS, GeoEntityRenderer::new, VariantGeoModel::new);
+        event.accept(CACEntities.LEAF_INSECT, GeoEntityRenderer::new, LeafInsectModel::new);
+        event.accept(CACEntities.RED_PANDA, GeoEntityRenderer::new, RedPandaModel::new);
 
-        event.simple(CACEntities.LADYBUG);
-        event.variant(CACEntities.STAG_BEETLE);
+        event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedBlockGeoModel::new);
+        event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
     }
 
     public static void registerEntityLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> event) {

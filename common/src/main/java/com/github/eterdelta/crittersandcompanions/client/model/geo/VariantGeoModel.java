@@ -14,7 +14,7 @@ public class VariantGeoModel<T extends GeoAnimatable & BehaviourDriven> extends 
 
     public VariantGeoModel(ResourceLocation id) {
         super(id);
-        this.texture = Util.memoize(variant -> id.withPath(name -> "textures/entity/%s_%s.png".formatted(name, variant)));
+        this.texture = Util.memoize(variant -> buildFormattedTexturePath(id.withSuffix("_" + variant)));
     }
 
     @Override
