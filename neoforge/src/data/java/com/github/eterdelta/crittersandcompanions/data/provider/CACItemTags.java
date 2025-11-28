@@ -9,7 +9,10 @@ import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import com.github.eterdelta.crittersandcompanions.entity.RedPandaEntity;
 import com.github.eterdelta.crittersandcompanions.entity.RollypollyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.ShimaEnagaEntity;
+import com.github.eterdelta.crittersandcompanions.entity.SnailEntity;
 import com.github.eterdelta.crittersandcompanions.entity.StagBeetleEntity;
+import com.github.eterdelta.crittersandcompanions.entity.StickBugEntity;
+import com.github.eterdelta.crittersandcompanions.entity.WeevilEntity;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import java.util.concurrent.CompletableFuture;
@@ -62,7 +65,14 @@ public final class CACItemTags extends ItemTagsProvider {
         tag(StagBeetleEntity.TAGS.food()).addTag(Tags.Items.FOODS_BERRY);
         temptWithFood(StagBeetleEntity.TAGS);
 
-        //tag(SnailEntity.TAGS.food()).add(Items.CARROT);
+        tag(StickBugEntity.TAGS.food()).addTag(ItemTags.LEAVES);
+        temptWithFood(StickBugEntity.TAGS);
+
+        tag(SnailEntity.TAGS.tempt()).addTag(ItemTags.LEAVES);
+        tag(SnailEntity.TAGS.food()).add(Items.CARROT);
+
+        //tag(WeevilEntity.TAGS.food()).addTag(CACItems.ACORN);
+        //temptWithFood(WeevilEntity.TAGS);
     }
 
     public void temptWithFood(AnimalTags tags) {

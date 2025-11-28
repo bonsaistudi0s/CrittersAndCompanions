@@ -27,6 +27,9 @@ public final class CACItemModels extends ItemModelProvider {
         spawnEggItem(CACItems.STAG_BEETLE_SPAWN_EGG.get());
         spawnEggItem(CACItems.DUMBO_OCTOPUS_SPAWN_EGG.get());
         spawnEggItem(CACItems.ROLLYPOLLY_SPAWN_EGG.get());
+        spawnEggItem(CACItems.SNAIL_SPAWN_EGG.get());
+        spawnEggItem(CACItems.STICK_BUG_SPAWN_EGG.get());
+        spawnEggItem(CACItems.WEEVIL_SPAWN_EGG.get());
     }
 
 }

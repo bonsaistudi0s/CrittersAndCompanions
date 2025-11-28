@@ -14,7 +14,10 @@ import com.github.eterdelta.crittersandcompanions.entity.RedPandaEntity;
 import com.github.eterdelta.crittersandcompanions.entity.RollypollyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.ShimaEnagaEntity;
+import com.github.eterdelta.crittersandcompanions.entity.SnailEntity;
 import com.github.eterdelta.crittersandcompanions.entity.StagBeetleEntity;
+import com.github.eterdelta.crittersandcompanions.entity.StickBugEntity;
+import com.github.eterdelta.crittersandcompanions.entity.WeevilEntity;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryEntry;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryHelper;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
@@ -42,6 +45,9 @@ public class CACEntities {
     public static final RegistryEntry<EntityType<LadybugEntity>> LADYBUG = register("ladybug", () -> EntityType.Builder.of(LadybugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
     public static final RegistryEntry<EntityType<StagBeetleEntity>> STAG_BEETLE = register("stag_beetle", () -> EntityType.Builder.of(StagBeetleEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
     public static final RegistryEntry<EntityType<RollypollyEntity>> ROLLYPOLLY = register("rollypolly", () -> EntityType.Builder.of(RollypollyEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
+    public static final RegistryEntry<EntityType<SnailEntity>> SNAIL = register("snail", () -> EntityType.Builder.of(SnailEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
+    public static final RegistryEntry<EntityType<StickBugEntity>> STICK_BUG = register("stick_bug", () -> EntityType.Builder.of(StickBugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
+    public static final RegistryEntry<EntityType<WeevilEntity>> WEEVIL = register("weevil", () -> EntityType.Builder.of(WeevilEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
 
     private static <T extends Entity> RegistryEntry<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> factory) {
         return ENTITIES.register(name, () -> factory.get().build(name));

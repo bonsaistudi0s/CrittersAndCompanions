@@ -38,6 +38,9 @@ public final class CACLang extends LanguageProvider {
         withSpawnEgg(CACEntities.LADYBUG);
         withSpawnEgg(CACEntities.STAG_BEETLE);
         withSpawnEgg(CACEntities.ROLLYPOLLY);
+        withSpawnEgg(CACEntities.SNAIL);
+        withSpawnEgg(CACEntities.STICK_BUG);
+        withSpawnEgg(CACEntities.WEEVIL);
         add(CACEntities.GRAPPLING_HOOK.get(), "Grappling Hook");
 
         add(CACBlocks.SILK_COCOON.get(), "Silk Cocoon");

@@ -8,7 +8,7 @@ import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpider
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.OtterModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.RedPandaModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.RollyPollyModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.AgedVariantGeoModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.VariantGeoModel;
@@ -67,7 +67,10 @@ public class CrittersAndCompanionsClient {
 
         event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
         event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
-        event.accept(CACEntities.ROLLYPOLLY, GeoEntityRenderer::new, RollyPollyModel::new);
+        event.accept(CACEntities.ROLLYPOLLY, GeoEntityRenderer::new, AgedVariantGeoModel::new);
+        event.accept(CACEntities.SNAIL, GeoEntityRenderer::new, AgedVariantGeoModel::new);
+        event.accept(CACEntities.STICK_BUG, GeoEntityRenderer::new, VariantGeoModel::new);
+        event.accept(CACEntities.WEEVIL, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
     }
 
     public static void registerEntityLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> event) {

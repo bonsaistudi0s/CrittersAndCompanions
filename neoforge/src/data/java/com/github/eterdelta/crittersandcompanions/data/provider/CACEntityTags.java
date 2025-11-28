@@ -32,12 +32,14 @@ public final class CACEntityTags extends EntityTypeTagsProvider {
                 .add(underWater);
 
         tag(EntityTypeTags.ARTHROPOD)
-                .add(CACEntities.DRAGONFLY.get())
                 .add(CACEntities.JUMPING_SPIDER.get())
                 .add(CACEntities.LEAF_INSECT.get())
                 .add(CACEntities.LADYBUG.get())
                 .add(CACEntities.STAG_BEETLE.get())
-                .add(CACEntities.ROLLYPOLLY.get());
+                .add(CACEntities.ROLLYPOLLY.get())
+                .add(CACEntities.STICK_BUG.get())
+                .add(CACEntities.WEEVIL.get())
+                .add(CACEntities.DRAGONFLY.get());
     }
 
 }
