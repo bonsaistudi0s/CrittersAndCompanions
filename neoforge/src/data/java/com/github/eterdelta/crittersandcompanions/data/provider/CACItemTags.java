@@ -12,7 +12,6 @@ import com.github.eterdelta.crittersandcompanions.entity.ShimaEnagaEntity;
 import com.github.eterdelta.crittersandcompanions.entity.SnailEntity;
 import com.github.eterdelta.crittersandcompanions.entity.StagBeetleEntity;
 import com.github.eterdelta.crittersandcompanions.entity.StickBugEntity;
-import com.github.eterdelta.crittersandcompanions.entity.WeevilEntity;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import java.util.concurrent.CompletableFuture;

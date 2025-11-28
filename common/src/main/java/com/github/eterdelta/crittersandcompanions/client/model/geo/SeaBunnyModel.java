@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.ClimbingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.animation.AnimationState;
@@ -32,7 +33,7 @@ public class SeaBunnyModel extends DefaultedEntityGeoModel<SeaBunnyEntity> {
         var mainBone = this.getAnimationProcessor().getBone("main");
 
         mainBone.setRotY(data.netHeadYaw() * ((float) Math.PI / 180.0F));
-        if (animatable.isClimbing()) {
+        if (animatable.behaviour(ClimbingBehaviour.class).isClimbing()) {
             mainBone.setRotX(90.0F * ((float) Math.PI / 180.0F));
         } else {
             mainBone.setRotX(0F);

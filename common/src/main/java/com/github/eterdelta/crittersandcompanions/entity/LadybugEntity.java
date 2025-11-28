@@ -4,7 +4,6 @@ import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.server.level.ServerLevel;
@@ -14,7 +13,15 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -22,11 +29,16 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class LadybugEntity extends TamableAnimal implements GeoEntity {
+public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAnimal {
 
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.LADYBUG.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    public LadybugEntity(EntityType<? extends TamableAnimal> type, Level level) {
+        super(type, level);
+        this.moveControl = new FlyingMoveControl(this, 10, false);
+    }
 
     @Override
     public void registerBehaviours(Behaviours behaviours) {
@@ -36,17 +48,19 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(2, TAGS.temptGoal(this));
+        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-    }
-
-    public LadybugEntity(EntityType<? extends TamableAnimal> type, Level level) {
-        super(type, level);
+        goalSelector.addGoal(11, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2D);
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 8.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
+                .add(Attributes.FLYING_SPEED, 0.4D);
     }
 
     @Override
@@ -69,4 +83,31 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity {
         return cache;
     }
 
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        var navigation = new FlyingPathNavigation(this, level);
+        navigation.setCanOpenDoors(false);
+        navigation.setCanFloat(true);
+        navigation.setCanPassDoors(true);
+        return navigation;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+        var motion = getDeltaMovement();
+        if (isFlying() && motion.y < 0) {
+            setDeltaMovement(motion.multiply(1.0F, 0.6, 1.0F));
+        }
+    }
+
+    public boolean isFlying() {
+        return !onGround();
+    }
+
+    @Override
+    protected boolean canFlyToOwner() {
+        return true;
+    }
 }

@@ -22,6 +22,13 @@
     "${mod_id}.mixins.json",
     "${mod_id}.fabric.mixins.json"
   ],
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/world/entity/Mob": [
+        "com/github/eterdelta/crittersandcompanions/entity/brain/behaviour/BehaviourDriven"
+      ]
+    }
+  },
   "depends": {
     "fabricloader": ">=0.15",
     "fabric-api": "*",

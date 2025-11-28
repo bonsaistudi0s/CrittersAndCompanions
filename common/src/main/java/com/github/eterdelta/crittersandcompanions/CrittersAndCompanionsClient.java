@@ -2,15 +2,16 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
 import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.AgedVariantGeoModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DragonflyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.FerretModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpiderModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.OtterModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.RedPandaModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.AgedVariantGeoModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.SnailModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.VariantGeoModel;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
@@ -68,7 +69,7 @@ public class CrittersAndCompanionsClient {
         event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
         event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.ROLLYPOLLY, GeoEntityRenderer::new, AgedVariantGeoModel::new);
-        event.accept(CACEntities.SNAIL, GeoEntityRenderer::new, AgedVariantGeoModel::new);
+        event.accept(CACEntities.SNAIL, GeoEntityRenderer::new, SnailModel::new);
         event.accept(CACEntities.STICK_BUG, GeoEntityRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.WEEVIL, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
     }

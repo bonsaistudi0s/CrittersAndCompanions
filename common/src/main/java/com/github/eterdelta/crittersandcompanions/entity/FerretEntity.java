@@ -6,7 +6,7 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Tameabl
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.FerretDigGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.FerretSleepGoal;
-import com.github.eterdelta.crittersandcompanions.entity.brain.goal.SprintingFollowParentGoal;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.SprintingFollowOwnerGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameableFollowParentGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
@@ -111,22 +111,22 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
-        this.goalSelector.addGoal(2, new FerretDigGoal(this));
-        this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(4, new FerretSleepGoal(this, 200));
-        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())));
-        this.goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
-        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.5D, true));
-        this.goalSelector.addGoal(8, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(7, new SprintingFollowParentGoal(this, 1.4D, 10.0F, 5.0F, 2.0F));
-        this.goalSelector.addGoal(10, new TameableFollowParentGoal(this, 1.0D));
-        this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(13, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(0, new FloatGoal(this));
+        goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
+        goalSelector.addGoal(2, new FerretDigGoal(this));
+        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
+        goalSelector.addGoal(4, new FerretSleepGoal(this, 200));
+        goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())));
+        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.5D, true));
+        goalSelector.addGoal(7, new SprintingFollowOwnerGoal(this, 1.4D, 10.0F, 5.0F, 2.0F));
+        goalSelector.addGoal(8, TAGS.temptGoal(this));
+        goalSelector.addGoal(10, new TameableFollowParentGoal(this, 1.0D));
+        goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(13, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
+        targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
     }
 
     @Override

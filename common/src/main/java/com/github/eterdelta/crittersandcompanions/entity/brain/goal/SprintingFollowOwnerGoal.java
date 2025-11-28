@@ -3,14 +3,14 @@ package com.github.eterdelta.crittersandcompanions.entity.brain.goal;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 
-public class SprintingFollowParentGoal extends FollowOwnerGoal {
+public class SprintingFollowOwnerGoal extends FollowOwnerGoal {
 
     private final TamableAnimal mob;
     private final double speedModifier;
     private final float sprintAtSqr;
     private int timeToRecalcPath;
 
-    public SprintingFollowParentGoal(TamableAnimal mob, double speedModifier, float start, float sprintAt, float stop) {
+    public SprintingFollowOwnerGoal(TamableAnimal mob, double speedModifier, float start, float sprintAt, float stop) {
         super(mob, 1.0D, start, stop);
         this.mob = mob;
         this.speedModifier = speedModifier;

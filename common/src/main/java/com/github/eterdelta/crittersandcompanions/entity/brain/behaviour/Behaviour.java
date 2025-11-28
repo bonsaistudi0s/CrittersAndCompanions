@@ -10,10 +10,14 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 
 public interface Behaviour {
 
     default void aiStep() {
+    }
+
+    default void serverTick() {
     }
 
     default void save(CompoundTag nbt) {
@@ -36,6 +40,9 @@ public interface Behaviour {
 
     default InteractionResult mobInteract(Player player, InteractionHand hand) {
         return InteractionResult.PASS;
+    }
+
+    default void travel(Vec3 speed) {
     }
 
 }

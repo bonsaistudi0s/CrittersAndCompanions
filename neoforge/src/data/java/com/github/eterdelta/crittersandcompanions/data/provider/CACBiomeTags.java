@@ -1,19 +1,14 @@
 package com.github.eterdelta.crittersandcompanions.data.provider;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACTags;
+import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-
-import java.util.concurrent.CompletableFuture;
 
 public final class CACBiomeTags extends BiomeTagsProvider {
 

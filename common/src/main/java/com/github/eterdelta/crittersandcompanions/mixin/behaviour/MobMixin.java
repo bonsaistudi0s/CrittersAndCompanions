@@ -43,6 +43,16 @@ public class MobMixin implements BehaviourDriven {
     }
 
     @Inject(
+            method = "tick()V",
+            at = @At("HEAD")
+    )
+    private void behaviourServerTick(CallbackInfo ci) {
+        var self = (Mob) (Object) this;
+        if (self.level().isClientSide()) return;
+        getBehaviours().forEach(Behaviour::serverTick);
+    }
+
+    @Inject(
             method = "defineSynchedData(Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V",
             at = @At("HEAD")
     )

@@ -4,13 +4,9 @@ import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -18,7 +14,10 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -44,9 +43,12 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(0, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(2, TAGS.temptGoal(this));
+        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(11, new DancingStrollGoal<>(this, 1.0D));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

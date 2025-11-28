@@ -2,7 +2,7 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.goal.SprintingFollowParentGoal;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.SprintingFollowOwnerGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
@@ -104,7 +104,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(4, new SleepGoal(140));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(6, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(7, new SprintingFollowParentGoal(this, 1.25D, 10.0F, 5.0F, 2.0F));
+        this.goalSelector.addGoal(7, new SprintingFollowOwnerGoal(this, 1.25D, 10.0F, 5.0F, 2.0F));
         this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));

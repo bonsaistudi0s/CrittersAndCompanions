@@ -1,7 +1,10 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.ClimbingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.control.NoJumpControl;
+import com.github.eterdelta.crittersandcompanions.entity.brain.control.SeaBunnyMoveControl;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
@@ -12,7 +15,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -20,8 +22,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.JumpControl;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.ai.util.GoalUtils;
@@ -52,7 +52,7 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     public SeaBunnyEntity(EntityType<? extends SeaBunnyEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new SeaBunnyMoveControl(this);
-        this.jumpControl = new SeaBunnyJumpControl(this);
+        this.jumpControl = new NoJumpControl(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -72,12 +72,12 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     @Override
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new VariantBehaviour(this, VARIANT, 3));
+        behaviours.add(new ClimbingBehaviour(this, CLIMBING));
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(CLIMBING, false);
         builder.define(FROM_BUCKET, false);
     }
 
@@ -89,14 +89,12 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("Climbing", this.isClimbing());
         compound.putBoolean("FromBucket", this.fromBucket());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.setClimbing(compound.getBoolean("Climbing"));
         this.setFromBucket(compound.getBoolean("FromBucket"));
     }
 
@@ -159,29 +157,13 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide()) {
-            this.setClimbing(this.horizontalCollision && this.getNavigation().isInProgress());
-        }
-    }
-
-    @Override
     public float getWalkTargetValue(BlockPos blockPos) {
         return this.level().getBlockState(blockPos).getFluidState().isEmpty() ? 1.0F : 5.0F;
     }
 
     @Override
     public boolean onClimbable() {
-        return this.isClimbing();
-    }
-
-    @Override
-    public void travel(Vec3 speed) {
-        super.travel(speed);
-        if (this.horizontalCollision && this.onClimbable()) {
-            this.setDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.12D, 0.0D));
-        }
+        return behaviour(ClimbingBehaviour.class).isClimbing();
     }
 
     @Override
@@ -222,48 +204,6 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-
-    public boolean isClimbing() {
-        return this.entityData.get(CLIMBING);
-    }
-
-    public void setClimbing(boolean climbing) {
-        this.entityData.set(CLIMBING, climbing);
-    }
-
-    static class SeaBunnyMoveControl extends MoveControl {
-        public SeaBunnyMoveControl(SeaBunnyEntity seaBunny) {
-            super(seaBunny);
-        }
-
-        @Override
-        public void tick() {
-            if (this.operation == Operation.MOVE_TO && !this.mob.getNavigation().isDone()) {
-                double d0 = this.wantedX - this.mob.getX();
-                double d2 = this.wantedZ - this.mob.getZ();
-                float f = (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
-
-                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), f, 90.0F));
-                this.mob.yBodyRot = this.mob.getYRot();
-
-                float speed = (float) this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
-                speed *= this.mob.isInWater() ? 2.0F + this.speedModifier : this.speedModifier;
-                this.mob.setSpeed(speed);
-            } else {
-                this.mob.setSpeed(0.0F);
-            }
-        }
-    }
-
-    static class SeaBunnyJumpControl extends JumpControl {
-        public SeaBunnyJumpControl(SeaBunnyEntity seaBunny) {
-            super(seaBunny);
-        }
-
-        @Override
-        public void jump() {
-        }
     }
 
     static class RandomStrollGoal extends net.minecraft.world.entity.ai.goal.RandomStrollGoal {

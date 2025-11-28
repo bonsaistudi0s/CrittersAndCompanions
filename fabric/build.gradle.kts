@@ -16,7 +16,6 @@ mod {
 
 fabric {
     dependOn(project(":common"))
-    injectInterfaces()
 }
 
 dependencies {
