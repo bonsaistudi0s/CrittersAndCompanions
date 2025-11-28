@@ -61,7 +61,7 @@ public class CrittersAndCompanions {
         event.accept(CACEntities.RED_PANDA.get(), RedPandaEntity.createAttributes().build());
 
         event.accept(CACEntities.LADYBUG.get(), LadybugEntity.createAttributes().build());
-        event.accept(CACEntities.STAG_BEETLE.get(), StabBeetleEntity.createAttributes().build());
+        event.accept(CACEntities.STAG_BEETLE.get(), StagBeetleEntity.createAttributes().build());
         event.accept(CACEntities.ROLLYPOLLY.get(), RollypollyEntity.createAttributes().build());
     }
 

@@ -15,7 +15,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
-public class CACLang extends LanguageProvider {
+public final class CACLang extends LanguageProvider {
 
     public CACLang(PackOutput output) {
         super(output, CrittersAndCompanions.MODID, "en_us");

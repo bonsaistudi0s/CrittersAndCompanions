@@ -6,7 +6,7 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-public class CACItemModels extends ItemModelProvider {
+public final class CACItemModels extends ItemModelProvider {
 
     public CACItemModels(PackOutput output, ExistingFileHelper fileHelper) {
         super(output, CrittersAndCompanions.MODID, fileHelper);

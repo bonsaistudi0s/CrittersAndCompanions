@@ -16,8 +16,12 @@ public class Behaviours {
         return this;
     }
 
+    public Iterable<Behaviour> all() {
+        return entries.values();
+    }
+
     public void forEach(Consumer<Behaviour> consumer) {
-        this.entries.values().forEach(consumer);
+        all().forEach(consumer);
     }
 
     @SuppressWarnings("unchecked")

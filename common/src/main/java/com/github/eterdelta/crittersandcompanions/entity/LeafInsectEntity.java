@@ -1,10 +1,10 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
-import com.github.eterdelta.crittersandcompanions.entity.brain.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -57,11 +57,6 @@ public class LeafInsectEntity extends PathfinderMob implements GeoEntity {
     public static boolean checkLeafInsectSpawnRules(EntityType<LeafInsectEntity> entityType, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource random) {
         BlockState blockState = levelAccessor.getBlockState(blockPos.below());
         return blockPos.getY() > levelAccessor.getSeaLevel() - 16 && (blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.LEAVES));
-    }
-
-    @Override
-    public void setRecordPlayingNearby(BlockPos pos, boolean active) {
-        behaviour(DancingBehaviour.class).setRecordPlayingNearby(pos, active);
     }
 
     @Override

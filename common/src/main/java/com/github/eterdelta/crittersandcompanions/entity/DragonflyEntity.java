@@ -1,15 +1,14 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
+import com.github.eterdelta.crittersandcompanions.entity.brain.control.DragonflyMoveControl;
 import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
-import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,12 +22,10 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -36,14 +33,11 @@ import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -58,7 +52,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class DragonflyEntity extends TamableAnimal implements GeoEntity {
 
-    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("dragonfly_food"));
+    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.DRAGONFLY.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -85,7 +79,7 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(FOODS_TAG), false));
+        this.goalSelector.addGoal(3, TAGS.temptGoal(this));
         this.goalSelector.addGoal(4, new RandomFlyGoal());
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
@@ -106,7 +100,7 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     public float getWalkTargetValue(BlockPos blockPos) {
         return !this.isTame() && this.level().getBiome(blockPos).is(Biomes.RIVER) ? 10.0F : 5.0F;
     }
-    
+
     @Override
     public boolean canBeLeashed() {
         return false;
@@ -148,52 +142,28 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack handStack = player.getItemInHand(hand);
+        var stack = player.getItemInHand(hand);
 
-        if (this.isTame()) {
-            if (handStack.is(FOODS_TAG) && this.getHealth() < this.getMaxHealth()) {
-                this.gameEvent(GameEvent.EAT, this);
-                this.heal(2.0F);
-                if (!player.getAbilities().instabuild) {
-                    handStack.shrink(1);
-                }
-            } else if (this.isOwnedBy(player)) {
-                if (!this.level().isClientSide()) {
-                    if (handStack.getItem() instanceof DragonflyArmorItem && this.getArmor().isEmpty()) {
-                        this.setArmor(handStack.copy());
-                        handStack.shrink(1);
-                        if (!player.getAbilities().instabuild) {
-                            handStack.shrink(1);
-                        }
-                        this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value(), 0.4F, 1.5F);
+        if (isTame() && isOwnedBy(player)) {
+            var success = InteractionResult.sidedSuccess(level().isClientSide());
 
-                    } else if (player.isCrouching() && !this.getArmor().isEmpty()) {
-                        this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getArmor().copy()));
-                        this.setArmor(ItemStack.EMPTY);
-                        this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, 1.0F);
+            if (stack.getItem() instanceof DragonflyArmorItem && getArmor().isEmpty()) {
+                setArmor(stack.copy());
+                stack.consume(1, player);
+                playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value(), 0.4F, 1.5F);
 
-                    } else {
-                        this.setOrderedToSit(!this.isOrderedToSit());
-                    }
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
+                return success;
             }
-        } else {
-            if (handStack.is(FOODS_TAG)) {
-                if (!player.getAbilities().instabuild) {
-                    handStack.shrink(1);
-                }
-                if (!this.level().isClientSide()) {
-                    if (this.random.nextInt(10) == 0 && Services.EVENTS.canTame(this, player)) {
-                        this.tame(player);
-                        this.level().broadcastEntityEvent(this, (byte) 7);
-                    } else {
-                        this.level().broadcastEntityEvent(this, (byte) 6);
-                    }
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
+
+            if (stack.isEmpty() && player.isCrouching() && !getArmor().isEmpty()) {
+                level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getArmor().copy()));
+                setArmor(ItemStack.EMPTY);
+                playSound(SoundEvents.ITEM_PICKUP, 0.2F, 1.0F);
+
+                return success;
             }
         }
+
         return super.mobInteract(player, hand);
     }
 
@@ -210,17 +180,12 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public boolean isFood(ItemStack itemStack) {
-        return false;
+    public boolean isFood(ItemStack stack) {
+        return stack.is(TAGS.food());
     }
 
     @Override
-    public boolean canBreed() {
-        return false;
-    }
-
-    @Override
-    public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
+    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
         return null;
     }
 
@@ -249,45 +214,6 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-
-    static class DragonflyMoveControl extends FlyingMoveControl {
-        public DragonflyMoveControl(DragonflyEntity dragonfly) {
-            super(dragonfly, 360, true);
-        }
-
-        @Override
-        public void tick() {
-            if (this.operation == Operation.MOVE_TO) {
-                this.operation = Operation.WAIT;
-                this.mob.setNoGravity(true);
-                double deltaX = this.wantedX - this.mob.getX();
-                double deltaY = this.wantedY - this.mob.getY();
-                double deltaZ = this.wantedZ - this.mob.getZ();
-                double distanceSqrt = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
-                if (distanceSqrt < 0.1) {
-                    this.mob.setYya(mob.getRandom().nextFloat() - 0.5F);
-                    this.mob.setZza(0.0F);
-                    return;
-                }
-
-                float f = (float) (Mth.atan2(deltaZ, deltaX) * (180F / (float) Math.PI)) - 90.0F;
-                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), f, 360.0F));
-
-                float speed = (float) (this.speedModifier * this.mob.getAttributeValue(Attributes.FLYING_SPEED));
-
-                this.mob.setSpeed(speed);
-                double horizontalDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-                if (Math.abs(deltaY) > 1.0E-5F || Math.abs(horizontalDistance) > 1.0E-5F) {
-                    float f2 = (float) (-(Mth.atan2(deltaY, horizontalDistance) * (180F / (float) Math.PI)));
-                    this.mob.setXRot(this.rotlerp(this.mob.getXRot(), f2, 20.0F));
-                    this.mob.setYya(deltaY > 0.0D ? speed : -speed);
-                }
-            } else {
-                this.mob.setYya(mob.getRandom().nextFloat() - 0.5F);
-                this.mob.setZza(0.0F);
-            }
-        }
     }
 
     public class RandomFlyGoal extends Goal {

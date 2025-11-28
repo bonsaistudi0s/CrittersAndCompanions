@@ -12,8 +12,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class FabricCommonConfig extends CACCommonConfig {
 
-    private static final Map<ResourceKey<? extends EntityType<?>>, CACWorldGen.SpawnValues> SPAWN_DEFAULT_VALUES = new HashMap<>();
-
     private final Map<ResourceKey<? extends EntityType<?>>, Supplier<CACWorldGen.SpawnValues>> spawnValues = new HashMap<>();
 
     private void registerSpawns(ModConfigSpec.Builder builder, ResourceKey<? extends EntityType<?>> key, CACWorldGen.SpawnValues defaultValues) {

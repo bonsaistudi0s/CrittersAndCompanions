@@ -13,8 +13,10 @@
     "PlayerMixin",
     "SpawnPlacementsAccessor",
     "ZombifiedPiglinMixin",
+    "behaviour.AnimalMixin",
     "behaviour.BucketableMixin",
     "behaviour.EntityMixin",
+    "behaviour.LivingEntityMixin",
     "behaviour.MobMixin"
   ],
   "client": [

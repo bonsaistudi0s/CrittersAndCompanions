@@ -1,15 +1,13 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
+import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -28,12 +26,9 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -46,7 +41,8 @@ import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, GeoEntity {
-    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("shima_enaga_food"));
+
+    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SHIMA_ENAGA.getKey());
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ShimaEnagaEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
@@ -61,13 +57,19 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     }
 
     @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new TameableBehaviour(this, TAGS));
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
-        this.goalSelector.addGoal(3, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
+        this.goalSelector.addGoal(2, TAGS.temptGoal(this));
+        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
+        this.goalSelector.addGoal(5, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
@@ -113,43 +115,8 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        ItemStack handStack = player.getItemInHand(interactionHand);
-
-        if (!this.isTame() && handStack.is(FOODS_TAG)) {
-            if (!player.getAbilities().instabuild) {
-                handStack.shrink(1);
-            }
-            if (!this.level().isClientSide()) {
-                if (this.random.nextInt(10) == 0 && Services.EVENTS.canTame(this, player)) {
-                    this.tame(player);
-                    this.level().broadcastEntityEvent(this, (byte) 7);
-                } else {
-                    this.level().broadcastEntityEvent(this, (byte) 6);
-                }
-            }
-            return InteractionResult.sidedSuccess(this.level().isClientSide());
-        } else if (this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level().isClientSide()) {
-                if (handStack.is(FOODS_TAG) && this.getHealth() < this.getMaxHealth()) {
-                    this.gameEvent(GameEvent.EAT, this);
-                    this.heal(1.0F);
-                    if (!player.getAbilities().instabuild) {
-                        handStack.shrink(1);
-                    }
-                } else {
-                    this.setOrderedToSit(!this.isOrderedToSit());
-                }
-            }
-            return InteractionResult.sidedSuccess(this.level().isClientSide());
-        } else {
-            return super.mobInteract(player, interactionHand);
-        }
-    }
-
-    @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(FOODS_TAG);
+        return stack.is(TAGS.food());
     }
 
     @Override

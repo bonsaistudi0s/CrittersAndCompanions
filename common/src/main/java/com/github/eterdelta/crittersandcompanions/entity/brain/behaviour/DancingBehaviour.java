@@ -17,6 +17,7 @@ public class DancingBehaviour implements Behaviour {
         this.owner = owner;
     }
 
+    @Override
     public void setRecordPlayingNearby(BlockPos pos, boolean active) {
         activeJukebox = pos;
         dancing = active;

@@ -1,10 +1,14 @@
 package com.github.eterdelta.crittersandcompanions.entity.brain.behaviour;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ServerLevelAccessor;
 
 public interface Behaviour {
@@ -24,6 +28,14 @@ public interface Behaviour {
 
     default void finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData groupData) {
 
+    }
+
+    default void setRecordPlayingNearby(BlockPos pos, boolean active) {
+
+    }
+
+    default InteractionResult mobInteract(Player player, InteractionHand hand) {
+        return InteractionResult.PASS;
     }
 
 }

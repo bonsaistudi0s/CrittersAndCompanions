@@ -1,0 +1,43 @@
+package com.github.eterdelta.crittersandcompanions.data.provider;
+
+import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.entity.EntityType;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+public final class CACEntityTags extends EntityTypeTagsProvider {
+
+    public CACEntityTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
+        super(output, lookupProvider, CrittersAndCompanions.MODID, fileHelper);
+    }
+
+    @Override
+    protected void addTags(HolderLookup.Provider provider) {
+        var underWater = new EntityType[]{
+                CACEntities.DUMBO_OCTOPUS.get(),
+                CACEntities.KOI_FISH.get(),
+                CACEntities.SEA_BUNNY.get()
+        };
+
+        tag(EntityTypeTags.AQUATIC).add(underWater);
+        tag(EntityTypeTags.AXOLOTL_HUNT_TARGETS).add(underWater);
+
+        tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
+                .add(CACEntities.OTTER.get())
+                .add(underWater);
+
+        tag(EntityTypeTags.ARTHROPOD)
+                .add(CACEntities.DRAGONFLY.get())
+                .add(CACEntities.JUMPING_SPIDER.get())
+                .add(CACEntities.LEAF_INSECT.get())
+                .add(CACEntities.LADYBUG.get())
+                .add(CACEntities.STAG_BEETLE.get())
+                .add(CACEntities.ROLLYPOLLY.get());
+    }
+
+}

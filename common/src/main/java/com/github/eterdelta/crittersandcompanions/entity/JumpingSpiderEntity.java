@@ -1,14 +1,13 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.control.JumpingSpiderMoveControl;
+import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
+import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
@@ -26,7 +24,6 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -34,13 +31,10 @@ import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -54,7 +48,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
-    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("jumping_spider_food"));
+    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.JUMPING_SPIDER.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private PanicGoal panicGoal;
@@ -69,6 +63,11 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new TameableBehaviour(this, TAGS));
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
@@ -78,7 +77,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.of(FOODS_TAG), false));
+        this.goalSelector.addGoal(5, TAGS.temptGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -113,41 +112,6 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        ItemStack handStack = player.getItemInHand(interactionHand);
-
-        if (!this.isTame() && handStack.is(FOODS_TAG)) {
-            if (!player.getAbilities().instabuild) {
-                handStack.shrink(1);
-            }
-            if (!this.level().isClientSide()) {
-                if (this.random.nextInt(10) == 0 && Services.EVENTS.canTame(this, player)) {
-                    this.tame(player);
-                    this.level().broadcastEntityEvent(this, (byte) 7);
-                } else {
-                    this.level().broadcastEntityEvent(this, (byte) 6);
-                }
-            }
-            return InteractionResult.sidedSuccess(this.level().isClientSide());
-        } else if (this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level().isClientSide()) {
-                if (handStack.is(FOODS_TAG) && this.getHealth() < this.getMaxHealth()) {
-                    this.gameEvent(GameEvent.EAT, this);
-                    this.heal(1.0F);
-                    if (!player.getAbilities().instabuild) {
-                        handStack.shrink(1);
-                    }
-                } else {
-                    this.setOrderedToSit(!this.isOrderedToSit());
-                }
-            }
-            return InteractionResult.sidedSuccess(this.level().isClientSide());
-        } else {
-            return super.mobInteract(player, interactionHand);
-        }
-    }
-
-    @Override
     public void tame(Player player) {
         super.tame(player);
         this.goalSelector.removeGoal(this.panicGoal);
@@ -172,22 +136,6 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-
-    static class JumpingSpiderMoveControl extends MoveControl {
-        private final JumpingSpiderEntity spider;
-
-        public JumpingSpiderMoveControl(JumpingSpiderEntity jumpingSpider) {
-            super(jumpingSpider);
-            this.spider = jumpingSpider;
-        }
-
-        public void tick() {
-            if (this.hasWanted() && this.spider.onGround() && this.spider.getRandom().nextFloat() <= 0.05F) {
-                this.spider.setDeltaMovement(this.spider.getDeltaMovement().add(0.0D, 0.6D, 0.0D));
-            }
-            super.tick();
-        }
     }
 
     @Override

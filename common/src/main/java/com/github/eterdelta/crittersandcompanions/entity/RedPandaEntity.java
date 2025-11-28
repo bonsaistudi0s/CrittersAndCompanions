@@ -1,25 +1,22 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
-import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.entity.brain.SprintingFollowParentGoal;
-import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.SprintingFollowParentGoal;
+import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -39,16 +36,12 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.gameevent.GameEvent;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -61,8 +54,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
-    private static final TagKey<Item> TEMPT_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("red_panda_tempt_items"));
-    private static final TagKey<Item> FOODS_TAG = TagKey.create(Registries.ITEM, CrittersAndCompanions.createId("red_panda_food"));
+    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.RED_PANDA.getKey());
 
     protected static final List<EntityType<? extends Mob>> SCAREABLES = new ArrayList<>(Arrays.asList(
             EntityType.BEE,
@@ -87,6 +79,11 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.moveControl = new RedPandaMoveControl(this);
     }
 
+    @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new TameableBehaviour(this, TAGS));
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 18.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
@@ -106,7 +103,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(4, new SleepGoal(140));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
-        this.goalSelector.addGoal(6, new TemptGoal(this, 1.0D, Ingredient.of(TEMPT_TAG), false));
+        this.goalSelector.addGoal(6, TAGS.temptGoal(this));
         this.goalSelector.addGoal(7, new SprintingFollowParentGoal(this, 1.25D, 10.0F, 5.0F, 2.0F));
         this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -130,12 +127,12 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public int getBaseExperienceReward() {
-        return this.random.nextInt(2, 5);
+        return random.nextInt(2, 5);
     }
 
     @Override
     public float getScale() {
-        return this.isBaby() ? 0.6F : 1.0F;
+        return isBaby() ? 0.6F : 1.0F;
     }
 
     @Override
@@ -144,47 +141,8 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        if (!this.isSleeping()) {
-            ItemStack handStack = player.getItemInHand(interactionHand);
-
-            if (!this.isTame()) {
-                if (handStack.is(TEMPT_TAG)) {
-                    if (!player.getAbilities().instabuild) {
-                        handStack.shrink(1);
-                    }
-                    if (!this.level().isClientSide()) {
-                        if (this.random.nextInt(10) == 0 && Services.EVENTS.canTame(this, player)) {
-                            this.tame(player);
-                            this.level().broadcastEntityEvent(this, (byte) 7);
-                        } else {
-                            this.level().broadcastEntityEvent(this, (byte) 6);
-                        }
-                    }
-                    return InteractionResult.sidedSuccess(this.level().isClientSide());
-                }
-            } else if (this.isTame() && this.isOwnedBy(player)) {
-                if (!this.isFood(handStack) && !handStack.is(TEMPT_TAG)) {
-                    this.setOrderedToSit(!this.isOrderedToSit());
-                    return InteractionResult.sidedSuccess(this.level().isClientSide());
-                } else if (this.getHealth() < this.getMaxHealth()) {
-                    this.gameEvent(GameEvent.EAT, this);
-                    this.heal(2.0F);
-                    if (!player.getAbilities().instabuild) {
-                        handStack.shrink(1);
-                    }
-                    return InteractionResult.sidedSuccess(this.level().isClientSide());
-                }
-            }
-            return super.mobInteract(player, interactionHand);
-        } else {
-            return InteractionResult.PASS;
-        }
-    }
-
-    @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(FOODS_TAG);
+        return itemStack.is(TAGS.food());
     }
 
     @Override
