@@ -58,6 +58,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.ATTACK_DAMAGE, 1.0F)
                 .add(Attributes.MAX_HEALTH, 8.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FLYING_SPEED, 0.4D);

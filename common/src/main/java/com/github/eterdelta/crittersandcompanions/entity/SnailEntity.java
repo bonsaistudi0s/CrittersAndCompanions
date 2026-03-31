@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
+import com.github.eterdelta.crittersandcompanions.entity.brain.CompanionAI;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.ClimbingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
@@ -22,8 +23,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +48,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public SnailEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
-       // this.jumpControl = new NoJumpControl(this);
+        // this.jumpControl = new NoJumpControl(this);
         this.moveControl = new WallClimberMoveControl(this);
     }
 
@@ -57,12 +62,8 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(2, TAGS.temptGoal(this));
-        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        goalSelector.addGoal(11, new DancingStrollGoal<>(this, 1.0D));
+        CompanionAI.addGoalSelectors(this, TAGS, goalSelector);
+        CompanionAI.addTargetSelectors(this, targetSelector);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
