@@ -42,12 +42,12 @@ public class CACEntities {
     public static final RegistryEntry<EntityType<SeaBunnyEntity>> SEA_BUNNY = register("sea_bunny", () -> EntityType.Builder.of(SeaBunnyEntity::new, MobCategory.WATER_AMBIENT).sized(0.45F, 0.3F));
     public static final RegistryEntry<EntityType<ShimaEnagaEntity>> SHIMA_ENAGA = register("shima_enaga", () -> EntityType.Builder.of(ShimaEnagaEntity::new, MobCategory.CREATURE).sized(0.5F, 0.6F));
 
-    public static final RegistryEntry<EntityType<LadybugEntity>> LADYBUG = register("ladybug", () -> EntityType.Builder.of(LadybugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
-    public static final RegistryEntry<EntityType<StagBeetleEntity>> STAG_BEETLE = register("stag_beetle", () -> EntityType.Builder.of(StagBeetleEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
-    public static final RegistryEntry<EntityType<RollypollyEntity>> ROLLYPOLLY = register("rollypolly", () -> EntityType.Builder.of(RollypollyEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
-    public static final RegistryEntry<EntityType<SnailEntity>> SNAIL = register("snail", () -> EntityType.Builder.of(SnailEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
-    public static final RegistryEntry<EntityType<StickBugEntity>> STICK_BUG = register("stick_bug", () -> EntityType.Builder.of(StickBugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
-    public static final RegistryEntry<EntityType<WeevilEntity>> WEEVIL = register("weevil", () -> EntityType.Builder.of(WeevilEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.6F));
+    public static final RegistryEntry<EntityType<LadybugEntity>> LADYBUG = register("ladybug", () -> EntityType.Builder.of(LadybugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.375F));
+    public static final RegistryEntry<EntityType<StagBeetleEntity>> STAG_BEETLE = register("stag_beetle", () -> EntityType.Builder.of(StagBeetleEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.45F));
+    public static final RegistryEntry<EntityType<RollypollyEntity>> ROLLYPOLLY = register("rollypolly", () -> EntityType.Builder.of(RollypollyEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.4F));
+    public static final RegistryEntry<EntityType<SnailEntity>> SNAIL = register("snail", () -> EntityType.Builder.of(SnailEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.575F));
+    public static final RegistryEntry<EntityType<StickBugEntity>> STICK_BUG = register("stick_bug", () -> EntityType.Builder.of(StickBugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.385F));
+    public static final RegistryEntry<EntityType<WeevilEntity>> WEEVIL = register("weevil", () -> EntityType.Builder.of(WeevilEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.5F));
 
     private static <T extends Entity> RegistryEntry<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> factory) {
         return ENTITIES.register(name, () -> factory.get().build(name));
