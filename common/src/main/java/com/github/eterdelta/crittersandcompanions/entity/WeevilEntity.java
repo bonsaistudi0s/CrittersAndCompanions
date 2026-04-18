@@ -5,6 +5,7 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behavio
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.server.level.ServerLevel;
@@ -43,6 +44,7 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
+        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(2, TAGS.temptGoal(this));
         goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
