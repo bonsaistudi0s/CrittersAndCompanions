@@ -1,7 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
-import com.github.eterdelta.crittersandcompanions.entity.brain.CompanionAI;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
@@ -50,7 +49,12 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        CompanionAI.addGoalSelectors(this, TAGS, goalSelector);
+        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
+        goalSelector.addGoal(2, TAGS.temptGoal(this));
+        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(11, new DancingStrollGoal<>(this, 1.0D));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
