@@ -65,6 +65,9 @@ public final class CACLang extends LanguageProvider {
         translate(CACItems.PEARL_NECKLACE_2.getKey());
         translate(CACItems.PEARL_NECKLACE_3.getKey());
 
+        translate(CACItems.ACORN_HAT.getKey());
+        translate(CACItems.ACORN.getKey());
+
         add("pearl_necklace.level", "Level %s");
         add("pearl_necklace.swim_speed", "+%s%% Base swim speed");
         add("pearl_necklace.drowned_range", "-%s%% Drowned detection range");

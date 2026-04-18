@@ -41,6 +41,7 @@ public class CrittersAndCompanionsForge {
         var lootModifiers = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MODID);
         lootModifiers.register("replace_item", () -> ReplaceItemModifier.CODEC);
         lootModifiers.register("add_item", () -> AddItemModifier.CODEC);
+        lootModifiers.register("oak_leaves_acorn", () -> OakLeavesAcornModifier.CODEC);
         lootModifiers.register(modBus);
     }
 

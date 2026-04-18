@@ -1,0 +1,9 @@
+{
+  "type": "crittersandcompanions:oak_leaves_acorn",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:blocks/oak_leaves"
+    }
+  ]
+}

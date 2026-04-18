@@ -1,10 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.registry;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
-import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
-import com.github.eterdelta.crittersandcompanions.item.GrapplingHookItem;
-import com.github.eterdelta.crittersandcompanions.item.PearlNecklaceItem;
-import com.github.eterdelta.crittersandcompanions.item.SilkLeashItem;
+import com.github.eterdelta.crittersandcompanions.item.*;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryEntry;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryHelper;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
@@ -67,6 +64,9 @@ public class CACItems {
     public static final RegistryEntry<Item> WEEVIL_SPAWN_EGG = registerSpawnEgg(CACEntities.WEEVIL, 0xb06b3a, 0x975632);
 
     public static final RegistryEntry<Item> SILK_COCOON = ITEMS.register("silk_cocoon", () -> new BlockItem(CACBlocks.SILK_COCOON.get(), new Item.Properties()));
+
+    public static final RegistryEntry<Item> ACORN = ITEMS.register("acorn", () -> new AcornItem(new Item.Properties()));
+    public static final RegistryEntry<Item> ACORN_HAT = ITEMS.register("acorn_hat", () -> new AcornHatItem(new Item.Properties().durability(55)));
 
     private static <T extends Mob> RegistryEntry<Item> registerSpawnEgg(RegistryEntry<EntityType<T>> entity, int primary, int secondary) {
         return ITEMS.register(entity.getKey().location().getPath() + "_spawn_egg", () -> Services.PLATFORM.createSpawnEgg(entity, primary, secondary, new Item.Properties()));

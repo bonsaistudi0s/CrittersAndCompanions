@@ -7,6 +7,7 @@ import com.github.eterdelta.crittersandcompanions.network.CACPacketHandler;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryEntry;
 import com.github.eterdelta.crittersandcompanions.platform.RegistryHelper;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.registry.CACArmorMaterials;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
@@ -36,6 +37,7 @@ public class CrittersAndCompanions {
     );
 
     public static void init() {
+        CACArmorMaterials.init();
         CACBlocks.init();
         CACEntities.init();
         CACItems.init();
