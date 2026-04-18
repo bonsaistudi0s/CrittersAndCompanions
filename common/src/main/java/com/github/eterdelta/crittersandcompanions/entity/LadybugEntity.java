@@ -3,6 +3,7 @@ package com.github.eterdelta.crittersandcompanions.entity;
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.LadybugHealingAuraBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.FlyingTameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
@@ -45,6 +46,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new DancingBehaviour(this));
         behaviours.add(new TameableBehaviour(this, TAGS));
+        behaviours.add(new LadybugHealingAuraBehaviour(this));
     }
 
     @Override
