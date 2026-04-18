@@ -24,3 +24,6 @@ run
 runs
 
 .env
+
+# datagen cache
+common/src/generated/resources/.cache
