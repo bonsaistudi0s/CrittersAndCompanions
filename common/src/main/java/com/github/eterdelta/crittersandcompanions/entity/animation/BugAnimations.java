@@ -35,7 +35,7 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
             return RawAnimation.begin().thenLoop("fly");
         }
         if (dancingBehaviour != null && dancingBehaviour.isDancing()) {
-            return RawAnimation.begin().thenLoop("dance");
+            return RawAnimation.begin().thenLoop(dancingBehaviour.getDanceAnimationName());
         }
 
         if (state.isMoving()) {

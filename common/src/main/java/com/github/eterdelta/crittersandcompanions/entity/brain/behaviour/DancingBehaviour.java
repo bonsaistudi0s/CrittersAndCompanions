@@ -8,19 +8,29 @@ import org.jetbrains.annotations.Nullable;
 public class DancingBehaviour implements Behaviour {
 
     private final Entity owner;
+    private final int variants;
 
     private boolean dancing = false;
+    private int currentDanceIndex = 1;
     @Nullable
     private BlockPos activeJukebox = null;
 
     public DancingBehaviour(Entity owner) {
+        this(owner, 1);
+    }
+
+    public DancingBehaviour(Entity owner, int variants) {
         this.owner = owner;
+        this.variants = variants;
     }
 
     @Override
     public void setRecordPlayingNearby(BlockPos pos, boolean active) {
         activeJukebox = pos;
         dancing = active;
+        if (active && variants > 1) {
+            currentDanceIndex = owner.getRandom().nextInt(variants) + 1;
+        }
     }
 
     private boolean proceed() {
@@ -38,6 +48,10 @@ public class DancingBehaviour implements Behaviour {
 
     public boolean isDancing() {
         return dancing;
+    }
+
+    public String getDanceAnimationName() {
+        return variants == 1 ? "dance" : "dance_" + currentDanceIndex;
     }
 
 }

@@ -44,7 +44,7 @@ public class RollypollyEntity extends TamableAnimal implements GeoEntity {
     @Override
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new VariantBehaviour(this, VARIANT, 7));
-        behaviours.add(new DancingBehaviour(this));
+        behaviours.add(new DancingBehaviour(this, 2));
         behaviours.add(new TameableBehaviour(this, TAGS));
     }
 
