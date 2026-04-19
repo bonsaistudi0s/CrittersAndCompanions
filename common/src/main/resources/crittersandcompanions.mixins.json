@@ -12,6 +12,7 @@
     "NeutralMobsMixin",
     "PlayerMixin",
     "SpawnPlacementsAccessor",
+    "ZombieMixin",
     "ZombifiedPiglinMixin",
     "behaviour.AnimalMixin",
     "behaviour.BucketableMixin",

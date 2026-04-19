@@ -6,7 +6,6 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Climbin
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.control.WallClimberMoveControl;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
@@ -15,24 +14,21 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -40,16 +36,16 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class SnailEntity extends TamableAnimal implements GeoEntity {
 
-    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SnailEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SnailEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SnailEntity.class,
+            EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SnailEntity.class,
+            EntityDataSerializers.BOOLEAN);
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SNAIL.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public SnailEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
-       // this.jumpControl = new NoJumpControl(this);
-        this.moveControl = new WallClimberMoveControl(this);
     }
 
     @Override
@@ -84,7 +80,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob entity) {
         return CACEntities.SNAIL.get().create(level);
     }
 
@@ -94,11 +90,24 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
+    public void travel(@NotNull Vec3 travelVector) {
+        super.travel(travelVector);
+
+        if (onClimbable()) {
+            Vec3 movement = getDeltaMovement();
+            double climbSpeed = getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.5f;
+            if (movement.y > climbSpeed) {
+                setDeltaMovement(movement.x, climbSpeed, movement.z);
+            }
+        }
+    }
+
+    @Override
     public void jumpFromGround() {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
+    protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         return new WallClimberNavigation(this, level);
     }
 
@@ -115,5 +124,58 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return SoundEvents.SLIME_HURT_SMALL;
+    }
+
+    @Override
+    public @NotNull Vec3 getPassengerRidingPosition(@NotNull Entity passenger) {
+        if (onClimbable()) {
+            var wallFace = getClimbingWallFace();
+            if (wallFace != null) {
+                var away = wallFace.getOpposite();
+                double awayOffset = 6.0 / 16.0;
+                double heightOffset = -2.5 / 16.0;
+                return position().add(away.getStepX() * awayOffset, heightOffset, away.getStepZ() * awayOffset);
+            }
+        }
+
+        double backOffset = 2.0 / 16.0;
+        double yawRad = getYRot() * (Math.PI / 180.0);
+        return position().add(
+                Math.sin(yawRad) * backOffset,
+                8.2 / 16.0,
+                -Math.cos(yawRad) * backOffset
+        );
+    }
+
+    @Override
+    public void positionRider(@NotNull Entity passenger, @NotNull Entity.MoveFunction callback) {
+        super.positionRider(passenger, callback);
+        if (onClimbable()) {
+            passenger.setYRot(getYRot());
+            passenger.yRotO = getYRot();
+            passenger.setXRot(0.0F);
+            passenger.xRotO = 0.0F;
+            if (passenger instanceof Mob mob) {
+                mob.yBodyRot = getYRot();
+                mob.yHeadRot = getYRot();
+            }
+        }
+    }
+
+    @Nullable
+    public Direction getClimbingWallFace() {
+        var box = getBoundingBox();
+        var level = level();
+        for (var dir : Direction.Plane.HORIZONTAL) {
+            var neighbourPos = BlockPos.containing(
+                    box.getCenter().x + dir.getStepX() * (box.getXsize() / 2.0 + 0.1),
+                    box.minY,
+                    box.getCenter().z + dir.getStepZ() * (box.getZsize() / 2.0 + 0.1)
+            );
+            if (!level.getBlockState(neighbourPos).getCollisionShape(level, neighbourPos).isEmpty()) {
+                return dir;
+            }
+        }
+        return null;
     }
 }

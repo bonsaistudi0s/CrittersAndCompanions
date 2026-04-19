@@ -4,7 +4,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.phys.Vec3;
 
 public class ClimbingBehaviour implements Behaviour {
     private final Mob owner;
@@ -42,12 +41,4 @@ public class ClimbingBehaviour implements Behaviour {
     public void serverTick() {
         setClimbing(owner.horizontalCollision);
     }
-
-    @Override
-    public void travel(Vec3 speed) {
-        //if (owner.horizontalCollision && owner.onClimbable()) {
-        //    owner.setDeltaMovement(owner.getDeltaMovement().subtract(0.0D, 0.12D, 0.0D));
-        //}
-    }
-
 }
