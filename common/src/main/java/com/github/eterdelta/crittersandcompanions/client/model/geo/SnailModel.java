@@ -1,7 +1,9 @@
 package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
+import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.SnailEntity;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.ClimbingBehaviour;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.animation.AnimationState;
 
@@ -12,7 +14,24 @@ public class SnailModel extends AgedVariantGeoModel<SnailEntity> {
     }
 
     @Override
-    public void setCustomAnimations(SnailEntity animatable, long instanceId, AnimationState<SnailEntity> animationState) {
+    public ResourceLocation getTextureResource(SnailEntity entity) {
+        if (entity.hasCustomName()) {
+            var customName = ChatFormatting.stripFormatting(entity.getCustomName().getString());
+            if (customName.equalsIgnoreCase("gary")) {
+                if (entity.isBaby()) {
+                    return CrittersAndCompanions.createId("textures/entity/baby_snail_gary.png");
+                } else {
+                    return CrittersAndCompanions.createId("textures/entity/snail_gary.png");
+                }
+            }
+        }
+
+        return super.getTextureResource(entity);
+    }
+
+    @Override
+    public void setCustomAnimations(SnailEntity animatable, long instanceId,
+                                    AnimationState<SnailEntity> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
 
         var mainBone = this.getAnimationProcessor().getBone("main");
