@@ -1,4 +1,5 @@
 {
+  "block.crittersandcompanions.sea_bunny_slime_block": "Sea Bunny Slime Block",
   "block.crittersandcompanions.silk_cocoon": "Silk Cocoon",
   "entity.crittersandcompanions.dragonfly": "Dragonfly",
   "entity.crittersandcompanions.dumbo_octopus": "Dumbo Octopus",
@@ -43,7 +44,7 @@
   "item.crittersandcompanions.red_panda_spawn_egg": "Red Panda Spawn Egg",
   "item.crittersandcompanions.rollypolly_spawn_egg": "Rollypolly Spawn Egg",
   "item.crittersandcompanions.sea_bunny_bucket": "Bucket of Sea Bunny",
-  "item.crittersandcompanions.sea_bunny_slime_block": "Sea Bunny Slime Block",
+  "item.crittersandcompanions.sea_bunny_slime_bottle": "Sea Bunny Slime Bottle",
   "item.crittersandcompanions.sea_bunny_spawn_egg": "Sea Bunny Spawn Egg",
   "item.crittersandcompanions.shima_enaga_spawn_egg": "Shima Enaga Spawn Egg",
   "item.crittersandcompanions.silk": "Silk",

@@ -43,7 +43,8 @@ public final class CACLang extends LanguageProvider {
         withSpawnEgg(CACEntities.WEEVIL);
         add(CACEntities.GRAPPLING_HOOK.get(), "Grappling Hook");
 
-        add(CACBlocks.SILK_COCOON.get(), "Silk Cocoon");
+        translate(CACBlocks.SILK_COCOON.getKey());
+        translate(CACBlocks.SEA_BUNNY_SLIME_BLOCK.getKey());
 
         add(CACItems.DUMBO_OCTOPUS_BUCKET.get(), "Bucket of Dumbo Octopus");
         add(CACItems.SEA_BUNNY_BUCKET.get(), "Bucket of Sea Bunny");
@@ -58,7 +59,7 @@ public final class CACLang extends LanguageProvider {
         translate(CACItems.DRAGONFLY_WING.getKey());
         translate(CACItems.PEARL.getKey());
         translate(CACItems.SILK.getKey());
-        translate(CACItems.SEA_BUNNY_SLIME_BLOCK.getKey());
+        translate(CACItems.SEA_BUNNY_SLIME_BOTTLE.getKey());
         translate(CACItems.SILK_LEAD.getKey());
         translate(CACItems.GRAPPLING_HOOK.getKey());
         translate(CACItems.PEARL_NECKLACE_1.getKey());
