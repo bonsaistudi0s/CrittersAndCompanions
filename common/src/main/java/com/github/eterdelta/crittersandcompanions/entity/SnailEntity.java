@@ -94,6 +94,10 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
+    public void jumpFromGround() {
+    }
+
+    @Override
     protected PathNavigation createNavigation(Level level) {
         return new WallClimberNavigation(this, level);
     }
