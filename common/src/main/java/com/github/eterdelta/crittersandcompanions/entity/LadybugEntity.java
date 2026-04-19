@@ -124,4 +124,8 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     protected boolean canFlyToOwner() {
         return true;
     }
+
+    @Override
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state) {
+    }
 }

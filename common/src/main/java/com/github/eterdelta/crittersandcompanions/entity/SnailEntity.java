@@ -10,6 +10,7 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrol
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,6 +22,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -124,6 +126,10 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return SoundEvents.SLIME_HURT_SMALL;
+    }
+
+    @Override
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state) {
     }
 
     @Override

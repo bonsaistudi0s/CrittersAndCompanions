@@ -9,6 +9,7 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrol
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -31,6 +32,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -96,6 +99,10 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state) {
+    }
+
+    @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
         return null;
     }
@@ -109,5 +116,4 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
-
 }
