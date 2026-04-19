@@ -105,4 +105,8 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         return cache;
     }
 
+    @Override
+    protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+        return SoundEvents.SLIME_HURT_SMALL;
+    }
 }
