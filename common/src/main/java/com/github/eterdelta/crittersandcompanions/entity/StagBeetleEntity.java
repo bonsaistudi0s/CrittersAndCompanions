@@ -1,10 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
-import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.*;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
@@ -55,6 +52,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(new VariantBehaviour(this, VARIANT, 6));
         behaviours.add(new DancingBehaviour(this));
         behaviours.add(new TameableBehaviour(this, TAGS));
+        behaviours.add(new HealthRegenerationBehaviour(this));
     }
 
     @Override
