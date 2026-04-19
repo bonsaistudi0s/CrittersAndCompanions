@@ -11,7 +11,7 @@ import com.github.eterdelta.crittersandcompanions.entity.LadybugEntity;
 import com.github.eterdelta.crittersandcompanions.entity.LeafInsectEntity;
 import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import com.github.eterdelta.crittersandcompanions.entity.RedPandaEntity;
-import com.github.eterdelta.crittersandcompanions.entity.RollypollyEntity;
+import com.github.eterdelta.crittersandcompanions.entity.RolyPolyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.SeaBunnyEntity;
 import com.github.eterdelta.crittersandcompanions.entity.ShimaEnagaEntity;
 import com.github.eterdelta.crittersandcompanions.entity.SnailEntity;
@@ -44,7 +44,7 @@ public class CACEntities {
 
     public static final RegistryEntry<EntityType<LadybugEntity>> LADYBUG = register("ladybug", () -> EntityType.Builder.of(LadybugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.375F));
     public static final RegistryEntry<EntityType<StagBeetleEntity>> STAG_BEETLE = register("stag_beetle", () -> EntityType.Builder.of(StagBeetleEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.45F));
-    public static final RegistryEntry<EntityType<RollypollyEntity>> ROLLYPOLLY = register("rollypolly", () -> EntityType.Builder.of(RollypollyEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.4F));
+    public static final RegistryEntry<EntityType<RolyPolyEntity>> ROLY_POLY = register("roly_poly", () -> EntityType.Builder.of(RolyPolyEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.4F));
     public static final RegistryEntry<EntityType<SnailEntity>> SNAIL = register("snail", () -> EntityType.Builder.of(SnailEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.575F));
     public static final RegistryEntry<EntityType<StickBugEntity>> STICK_BUG = register("stick_bug", () -> EntityType.Builder.of(StickBugEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.385F));
     public static final RegistryEntry<EntityType<WeevilEntity>> WEEVIL = register("weevil", () -> EntityType.Builder.of(WeevilEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.5F));

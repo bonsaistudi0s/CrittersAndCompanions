@@ -58,7 +58,7 @@ public class CACItems {
     public static final RegistryEntry<Item> SHIMA_ENAGA_SPAWN_EGG = registerSpawnEgg(CACEntities.SHIMA_ENAGA, 0xFCFCEC, 0x5C3C34);
     public static final RegistryEntry<Item> LADYBUG_SPAWN_EGG = registerSpawnEgg(CACEntities.LADYBUG, 0xDE3023, 0x170302);
     public static final RegistryEntry<Item> STAG_BEETLE_SPAWN_EGG = registerSpawnEgg(CACEntities.STAG_BEETLE, 0x11111a, 0x2b4854);
-    public static final RegistryEntry<Item> ROLLYPOLLY_SPAWN_EGG = registerSpawnEgg(CACEntities.ROLLYPOLLY, 0x918780, 0x4e494d);
+    public static final RegistryEntry<Item> ROLY_POLY_SPAWN_EGG = registerSpawnEgg(CACEntities.ROLY_POLY, 0x918780, 0x4e494d);
     public static final RegistryEntry<Item> SNAIL_SPAWN_EGG = registerSpawnEgg(CACEntities.SNAIL, 0x834434, 0xeb9b5c);
     public static final RegistryEntry<Item> STICK_BUG_SPAWN_EGG = registerSpawnEgg(CACEntities.STICK_BUG, 0xa97338, 0x70851e);
     public static final RegistryEntry<Item> WEEVIL_SPAWN_EGG = registerSpawnEgg(CACEntities.WEEVIL, 0xb06b3a, 0x975632);

@@ -40,7 +40,7 @@ public class ZombieMixin {
                     level.addFreshEntity(mount);
                 }
             } else {
-                var mount = CACEntities.ROLLYPOLLY.get().create(self.level());
+                var mount = CACEntities.ROLY_POLY.get().create(self.level());
                 if (mount != null) {
                     mount.moveTo(self.getX(), self.getY(), self.getZ(), self.getYRot(), 0.0F);
                     mount.finalizeSpawn(level, difficulty, MobSpawnType.JOCKEY, null);

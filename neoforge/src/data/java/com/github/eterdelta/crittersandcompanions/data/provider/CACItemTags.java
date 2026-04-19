@@ -45,8 +45,8 @@ public final class CACItemTags extends ItemTagsProvider {
         tag(ShimaEnagaEntity.TAGS.food()).addTag(Tags.Items.SEEDS);
         temptWithFood(ShimaEnagaEntity.TAGS);
 
-        tag(RollypollyEntity.TAGS.tempt()).addTag(Tags.Items.MUSHROOMS);
-        tag(RollypollyEntity.TAGS.food()).add(Items.DEAD_BUSH);
+        tag(RolyPolyEntity.TAGS.tempt()).addTag(Tags.Items.MUSHROOMS);
+        tag(RolyPolyEntity.TAGS.food()).add(Items.DEAD_BUSH);
 
         tag(LadybugEntity.TAGS.food()).addTag(Tags.Items.MUSHROOMS);
         temptWithFood(LadybugEntity.TAGS);

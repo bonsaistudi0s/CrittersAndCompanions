@@ -37,7 +37,8 @@ public final class CACLang extends LanguageProvider {
         withSpawnEgg(CACEntities.LEAF_INSECT);
         withSpawnEgg(CACEntities.LADYBUG);
         withSpawnEgg(CACEntities.STAG_BEETLE);
-        withSpawnEgg(CACEntities.ROLLYPOLLY);
+        add(CACEntities.ROLY_POLY.get(), "Roly-Poly");
+        addSpawnEgg(CACEntities.ROLY_POLY, "Roly-Poly");
         withSpawnEgg(CACEntities.SNAIL);
         withSpawnEgg(CACEntities.STICK_BUG);
         withSpawnEgg(CACEntities.WEEVIL);
@@ -118,4 +119,8 @@ public final class CACLang extends LanguageProvider {
         add("item.%s.%s_spawn_egg".formatted(id.getNamespace(), id.getPath()), translation + " Spawn Egg");
     }
 
+    private void addSpawnEgg(RegistryEntry<? extends EntityType<?>> type, String translation) {
+        var id = type.getKey().location();
+        add("item.%s.%s_spawn_egg".formatted(id.getNamespace(), id.getPath()), translation + " Spawn Egg");
+    }
 }

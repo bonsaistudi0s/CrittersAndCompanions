@@ -30,14 +30,14 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class RollypollyEntity extends TamableAnimal implements GeoEntity {
+public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
-    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(RollypollyEntity.class, EntityDataSerializers.INT);
-    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.ROLLYPOLLY.getKey());
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(RolyPolyEntity.class, EntityDataSerializers.INT);
+    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.ROLY_POLY.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public RollypollyEntity(EntityType<? extends TamableAnimal> type, Level level) {
+    public RolyPolyEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
     }
 
@@ -70,7 +70,7 @@ public class RollypollyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
-        return CACEntities.ROLLYPOLLY.get().create(level);
+        return CACEntities.ROLY_POLY.get().create(level);
     }
 
     @Override

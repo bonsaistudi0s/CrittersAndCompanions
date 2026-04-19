@@ -69,7 +69,7 @@ public class CrittersAndCompanionsClient {
 
         event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
         event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
-        event.accept(CACEntities.ROLLYPOLLY, GeoEntityRenderer::new, AgedVariantGeoModel::new);
+        event.accept(CACEntities.ROLY_POLY, GeoEntityRenderer::new, AgedVariantGeoModel::new);
         event.accept(CACEntities.SNAIL, SnailRenderer::new, SnailModel::new);
         event.accept(CACEntities.STICK_BUG, GeoEntityRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.WEEVIL, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
