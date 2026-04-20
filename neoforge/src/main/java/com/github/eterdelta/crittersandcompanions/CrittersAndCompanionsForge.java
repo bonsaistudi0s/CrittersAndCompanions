@@ -2,9 +2,11 @@ package com.github.eterdelta.crittersandcompanions;
 
 import static com.github.eterdelta.crittersandcompanions.CrittersAndCompanions.MODID;
 
+import com.github.eterdelta.crittersandcompanions.config.CACSpawnConfig;
 import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
 import com.github.eterdelta.crittersandcompanions.platform.ForgeConfigs;
 import com.github.eterdelta.crittersandcompanions.platform.ForgeNetwork;
+import com.github.eterdelta.crittersandcompanions.platform.Services;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -34,6 +36,7 @@ public class CrittersAndCompanionsForge {
         CrittersAndCompanions.init();
         ForgeNetwork.register(modBus);
         ForgeConfigs.register(container);
+        CACSpawnConfig.load(Services.PLATFORM.getConfigDir());
 
         modBus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(CrittersAndCompanions::setup));
         modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(CrittersAndCompanionsClient::init));
@@ -43,6 +46,10 @@ public class CrittersAndCompanionsForge {
         lootModifiers.register("add_item", () -> AddItemModifier.CODEC);
         lootModifiers.register("oak_leaves_acorn", () -> OakLeavesAcornModifier.CODEC);
         lootModifiers.register(modBus);
+
+        var biomeModifiers = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID);
+        biomeModifiers.register("config_driven_spawns", () -> CACSpawnsBiomeModifier.CODEC);
+        biomeModifiers.register(modBus);
     }
 
     @SubscribeEvent
@@ -91,5 +98,4 @@ public class CrittersAndCompanionsForge {
         }
 
     }
-
 }

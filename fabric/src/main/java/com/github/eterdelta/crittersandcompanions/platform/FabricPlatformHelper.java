@@ -3,6 +3,7 @@ package com.github.eterdelta.crittersandcompanions.platform;
 import com.github.eterdelta.crittersandcompanions.compat.TrinketsCompat;
 import com.github.eterdelta.crittersandcompanions.platform.service.IPlatformHelper;
 import io.github.fabricators_of_create.porting_lib.attributes.PortingLibAttributes;
+import java.nio.file.Path;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import net.fabricmc.loader.api.FabricLoader;
@@ -46,4 +47,8 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return Stream.empty();
     }
 
+    @Override
+    public Path getConfigDir() {
+        return FabricLoader.getInstance().getConfigDir();
+    }
 }

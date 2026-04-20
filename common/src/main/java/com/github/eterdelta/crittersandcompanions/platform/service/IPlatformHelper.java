@@ -1,6 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.platform.service;
 
 import com.github.eterdelta.crittersandcompanions.platform.RegistryHelper;
+import java.nio.file.Path;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import net.minecraft.core.Holder;
@@ -24,4 +25,5 @@ public interface IPlatformHelper {
 
     Stream<ItemStack> getAdditionalEquipment(Player player);
 
+    Path getConfigDir();
 }

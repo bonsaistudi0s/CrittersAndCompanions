@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.platform;
 
 import com.github.eterdelta.crittersandcompanions.compat.CuriosCompat;
 import com.github.eterdelta.crittersandcompanions.platform.service.IPlatformHelper;
+import java.nio.file.Path;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import net.minecraft.core.Holder;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForgeMod;
 
@@ -47,4 +49,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
         return Stream.empty();
     }
 
+    @Override
+    public Path getConfigDir() {
+        return FMLPaths.CONFIGDIR.get();
+    }
 }
