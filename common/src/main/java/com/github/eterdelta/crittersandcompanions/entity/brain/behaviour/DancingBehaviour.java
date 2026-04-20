@@ -51,7 +51,7 @@ public class DancingBehaviour implements Behaviour {
     }
 
     public String getDanceAnimationName() {
-        return variants == 1 ? "dance" : "dance_" + currentDanceIndex;
+        return currentDanceIndex == 1 ? "dance" : "dance_" + currentDanceIndex;
     }
 
 }

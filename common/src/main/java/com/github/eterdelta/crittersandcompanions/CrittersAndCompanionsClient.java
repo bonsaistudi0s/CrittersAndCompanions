@@ -2,7 +2,7 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
 import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.AgedVariantGeoModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.RolyPolyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DragonflyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.FerretModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpiderModel;
@@ -69,7 +69,7 @@ public class CrittersAndCompanionsClient {
 
         event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
         event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
-        event.accept(CACEntities.ROLY_POLY, GeoEntityRenderer::new, AgedVariantGeoModel::new);
+        event.accept(CACEntities.ROLY_POLY, GeoEntityRenderer::new, RolyPolyModel::new);
         event.accept(CACEntities.SNAIL, SnailRenderer::new, SnailModel::new);
         event.accept(CACEntities.STICK_BUG, GeoEntityRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.WEEVIL, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
