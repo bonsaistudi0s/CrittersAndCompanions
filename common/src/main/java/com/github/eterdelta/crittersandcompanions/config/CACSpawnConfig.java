@@ -13,9 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
@@ -35,18 +35,17 @@ public class CACSpawnConfig {
 
     static {
         defaults(CACEntities.LEAF_INSECT,
-                entry(BiomeTags.IS_JUNGLE, 14, 1, 1),
-                entry(BiomeTags.IS_FOREST, 14, 1, 1));
+                entry(cTag("is_jungle"), 14, 1, 1),
+                entry(cTag("is_forest"), 14, 1, 1));
         defaults(CACEntities.RED_PANDA,
-                entry(BiomeTags.IS_JUNGLE, 8, 1, 2));
+                entry(cTag("is_jungle"), 8, 1, 2));
         defaults(CACEntities.JUMPING_SPIDER,
-                entry(BiomeTags.IS_JUNGLE, 2, 1, 1),
-                entry(BiomeTags.IS_FOREST, 2, 1, 1),
-                entry(Biomes.LUSH_CAVES, 2, 1, 1));
+                entry(cTag("is_jungle"), 2, 1, 1),
+                entry(cTag("is_forest"), 2, 1, 1),
+                entry(cTag("is_lush"), 2, 1, 1));
         defaults(CACEntities.FERRET,
-                entry(BiomeTags.IS_FOREST, 3, 2, 3),
-                entry(BiomeTags.HAS_VILLAGE_PLAINS, 4, 2, 3),
-                entry(Biomes.SUNFLOWER_PLAINS, 4, 2, 3));
+                entry(cTag("is_forest"), 3, 2, 3),
+                entry(cTag("is_plains"), 4, 2, 3));
         defaults(CACEntities.SEA_BUNNY,
                 entry(Biomes.OCEAN, 16, 1, 2),
                 entry(Biomes.DEEP_OCEAN, 16, 1, 2),
@@ -60,31 +59,35 @@ public class CACSpawnConfig {
                 entry(Biomes.LUKEWARM_OCEAN, 6, 1, 1),
                 entry(Biomes.DEEP_LUKEWARM_OCEAN, 6, 1, 1));
         defaults(CACEntities.OTTER,
-                entry(BiomeTags.IS_RIVER, 1, 3, 5));
+                entry(cTag("is_river"), 1, 3, 5));
         defaults(CACEntities.KOI_FISH,
-                entry(BiomeTags.IS_RIVER, 4, 2, 5));
+                entry(cTag("is_river"), 4, 2, 5));
         defaults(CACEntities.DRAGONFLY,
-                entry(BiomeTags.IS_RIVER, 7, 1, 1));
+                entry(cTag("is_river"), 7, 1, 1));
         defaults(CACEntities.SHIMA_ENAGA,
-                entry(Biomes.SNOWY_PLAINS, 3, 2, 3));
+                entry(cTag("is_snowy"), 3, 2, 3));
         defaults(CACEntities.LADYBUG,
-                entry(Biomes.FOREST, 6, 1, 3),
-                entry(Biomes.LUSH_CAVES, 6, 1, 3));
+                entry(cTag("is_forest"), 6, 1, 3),
+                entry(cTag("is_lush"), 6, 1, 3));
         defaults(CACEntities.STAG_BEETLE,
-                entry(Biomes.FOREST, 4, 1, 2),
-                entry(Biomes.LUSH_CAVES, 4, 1, 2));
+                entry(cTag("is_forest"), 4, 1, 2),
+                entry(cTag("is_lush"), 4, 1, 2));
         defaults(CACEntities.ROLY_POLY,
-                entry(Biomes.FOREST, 5, 1, 3),
-                entry(Biomes.LUSH_CAVES, 5, 1, 3));
+                entry(cTag("is_forest"), 5, 1, 3),
+                entry(cTag("is_lush"), 5, 1, 3));
         defaults(CACEntities.SNAIL,
-                entry(Biomes.FOREST, 5, 1, 2),
-                entry(Biomes.LUSH_CAVES, 5, 1, 2));
+                entry(cTag("is_forest"), 5, 1, 2),
+                entry(cTag("is_lush"), 5, 1, 2));
         defaults(CACEntities.STICK_BUG,
-                entry(Biomes.FOREST, 4, 1, 2),
-                entry(Biomes.LUSH_CAVES, 4, 1, 2));
+                entry(cTag("is_forest"), 4, 1, 2),
+                entry(cTag("is_lush"), 4, 1, 2));
         defaults(CACEntities.WEEVIL,
-                entry(Biomes.FOREST, 4, 1, 3),
-                entry(Biomes.LUSH_CAVES, 4, 1, 3));
+                entry(cTag("is_forest"), 4, 1, 3),
+                entry(cTag("is_lush"), 4, 1, 3));
+    }
+
+    private static TagKey<Biome> cTag(String path) {
+        return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("c", path));
     }
 
     private static SpawnEntry entry(TagKey<Biome> tag, int weight, int min, int max) {
