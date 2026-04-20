@@ -20,4 +20,3 @@ public class TameablePanicGoal extends PanicGoal {
         return super.canUse();
     }
 }
-

@@ -3,9 +3,7 @@ package com.github.eterdelta.crittersandcompanions.item;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.client.renderer.geo.AcornArmorRenderer;
 import com.github.eterdelta.crittersandcompanions.registry.CACArmorMaterials;
-
 import java.util.function.Consumer;
-
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EquipmentSlot;

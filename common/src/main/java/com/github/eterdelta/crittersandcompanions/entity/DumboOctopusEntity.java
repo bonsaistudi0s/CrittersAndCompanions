@@ -8,7 +8,6 @@ import com.github.eterdelta.crittersandcompanions.network.ClientboundBubbleState
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.EnumSet;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

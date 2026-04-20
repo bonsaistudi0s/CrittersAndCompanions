@@ -1,13 +1,12 @@
 package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
 import net.fabricmc.fabric.api.loot.v3.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.mixin.loot.LootTableAccessor;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -20,12 +19,11 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class CACLootModifiers {

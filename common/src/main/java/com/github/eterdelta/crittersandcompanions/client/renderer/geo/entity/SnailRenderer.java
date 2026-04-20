@@ -24,5 +24,3 @@ public class SnailRenderer extends GeoEntityRenderer<SnailEntity> {
         }
     }
 }
-
-
