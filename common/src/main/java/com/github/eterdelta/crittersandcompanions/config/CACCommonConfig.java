@@ -22,7 +22,7 @@ public class CACCommonConfig {
     public CACCommonConfig(ModConfigSpec.Builder builder) {
         builder.push("necklace");
 
-        this.necklaceSwimSpeed = builder.defineInRange("swim_sped", 0.2F, 0F, 1F);
+        this.necklaceSwimSpeed = builder.defineInRange("swim_speed", 0.2F, 0F, 1F);
         this.necklaceDrownedDebuff = builder.defineInRange("drowned_range_debuff", 0.1F, 0F, 1F);
         this.necklaceGuardianDebuff = builder.defineInRange("guardian_range_debuff", 0.1F, 0F, 1F);
 
