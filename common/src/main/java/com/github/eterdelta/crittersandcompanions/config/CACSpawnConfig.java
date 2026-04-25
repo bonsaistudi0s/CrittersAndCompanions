@@ -59,11 +59,11 @@ public class CACSpawnConfig {
                 entry(Biomes.LUKEWARM_OCEAN, 6, 1, 1),
                 entry(Biomes.DEEP_LUKEWARM_OCEAN, 6, 1, 1));
         defaults(CACEntities.OTTER,
-                entry(cTag("is_river"), 1, 3, 5));
+                entry(Biomes.RIVER, 1, 3, 5));
         defaults(CACEntities.KOI_FISH,
-                entry(cTag("is_river"), 4, 2, 5));
+                entry(Biomes.RIVER, 4, 2, 5));
         defaults(CACEntities.DRAGONFLY,
-                entry(cTag("is_river"), 7, 1, 1));
+                entry(Biomes.RIVER, 7, 1, 1));
         defaults(CACEntities.SHIMA_ENAGA,
                 entry(cTag("is_snowy"), 3, 2, 3));
         defaults(CACEntities.LADYBUG,
