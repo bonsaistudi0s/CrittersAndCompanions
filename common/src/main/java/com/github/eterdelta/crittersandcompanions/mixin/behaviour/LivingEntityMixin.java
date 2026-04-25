@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.mixin.behaviour;
 
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +27,14 @@ public class LivingEntityMixin implements BehaviourDriven {
     )
     private void behaviourTravel(Vec3 vec, CallbackInfo ci) {
         getBehaviours().forEach(it -> it.travel(vec));
+    }
+
+    @Inject(
+            method = "dropEquipment()V",
+            at = @At("HEAD")
+    )
+    private void behaviourDropEquipment(CallbackInfo ci) {
+        getBehaviours().forEach(Behaviour::dropEquipment);
     }
 
 }

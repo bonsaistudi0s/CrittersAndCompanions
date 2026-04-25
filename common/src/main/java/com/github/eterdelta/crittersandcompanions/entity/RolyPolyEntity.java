@@ -3,6 +3,7 @@ package com.github.eterdelta.crittersandcompanions.entity;
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.*;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.FreezeWhileChestAccessedGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.inventory.DispenserMenu;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -34,6 +36,8 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(RolyPolyEntity.class,
             EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> HAS_CHEST = SynchedEntityData.defineId(RolyPolyEntity.class,
+            EntityDataSerializers.BOOLEAN);
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.ROLY_POLY.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -44,6 +48,7 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new ChestBehaviour(this, HAS_CHEST, 9, DispenserMenu::new));
         behaviours.add(new VariantBehaviour(this, VARIANT, 7));
         behaviours.add(new DancingBehaviour(this, 2));
         behaviours.add(new TameableBehaviour(this, TAGS));
@@ -52,6 +57,7 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
+        goalSelector.addGoal(0, new FreezeWhileChestAccessedGoal(this));
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(2, TAGS.temptGoal(this));

@@ -42,6 +42,9 @@ public interface Behaviour {
         return InteractionResult.PASS;
     }
 
+    default void dropEquipment() {
+    }
+
     default void travel(Vec3 speed) {
     }
 
