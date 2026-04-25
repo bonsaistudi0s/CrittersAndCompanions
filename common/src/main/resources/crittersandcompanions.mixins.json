@@ -4,6 +4,7 @@
   "package": "com.github.eterdelta.crittersandcompanions.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractIllagerMixin",
     "DrownedMixin",
     "EntityAccessor",
     "LivingEntityMixin",
