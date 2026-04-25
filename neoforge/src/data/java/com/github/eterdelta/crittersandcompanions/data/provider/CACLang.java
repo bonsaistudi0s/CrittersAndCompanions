@@ -69,6 +69,11 @@ public final class CACLang extends LanguageProvider {
 
         translate(CACItems.ACORN_HAT.getKey());
         translate(CACItems.ACORN.getKey());
+        translate(CACItems.SNAIL_SLIME_BOTTLE.getKey());
+
+        add("item.minecraft.potion.effect.resistance", "Potion of Resistance");
+        add("item.minecraft.splash_potion.effect.resistance", "Splash Potion of Resistance");
+        add("item.minecraft.lingering_potion.effect.resistance", "Lingering Potion of Resistance");
 
         add("pearl_necklace.level", "Level %s");
         add("pearl_necklace.swim_speed", "+%s%% Base swim speed");

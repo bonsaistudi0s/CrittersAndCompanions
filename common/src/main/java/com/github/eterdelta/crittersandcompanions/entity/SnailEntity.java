@@ -6,6 +6,7 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrol
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,6 +15,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,7 +25,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -53,6 +59,34 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new ClimbingBehaviour(this, CLIMBING));
         behaviours.add(new HealthRegenerationBehaviour(this));
+        behaviours.add(new SlimeHarvestBehaviour());
+    }
+
+    @Override
+    public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
+        if (isTame() && isOwnedBy(player)) {
+            var handStack = player.getItemInHand(hand);
+            if (handStack.is(Items.GLASS_BOTTLE)) {
+                var harvest = behaviour(SlimeHarvestBehaviour.class);
+                if (!level().isClientSide()) {
+                    if (harvest.isReady()) {
+                        handStack.consume(1, player);
+                        var slimeBottle = new ItemStack(CACItems.SNAIL_SLIME_BOTTLE.get());
+                        if (handStack.isEmpty()) {
+                            player.setItemInHand(hand, slimeBottle);
+                        } else if (!player.getInventory().add(slimeBottle)) {
+                            player.drop(slimeBottle, false);
+                        }
+                        level().playSound(null, getX(), getY(), getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
+                        harvest.startCooldown();
+                    }
+                    return InteractionResult.sidedSuccess(false);
+                }
+                return InteractionResult.sidedSuccess(true);
+            }
+        }
+
+        return super.mobInteract(player, hand);
     }
 
     @Override

@@ -67,6 +67,7 @@ public class CACItems {
 
     public static final RegistryEntry<Item> ACORN = ITEMS.register("acorn", () -> new AcornItem(new Item.Properties()));
     public static final RegistryEntry<Item> ACORN_HAT = ITEMS.register("acorn_hat", () -> new AcornHatItem(new Item.Properties().durability(55)));
+    public static final RegistryEntry<Item> SNAIL_SLIME_BOTTLE = ITEMS.register("snail_slime_bottle", () -> new SnailSlimeBottleItem(new Item.Properties().craftRemainder(Items.GLASS_BOTTLE).stacksTo(16)));
 
     private static <T extends Mob> RegistryEntry<Item> registerSpawnEgg(RegistryEntry<EntityType<T>> entity, int primary, int secondary) {
         return ITEMS.register(entity.getKey().location().getPath() + "_spawn_egg", () -> Services.PLATFORM.createSpawnEgg(entity, primary, secondary, new Item.Properties()));

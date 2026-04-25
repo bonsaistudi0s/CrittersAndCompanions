@@ -4,7 +4,8 @@
   "package": "com.github.eterdelta.crittersandcompanions.mixin.fabric",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "PistonStructureResolverMixin"
+    "PistonStructureResolverMixin",
+    "PotionBrewingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -11,8 +11,10 @@ import com.github.eterdelta.crittersandcompanions.registry.CACArmorMaterials;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACPotions;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.function.BiConsumer;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +25,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 
 public class CrittersAndCompanions {
+
     public static final String MODID = "crittersandcompanions";
 
     public static ResourceLocation createId(String path) {
@@ -41,6 +44,7 @@ public class CrittersAndCompanions {
         CACBlocks.init();
         CACEntities.init();
         CACItems.init();
+        CACPotions.init();
         CACSounds.init();
         CACPacketHandler.registerPackets();
         registerColors();

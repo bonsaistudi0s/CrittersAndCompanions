@@ -7,6 +7,7 @@ import com.github.eterdelta.crittersandcompanions.handler.PlayerHandler;
 import com.github.eterdelta.crittersandcompanions.platform.ForgeConfigs;
 import com.github.eterdelta.crittersandcompanions.platform.ForgeNetwork;
 import com.github.eterdelta.crittersandcompanions.platform.Services;
+import com.github.eterdelta.crittersandcompanions.registry.CACPotions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -21,6 +22,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -97,5 +99,10 @@ public class CrittersAndCompanionsForge {
             PlayerHandler.onPlayerStopTracking(event.getTarget(), event.getEntity());
         }
 
+        @SubscribeEvent
+        public static void onRegisterBrewingRecipes(RegisterBrewingRecipesEvent event) {
+            var builder = event.getBuilder();
+            CACPotions.registerBrewingRecipes(builder::addMix);
+        }
     }
 }
