@@ -11,6 +11,7 @@ import com.github.eterdelta.crittersandcompanions.registry.CACArmorMaterials;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+import com.github.eterdelta.crittersandcompanions.registry.CACMenuTypes;
 import com.github.eterdelta.crittersandcompanions.registry.CACPotions;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.function.BiConsumer;
@@ -44,6 +45,7 @@ public class CrittersAndCompanions {
         CACBlocks.init();
         CACEntities.init();
         CACItems.init();
+        CACMenuTypes.init();
         CACPotions.init();
         CACSounds.init();
         CACPacketHandler.registerPackets();

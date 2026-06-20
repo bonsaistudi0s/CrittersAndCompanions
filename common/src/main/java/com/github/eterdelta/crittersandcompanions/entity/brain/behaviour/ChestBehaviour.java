@@ -52,10 +52,6 @@ public class ChestBehaviour implements Behaviour {
         return viewer != null;
     }
 
-    public SimpleContainer getInventory() {
-        return inventory;
-    }
-
     @Override
     public void defineSyncedData(SynchedEntityData.Builder builder) {
         builder.define(dataAccessor, false);
@@ -152,6 +148,7 @@ public class ChestBehaviour implements Behaviour {
             }
             setHasChest(false);
             inventory = new SimpleContainer(slots);
+            viewer = null;
         }
     }
 }

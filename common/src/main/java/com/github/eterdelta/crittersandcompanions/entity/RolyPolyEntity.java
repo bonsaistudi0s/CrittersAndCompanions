@@ -5,6 +5,7 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.*;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.FreezeWhileChestAccessedGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
+import com.github.eterdelta.crittersandcompanions.menu.RolyPolyMenu;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import net.minecraft.core.BlockPos;
@@ -15,7 +16,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.inventory.DispenserMenu;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -48,7 +48,9 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerBehaviours(Behaviours behaviours) {
-        behaviours.add(new ChestBehaviour(this, HAS_CHEST, 9, DispenserMenu::new));
+        behaviours.add(new ChestBehaviour(this, HAS_CHEST, RolyPolyMenu.SLOTS,
+                (id, inv, container) -> new RolyPolyMenu(id, inv, container,
+                        () -> getBehaviours().the(ChestBehaviour.class).dropEquipment())));
         behaviours.add(new VariantBehaviour(this, VARIANT, 7));
         behaviours.add(new DancingBehaviour(this, 2));
         behaviours.add(new TameableBehaviour(this, TAGS));
