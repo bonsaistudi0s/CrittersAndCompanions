@@ -3,6 +3,8 @@ package com.github.eterdelta.crittersandcompanions.entity.animation;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
+
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -36,6 +38,10 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
         }
         if (dancingBehaviour != null && dancingBehaviour.isDancing()) {
             return RawAnimation.begin().thenLoop(dancingBehaviour.getDanceAnimationName());
+        }
+
+        if (state.getAnimatable() instanceof TamableAnimal animal && animal.isInSittingPose()) {
+            return RawAnimation.begin().thenLoop("sit");
         }
 
         if (state.isMoving()) {
