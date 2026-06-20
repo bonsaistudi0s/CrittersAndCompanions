@@ -546,6 +546,48 @@
 					}
 				}
 			}
+		},
+		"sitting": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"position": {
+						"vector": [0, -1, 0]
+					}
+				},
+				"left_legs_walk": {
+					"rotation": {
+						"vector": [0, 0, -30]
+					},
+					"position": {
+						"vector": [0, -0.9, 0]
+					}
+				},
+				"left_legs": {
+					"rotation": {
+						"vector": [0, 0, -30]
+					},
+					"position": {
+						"vector": [0, -0.9, 0]
+					}
+				},
+				"right_legs_walk": {
+					"rotation": {
+						"vector": [0, 0, 30]
+					},
+					"position": {
+						"vector": [0, -0.9, 0]
+					}
+				},
+				"right_legs": {
+					"rotation": {
+						"vector": [0, 0, 30]
+					},
+					"position": {
+						"vector": [0, -0.9, 0]
+					}
+				}
+			}
 		}
 	}
 }
