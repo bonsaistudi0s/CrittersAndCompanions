@@ -50,5 +50,6 @@ public final class CACItemModels extends ItemModelProvider {
         basicItem(CACItems.SEA_BUNNY_SLIME_BOTTLE.get());
         basicItem(CACItems.ACORN.get());
         basicItem(CACItems.ACORN_HAT.get());
+        basicItem(CACItems.SNAIL_SLIME_BOTTLE.get());
     }
 }
