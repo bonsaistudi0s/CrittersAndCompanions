@@ -4,6 +4,7 @@ import com.github.eterdelta.crittersandcompanions.compat.TrinketsCompat;
 import com.github.eterdelta.crittersandcompanions.platform.service.IPlatformHelper;
 import io.github.fabricators_of_create.porting_lib.attributes.PortingLibAttributes;
 import java.nio.file.Path;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,7 +15,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -29,6 +34,11 @@ public class FabricPlatformHelper implements IPlatformHelper {
         }
 
         return new FabricRegistryHelper<>(registryKey, modid);
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> MenuType<T> createMenuType(BiFunction<Integer, Inventory, T> factory) {
+        return new MenuType<>(factory::apply, FeatureFlags.VANILLA_SET);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.github.eterdelta.crittersandcompanions.platform;
 import com.github.eterdelta.crittersandcompanions.compat.CuriosCompat;
 import com.github.eterdelta.crittersandcompanions.platform.service.IPlatformHelper;
 import java.nio.file.Path;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import net.minecraft.core.Holder;
@@ -12,7 +13,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -20,6 +24,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 
 public class ForgePlatformHelper implements IPlatformHelper {
 
@@ -31,6 +36,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
         }
 
         return new ForgeRegistryHelper<>(registryKey, modid);
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> MenuType<T> createMenuType(BiFunction<Integer, Inventory, T> factory) {
+        return IMenuTypeExtension.create((id, inv, buf) -> factory.apply(id, inv));
     }
 
     @Override

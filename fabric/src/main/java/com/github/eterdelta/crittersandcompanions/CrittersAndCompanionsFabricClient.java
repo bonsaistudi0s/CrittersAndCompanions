@@ -3,6 +3,8 @@ package com.github.eterdelta.crittersandcompanions;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.SilkLeashRenderer;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
+import com.github.eterdelta.crittersandcompanions.client.gui.RolyPolyScreen;
+import com.github.eterdelta.crittersandcompanions.registry.CACMenuTypes;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -11,6 +13,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRe
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -23,6 +26,8 @@ public class CrittersAndCompanionsFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CrittersAndCompanionsClient.init();
+
+        MenuScreens.register(CACMenuTypes.ROLY_POLY_CHEST.get(), RolyPolyScreen::new);
 
         GeoRenderEvent.Entity.Post.EVENT.register(event ->
                 SilkLeashRenderer.renderSilkLeash(event.getEntity(), event.getPartialTick(), event.getPoseStack(), event.getBufferSource())
