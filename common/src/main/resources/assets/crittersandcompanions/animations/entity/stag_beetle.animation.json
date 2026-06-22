@@ -1,7 +1,7 @@
 {
   "format_version": "1.8.0",
   "animations": {
-    "animation.stag_beetlel.walk": {
+    "walk": {
       "loop": true,
       "animation_length": 0.5,
       "bones": {
@@ -669,7 +669,7 @@
         }
       }
     },
-    "animation.stag_beetlel.idle": {
+    "idle": {
       "loop": true,
       "animation_length": 0.5,
       "bones": {
@@ -805,7 +805,7 @@
         }
       }
     },
-    "animation.stag_beetlel.dance": {
+    "dance": {
       "loop": true,
       "animation_length": 0.6667,
       "bones": {
@@ -995,7 +995,7 @@
         }
       }
     },
-    "animation.stag_beetlel.sitting": {
+    "sit": {
       "loop": true,
       "animation_length": 1,
       "bones": {
@@ -1178,6 +1178,5 @@
         }
       }
     }
-  },
-  "geckolib_format_version": 2
+  }
 }
