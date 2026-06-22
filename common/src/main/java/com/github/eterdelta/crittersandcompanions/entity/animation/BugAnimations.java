@@ -49,7 +49,7 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
             var renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(geoEntity);
             if (renderer instanceof GeoEntityRenderer<?> geoRenderer) {
                 var model = geoRenderer.getGeoModel();
-                @SuppressWarnings({"rawtypes", "unchecked"}) var hasSitAnimation = doesAnimationExist((GeoModel) model, geoEntity, "animation.sit");
+                @SuppressWarnings({"rawtypes", "unchecked"}) var hasSitAnimation = doesAnimationExist((GeoModel) model, geoEntity, "sit");
                 if (hasSitAnimation) {
                     return RawAnimation.begin().thenLoop("sit");
                 } else {
