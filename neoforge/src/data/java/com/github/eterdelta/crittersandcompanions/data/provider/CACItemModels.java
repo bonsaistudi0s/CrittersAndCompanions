@@ -3,7 +3,6 @@ package com.github.eterdelta.crittersandcompanions.data.provider;
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
-
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;

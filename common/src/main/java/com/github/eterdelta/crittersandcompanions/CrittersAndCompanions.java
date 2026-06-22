@@ -15,7 +15,6 @@ import com.github.eterdelta.crittersandcompanions.registry.CACMenuTypes;
 import com.github.eterdelta.crittersandcompanions.registry.CACPotions;
 import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import java.util.function.BiConsumer;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

@@ -1,10 +1,9 @@
 package com.github.eterdelta.crittersandcompanions.entity.brain.goal;
 
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.ChestBehaviour;
+import java.util.EnumSet;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class FreezeWhileChestAccessedGoal extends Goal {
 
