@@ -4,14 +4,19 @@ import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behavio
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements AnimationController.AnimationStateHandler<T> {
 
@@ -41,7 +46,17 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
         }
 
         if (state.getAnimatable() instanceof TamableAnimal animal && animal.isInSittingPose()) {
-            return RawAnimation.begin().thenLoop("sit");
+            var geoEntity = (Entity & GeoEntity) animal;
+            var renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(geoEntity);
+            if (renderer instanceof GeoEntityRenderer<?> geoRenderer) {
+                var model = geoRenderer.getGeoModel();
+                @SuppressWarnings({"rawtypes", "unchecked"}) var hasSitAnimation = doesAnimationExist((GeoModel) model, geoEntity, "animation.sit");
+                if (hasSitAnimation) {
+                    return RawAnimation.begin().thenLoop("sit");
+                } else {
+                    return RawAnimation.begin().thenLoop("idle");
+                }
+            }
         }
 
         if (state.isMoving()) {
@@ -51,4 +66,8 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
         return RawAnimation.begin().thenLoop("idle");
     }
 
+    private <A extends Entity & GeoAnimatable> boolean doesAnimationExist(GeoModel<A> model, A animatable, String animationName) {
+        var animation = model.getAnimation(animatable, animationName);
+        return animation != null;
+    }
 }
