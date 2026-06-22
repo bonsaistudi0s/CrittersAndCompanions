@@ -26,5 +26,5 @@ dependencies {
     modRuntimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
     modRuntimeOnly("maven.modrinth:jade:${jade_version}")
 
-    modRuntimeOnly("com.possible-triangle:pathfinding_renderer-neoforge:${mc_version}-${pathfinding_renderer_version}")
+    modRuntimeOnly("curse.maven:debug-utils-783008:6800027")
 }
