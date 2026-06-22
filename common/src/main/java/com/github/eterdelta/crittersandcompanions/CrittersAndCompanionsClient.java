@@ -2,13 +2,13 @@ package com.github.eterdelta.crittersandcompanions;
 
 import com.github.eterdelta.crittersandcompanions.client.model.BubbleModel;
 import com.github.eterdelta.crittersandcompanions.client.model.GrapplingHookModel;
-import com.github.eterdelta.crittersandcompanions.client.model.geo.RolyPolyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.DragonflyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.FerretModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.JumpingSpiderModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.LeafInsectModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.OtterModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.RedPandaModel;
+import com.github.eterdelta.crittersandcompanions.client.model.geo.RolyPolyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SeaBunnyModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.ShimaEnagaModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.SnailModel;

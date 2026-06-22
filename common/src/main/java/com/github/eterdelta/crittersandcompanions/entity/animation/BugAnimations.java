@@ -3,7 +3,6 @@ package com.github.eterdelta.crittersandcompanions.entity.animation;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;

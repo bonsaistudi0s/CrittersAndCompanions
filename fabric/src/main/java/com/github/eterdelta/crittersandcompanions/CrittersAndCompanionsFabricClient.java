@@ -1,9 +1,9 @@
 package com.github.eterdelta.crittersandcompanions;
 
+import com.github.eterdelta.crittersandcompanions.client.gui.RolyPolyScreen;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.SilkLeashRenderer;
 import com.github.eterdelta.crittersandcompanions.registry.CACBlocks;
-import com.github.eterdelta.crittersandcompanions.client.gui.RolyPolyScreen;
 import com.github.eterdelta.crittersandcompanions.registry.CACMenuTypes;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
