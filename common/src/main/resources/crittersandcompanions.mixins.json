@@ -13,6 +13,7 @@
     "NeutralMobsMixin",
     "PlayerMixin",
     "SpawnPlacementsAccessor",
+    "WallClimberNavigationAccessor",
     "ZombieMixin",
     "ZombifiedPiglinMixin",
     "behaviour.AnimalMixin",

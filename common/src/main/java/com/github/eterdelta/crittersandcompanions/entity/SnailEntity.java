@@ -4,9 +4,11 @@ import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.*;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
+import com.github.eterdelta.crittersandcompanions.mixin.WallClimberNavigationAccessor;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -31,8 +33,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -63,6 +67,17 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
+    protected void registerGoals() {
+        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        goalSelector.addGoal(3, TAGS.temptGoal(this));
+        goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
+    }
+
+    @Override
     public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         if (isTame() && isOwnedBy(player)) {
             var handStack = player.getItemInHand(hand);
@@ -82,22 +97,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
                     }
                     return InteractionResult.sidedSuccess(false);
                 }
+
                 return InteractionResult.sidedSuccess(true);
             }
         }
 
         return super.mobInteract(player, hand);
-    }
-
-    @Override
-    protected void registerGoals() {
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
-        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(2, TAGS.temptGoal(this));
-        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        goalSelector.addGoal(11, new DancingStrollGoal<>(this, 1.0D));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -141,7 +146,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
-        return new WallClimberNavigation(this, level);
+        return new SnailNavigation(this, level);
     }
 
     @Override
@@ -214,5 +219,21 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             }
         }
         return null;
+    }
+
+    private static class SnailNavigation extends WallClimberNavigation {
+
+        public SnailNavigation(SnailEntity mob, Level level) {
+            super(mob, level);
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+
+            // the snail often continued to navigate to its last target position
+            // because of a quirk in WallClimberNavigation
+            ((WallClimberNavigationAccessor) this).setPathToPosition(null);
+        }
     }
 }
