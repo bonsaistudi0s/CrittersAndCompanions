@@ -52,12 +52,12 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
-        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(2, TAGS.temptGoal(this));
-        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        goalSelector.addGoal(11, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        goalSelector.addGoal(3, TAGS.temptGoal(this));
+        goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

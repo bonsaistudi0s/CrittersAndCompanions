@@ -58,13 +58,13 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
-        goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
-        goalSelector.addGoal(2, TAGS.temptGoal(this));
-        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        goalSelector.addGoal(11, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
+        goalSelector.addGoal(4, TAGS.temptGoal(this));
+        goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(8, new DancingStrollGoal<>(this, 1.0D));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
