@@ -8,6 +8,7 @@ import com.github.eterdelta.crittersandcompanions.mixin.WallClimberNavigationAcc
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -32,11 +33,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class SnailEntity extends TamableAnimal implements GeoEntity {
@@ -148,7 +152,48 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(BugAnimations.createController(this));
+        controllers.add(SnailAnimations.createController(this));
+    }
+
+    private int wakingUpTicks = -1;
+
+    private boolean isWakingUp() {
+        return wakingUpTicks >= 0;
+    }
+
+    @Override
+    public void setOrderedToSit(boolean orderedToSit) {
+        if (isWakingUp()) {
+            return;
+        }
+
+        if (isOrderedToSit() && !orderedToSit) {
+            if (level().isClientSide()) {
+                triggerAnim("controller", "wake_up");
+            } else {
+                wakingUpTicks = 26;
+            }
+        }
+
+        super.setOrderedToSit(orderedToSit);
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return isWakingUp() || super.isImmobile();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (level().isClientSide()) {
+            return;
+        }
+
+        if (isWakingUp()) {
+            wakingUpTicks--;
+        }
     }
 
     @Override
@@ -231,6 +276,30 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             // the snail often continued to navigate to its last target position
             // because of a quirk in WallClimberNavigation
             ((WallClimberNavigationAccessor) this).setPathToPosition(null);
+        }
+    }
+
+    private static class SnailAnimations extends BugAnimations<SnailEntity> {
+
+        private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenPlay("hide").thenLoop("sit");
+        private static final RawAnimation WAKE_UP_ANIM = RawAnimation.begin().thenPlay("wake_up");
+
+        public SnailAnimations(Behaviours behaviours) {
+            super(behaviours);
+        }
+
+        public static AnimationController<SnailEntity> createController(SnailEntity animatable) {
+            return new AnimationController<>(animatable, "controller", 4, new SnailAnimations(animatable.getBehaviours()))
+                    .triggerableAnim("wake_up", WAKE_UP_ANIM);
+        }
+
+        @Override
+        protected @Nullable RawAnimation getCustomAnimation(AnimationState<SnailEntity> state) {
+            if (state.getAnimatable().isInSittingPose()) {
+                return SIT_ANIM;
+            }
+
+            return null;
         }
     }
 }
