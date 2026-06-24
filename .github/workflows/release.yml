@@ -1,37 +1,50 @@
+# <meta>
+#    <source>@pssbletrngle/github-meta-generator</source>
+#    <version>0.0.0-dev</version>
+#    <timestamp>2026-06-24T20:12:28.874Z</timestamp>
+#    <hash>f96aec3625346db2</hash>
+# </meta>
+
 name: Release
 on:
-   release:
-      types: [published]
+  release:
+    types: [published]
 
 env:
-   CI: true
+  CI: true
 
 jobs:
-   build:
-      runs-on: ubuntu-latest
-      timeout-minutes: 20
-      permissions:
-         contents: read
-         packages: write
-      steps:
-         - uses: actions/checkout@v4
-           with:
-              lfs: true
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
 
-         - uses: actions/setup-java@v4
-           with:
-              java-version: 21
-              distribution: temurin
+      - uses: actions/setup-java@v5
+        with:
+          java-version: 26
+          distribution: temurin
 
-         - name: Setup Gradle
-           uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: ${{ github.event_name != 'push' }}
 
-         - name: Build and upload
-           uses: gradle/gradle-build-action@v2
-           with:
-              arguments: build publish
-           env:
-              MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-              CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-              CHANGELOG: ${{ github.event.release.body }}
-              RELEASE_VERSION: ${{ github.event.release.tag_name }}
+      - name: Build and upload
+        run: ./gradlew build upload
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CHANGELOG: ${{ github.event.release.body }}
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+
+      - name: Publish Release Metadata
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          path: build/release.json
+          retention-days: 1
