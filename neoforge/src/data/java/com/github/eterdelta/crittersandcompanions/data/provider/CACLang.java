@@ -80,12 +80,12 @@ public final class CACLang extends LanguageProvider {
         add("pearl_necklace.drowned_range", "-%s%% Drowned detection range");
         add("pearl_necklace.guardian_range", "-%s%% Guardian detection range");
 
-        subtitle(CACSounds.DRAGONFLY_AMBIENT.get(), "DragonFly Buzzes");
+        subtitle(CACSounds.DRAGONFLY_AMBIENT_LOOP.get(), "Dragonfly buzzes");
         subtitle(CACSounds.FERRET_AMBIENT.get(), "Ferret squeaks");
         subtitle(CACSounds.FERRET_DEATH.get(), "Ferret dies");
         subtitle(CACSounds.FERRET_HURT.get(), "Ferret hurts");
-        subtitle(CACSounds.LEAF_INSECT_DEATH.get(), "Lead Insect dies");
-        subtitle(CACSounds.LEAF_INSECT_HURT.get(), "Lead Insect hurts");
+        subtitle(CACSounds.LEAF_INSECT_DEATH.get(), "Leaf insect dies");
+        subtitle(CACSounds.LEAF_INSECT_HURT.get(), "Leaf insect hurts");
         subtitle(CACSounds.OTTER_AMBIENT.get(), "Otter squeaks");
         subtitle(CACSounds.OTTER_DEATH.get(), "Otter dies");
         subtitle(CACSounds.OTTER_HURT.get(), "Otter hurts");
