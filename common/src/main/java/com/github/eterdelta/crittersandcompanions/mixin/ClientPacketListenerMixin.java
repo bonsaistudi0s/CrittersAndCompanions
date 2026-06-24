@@ -1,7 +1,10 @@
 package com.github.eterdelta.crittersandcompanions.mixin;
 
+import com.github.eterdelta.crittersandcompanions.client.sound.BugsWalkSoundInstance;
 import com.github.eterdelta.crittersandcompanions.client.sound.DragonflySoundInstance;
-import com.github.eterdelta.crittersandcompanions.entity.DragonflyEntity;
+import com.github.eterdelta.crittersandcompanions.client.sound.LadybugFlySoundInstance;
+import com.github.eterdelta.crittersandcompanions.client.sound.SnailWalkSoundInstance;
+import com.github.eterdelta.crittersandcompanions.entity.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +20,19 @@ public class ClientPacketListenerMixin {
     private void handleAddMob(Entity packetEntity, CallbackInfo callback) {
         if (packetEntity instanceof DragonflyEntity dragonflyEntity) {
             Minecraft.getInstance().getSoundManager().queueTickingSound(new DragonflySoundInstance(dragonflyEntity));
+        } else if (packetEntity instanceof LadybugEntity ladybugEntity) {
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new BugsWalkSoundInstance(ladybugEntity));
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new LadybugFlySoundInstance(ladybugEntity));
+        } else if (packetEntity instanceof RolyPolyEntity rolyPolyEntity) {
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new BugsWalkSoundInstance(rolyPolyEntity));
+        } else if (packetEntity instanceof StagBeetleEntity stagBeetleEntity) {
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new BugsWalkSoundInstance(stagBeetleEntity));
+        } else if (packetEntity instanceof StickBugEntity stickBugEntity) {
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new BugsWalkSoundInstance(stickBugEntity));
+        } else if (packetEntity instanceof WeevilEntity weevilEntity) {
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new BugsWalkSoundInstance(weevilEntity));
+        } else if (packetEntity instanceof SnailEntity snailEntity) {
+            Minecraft.getInstance().getSoundManager().queueTickingSound(new SnailWalkSoundInstance(snailEntity));
         }
     }
 }

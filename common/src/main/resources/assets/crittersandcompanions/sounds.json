@@ -179,5 +179,31 @@
       "crittersandcompanions:entity/bubble_pop"
     ],
     "subtitle": "subtitles.crittersandcompanions.entity.bubble_pop"
+  },
+  "entity.bugs.walk": {
+    "sounds": [
+      "crittersandcompanions:entity/bugs/walk_loop"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.bugs.walk"
+  },
+  "entity.bugs.idle": {
+    "sounds": [
+      "crittersandcompanions:entity/bugs/idle_1",
+      "crittersandcompanions:entity/bugs/idle_2",
+      "crittersandcompanions:entity/bugs/idle_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.bugs.idle"
+  },
+  "entity.snail.walk": {
+    "sounds": [
+      "crittersandcompanions:entity/snail/walk_loop"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.snail.walk"
+  },
+  "entity.ladybug.fly": {
+    "sounds": [
+      "crittersandcompanions:entity/ladybug/fly_loop"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.ladybug.fly"
   }
 }

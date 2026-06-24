@@ -64,13 +64,13 @@
   "pearl_necklace.swim_speed": "+%s%% Base swim speed",
   "subtitles.crittersandcompanions.entity.bite_attack": "Animal bites",
   "subtitles.crittersandcompanions.entity.bubble_pop": "Bubble pops",
-  "subtitles.crittersandcompanions.entity.dragonfly.ambient": "DragonFly Buzzes",
+  "subtitles.crittersandcompanions.entity.bugs.idle": "Bug chitters",
+  "subtitles.crittersandcompanions.entity.bugs.walk": "Bug patters",
   "subtitles.crittersandcompanions.entity.dragonfly.ambient": "Dragonfly buzzes",
   "subtitles.crittersandcompanions.entity.ferret.ambient": "Ferret squeaks",
   "subtitles.crittersandcompanions.entity.ferret.death": "Ferret dies",
   "subtitles.crittersandcompanions.entity.ferret.hurt": "Ferret hurts",
-  "subtitles.crittersandcompanions.entity.leaf_insect.death": "Lead Insect dies",
-  "subtitles.crittersandcompanions.entity.leaf_insect.hurt": "Lead Insect hurts",
+  "subtitles.crittersandcompanions.entity.ladybug.fly": "Ladybug flutters",
   "subtitles.crittersandcompanions.entity.leaf_insect.death": "Leaf insect dies",
   "subtitles.crittersandcompanions.entity.leaf_insect.hurt": "Leaf insect hurts",
   "subtitles.crittersandcompanions.entity.otter.ambient": "Otter squeaks",
@@ -83,5 +83,6 @@
   "subtitles.crittersandcompanions.entity.red_panda.hurt": "Red Panda hurts",
   "subtitles.crittersandcompanions.entity.sea_bunny.death": "Sea Bunny dies",
   "subtitles.crittersandcompanions.entity.sea_bunny.hurt": "Sea Bunny hurts",
-  "subtitles.crittersandcompanions.entity.shima_enaga.ambient": "Shima Enaga sings"
+  "subtitles.crittersandcompanions.entity.shima_enaga.ambient": "Shima Enaga sings",
+  "subtitles.crittersandcompanions.entity.snail.walk": "Snail squelches"
 }
