@@ -12,7 +12,7 @@ public class CACSounds {
 
     public static final RegistryEntry<SoundEvent> BITE_ATTACK = SOUNDS.register("entity.bite_attack", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bite_attack")));
     public static final RegistryEntry<SoundEvent> BUBBLE_POP = SOUNDS.register("entity.bubble_pop", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bubble_pop")));
-    public static final RegistryEntry<SoundEvent> DRAGONFLY_AMBIENT = SOUNDS.register("entity.dragonfly.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.dragonfly.ambient")));
+    public static final RegistryEntry<SoundEvent> DRAGONFLY_AMBIENT_LOOP = SOUNDS.register("entity.dragonfly.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.dragonfly.ambient")));
     public static final RegistryEntry<SoundEvent> FERRET_AMBIENT = SOUNDS.register("entity.ferret.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ferret.ambient")));
     public static final RegistryEntry<SoundEvent> FERRET_DEATH = SOUNDS.register("entity.ferret.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ferret.death")));
     public static final RegistryEntry<SoundEvent> FERRET_HURT = SOUNDS.register("entity.ferret.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ferret.hurt")));
