@@ -8,9 +8,7 @@ version = "${mod_version}"
 displayName = "${mod_name}"
 logoFile = "logo.png"
 authors = "${mod_author}"
-description = '''
-Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.
-'''
+description = "${mod_description}"
 updateJSONURL = 'https://api.modrinth.com/updates/critters-and-companions/forge_updates.json?neoforge=only'
 
 [[dependencies.${mod_id}]]

@@ -8,17 +8,15 @@ plugins {
     id("com.possible-triangle.fabric")
 }
 
-mod {
-    mods.include("io.github.fabricators_of_create.Porting-Lib:attributes:${porting_lib_version}+${mc_version}")
-    mods.include("io.github.fabricators_of_create.Porting-Lib:entity:${porting_lib_version}+${mc_version}")
-    mods.include("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_port_version}")
-}
-
 fabric {
     dependOn(project(":common"))
 }
 
 dependencies {
+    modInclude("io.github.fabricators_of_create.Porting-Lib:attributes:${porting_lib_version}+${mc_version}")
+    modInclude("io.github.fabricators_of_create.Porting-Lib:entity:${porting_lib_version}+${mc_version}")
+    modInclude("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_port_version}")
+
     modImplementation("software.bernie.geckolib:geckolib-fabric-${mc_version}:${geckolib_version}")
     modImplementation("dev.emi:trinkets:${trinkets_version}")
 }
