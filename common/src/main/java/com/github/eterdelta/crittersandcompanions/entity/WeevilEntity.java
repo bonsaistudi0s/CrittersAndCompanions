@@ -126,6 +126,11 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
     }
 
     @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CACSounds.BUGS_IDLE.get();
+    }
+
+    @Override
     public void performRangedAttack(@NotNull LivingEntity target, float velocity) {
         var lookVec = getLookAngle().normalize().scale(0.5);
         var spawnPos = new Vec3(getX(), getY() + getBbHeight() / 2.0, getZ()).add(lookVec);

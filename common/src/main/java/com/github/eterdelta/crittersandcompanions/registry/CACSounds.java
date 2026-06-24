@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 
 public class CACSounds {
+
     private static final RegistryHelper<SoundEvent> SOUNDS = Services.PLATFORM.createRegistryHelper(Registries.SOUND_EVENT, CrittersAndCompanions.MODID);
 
     public static final RegistryEntry<SoundEvent> BITE_ATTACK = SOUNDS.register("entity.bite_attack", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bite_attack")));
@@ -32,8 +33,12 @@ public class CACSounds {
     public static final RegistryEntry<SoundEvent> SEA_BUNNY_HURT = SOUNDS.register("entity.sea_bunny.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.sea_bunny.hurt")));
     public static final RegistryEntry<SoundEvent> SHIMA_ENAGA_AMBIENT = SOUNDS.register("entity.shima_enaga.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.shima_enaga.ambient")));
 
+    public static final RegistryEntry<SoundEvent> BUGS_WALK_LOOP = SOUNDS.register("entity.bugs.walk", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.walk")));
+    public static final RegistryEntry<SoundEvent> SNAIL_WALK_LOOP = SOUNDS.register("entity.snail.walk", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.snail.walk")));
+    public static final RegistryEntry<SoundEvent> LADYBUG_FLY_LOOP = SOUNDS.register("entity.ladybug.fly", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ladybug.fly")));
+    public static final RegistryEntry<SoundEvent> BUGS_IDLE = SOUNDS.register("entity.bugs.idle", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.idle")));
+
     public static void init() {
         // Load the class
     }
-
 }
