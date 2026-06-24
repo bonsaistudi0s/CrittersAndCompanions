@@ -30,6 +30,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
@@ -63,7 +64,6 @@ public class CrittersAndCompanionsClient {
         event.accept(CACEntities.SEA_BUNNY, GeoEntityRenderer::new, SeaBunnyModel::new);
         event.accept(CACEntities.SHIMA_ENAGA, GeoEntityRenderer::new, ShimaEnagaModel::new);
         event.accept(CACEntities.FERRET, FerretRenderer::new, FerretModel::new);
-        event.accept(CACEntities.GRAPPLING_HOOK, GrapplingHookRenderer::new);
         event.accept(CACEntities.DUMBO_OCTOPUS, GeoEntityRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.LEAF_INSECT, GeoEntityRenderer::new, LeafInsectModel::new);
         event.accept(CACEntities.RED_PANDA, GeoEntityRenderer::new, RedPandaModel::new);
@@ -74,6 +74,9 @@ public class CrittersAndCompanionsClient {
         event.accept(CACEntities.SNAIL, SnailRenderer::new, SnailModel::new);
         event.accept(CACEntities.STICK_BUG, GeoEntityRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.WEEVIL, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
+
+        event.accept(CACEntities.GRAPPLING_HOOK, GrapplingHookRenderer::new);
+        event.accept(CACEntities.MUD_BALL, context -> new GeoEntityRenderer<>(context, new DefaultedEntityGeoModel<>(BuiltInRegistries.ENTITY_TYPE.getKey(CACEntities.MUD_BALL.get()))));
     }
 
     public static void registerEntityLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> event) {
