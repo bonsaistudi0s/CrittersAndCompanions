@@ -80,27 +80,25 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
-        if (isTame() && isOwnedBy(player)) {
-            var handStack = player.getItemInHand(hand);
-            if (handStack.is(Items.GLASS_BOTTLE)) {
-                var harvest = behaviour(SlimeHarvestBehaviour.class);
-                if (!level().isClientSide()) {
-                    if (harvest.isReady()) {
-                        handStack.consume(1, player);
-                        var slimeBottle = new ItemStack(CACItems.SNAIL_SLIME_BOTTLE.get());
-                        if (handStack.isEmpty()) {
-                            player.setItemInHand(hand, slimeBottle);
-                        } else if (!player.getInventory().add(slimeBottle)) {
-                            player.drop(slimeBottle, false);
-                        }
-                        level().playSound(null, getX(), getY(), getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
-                        harvest.startCooldown();
+        var handStack = player.getItemInHand(hand);
+        if (handStack.is(Items.GLASS_BOTTLE)) {
+            var harvest = behaviour(SlimeHarvestBehaviour.class);
+            if (!level().isClientSide()) {
+                if (harvest.isReady()) {
+                    handStack.consume(1, player);
+                    var slimeBottle = new ItemStack(CACItems.SNAIL_SLIME_BOTTLE.get());
+                    if (handStack.isEmpty()) {
+                        player.setItemInHand(hand, slimeBottle);
+                    } else if (!player.getInventory().add(slimeBottle)) {
+                        player.drop(slimeBottle, false);
                     }
-                    return InteractionResult.sidedSuccess(false);
+                    level().playSound(null, getX(), getY(), getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
+                    harvest.startCooldown();
                 }
-
-                return InteractionResult.sidedSuccess(true);
+                return InteractionResult.sidedSuccess(false);
             }
+
+            return InteractionResult.sidedSuccess(true);
         }
 
         return super.mobInteract(player, hand);
