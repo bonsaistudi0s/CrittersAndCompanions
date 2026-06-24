@@ -84,5 +84,9 @@
   "subtitles.crittersandcompanions.entity.sea_bunny.death": "Sea Bunny dies",
   "subtitles.crittersandcompanions.entity.sea_bunny.hurt": "Sea Bunny hurts",
   "subtitles.crittersandcompanions.entity.shima_enaga.ambient": "Shima Enaga sings",
+  "subtitles.crittersandcompanions.entity.snail.gary_hurt": "Gary screams",
+  "subtitles.crittersandcompanions.entity.snail.gary_idle": "Gary meows",
+  "subtitles.crittersandcompanions.entity.snail.gary_purr": "Gary purrs",
+  "subtitles.crittersandcompanions.entity.snail.gary_sing": "Gary sings",
   "subtitles.crittersandcompanions.entity.snail.walk": "Snail squelches"
 }

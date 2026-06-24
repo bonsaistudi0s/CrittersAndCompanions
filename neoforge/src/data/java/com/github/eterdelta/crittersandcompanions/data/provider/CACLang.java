@@ -102,6 +102,10 @@ public final class CACLang extends LanguageProvider {
         subtitle(CACSounds.BUGS_IDLE.get(), "Bug chitters");
         subtitle(CACSounds.BUGS_WALK_LOOP.get(), "Bug patters");
         subtitle(CACSounds.SNAIL_WALK_LOOP.get(), "Snail squelches");
+        subtitle(CACSounds.SNAIL_GARY_IDLE.get(), "Gary meows");
+        subtitle(CACSounds.SNAIL_GARY_PURR.get(), "Gary purrs");
+        subtitle(CACSounds.SNAIL_GARY_SING.get(), "Gary sings");
+        subtitle(CACSounds.SNAIL_GARY_HURT.get(), "Gary screams");
         subtitle(CACSounds.LADYBUG_FLY_LOOP.get(), "Ladybug flutters");
     }
 
