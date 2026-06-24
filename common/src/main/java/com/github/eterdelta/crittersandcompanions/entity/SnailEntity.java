@@ -10,6 +10,8 @@ import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACItems;
 
+import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -230,15 +232,6 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
-        return SoundEvents.SLIME_HURT_SMALL;
-    }
-
-    @Override
-    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state) {
-    }
-
-    @Override
     public @NotNull Vec3 getPassengerRidingPosition(@NotNull Entity passenger) {
         if (onClimbable()) {
             var wallFace = getClimbingWallFace();
@@ -289,6 +282,55 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             }
         }
         return null;
+    }
+
+    public boolean isGaryVariant() {
+        if (!hasCustomName()) {
+            return false;
+        }
+
+        var customName = ChatFormatting.stripFormatting(getCustomName().getString());
+        return customName.equalsIgnoreCase("gary");
+    }
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        if (isInSittingPose()) {
+            return null;
+        }
+
+        if (isGaryVariant()) {
+            return CACSounds.SNAIL_GARY_IDLE.get();
+        }
+
+        return super.getAmbientSound();
+    }
+
+    @Override
+    public int getAmbientSoundInterval() {
+        if (isGaryVariant()) {
+            return 200;
+        }
+
+        return super.getAmbientSoundInterval();
+    }
+
+    @Override
+    protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+        if (isGaryVariant()) {
+            return CACSounds.SNAIL_GARY_HURT.get();
+        }
+
+        return SoundEvents.SLIME_HURT_SMALL;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.5F;
+    }
+
+    @Override
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state) {
     }
 
     private static class SnailNavigation extends WallClimberNavigation {

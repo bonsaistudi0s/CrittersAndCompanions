@@ -14,14 +14,11 @@ public class SnailModel extends AgedVariantGeoModel<SnailEntity> {
 
     @Override
     public ResourceLocation getTextureResource(SnailEntity entity) {
-        if (entity.hasCustomName()) {
-            var customName = ChatFormatting.stripFormatting(entity.getCustomName().getString());
-            if (customName.equalsIgnoreCase("gary")) {
-                if (entity.isBaby()) {
-                    return CrittersAndCompanions.createId("textures/entity/baby_snail_gary.png");
-                } else {
-                    return CrittersAndCompanions.createId("textures/entity/snail_gary.png");
-                }
+        if (entity.isGaryVariant()) {
+            if (entity.isBaby()) {
+                return CrittersAndCompanions.createId("textures/entity/baby_snail_gary.png");
+            } else {
+                return CrittersAndCompanions.createId("textures/entity/snail_gary.png");
             }
         }
 
