@@ -2,7 +2,6 @@ package com.github.eterdelta.crittersandcompanions.client.model.geo;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.SnailEntity;
-import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.animation.AnimationState;
 
