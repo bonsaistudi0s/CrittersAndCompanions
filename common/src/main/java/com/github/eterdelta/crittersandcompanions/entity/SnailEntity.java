@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
+import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.*;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
@@ -14,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -22,6 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -50,6 +53,9 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SnailEntity.class,
             EntityDataSerializers.BOOLEAN);
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SNAIL.getKey());
+
+    private static final ResourceLocation SHELL_KNOCKBACK_RESIST = CrittersAndCompanions.createId("shell_knockback_resistance");
+    private static final ResourceLocation SHELL_ARMOR = CrittersAndCompanions.createId("shell_armor");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -174,11 +180,35 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         }
 
         super.setOrderedToSit(orderedToSit);
+
+        if (!level().isClientSide()) {
+            updateShellDefenses(orderedToSit);
+        }
     }
 
     @Override
     protected boolean isImmobile() {
         return isWakingUp() || super.isImmobile();
+    }
+
+    private void updateShellDefenses(boolean isHiding) {
+        var knockbackResistanceAttribute = this.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+        var armorAttribute = this.getAttribute(Attributes.ARMOR);
+
+        if (knockbackResistanceAttribute != null && armorAttribute != null) {
+            if (isHiding) {
+                if (!knockbackResistanceAttribute.hasModifier(SHELL_KNOCKBACK_RESIST)) {
+                    knockbackResistanceAttribute.addTransientModifier(new AttributeModifier(SHELL_KNOCKBACK_RESIST, 0.4, AttributeModifier.Operation.ADD_VALUE));
+                }
+
+                if (!armorAttribute.hasModifier(SHELL_ARMOR)) {
+                    armorAttribute.addTransientModifier(new AttributeModifier(SHELL_ARMOR, 10.0, AttributeModifier.Operation.ADD_VALUE));
+                }
+            } else {
+                knockbackResistanceAttribute.removeModifier(SHELL_KNOCKBACK_RESIST);
+                armorAttribute.removeModifier(SHELL_ARMOR);
+            }
+        }
     }
 
     @Override
