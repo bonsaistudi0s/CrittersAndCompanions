@@ -3,21 +3,21 @@ package com.github.eterdelta.crittersandcompanions.entity.animation;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.BehaviourDriven;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements AnimationController.AnimationStateHandler<T> {
+
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation FLY_ANIM = RawAnimation.begin().thenLoop("fly");
+    private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
 
     @Nullable
     private final DancingBehaviour dancingBehaviour;
@@ -32,41 +32,37 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
 
     @Override
     public PlayState handle(AnimationState<T> state) {
+        var custom = getCustomAnimation(state);
+        if (custom != null) {
+            state.getController().setAnimation(custom);
+            return PlayState.CONTINUE;
+        }
+
         state.getController().setAnimation(createAnimation(state));
         return PlayState.CONTINUE;
     }
 
+    protected @Nullable RawAnimation getCustomAnimation(AnimationState<T> state) {
+        return null;
+    }
+
     private RawAnimation createAnimation(AnimationState<T> state) {
         if (state.getAnimatable() instanceof FlyingAnimal animal && animal.isFlying()) {
-            return RawAnimation.begin().thenLoop("fly");
+            return FLY_ANIM;
         }
+
         if (dancingBehaviour != null && dancingBehaviour.isDancing()) {
             return RawAnimation.begin().thenLoop(dancingBehaviour.getDanceAnimationName());
         }
 
         if (state.getAnimatable() instanceof TamableAnimal animal && animal.isInSittingPose()) {
-            var geoEntity = (Entity & GeoEntity) animal;
-            var renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(geoEntity);
-            if (renderer instanceof GeoEntityRenderer<?> geoRenderer) {
-                var model = geoRenderer.getGeoModel();
-                @SuppressWarnings({"rawtypes", "unchecked"}) var hasSitAnimation = doesAnimationExist((GeoModel) model, geoEntity, "sit");
-                if (hasSitAnimation) {
-                    return RawAnimation.begin().thenLoop("sit");
-                } else {
-                    return RawAnimation.begin().thenLoop("idle");
-                }
-            }
+            return SIT_ANIM;
         }
 
         if (state.isMoving()) {
-            return RawAnimation.begin().thenLoop("walk");
+            return WALK_ANIM;
         }
 
-        return RawAnimation.begin().thenLoop("idle");
-    }
-
-    private <A extends Entity & GeoAnimatable> boolean doesAnimationExist(GeoModel<A> model, A animatable, String animationName) {
-        var animation = model.getAnimation(animatable, animationName);
-        return animation != null;
+        return IDLE_ANIM;
     }
 }
