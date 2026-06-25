@@ -149,6 +149,18 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
         playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1, 0.4f / (getRandom().nextFloat() * 0.4f + 0.8f));
     }
 
+    @Override
+    public boolean canAttack(@NotNull LivingEntity target) {
+        if (getOwner() != null) {
+            var targetHasSameOwner = target instanceof TamableAnimal tamableAnimal && tamableAnimal.isOwnedBy(getOwner());
+            if (targetHasSameOwner) {
+                return false;
+            }
+        }
+
+        return super.canAttack(target);
+    }
+
     private static class DelayedRangedAttackGoal extends Goal {
         private final WeevilEntity owner;
         private @Nullable LivingEntity target;
