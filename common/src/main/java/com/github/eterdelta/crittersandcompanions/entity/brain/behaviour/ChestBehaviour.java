@@ -87,7 +87,7 @@ public class ChestBehaviour implements Behaviour {
         }
 
         var stack = player.getItemInHand(hand);
-        if (!hasChest() && stack.is(CACTags.WOODEN_CHESTS)) {
+        if (!hasChest() && stack.is(CACTags.WOODEN_CHESTS) && !owner.isBaby()) {
             if (!owner.level().isClientSide()) {
                 setHasChest(true);
                 owner.playSound(
