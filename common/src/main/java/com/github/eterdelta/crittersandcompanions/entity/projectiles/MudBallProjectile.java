@@ -73,7 +73,7 @@ public class MudBallProjectile extends ThrowableItemProjectile implements GeoEnt
         }
 
         var entity = result.getEntity();
-        entity.hurt(damageSources().thrown(this, getOwner()), 4);
+        entity.hurt(damageSources().thrown(this, getOwner()), 3);
     }
 
     @Override
