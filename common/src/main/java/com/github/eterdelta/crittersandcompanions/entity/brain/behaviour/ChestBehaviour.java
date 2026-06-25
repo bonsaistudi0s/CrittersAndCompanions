@@ -46,6 +46,7 @@ public class ChestBehaviour implements Behaviour {
 
     public void setHasChest(boolean value) {
         owner.getEntityData().set(dataAccessor, value);
+        owner.refreshDimensions();
     }
 
     public boolean isBeingAccessed() {
