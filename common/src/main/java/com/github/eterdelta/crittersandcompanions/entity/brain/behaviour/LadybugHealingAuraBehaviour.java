@@ -18,7 +18,23 @@ public record LadybugHealingAuraBehaviour(TamableAnimal owner) implements Behavi
                 .getEntitiesOfClass(
                         TamableAnimal.class,
                         owner.getBoundingBox().inflate(RADIUS),
-                        e -> e.isTame() && e != owner
+                        tamableAnimal -> {
+                            var isSelf = tamableAnimal == owner;
+                            if (isSelf) {
+                                return false;
+                            }
+
+                            if (!tamableAnimal.isTame()) {
+                                return false;
+                            }
+
+                            var isAtFullHealth = tamableAnimal.getHealth() >= tamableAnimal.getMaxHealth();
+                            if (isAtFullHealth) {
+                                return false;
+                            }
+
+                            return true;
+                        }
                 )
                 .forEach(target -> target.addEffect(
                         new MobEffectInstance(MobEffects.REGENERATION, TICK_INTERVAL + 20, 0, false, true))
