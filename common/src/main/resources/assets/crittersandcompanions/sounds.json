@@ -186,13 +186,13 @@
     ],
     "subtitle": "subtitles.crittersandcompanions.entity.bugs.walk"
   },
-  "entity.bugs.idle": {
+  "entity.bugs.hurt": {
     "sounds": [
-      "crittersandcompanions:entity/bugs/idle_1",
-      "crittersandcompanions:entity/bugs/idle_2",
-      "crittersandcompanions:entity/bugs/idle_3"
+      "crittersandcompanions:entity/bugs/hurt_1",
+      "crittersandcompanions:entity/bugs/hurt_2",
+      "crittersandcompanions:entity/bugs/hurt_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.entity.bugs.idle"
+    "subtitle": "subtitles.crittersandcompanions.entity.bugs.hurt"
   },
   "entity.snail.walk": {
     "sounds": [

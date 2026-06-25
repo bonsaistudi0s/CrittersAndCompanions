@@ -131,7 +131,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     }
 
     @Override
-    protected @Nullable SoundEvent getAmbientSound() {
-        return CACSounds.BUGS_IDLE.get();
+    protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+        return CACSounds.BUGS_HURT.get();
     }
 }

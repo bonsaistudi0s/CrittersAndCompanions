@@ -34,13 +34,13 @@ public class CACSounds {
     public static final RegistryEntry<SoundEvent> SHIMA_ENAGA_AMBIENT = SOUNDS.register("entity.shima_enaga.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.shima_enaga.ambient")));
 
     public static final RegistryEntry<SoundEvent> BUGS_WALK_LOOP = SOUNDS.register("entity.bugs.walk", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.walk")));
+    public static final RegistryEntry<SoundEvent> BUGS_HURT = SOUNDS.register("entity.bugs.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.hurt")));
     public static final RegistryEntry<SoundEvent> SNAIL_WALK_LOOP = SOUNDS.register("entity.snail.walk", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.snail.walk")));
     public static final RegistryEntry<SoundEvent> SNAIL_GARY_IDLE = SOUNDS.register("entity.snail.gary_idle", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.snail.gary_idle")));
     public static final RegistryEntry<SoundEvent> SNAIL_GARY_PURR = SOUNDS.register("entity.snail.gary_purr", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.snail.gary_purr")));
     public static final RegistryEntry<SoundEvent> SNAIL_GARY_SING = SOUNDS.register("entity.snail.gary_sing", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.snail.gary_sing")));
     public static final RegistryEntry<SoundEvent> SNAIL_GARY_HURT = SOUNDS.register("entity.snail.gary_hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.snail.gary_hurt")));
     public static final RegistryEntry<SoundEvent> LADYBUG_FLY_LOOP = SOUNDS.register("entity.ladybug.fly", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ladybug.fly")));
-    public static final RegistryEntry<SoundEvent> BUGS_IDLE = SOUNDS.register("entity.bugs.idle", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.idle")));
 
     public static void init() {
         // Load the class

@@ -64,7 +64,7 @@
   "pearl_necklace.swim_speed": "+%s%% Base swim speed",
   "subtitles.crittersandcompanions.entity.bite_attack": "Animal bites",
   "subtitles.crittersandcompanions.entity.bubble_pop": "Bubble pops",
-  "subtitles.crittersandcompanions.entity.bugs.idle": "Bug chitters",
+  "subtitles.crittersandcompanions.entity.bugs.hurt": "Bug chitters",
   "subtitles.crittersandcompanions.entity.bugs.walk": "Bug patters",
   "subtitles.crittersandcompanions.entity.dragonfly.ambient": "Dragonfly buzzes",
   "subtitles.crittersandcompanions.entity.ferret.ambient": "Ferret squeaks",

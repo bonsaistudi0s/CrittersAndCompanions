@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -98,8 +99,8 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    protected @Nullable SoundEvent getAmbientSound() {
-        return CACSounds.BUGS_IDLE.get();
+    protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+        return CACSounds.BUGS_HURT.get();
     }
 
     @Override

@@ -119,7 +119,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    protected @Nullable SoundEvent getAmbientSound() {
-        return CACSounds.BUGS_IDLE.get();
+    protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+        return CACSounds.BUGS_HURT.get();
     }
 }
