@@ -1,11 +1,18 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.DancingBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.VariantBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.control.JumpingSpiderMoveControl;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,6 +43,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -48,10 +56,13 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(JumpingSpiderEntity.class,
+            EntityDataSerializers.INT);
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.JUMPING_SPIDER.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private PanicGoal panicGoal;
+    private DancingBehaviour dancingBehaviour;
 
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
         super(entityType, level);
@@ -64,7 +75,10 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerBehaviours(Behaviours behaviours) {
+        dancingBehaviour = new DancingBehaviour(this);
+        behaviours.add(dancingBehaviour);
         behaviours.add(new TameableBehaviour(this, TAGS));
+        behaviours.add(new VariantBehaviour(this, VARIANT, 8));
     }
 
     @Override
@@ -79,7 +93,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(5, TAGS.temptGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(7, new DancingStrollGoal<>(this, 0.8D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
@@ -118,12 +132,14 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<?> event) {
-        if (this.isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("jumping_spider_sit"));
+        if (dancingBehaviour.isDancing()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("dance"));
+        } else if (this.isInSittingPose()) {
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
         } else if (event.isMoving()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("jumping_spider_walk"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("walk"));
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("jumping_spider_idle"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
         }
         return PlayState.CONTINUE;
     }

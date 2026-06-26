@@ -8,7 +8,7 @@ import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
-public class JumpingSpiderModel extends DefaultedEntityGeoModel<JumpingSpiderEntity> {
+public class JumpingSpiderModel extends VariantGeoModel<JumpingSpiderEntity> {
 
     public JumpingSpiderModel(ResourceLocation id) {
         super(id);
