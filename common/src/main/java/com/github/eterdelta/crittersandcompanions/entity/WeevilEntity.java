@@ -63,6 +63,7 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
 
     @Override
     protected void registerGoals() {
+        goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(4, TAGS.temptGoal(this));

@@ -52,6 +52,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
 
     @Override
     protected void registerGoals() {
+        goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new FlyingTameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, TAGS.temptGoal(this));
