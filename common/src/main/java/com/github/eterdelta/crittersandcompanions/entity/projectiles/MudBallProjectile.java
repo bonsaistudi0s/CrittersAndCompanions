@@ -68,12 +68,16 @@ public class MudBallProjectile extends ThrowableItemProjectile implements GeoEnt
     @Override
     protected void onHitEntity(@NotNull EntityHitResult result) {
         super.onHitEntity(result);
-        if (result.getEntity() instanceof WeevilEntity) {
-            return;
+
+        var owner = getOwner();
+        var target = result.getEntity();
+        if (owner instanceof WeevilEntity weevilThrower && target instanceof LivingEntity livingTarget) {
+            if (!weevilThrower.canAttack(livingTarget)) {
+                return;
+            }
         }
 
-        var entity = result.getEntity();
-        entity.hurt(damageSources().thrown(this, getOwner()), 3);
+        target.hurt(damageSources().thrown(this, owner), 3);
     }
 
     @Override
