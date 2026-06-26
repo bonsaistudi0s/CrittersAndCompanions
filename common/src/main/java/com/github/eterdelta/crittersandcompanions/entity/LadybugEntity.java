@@ -9,6 +9,7 @@ import com.github.eterdelta.crittersandcompanions.registry.CACSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -96,6 +98,16 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
         navigation.setCanFloat(true);
         navigation.setCanPassDoors(true);
         return navigation;
+    }
+
+    @Override
+    public float getWalkTargetValue(@NotNull BlockPos pos, LevelReader level) {
+        var state = level.getBlockState(pos);
+        if (state.getFluidState().is(FluidTags.WATER)) {
+            return -10.0F;
+        }
+
+        return super.getWalkTargetValue(pos, level);
     }
 
     @Override
