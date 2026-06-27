@@ -6,9 +6,7 @@ import com.github.eterdelta.crittersandcompanions.entity.OtterEntity;
 import com.github.eterdelta.crittersandcompanions.mixin.SpawnPlacementsAccessor;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
 import com.github.eterdelta.crittersandcompanions.registry.CACTags;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
