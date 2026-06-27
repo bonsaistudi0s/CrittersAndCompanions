@@ -128,8 +128,23 @@ public class CACSpawnConfig {
         Path path = configDir.resolve(FILE_NAME);
         if (!Files.exists(path)) {
             writeDefaults(path);
+            INSTANCE = new CACSpawnConfig(new LinkedHashMap<>(DEFAULTS));
+            LOGGER.info("Wrote default spawn config to {}", path);
+            return;
         }
-        INSTANCE = read(path);
+        var loaded = readEntries(path);
+        var missing = new LinkedHashMap<String, List<SpawnEntry>>();
+        for (var defaultEntry : DEFAULTS.entrySet()) {
+            if (!loaded.containsKey(defaultEntry.getKey())) {
+                missing.put(defaultEntry.getKey(), defaultEntry.getValue());
+            }
+        }
+        if (!missing.isEmpty()) {
+            appendEntries(path, missing);
+            loaded.putAll(missing);
+            LOGGER.info("Appended {} new mob(s) to spawn config: {}", missing.size(), String.join(", ", missing.keySet()));
+        }
+        INSTANCE = new CACSpawnConfig(loaded);
         LOGGER.info("Loaded spawn config from {}", path);
     }
 
@@ -147,7 +162,7 @@ public class CACSpawnConfig {
                 .orElse(null);
     }
 
-    private static CACSpawnConfig read(Path path) {
+    private static LinkedHashMap<String, List<SpawnEntry>> readEntries(Path path) {
         var result = new LinkedHashMap<String, List<SpawnEntry>>();
         try (var fileConfig = CommentedFileConfig.of(path.toFile())) {
             fileConfig.load();
@@ -174,9 +189,33 @@ public class CACSpawnConfig {
             }
         } catch (Exception e) {
             LOGGER.error("Failed to read spawn config '{}', falling back to defaults", path, e);
-            return new CACSpawnConfig(new LinkedHashMap<>(DEFAULTS));
+            return new LinkedHashMap<>(DEFAULTS);
         }
-        return new CACSpawnConfig(result);
+        return result;
+    }
+
+    private static String formatEntries(Map<String, List<SpawnEntry>> entries) {
+        var sb = new StringBuilder();
+        for (var entityEntry : entries.entrySet()) {
+            String entity = entityEntry.getKey();
+            sb.append("\n# ").append(CrittersAndCompanions.MODID).append(":").append(entity).append("\n");
+            for (SpawnEntry spawn : entityEntry.getValue()) {
+                sb.append("[[").append(entity).append("]]\n");
+                sb.append("biome  = \"").append(spawn.biomeSpec()).append("\"\n");
+                sb.append("weight = ").append(spawn.weight()).append("\n");
+                sb.append("min    = ").append(spawn.min()).append("\n");
+                sb.append("max    = ").append(spawn.max()).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private static void appendEntries(Path path, Map<String, List<SpawnEntry>> entries) {
+        try {
+            Files.writeString(path, formatEntries(entries), java.nio.file.StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            LOGGER.error("Failed to append new mob defaults to '{}'", path, e);
+        }
     }
 
     private static void writeDefaults(Path path) {
@@ -191,18 +230,7 @@ public class CACSpawnConfig {
         sb.append("#\n");
         sb.append("# You can freely add, remove, or modify entries. Custom biomes and tags are supported.\n");
         sb.append("# Delete this file to regenerate it with the mod defaults on the next start.\n");
-
-        for (var entityEntry : DEFAULTS.entrySet()) {
-            String entity = entityEntry.getKey();
-            sb.append("\n# ").append(CrittersAndCompanions.MODID).append(":").append(entity).append("\n");
-            for (SpawnEntry spawn : entityEntry.getValue()) {
-                sb.append("[[").append(entity).append("]]\n");
-                sb.append("biome  = \"").append(spawn.biomeSpec()).append("\"\n");
-                sb.append("weight = ").append(spawn.weight()).append("\n");
-                sb.append("min    = ").append(spawn.min()).append("\n");
-                sb.append("max    = ").append(spawn.max()).append("\n");
-            }
-        }
+        sb.append(formatEntries(DEFAULTS));
 
         try {
             Files.createDirectories(path.getParent());
