@@ -47,11 +47,13 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
             addedToWorld = true;
         }
 
-        if (getOwner() == null) {
+        var owner = getOwner();
+        if (owner == null) {
             discard();
             return;
         }
-        var offsetLengthSqr = distanceToSqr(getOwner());
+
+        var offsetLengthSqr = distanceToSqr(owner);
 
         var maxDistance = Services.CONFIGS.common().grapplingHookMaxDistance.get();
         var maxDistanceSqr = maxDistance * maxDistance;
@@ -77,14 +79,14 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
         }
 
         isStick = willStick;
-        if (isStick && getOwner() != null) {
+        if (isStick) {
             if (offsetLengthSqr > stickLength) {
-                var direction = position().subtract(getOwner().position()).normalize();
+                var direction = position().subtract(owner.position()).normalize();
                 var maxSpeed = Services.CONFIGS.common().grapplingHookMaxSpeed.get();
                 var scale = Math.min(maxSpeed, 0.01D * Math.sqrt(offsetLengthSqr));
                 if (scale >= 0) {
-                    getOwner().setDeltaMovement(getOwner().getDeltaMovement().add(direction.scale(scale)));
-                    getOwner().hurtMarked = true;
+                    owner.setDeltaMovement(owner.getDeltaMovement().add(direction.scale(scale)));
+                    owner.hurtMarked = true;
                 }
             }
             setDeltaMovement(0.0D, 0.0D, 0.0D);
