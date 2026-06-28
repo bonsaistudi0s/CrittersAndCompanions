@@ -1,5 +1,6 @@
 package com.github.eterdelta.crittersandcompanions.entity.brain.goal;
 
+import java.util.EnumSet;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -7,9 +8,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-
-import java.util.EnumSet;
-
 import software.bernie.geckolib.animatable.GeoEntity;
 
 public class AnimatedDelayedMeleeAttackGoal<T extends PathfinderMob & GeoEntity> extends Goal {

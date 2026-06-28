@@ -1,15 +1,12 @@
 package com.github.eterdelta.crittersandcompanions.entity.brain.goal;
 
+import java.util.EnumSet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-
 import org.jetbrains.annotations.Nullable;
-
-import java.util.EnumSet;
-
 import software.bernie.geckolib.animatable.GeoEntity;
 
 public class AnimatedDelayedRangedAttackGoal<T extends Mob & GeoEntity & RangedAttackMob> extends Goal {

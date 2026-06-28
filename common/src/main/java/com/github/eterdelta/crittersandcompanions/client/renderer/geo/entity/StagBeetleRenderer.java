@@ -1,9 +1,7 @@
 package com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.StagBeetleEntity;
-
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
