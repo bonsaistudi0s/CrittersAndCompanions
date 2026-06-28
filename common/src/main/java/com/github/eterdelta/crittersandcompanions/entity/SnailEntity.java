@@ -173,10 +173,14 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         }
 
         if (isOrderedToSit() && !orderedToSit) {
-            if (level().isClientSide()) {
+            wakingUpTicks = 26;
+
+            if (!level().isClientSide()) {
                 triggerAnim("controller", "wake_up");
-            } else {
-                wakingUpTicks = 26;
+            }
+        } else if (!isOrderedToSit() && orderedToSit) {
+            if (!level().isClientSide()) {
+                triggerAnim("controller", "hide");
             }
         }
 
@@ -216,12 +220,15 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     public void tick() {
         super.tick();
 
-        if (level().isClientSide()) {
-            return;
-        }
-
         if (isWakingUp()) {
             wakingUpTicks--;
+
+            if (wakingUpTicks == 0) {
+                super.setOrderedToSit(false);
+                if (!level().isClientSide()) {
+                    updateShellDefenses(false);
+                }
+            }
         }
     }
 
@@ -350,7 +357,8 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     private static class SnailAnimations extends BugAnimations<SnailEntity> {
 
-        private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenPlay("hide").thenLoop("sit");
+        private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
+        private static final RawAnimation HIDE_ANIM = RawAnimation.begin().thenPlay("hide");
         private static final RawAnimation WAKE_UP_ANIM = RawAnimation.begin().thenPlay("wake_up");
 
         public SnailAnimations(Behaviours behaviours) {
@@ -359,7 +367,8 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
         public static AnimationController<SnailEntity> createController(SnailEntity animatable) {
             return new AnimationController<>(animatable, "controller", 4, new SnailAnimations(animatable.getBehaviours()))
-                    .triggerableAnim("wake_up", WAKE_UP_ANIM);
+                    .triggerableAnim("wake_up", WAKE_UP_ANIM)
+                    .triggerableAnim("hide", HIDE_ANIM);
         }
 
         @Override
