@@ -49,7 +49,7 @@ public class RolyPolyScreen extends AbstractContainerScreen<RolyPolyMenu> {
                     }
 
                     mc.gameMode.handleInventoryButtonClick(menu.containerId, 0);
-                    mc.setScreen(null);
+                    this.onClose();
                 }
         ));
     }
