@@ -1,6 +1,8 @@
 package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.CrittersAndCompanions;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.Behaviours;
+import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.TameableBehaviour;
 import com.github.eterdelta.crittersandcompanions.entity.brain.control.DragonflyMoveControl;
 import com.github.eterdelta.crittersandcompanions.item.DragonflyArmorItem;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
@@ -63,6 +65,11 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(PathType.COCOA, -1.0F);
         this.setPathfindingMalus(PathType.FENCE, -1.0F);
+    }
+
+    @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new TameableBehaviour(this, TAGS));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
