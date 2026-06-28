@@ -15,10 +15,7 @@ import com.github.eterdelta.crittersandcompanions.client.model.geo.SnailModel;
 import com.github.eterdelta.crittersandcompanions.client.model.geo.VariantGeoModel;
 import com.github.eterdelta.crittersandcompanions.client.renderer.BubbleLayer;
 import com.github.eterdelta.crittersandcompanions.client.renderer.GrapplingHookRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.FerretRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.OtterRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.RolyPolyRenderer;
-import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.SnailRenderer;
+import com.github.eterdelta.crittersandcompanions.client.renderer.geo.entity.*;
 import com.github.eterdelta.crittersandcompanions.mixin.ItemPropertiesAccessor;
 import com.github.eterdelta.crittersandcompanions.platform.event.RegisterEntityRenderers;
 import com.github.eterdelta.crittersandcompanions.registry.CACEntities;
@@ -69,7 +66,7 @@ public class CrittersAndCompanionsClient {
         event.accept(CACEntities.RED_PANDA, GeoEntityRenderer::new, RedPandaModel::new);
 
         event.accept(CACEntities.LADYBUG, GeoEntityRenderer::new, DefaultedEntityGeoModel::new);
-        event.accept(CACEntities.STAG_BEETLE, GeoEntityRenderer::new, VariantGeoModel::new);
+        event.accept(CACEntities.STAG_BEETLE, StagBeetleRenderer::new, VariantGeoModel::new);
         event.accept(CACEntities.ROLY_POLY, RolyPolyRenderer::new, RolyPolyModel::new);
         event.accept(CACEntities.SNAIL, SnailRenderer::new, SnailModel::new);
         event.accept(CACEntities.STICK_BUG, GeoEntityRenderer::new, VariantGeoModel::new);

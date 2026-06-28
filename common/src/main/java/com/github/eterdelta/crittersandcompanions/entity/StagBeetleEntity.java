@@ -2,6 +2,7 @@ package com.github.eterdelta.crittersandcompanions.entity;
 
 import com.github.eterdelta.crittersandcompanions.entity.animation.BugAnimations;
 import com.github.eterdelta.crittersandcompanions.entity.brain.behaviour.*;
+import com.github.eterdelta.crittersandcompanions.entity.brain.goal.AnimatedDelayedMeleeAttackGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.DancingStrollGoal;
 import com.github.eterdelta.crittersandcompanions.entity.brain.goal.TameablePanicGoal;
 import com.github.eterdelta.crittersandcompanions.registry.AnimalTags;
@@ -28,11 +29,16 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
@@ -59,7 +65,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
+        goalSelector.addGoal(3, new AnimatedDelayedMeleeAttackGoal<>(this, 1.0D, true, "controller", "hit", 8));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
@@ -107,7 +113,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(BugAnimations.createController(this));
+        controllers.add(StagBeetleAnimations.createController(this));
     }
 
     @Override
@@ -118,5 +124,34 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return CACSounds.BUGS_HURT.get();
+    }
+
+    @Override
+    protected @NotNull AABB getAttackBoundingBox() {
+        return super.getAttackBoundingBox().inflate(1.0D, 0.0D, 1.0D);
+    }
+
+    private static class StagBeetleAnimations extends BugAnimations<StagBeetleEntity> {
+
+        private static final RawAnimation HIT = RawAnimation.begin().thenPlay("hit");
+        private static final RawAnimation DEATH = RawAnimation.begin().thenPlay("death");
+
+        public StagBeetleAnimations(Behaviours behaviours) {
+            super(behaviours);
+        }
+
+        public static AnimationController<StagBeetleEntity> createController(StagBeetleEntity animatable) {
+            return new AnimationController<>(animatable, "controller", 4, new StagBeetleEntity.StagBeetleAnimations(animatable.getBehaviours()))
+                    .triggerableAnim("hit", HIT);
+        }
+
+        @Override
+        protected @Nullable RawAnimation getCustomAnimation(AnimationState<StagBeetleEntity> state) {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return DEATH;
+            }
+
+            return null;
+        }
     }
 }
