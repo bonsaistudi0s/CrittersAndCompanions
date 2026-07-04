@@ -4,14 +4,18 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.GrapplingHookEntity;
 import io.github.bonsaistudi0s.crittersandcompanions.common.extension.IGrapplingState;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 
 public class GrapplingHookItem extends Item {
     public GrapplingHookItem(Properties properties) {
@@ -19,13 +23,14 @@ public class GrapplingHookItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack stack = player.getItemInHand(interactionHand);
         var grapplingState = (IGrapplingState) player;
 
         if (grapplingState.getHook() != null) {
             grapplingState.getHook().pull();
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 0.25F, 1.0F + 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
             player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
         } else {
             if (!level.isClientSide()) {
@@ -38,5 +43,10 @@ public class GrapplingHookItem extends Item {
         }
 
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    @Override
+    public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
+        return repairCandidate.is(CACItems.SILK) || super.isValidRepairItem(stack, repairCandidate);
     }
 }
