@@ -427,7 +427,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     public boolean rejectedItem(ItemEntity itemEntity) {
         if (itemEntity.getOwner() != null) {
-            return itemEntity.getOwner().equals(this.getUUID());
+            return itemEntity.getOwner().getUUID().equals(this.getUUID());
         }
         return false;
     }
