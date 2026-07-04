@@ -1,12 +1,3 @@
-<!---
-<meta>
-   <source>@pssbletrngle/github-meta-generator</source>
-   <version>0.0.0-dev</version>
-   <timestamp>2026-06-24T20:12:28.874Z</timestamp>
-   <hash>35296a40e63c684d</hash>
-</meta>
--->
-
 # License Overview
 
 ## Assets License (All Rights Reserved)

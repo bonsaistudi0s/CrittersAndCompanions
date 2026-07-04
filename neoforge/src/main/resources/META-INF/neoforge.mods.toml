@@ -1,36 +1,50 @@
 modLoader = "javafml"
-loaderVersion = "[1,)"
-license = "MIT"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/bonsaistudi0s/CrittersAndCompanions/issues"
+license = "ARR"
 
 [[mods]]
 modId = "${mod_id}"
-version = "${mod_version}"
-displayName = "${mod_name}"
+version = "${version}"
+displayName = "Critters and Companions"
+authors = "Joosh, EterDelta"
+description = "${description}"
 logoFile = "logo.png"
-authors = "${mod_author}"
-description = "${mod_description}"
-updateJSONURL = 'https://api.modrinth.com/updates/critters-and-companions/forge_updates.json?neoforge=only'
 
-[[dependencies.${mod_id}]]
-modId = "geckolib"
-mandatory = true
-versionRange = "[4.4.2,)"
+[[dependencies.crittersandcompanions]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.crittersandcompanions]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${minecraft_version}]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.crittersandcompanions]]
+modId = "architectury"
+type = "required"
+versionRange = "[${architectury_api_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.${mod_id}]]
-modId = "neoforge"
+[[dependencies.crittersandcompanions]]
+modId = "geckolib"
 type = "required"
-versionRange = "[21,)"
+versionRange = "[${geckolib_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.${mod_id}]]
-modId = "minecraft"
+[[dependencies.crittersandcompanions]]
+modId = "yet_another_config_lib_v3"
 mandatory = true
-versionRange = "[1.21.1,)"
+versionRange = "[${yacl_version},)"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
 
 [[mixins]]
-config="${mod_id}.mixins.json"
+config = "crittersandcompanions.mixins.json"

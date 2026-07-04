@@ -1,10 +1,3 @@
-# <meta>
-#    <source>@pssbletrngle/github-meta-generator</source>
-#    <version>0.0.0-dev</version>
-#    <timestamp>2026-06-24T20:12:28.874Z</timestamp>
-#    <hash>25ba58f85d094336</hash>
-# </meta>
-
 neoforge:
   - "/^neoforge$/m"
 fabric:

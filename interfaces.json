@@ -1,5 +1,0 @@
-{
-  "net/minecraft/world/entity/Mob": [
-    "com/github/eterdelta/crittersandcompanions/entity/brain/behaviour/BehaviourDriven"
-  ]
-}

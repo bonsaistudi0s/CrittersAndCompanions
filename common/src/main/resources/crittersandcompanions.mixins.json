@@ -1,8 +1,13 @@
 {
   "required": true,
+  "package": "io.github.bonsaistudi0s.crittersandcompanions.common.mixin",
+  "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
-  "package": "com.github.eterdelta.crittersandcompanions.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ClientPacketListenerMixin",
+    "ItemPropertiesAccessor",
+    "LivingEntityRendererMixin"
+  ],
   "mixins": [
     "AbstractIllagerMixin",
     "DrownedMixin",
@@ -12,7 +17,6 @@
     "NearestAttackableTargetGoalMixin",
     "NeutralMobsMixin",
     "PlayerMixin",
-    "SpawnPlacementsAccessor",
     "WallClimberNavigationAccessor",
     "ZombieMixin",
     "ZombifiedPiglinMixin",
@@ -21,11 +25,6 @@
     "behaviour.EntityMixin",
     "behaviour.LivingEntityMixin",
     "behaviour.MobMixin"
-  ],
-  "client": [
-    "ClientPacketListenerMixin",
-    "ItemPropertiesAccessor",
-    "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
