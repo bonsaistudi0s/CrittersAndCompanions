@@ -224,7 +224,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     public ItemStack eatOrOpen(Level level, ItemStack itemStack) {
         if (itemStack.is(CACItems.CLAM.get())) {
-            if (this.random.nextFloat() <= 0.07F) {
+            if (this.random.nextFloat() <= 0.25F) {
                 Vec3 mouthPos = this.calculateMouthPos();
                 ItemEntity pearl = new ItemEntity(level, mouthPos.x(), mouthPos.y(), mouthPos.z(), new ItemStack(CACItems.PEARL.get()));
 
