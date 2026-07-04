@@ -34,7 +34,7 @@ public class CACLootModifiers {
         // should always reflect the values in crittersandcompanions/loot_modifiers/..
 
         addEntriesTo(BuiltInLootTables.FISHING_FISH, 0, builder -> {
-            builder.accept(10, new ItemStack(CACItems.CLAM.get()));
+            builder.accept(5, new ItemStack(CACItems.CLAM.get()));
             builder.accept(5, new ItemStack(CACItems.KOI_FISH.get()));
         });
 
