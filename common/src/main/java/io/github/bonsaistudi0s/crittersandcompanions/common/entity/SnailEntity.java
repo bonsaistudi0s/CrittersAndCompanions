@@ -55,6 +55,9 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SnailEntity.class,
             EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> WAKING_UP_TICKS = SynchedEntityData.defineId(SnailEntity.class,
+            EntityDataSerializers.INT);
+
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SNAIL.getKey());
 
     private static final ResourceLocation SHELL_KNOCKBACK_RESIST = CrittersAndCompanions.createId("shell_knockback_resistance");
@@ -93,6 +96,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             }
         });
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(WAKING_UP_TICKS, -1);
     }
 
     @Override
@@ -170,35 +179,28 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         controllers.add(SnailAnimations.createController(this));
     }
 
-    private int wakingUpTicks = -1;
-
-    private boolean isWakingUp() {
-        return wakingUpTicks >= 0;
-    }
-
     @Override
     public void setOrderedToSit(boolean orderedToSit) {
+        if (level().isClientSide()) {
+            super.setOrderedToSit(orderedToSit);
+            return;
+        }
+
         if (isWakingUp()) {
             return;
         }
 
-        if (isOrderedToSit() && !orderedToSit) {
-            wakingUpTicks = 26;
-
-            if (!level().isClientSide()) {
-                triggerAnim("controller", "wake_up");
-            }
-        } else if (!isOrderedToSit() && orderedToSit) {
-            if (!level().isClientSide()) {
-                triggerAnim("controller", "hide");
-            }
+        if (orderedToSit) {
+            triggerAnim("controller", "hide");
+        } else {
+            setWakingUpTicks(26);
+            triggerAnim("controller", "wake_up");
         }
 
         super.setOrderedToSit(orderedToSit);
+        setInSittingPose(orderedToSit);
 
-        if (!level().isClientSide()) {
-            updateShellDefenses(orderedToSit);
-        }
+        updateShellDefenses(orderedToSit);
     }
 
     @Override
@@ -230,15 +232,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     public void tick() {
         super.tick();
 
-        if (isWakingUp()) {
-            wakingUpTicks--;
+        if (level().isClientSide()) {
+            return;
+        }
 
-            if (wakingUpTicks == 0) {
-                super.setOrderedToSit(false);
-                if (!level().isClientSide()) {
-                    updateShellDefenses(false);
-                }
-            }
+        if (isWakingUp()) {
+            setWakingUpTicks(getWakingUpTicks() - 1);
         }
     }
 
@@ -354,6 +353,18 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state) {
     }
 
+    public int getWakingUpTicks() {
+        return this.entityData.get(WAKING_UP_TICKS);
+    }
+
+    public void setWakingUpTicks(int value) {
+        this.entityData.set(WAKING_UP_TICKS, value);
+    }
+
+    private boolean isWakingUp() {
+        return getWakingUpTicks() >= 0;
+    }
+
     private static class SnailNavigation extends WallClimberNavigation {
 
         public SnailNavigation(SnailEntity mob, Level level) {
@@ -388,6 +399,10 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         protected @Nullable RawAnimation getCustomAnimation(AnimationState<SnailEntity> state) {
+            if (state.getAnimatable().isWakingUp()) {
+                return null;
+            }
+
             if (state.getAnimatable().isInSittingPose()) {
                 return SIT_ANIM;
             }
