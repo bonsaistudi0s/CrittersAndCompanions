@@ -17,6 +17,7 @@
     "NearestAttackableTargetGoalMixin",
     "NeutralMobsMixin",
     "PlayerMixin",
+    "SilverfishMixin",
     "WallClimberNavigationAccessor",
     "ZombieMixin",
     "ZombifiedPiglinMixin",
