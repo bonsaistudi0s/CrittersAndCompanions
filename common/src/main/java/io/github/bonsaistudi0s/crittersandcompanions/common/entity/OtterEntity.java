@@ -244,13 +244,41 @@ public class OtterEntity extends Animal implements GeoEntity {
         return this.isBaby() ? 0.6F : 1.0F;
     }
 
+    private static ItemStack removeOneItemFromItemEntity(ItemEntity itemEntity) {
+        var sourceStack = itemEntity.getItem();
+        var removedStack = sourceStack.split(1);
+        if (sourceStack.isEmpty()) {
+            itemEntity.discard();
+        } else {
+            itemEntity.setItem(sourceStack);
+            itemEntity.setPickUpDelay(20);
+        }
+
+        return removedStack;
+    }
+
     @Override
     protected void pickUpItem(ItemEntity itemEntity) {
         if (this.rejectedItem(itemEntity)) {
             return;
         }
 
-        super.pickUpItem(itemEntity);
+        var taken = removeOneItemFromItemEntity(itemEntity);
+
+        var equippedWithStack = this.equipItemIfPossible(taken);
+        if (!equippedWithStack.isEmpty()) {
+            this.onItemPickup(itemEntity);
+            this.take(itemEntity, equippedWithStack.getCount());
+        }
+    }
+
+    @Override
+    public boolean wantsToPickUp(ItemStack stack) {
+        if (!getMainHandItem().isEmpty()) {
+            return false;
+        }
+
+        return super.wantsToPickUp(stack);
     }
 
     @Override
