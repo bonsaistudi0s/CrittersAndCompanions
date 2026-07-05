@@ -62,6 +62,8 @@ dependencies {
 
     modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
 
+    modRuntimeOnly "maven.modrinth:jade:${jade_version}+fabric"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

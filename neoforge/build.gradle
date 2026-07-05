@@ -58,6 +58,8 @@ dependencies {
 
     modImplementation "dev.isxander:yet-another-config-lib:${yacl_version}-neoforge"
 
+    modRuntimeOnly "maven.modrinth:jade:${jade_version}+neoforge"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

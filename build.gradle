@@ -54,6 +54,9 @@ subprojects {
                 url 'https://maven.isxander.dev/releases'
             }
         }
+
+        // Jade
+        maven { url = "https://api.modrinth.com/maven" }
     }
 
     loom {
