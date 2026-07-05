@@ -76,7 +76,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.2D)
+                .add(Attributes.MOVEMENT_SPEED, 0.26D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
     }
