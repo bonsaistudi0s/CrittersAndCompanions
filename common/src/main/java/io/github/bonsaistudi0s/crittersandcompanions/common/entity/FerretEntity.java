@@ -110,8 +110,9 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(8, TAGS.temptGoal(this));
         goalSelector.addGoal(10, new TameableFollowParentGoal(this, 1.0D));
         goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        goalSelector.addGoal(13, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(12, TAGS.sittingTemptGoal(this));
+        goalSelector.addGoal(13, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(14, new RandomLookAroundGoal(this));
 
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
     }

@@ -5,10 +5,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.SittingTemptGoal;
 
 public record AnimalTags(TagKey<Item> food, TagKey<Item> tempt) {
 
@@ -19,8 +21,11 @@ public record AnimalTags(TagKey<Item> food, TagKey<Item> tempt) {
         return new AnimalTags(food, tempt);
     }
 
-    public Goal temptGoal(PathfinderMob mob) {
+    public TemptGoal temptGoal(PathfinderMob mob) {
         return new TemptGoal(mob, 1.0D, Ingredient.of(tempt()), false);
     }
 
+    public SittingTemptGoal sittingTemptGoal(TamableAnimal mob) {
+        return new SittingTemptGoal(mob, Ingredient.of(tempt()).and(Ingredient.of(food())));
+    }
 }

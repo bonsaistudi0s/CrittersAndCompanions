@@ -81,8 +81,9 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(5, TAGS.temptGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
         this.goalSelector.addGoal(7, new DancingStrollGoal<>(this, 0.8D));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(1, new NonTameRandomTargetGoal<>(this, Endermite.class, false, (LivingEntity::isAlive)));

@@ -86,7 +86,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
         goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
         goalSelector.addGoal(6, new DancingStrollGoal<>(this, 1.0D));
-        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F) {
+            @Override
+            public boolean canUse() {
+                return !isOrderedToSit() && super.canUse();
+            }
+        });
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
@@ -198,7 +203,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected boolean isImmobile() {
-        return isWakingUp() || super.isImmobile();
+        return isWakingUp() || isOrderedToSit() || super.isImmobile();
     }
 
     private void updateShellDefenses(boolean isHiding) {

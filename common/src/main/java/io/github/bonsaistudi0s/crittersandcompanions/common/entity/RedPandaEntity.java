@@ -91,8 +91,9 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(7, new SprintingFollowOwnerGoal(this, 1.25D, 10.0F, 5.0F, 2.0F));
         this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(10, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
     }
 
     @Override

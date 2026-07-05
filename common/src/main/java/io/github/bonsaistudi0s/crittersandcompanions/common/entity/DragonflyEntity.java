@@ -79,7 +79,8 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F));
         this.goalSelector.addGoal(3, TAGS.temptGoal(this));
         this.goalSelector.addGoal(4, new RandomFlyGoal());
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(5, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
     }
