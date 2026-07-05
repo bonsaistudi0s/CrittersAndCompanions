@@ -138,7 +138,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         }
 
         public static AnimationController<StagBeetleEntity> createController(StagBeetleEntity animatable) {
-            return new AnimationController<>(animatable, "controller", 4, new StagBeetleAnimations(animatable.getBehaviours()))
+            return new AnimationController<>(animatable, "controller", 0, new StagBeetleAnimations(animatable.getBehaviours()))
                     .triggerableAnim("hit", HIT);
         }
 
