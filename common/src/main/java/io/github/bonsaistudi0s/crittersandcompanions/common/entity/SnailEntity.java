@@ -287,6 +287,11 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
                     box.minY,
                     box.getCenter().z + dir.getStepZ() * (box.getZsize() / 2.0 + 0.1)
             );
+
+            if (!level.isLoaded(neighbourPos)) {
+                continue;
+            }
+
             if (!level.getBlockState(neighbourPos).getCollisionShape(level, neighbourPos).isEmpty()) {
                 return dir;
             }
