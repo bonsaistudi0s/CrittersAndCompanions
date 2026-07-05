@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -66,8 +67,9 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        goalSelector.addGoal(8, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));

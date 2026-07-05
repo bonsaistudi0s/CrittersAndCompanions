@@ -14,6 +14,7 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -60,8 +61,9 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(3, TAGS.temptGoal(this));
         goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(6, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
