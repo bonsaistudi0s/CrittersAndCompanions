@@ -35,11 +35,15 @@ public record TameableBehaviour(TamableAnimal owner, AnimalTags tags) implements
     }
 
     private InteractionResult order(ItemStack stack) {
-        if (stack.is(tags.food())) return InteractionResult.PASS;
-        if (stack.is(tags.tempt())) return InteractionResult.PASS;
+        if (owner.isFood(stack) && (owner.isBaby() || owner.canFallInLove())) {
+            return InteractionResult.PASS;
+        }
 
         owner.setOrderedToSit(!owner.isOrderedToSit());
-        return sucess();
+        owner.setJumping(false);
+        owner.getNavigation().stop();
+        owner.setTarget(null);
+        return InteractionResult.SUCCESS_NO_ITEM_USED;
     }
 
     private InteractionResult heal(Player player, ItemStack stack) {
