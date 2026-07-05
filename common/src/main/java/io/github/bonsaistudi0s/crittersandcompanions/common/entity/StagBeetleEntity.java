@@ -62,7 +62,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(3, new AnimatedDelayedMeleeAttackGoal<>(this, 1.0D, true, "controller", "hit", 8));
+        goalSelector.addGoal(3, new AnimatedDelayedMeleeAttackGoal<>(this, 1.0D, true, "controller", "hit", 4));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
