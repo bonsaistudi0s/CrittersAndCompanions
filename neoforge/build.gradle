@@ -112,6 +112,7 @@ shadowJar {
     archiveClassifier = 'dev-shadow'
 
     exclude "**/$rootProject.mod_id/datagen/**"
+    exclude "assets/$rootProject.mod_id/models/entity/**"
 }
 
 remapJar {

@@ -97,6 +97,8 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
+
+    exclude "assets/$rootProject.mod_id/models/entity/**"
 }
 
 remapJar {
