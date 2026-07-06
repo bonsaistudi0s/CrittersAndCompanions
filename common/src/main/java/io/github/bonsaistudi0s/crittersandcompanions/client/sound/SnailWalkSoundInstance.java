@@ -35,7 +35,7 @@ public class SnailWalkSoundInstance extends AbstractTickableSoundInstance {
         this.y = (float) this.snail.getY();
         this.z = (float) this.snail.getZ();
 
-        if (!snail.onGround()) {
+        if (!snail.onGround() || snail.isInSittingPose()) {
             this.volume = 0.0F;
             return;
         }
