@@ -116,6 +116,7 @@ shadowJar {
 
 remapJar {
     inputFile.set shadowJar.archiveFile
+    atAccessWideners.add "crittersandcompanions.accesswidener"
 }
 
 // Workaround for an architectury-loom bug: when Loom remaps a mod jar for the dev run
