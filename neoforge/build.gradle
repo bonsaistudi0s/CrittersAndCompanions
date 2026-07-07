@@ -111,6 +111,7 @@ shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
 
+    exclude "architectury.common.json"
     exclude "**/$rootProject.mod_id/datagen/**"
     exclude "assets/$rootProject.mod_id/models/entity/**"
 }
