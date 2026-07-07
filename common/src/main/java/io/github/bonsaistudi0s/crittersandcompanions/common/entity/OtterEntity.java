@@ -39,6 +39,8 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.OtterNavigation;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.OtterLookControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.OtterMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.*;
@@ -100,6 +102,11 @@ public class OtterEntity extends Animal implements GeoEntity {
         this.goalSelector.addGoal(9, new OtterRandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, AbstractFish.class, 20, false, false, (fish) -> fish instanceof AbstractSchoolingFish && this.getHuntDelay() <= 0));
+    }
+
+    @Override
+    public void registerBehaviours(Behaviours behaviours) {
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
@@ -336,9 +343,8 @@ public class OtterEntity extends Animal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        OtterEntity otter = CACEntities.OTTER.get().create(level);
-        return otter;
+    public OtterEntity getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
+        return CACEntities.OTTER.get().create(level);
     }
 
     @Override

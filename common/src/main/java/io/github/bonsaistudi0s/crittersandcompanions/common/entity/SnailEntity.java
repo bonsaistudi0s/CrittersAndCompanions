@@ -77,6 +77,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(new ClimbingBehaviour(this, CLIMBING));
         behaviours.add(new HealthRegenerationBehaviour(this));
         behaviours.add(new SlimeHarvestBehaviour());
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
@@ -84,12 +85,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(3, TAGS.temptGoal(this));
-        goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
-        goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(6, new DancingStrollGoal<>(this, 1.0D));
-        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F) {
+        goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(4, TAGS.temptGoal(this));
+        goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
+        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
             @Override
             public boolean canUse() {
                 return !isOrderedToSit() && super.canUse();
@@ -143,8 +144,22 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob entity) {
-        return CACEntities.SNAIL.get().create(level);
+    public @Nullable SnailEntity getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
+        var baby = CACEntities.SNAIL.get().create(level);
+        if (baby == null) {
+            return null;
+        }
+
+        if (otherParent instanceof SnailEntity otherSnailParent) {
+            baby.behaviour(VariantBehaviour.class).inherit(this, otherSnailParent);
+        }
+
+        if (isTame()) {
+            baby.setOwnerUUID(getOwnerUUID());
+            baby.setTame(true, true);
+        }
+
+        return baby;
     }
 
     @Override

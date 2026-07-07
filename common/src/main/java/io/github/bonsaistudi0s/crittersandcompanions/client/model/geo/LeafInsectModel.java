@@ -8,7 +8,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.data.EntityModelData;
 
-public class LeafInsectModel extends VariantGeoModel<LeafInsectEntity> {
+public class LeafInsectModel extends AgingVariantGeoModel<LeafInsectEntity> {
 
     public LeafInsectModel() {
         super(CrittersAndCompanions.createId("leaf_insect"));

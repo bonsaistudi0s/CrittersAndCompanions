@@ -27,12 +27,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.DancingBehaviour;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.VariantBehaviour;
+import org.jetbrains.annotations.Nullable;
+
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.JumpingSpiderMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -48,7 +48,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.JUMPING_SPIDER.getKey());
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private PanicGoal panicGoal;
+
     private DancingBehaviour dancingBehaviour;
 
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
@@ -66,29 +66,39 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(dancingBehaviour);
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new VariantBehaviour(this, VARIANT, 8));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-
-        this.panicGoal = new PanicGoal(this, 1.0D);
-        this.goalSelector.addGoal(1, this.panicGoal);
-
+        this.goalSelector.addGoal(1, new TameablePanicGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(5, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
-        this.goalSelector.addGoal(7, new DancingStrollGoal<>(this, 0.8D));
-        this.goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
+        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(7, TAGS.temptGoal(this));
+        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
+        this.goalSelector.addGoal(9, new DancingStrollGoal<>(this, 0.8D));
+        this.goalSelector.addGoal(10, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(1, new NonTameRandomTargetGoal<>(this, Endermite.class, false, (LivingEntity::isAlive)));
         this.targetSelector.addGoal(1, new NonTameRandomTargetGoal<>(this, Silverfish.class, false, (LivingEntity::isAlive)));
         this.targetSelector.addGoal(2, new NonTameRandomTargetGoal<>(this, DragonflyEntity.class, false, (LivingEntity::isAlive)));
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        if (isBaby()) {
+            super.setTarget(null);
+            return;
+        }
+
+        super.setTarget(target);
     }
 
     @Override
@@ -105,18 +115,26 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return false;
+        return stack.is(TAGS.food());
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return null;
-    }
+    public @Nullable JumpingSpiderEntity getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
+        var baby = CACEntities.JUMPING_SPIDER.get().create(level);
+        if (baby == null) {
+            return null;
+        }
 
-    @Override
-    public void tame(Player player) {
-        super.tame(player);
-        this.goalSelector.removeGoal(this.panicGoal);
+        if (otherParent instanceof JumpingSpiderEntity otherJumpingSpiderParent) {
+            baby.behaviour(VariantBehaviour.class).inherit(this, otherJumpingSpiderParent);
+        }
+
+        if (isTame()) {
+            baby.setOwnerUUID(getOwnerUUID());
+            baby.setTame(true, true);
+        }
+
+        return baby;
     }
 
     private PlayState predicate(AnimationState<?> event) {

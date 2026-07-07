@@ -1,30 +1,16 @@
 package io.github.bonsaistudi0s.crittersandcompanions.client.model.geo;
 
-import net.minecraft.resources.ResourceLocation;
-
+import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.SeaBunnyEntity;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.ClimbingBehaviour;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.VariantBehaviour;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
-public class SeaBunnyModel extends DefaultedEntityGeoModel<SeaBunnyEntity> {
-    private final ResourceLocation[] textures;
+public class SeaBunnyModel extends AgingVariantGeoModel<SeaBunnyEntity> {
 
-    public SeaBunnyModel(ResourceLocation id) {
-        super(id);
-        this.textures = new ResourceLocation[]{
-                buildFormattedTexturePath(id.withSuffix("_white")),
-                buildFormattedTexturePath(id.withSuffix("_blue")),
-                buildFormattedTexturePath(id.withSuffix("_yellow"))
-        };
-    }
-
-    @Override
-    public ResourceLocation getTextureResource(SeaBunnyEntity object) {
-        return textures[object.behaviour(VariantBehaviour.class).getVariant()];
+    public SeaBunnyModel() {
+        super(CrittersAndCompanions.createId("sea_bunny"));
     }
 
     @Override

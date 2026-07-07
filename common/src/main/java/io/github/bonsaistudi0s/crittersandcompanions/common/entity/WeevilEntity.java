@@ -24,10 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.DancingBehaviour;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.HealthRegenerationBehaviour;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.AnimatedDelayedRangedAttackGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
@@ -61,6 +58,7 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
         behaviours.add(new DancingBehaviour(this));
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new HealthRegenerationBehaviour(this));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
@@ -68,8 +66,9 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
-        goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
         goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
         goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
@@ -99,6 +98,16 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
         return entity instanceof Enemy && !(entity instanceof Creeper);
     }
 
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        if (isBaby()) {
+            super.setTarget(null);
+            return;
+        }
+
+        super.setTarget(target);
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 8.0).add(Attributes.MOVEMENT_SPEED, 0.2D);
     }
@@ -113,8 +122,18 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
-        return null;
+    public WeevilEntity getBreedOffspring(ServerLevel level, AgeableMob entity) {
+        var baby = CACEntities.WEEVIL.get().create(level);
+        if (baby == null) {
+            return null;
+        }
+
+        if (isTame()) {
+            baby.setOwnerUUID(getOwnerUUID());
+            baby.setTame(true, true);
+        }
+
+        return baby;
     }
 
     @Override

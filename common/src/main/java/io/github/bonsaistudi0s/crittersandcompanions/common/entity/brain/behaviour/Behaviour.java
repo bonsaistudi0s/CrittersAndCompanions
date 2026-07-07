@@ -48,4 +48,7 @@ public interface Behaviour {
     default void travel(Vec3 speed) {
     }
 
+    default void setAge(int age) {
+    }
+
 }

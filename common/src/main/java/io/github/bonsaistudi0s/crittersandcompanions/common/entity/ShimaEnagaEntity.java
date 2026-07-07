@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
@@ -35,6 +36,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, GeoEntity {
 
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SHIMA_ENAGA.getKey());
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ShimaEnagaEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
@@ -51,20 +53,23 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     @Override
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new TameableBehaviour(this, TAGS));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
-        this.goalSelector.addGoal(6, TAGS.sittingTemptGoal(this));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, TAGS.temptGoal(this));
+        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
+        this.goalSelector.addGoal(9, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -99,8 +104,18 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
-        return null;
+    public ShimaEnagaEntity getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
+        var baby = CACEntities.SHIMA_ENAGA.get().create(level);
+        if (baby == null) {
+            return null;
+        }
+
+        if (isTame()) {
+            baby.setOwnerUUID(getOwnerUUID());
+            baby.setTame(true, true);
+        }
+
+        return baby;
     }
 
     @Override
@@ -128,13 +143,19 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
         return 0.8F;
     }
 
+    @Override
+    public float getVoicePitch() {
+        // don't make the sounds of babies pitched even higher than it already is
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
+    }
+
     private PlayState predicate(AnimationState<?> event) {
         if (isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_sit"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
         } else if (onGround()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_idle"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("shima_enaga_fly"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("fly"));
         }
         return PlayState.CONTINUE;
     }

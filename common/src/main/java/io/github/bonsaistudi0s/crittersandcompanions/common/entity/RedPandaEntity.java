@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.SprintingFollowOwnerGoal;
@@ -66,6 +67,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     @Override
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new TameableBehaviour(this, TAGS));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -121,7 +123,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
+    public RedPandaEntity getBreedOffspring(ServerLevel level, AgeableMob ageableMob) {
         return CACEntities.RED_PANDA.get().create(level);
     }
 

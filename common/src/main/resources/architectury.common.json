@@ -1,5 +1,6 @@
 {
   "injected_interfaces": {
+    "net/minecraft/class_1296": ["io/github/bonsaistudi0s/crittersandcompanions/common/entity/brain/behaviour/BehaviourDriven"],
     "net/minecraft/class_1297": ["io/github/bonsaistudi0s/crittersandcompanions/common/entity/brain/behaviour/BehaviourDriven"],
     "net/minecraft/class_1308": ["io/github/bonsaistudi0s/crittersandcompanions/common/entity/brain/behaviour/BehaviourDriven"],
     "net/minecraft/class_1309": ["io/github/bonsaistudi0s/crittersandcompanions/common/entity/brain/behaviour/BehaviourDriven"],

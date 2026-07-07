@@ -22,6 +22,7 @@
     "WallClimberNavigationAccessor",
     "ZombieMixin",
     "ZombifiedPiglinMixin",
+    "behaviour.AgeableMobMixin",
     "behaviour.AnimalMixin",
     "behaviour.BucketableMixin",
     "behaviour.EntityMixin",

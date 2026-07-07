@@ -1,13 +1,19 @@
 package io.github.bonsaistudi0s.crittersandcompanions.datagen.provider;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,7 +29,7 @@ public final class CACItemTags extends ItemTagsProvider {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(@NotNull HolderLookup.Provider provider) {
         tag(ItemTags.CAT_FOOD).add(CACItems.KOI_FISH.get());
         tag(ItemTags.OCELOT_FOOD).add(CACItems.KOI_FISH.get());
         tag(ItemTags.FISHES).add(CACItems.KOI_FISH.get());
@@ -64,10 +70,20 @@ public final class CACItemTags extends ItemTagsProvider {
 
         tag(WeevilEntity.TAGS.food()).add(CACItems.ACORN.get());
         temptWithFood(WeevilEntity.TAGS);
+
+        tag(LeafInsectEntity.TAGS.food()).addTag(ItemTags.LEAVES);
+        temptWithFood(LeafInsectEntity.TAGS);
+
+        tag(SeaBunnyEntity.TAGS.food()).add(Items.SPONGE, Items.WET_SPONGE);
+        tag(SeaBunnyEntity.TAGS.food()).addOptionalTag(cTag("sponges"));
+        temptWithFood(SeaBunnyEntity.TAGS);
     }
 
-    public void temptWithFood(AnimalTags tags) {
+    private void temptWithFood(AnimalTags tags) {
         tag(tags.tempt()).addTag(tags.food());
     }
 
+    private TagKey<Item> cTag(String tag) {
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", tag));
+    }
 }

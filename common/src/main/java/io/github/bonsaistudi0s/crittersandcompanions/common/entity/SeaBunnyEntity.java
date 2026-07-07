@@ -5,22 +5,26 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.ai.util.GoalUtils;
 import net.minecraft.world.entity.ai.util.RandomPos;
 import net.minecraft.world.entity.animal.Bucketable;
-import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,12 +33,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.base.AgeableWaterAnimal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.ClimbingBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.VariantBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.NoJumpControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.SeaBunnyMoveControl;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -42,10 +51,14 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity {
+public class SeaBunnyEntity extends AgeableWaterAnimal implements Bucketable, GeoEntity {
+
     private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(SeaBunnyEntity.class, EntityDataSerializers.BOOLEAN);
+
+    public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SEA_BUNNY.getKey());
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     protected int harvestCooldown;
 
@@ -73,6 +86,21 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new VariantBehaviour(this, VARIANT, 3));
         behaviours.add(new ClimbingBehaviour(this, CLIMBING));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
+    }
+
+    @Override
+    public @Nullable SeaBunnyEntity getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
+        var baby = CACEntities.SEA_BUNNY.get().create(level);
+        if (baby == null) {
+            return null;
+        }
+
+        if (otherParent instanceof SeaBunnyEntity otherSeaBunnyParent) {
+            baby.behaviour(VariantBehaviour.class).inherit(this, otherSeaBunnyParent);
+        }
+
+        return baby;
     }
 
     @Override
@@ -83,7 +111,11 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0D));
+        goalSelector.addGoal(0, new PanicGoal(this, 1.5D));
+        goalSelector.addGoal(1, new BreedGoal(this, 1.0D));
+        goalSelector.addGoal(2, TAGS.temptGoal(this));
+        goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
+        goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0D));
     }
 
     @Override
@@ -101,6 +133,11 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     @Override
     public int getBaseExperienceReward() {
         return this.random.nextInt(2, 5);
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return stack.is(TAGS.food());
     }
 
     @Override
@@ -171,16 +208,16 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
     }
 
     @Override
-    protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        ItemStack handStack = player.getItemInHand(interactionHand);
+    public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack handStack = player.getItemInHand(hand);
         if (handStack.is(Items.BUCKET) || handStack.is(Items.WATER_BUCKET)) {
-            return Bucketable.bucketMobPickup(player, interactionHand, this).orElse(super.mobInteract(player, interactionHand));
+            return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
         } else if (handStack.is(Items.GLASS_BOTTLE)) {
-            if (this.harvestCooldown <= 0) {
+            if (this.harvestCooldown <= 0 && !isBaby()) {
                 handStack.shrink(1);
                 this.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.8F);
                 if (handStack.isEmpty()) {
-                    player.setItemInHand(interactionHand, new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()));
+                    player.setItemInHand(hand, new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()));
                 } else if (!player.getInventory().add(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()))) {
                     player.drop(new ItemStack(CACItems.SEA_BUNNY_SLIME_BOTTLE.get()), false);
                 }
@@ -188,15 +225,20 @@ public class SeaBunnyEntity extends WaterAnimal implements Bucketable, GeoEntity
                 return InteractionResult.sidedSuccess(this.level().isClientSide());
             }
         }
-        return super.mobInteract(player, interactionHand);
+        return super.mobInteract(player, hand);
     }
 
     private PlayState predicate(AnimationState<?> event) {
+        if (this.isBaby()) {
+            return PlayState.CONTINUE;
+        }
+
         if (this.getSpeed() > 0.03F) {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("sea_bunny_move"));
         } else {
             event.getController().setAnimation(RawAnimation.begin().thenLoop("sea_bunny"));
         }
+
         return PlayState.CONTINUE;
     }
 

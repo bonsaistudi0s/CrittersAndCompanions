@@ -53,6 +53,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new LadybugHealingAuraBehaviour(this));
         behaviours.add(new HealthRegenerationBehaviour(this));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
@@ -60,13 +61,14 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new FlyingTameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(3, TAGS.temptGoal(this));
-        goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(6, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
-        goalSelector.addGoal(7, TAGS.sittingTemptGoal(this));
-        goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(4, TAGS.temptGoal(this));
+        goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
+        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
+        goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
+        goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(10, new RandomLookAroundGoal(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -82,8 +84,18 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
-        return null;
+    public LadybugEntity getBreedOffspring(ServerLevel level, AgeableMob entity) {
+        var baby = CACEntities.LADYBUG.get().create(level);
+        if (baby == null) {
+            return null;
+        }
+
+        if (isTame()) {
+            baby.setOwnerUUID(getOwnerUUID());
+            baby.setTame(true, true);
+        }
+
+        return baby;
     }
 
     @Override

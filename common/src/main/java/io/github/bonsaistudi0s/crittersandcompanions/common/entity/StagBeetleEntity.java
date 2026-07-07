@@ -56,6 +56,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(new DancingBehaviour(this));
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new HealthRegenerationBehaviour(this));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     @Override
@@ -64,16 +65,27 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new AnimatedDelayedMeleeAttackGoal<>(this, 1.0D, true, "controller", "hit", 4));
-        goalSelector.addGoal(4, TAGS.temptGoal(this));
-        goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
-        goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
-        goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
-        goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
+        goalSelector.addGoal(5, TAGS.temptGoal(this));
+        goalSelector.addGoal(6, new FollowParentGoal(this, 1.25D));
+        goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(8, new DancingStrollGoal<>(this, 1.0D));
+        goalSelector.addGoal(9, TAGS.sittingTemptGoal(this));
+        goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(11, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        if (isBaby()) {
+            super.setTarget(null);
+            return;
+        }
+
+        super.setTarget(target);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -107,8 +119,22 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob entity) {
-        return null;
+    public @Nullable StagBeetleEntity getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
+        var baby = CACEntities.STAG_BEETLE.get().create(level);
+        if (baby == null) {
+            return null;
+        }
+
+        if (otherParent instanceof StagBeetleEntity otherStagBeetleParent) {
+            baby.behaviour(VariantBehaviour.class).inherit(this, otherStagBeetleParent);
+        }
+
+        if (isTame()) {
+            baby.setOwnerUUID(getOwnerUUID());
+            baby.setTame(true, true);
+        }
+
+        return baby;
     }
 
     @Override

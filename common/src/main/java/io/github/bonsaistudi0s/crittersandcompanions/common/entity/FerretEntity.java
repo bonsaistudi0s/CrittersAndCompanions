@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.VariantBehaviour;
@@ -74,6 +75,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     public void registerBehaviours(Behaviours behaviours) {
         behaviours.add(new VariantBehaviour(this, VARIANT, 2));
         behaviours.add(new TameableBehaviour(this, TAGS));
+        behaviours.add(new BabyHealthPenaltyBehaviour(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -149,7 +151,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
+    public FerretEntity getBreedOffspring(ServerLevel level, AgeableMob other) {
         var baby = CACEntities.FERRET.get().create(level);
         if (baby == null) return null;
 

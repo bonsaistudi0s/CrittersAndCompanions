@@ -6,10 +6,9 @@ import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.ShimaEnagaEntity;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
-public class ShimaEnagaModel extends DefaultedEntityGeoModel<ShimaEnagaEntity> {
+public class ShimaEnagaModel extends AgingGeoModel<ShimaEnagaEntity> {
 
     public ShimaEnagaModel() {
         super(CrittersAndCompanions.createId("shima_enaga"));
