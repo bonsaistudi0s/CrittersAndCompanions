@@ -1,6 +1,8 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.mixin;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.monster.Zombie;
@@ -26,28 +28,46 @@ public class ZombieMixin {
             MobSpawnType spawnType,
             SpawnGroupData spawnGroupData,
             CallbackInfoReturnable<SpawnGroupData> cir) {
-        Zombie self = (Zombie) (Object) this;
 
-        if (!self.isBaby() || self.isPassenger()) {
+        var finalGroupData = cir.getReturnValue();
+        var canSpawnJockey = finalGroupData instanceof Zombie.ZombieGroupData zombieData && zombieData.isBaby && zombieData.canSpawnJockey;
+        if (!canSpawnJockey) {
             return;
         }
 
-        if (level.getRandom().nextFloat() < 0.1F) {
-            if (level.getRandom().nextBoolean()) {
+        var self = (Zombie) (Object) this;
+
+        // Zombie subclasses like ZombifiedPiglin inherit Zombie#finalizeSpawn
+        if (self.getType() != EntityType.ZOMBIE) {
+            return;
+        }
+
+        var didSpawnAsJockeyAlready = self.isPassenger();
+        if (didSpawnAsJockeyAlready) {
+            return;
+        }
+
+        // never run this in a world gen thread (if for some reason baby zombies get spawned in a structure)
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        if (serverLevel.getRandom().nextFloat() < 0.1F) {
+            if (serverLevel.getRandom().nextBoolean()) {
                 var mount = CACEntities.SNAIL.get().create(self.level());
                 if (mount != null) {
                     mount.moveTo(self.getX(), self.getY(), self.getZ(), self.getYRot(), 0.0F);
-                    mount.finalizeSpawn(level, difficulty, MobSpawnType.JOCKEY, null);
+                    mount.finalizeSpawn(serverLevel, difficulty, MobSpawnType.JOCKEY, null);
                     self.startRiding(mount);
-                    level.addFreshEntity(mount);
+                    serverLevel.addFreshEntity(mount);
                 }
             } else {
                 var mount = CACEntities.ROLY_POLY.get().create(self.level());
                 if (mount != null) {
                     mount.moveTo(self.getX(), self.getY(), self.getZ(), self.getYRot(), 0.0F);
-                    mount.finalizeSpawn(level, difficulty, MobSpawnType.JOCKEY, null);
+                    mount.finalizeSpawn(serverLevel, difficulty, MobSpawnType.JOCKEY, null);
                     self.startRiding(mount);
-                    level.addFreshEntity(mount);
+                    serverLevel.addFreshEntity(mount);
                 }
             }
         }
