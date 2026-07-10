@@ -6,45 +6,53 @@ license = "ARR"
 [[mods]]
 modId = "${mod_id}"
 version = "${version}"
-displayName = "Critters and Companions"
+displayName = "${mod_name}"
 authors = "Joosh, EterDelta"
 description = "${description}"
 logoFile = "logo.png"
 
-[[dependencies.crittersandcompanions]]
+[[dependencies.${mod_id}]]
 modId = "neoforge"
 type = "required"
 versionRange = "[21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.crittersandcompanions]]
+[[dependencies.${mod_id}]]
 modId = "minecraft"
 type = "required"
 versionRange = "[${minecraft_version}]"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.crittersandcompanions]]
+[[dependencies.${mod_id}]]
 modId = "architectury"
 type = "required"
 versionRange = "[${architectury_api_version},)"
 ordering = "AFTER"
 side = "BOTH"
+[dependencies.${mod_id}.mc-publish]
+    ignore = false
+    modrinth = "architectury-api"
+    curseforge = "architectury-api"
 
-[[dependencies.crittersandcompanions]]
+[[dependencies.${mod_id}]]
 modId = "geckolib"
 type = "required"
 versionRange = "[${geckolib_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.crittersandcompanions]]
+[[dependencies.${mod_id}]]
 modId = "yet_another_config_lib_v3"
 mandatory = true
 versionRange = "[${yacl_version},)"
 ordering = "NONE"
 side = "CLIENT"
+[dependencies.${mod_id}.mc-publish]
+    ignore = false
+    modrinth = "yacl"
+    curseforge = "yacl"
 
 [[mixins]]
-config = "crittersandcompanions.mixins.json"
+config = "${mod_id}.mixins.json"

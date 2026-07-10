@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "${mod_id}",
   "version": "${version}",
-  "name": "Critters and Companions",
+  "name": "${mod_name}",
   "description": "${description}",
   "authors": [
     "Joosh",
@@ -27,7 +27,7 @@
     ]
   },
   "mixins": [
-    "crittersandcompanions.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.19.3",
@@ -46,6 +46,14 @@
       "links": {
         "modmenu.discord": "https://discord.gg/bonsai-studios-675743114173874176"
       }
+    },
+    "mc-publish": {
+      "dependencies": [
+        "architectury#(ignore)",
+        "architectury-api@>=${architectury_api_version}(required)",
+        "yet_another_config_lib_v3#(ignore)",
+        "yacl@>=${yacl_version}(required)"
+      ]
     }
   }
 }
