@@ -54,6 +54,7 @@ dependencies {
     modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 
     modImplementation include("io.github.fabricators_of_create.Porting-Lib:core:${porting_lib_version}")
+    modImplementation include("io.github.fabricators_of_create.Porting-Lib:gametest:${porting_lib_version}")
     modImplementation include("io.github.fabricators_of_create.Porting-Lib:attributes:${porting_lib_version}")
 
     modImplementation("dev.emi:trinkets:${trinkets_version}")
@@ -92,6 +93,7 @@ processResources {
 
     from(project(":common").sourceSets.main.resources) {
         include "resourcepacks/**"
+        include "${rootProject.mod_id}.accesswidener"
     }
 }
 
