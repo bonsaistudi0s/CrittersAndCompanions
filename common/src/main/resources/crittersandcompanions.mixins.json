@@ -11,6 +11,7 @@
   "mixins": [
     "AbstractIllagerMixin",
     "DrownedMixin",
+    "EndermiteMixin",
     "EntityAccessor",
     "FrogMixin",
     "LivingEntityMixin",

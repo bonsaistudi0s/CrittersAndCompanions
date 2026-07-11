@@ -1,5 +1,6 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FlyingAvoidEntityGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -75,12 +76,13 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F));
-        this.goalSelector.addGoal(3, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(4, new RandomFlyGoal());
-        this.goalSelector.addGoal(5, TAGS.sittingTemptGoal(this));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(1, new FlyingAvoidJumpingSpidersGoal(this, 8.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F));
+        this.goalSelector.addGoal(4, TAGS.temptGoal(this));
+        this.goalSelector.addGoal(5, new RandomFlyGoal());
+        this.goalSelector.addGoal(6, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
     }
@@ -240,6 +242,33 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
             if (randomPos != null) {
                 DragonflyEntity.this.navigation.moveTo(DragonflyEntity.this.navigation.createPath(BlockPos.containing(randomPos), 1), 1.0);
             }
+        }
+    }
+
+    private static class FlyingAvoidJumpingSpidersGoal extends FlyingAvoidEntityGoal<JumpingSpiderEntity> {
+
+        public FlyingAvoidJumpingSpidersGoal(PathfinderMob mob, float maxDistance, double walkSpeedModifier, double sprintSpeedModifier) {
+            super(mob, JumpingSpiderEntity.class, maxDistance, walkSpeedModifier, sprintSpeedModifier);
+        }
+
+        private boolean shouldAvoid() {
+            if (this.toAvoid == null) {
+                return false;
+            }
+
+            var self = (DragonflyEntity) this.mob;
+            var bothOwnedBySamePlayer = this.toAvoid.isTame() && self.isTame() && this.toAvoid.getOwnerUUID() == self.getOwnerUUID();
+            return !bothOwnedBySamePlayer;
+        }
+
+        @Override
+        public boolean canUse() {
+            return super.canUse() && shouldAvoid();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return super.canContinueToUse() && shouldAvoid();
         }
     }
 }
