@@ -32,10 +32,17 @@ public record ClientboundBubbleStatePacket(boolean state, int playerId) implemen
     }
 
     public void handle(NetworkManager.PacketContext context) {
-        Player player = (Player) Minecraft.getInstance().level.getEntity(playerId);
+        context.queue(() -> {
+            var level = Minecraft.getInstance().level;
+            if (level == null) {
+                return;
+            }
 
-        if (player instanceof IBubbleState bubbleState) {
-            bubbleState.setBubbleActive(state);
-        }
+            var player = (Player) level.getEntity(playerId);
+
+            if (player instanceof IBubbleState bubbleState) {
+                bubbleState.setBubbleActive(state);
+            }
+        });
     }
 }
