@@ -152,7 +152,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<GeoAnimatable>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<GeoAnimatable>(this, "controller", 4, this::predicate));
     }
 
     @Override
