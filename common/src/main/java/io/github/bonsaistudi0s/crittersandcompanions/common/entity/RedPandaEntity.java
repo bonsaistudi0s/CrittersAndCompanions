@@ -55,6 +55,16 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     ));
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ALERT = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private static final int TRANSITION_TICK_TIME = 3;
+    private static final RawAnimation ANGRY_ANIM = RawAnimation.begin().then("angry", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
+    private static final RawAnimation SLEEPING_ANIM = RawAnimation.begin().thenLoop("sleeping");
+    private static final RawAnimation SWIM_ANIM = RawAnimation.begin().thenLoop("swim");
+    private static final RawAnimation RUN_ANIM = RawAnimation.begin().thenLoop("run");
+    private static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private LivingEntity alerter;
@@ -162,30 +172,45 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<?> event) {
+        var controller = event.getController();
+
         if (this.isAlert()) {
-            event.getController().setAnimation(RawAnimation.begin().then("angry", Animation.LoopType.PLAY_ONCE));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(ANGRY_ANIM);
         } else if (this.isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
+            controller.transitionLength(0);
+            controller.setAnimation(SIT_ANIM);
         } else if (this.isSleeping()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("sleeping"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(SLEEPING_ANIM);
         } else if (isInWater()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("swim"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(SWIM_ANIM);
         } else if (event.isMoving()) {
+            controller.transitionLength(TRANSITION_TICK_TIME);
+
             if (getDeltaMovement().length() >= 0.16F) {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("run"));
+                controller.setAnimation(RUN_ANIM);
             } else {
-                event.getController().setAnimation(RawAnimation.begin().thenLoop("walk"));
+                controller.setAnimation(WALK_ANIM);
             }
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+            if (event.isCurrentAnimation(SIT_ANIM)) {
+                controller.transitionLength(0);
+            } else {
+                controller.transitionLength(TRANSITION_TICK_TIME);
+            }
+
+            controller.setAnimation(IDLE_ANIM);
         }
+
         return PlayState.CONTINUE;
     }
 
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 3, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", TRANSITION_TICK_TIME, this::predicate));
     }
 
     @Override

@@ -37,6 +37,11 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
 
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.SHIMA_ENAGA.getKey());
 
+    private static final int TRANSITION_TICK_TIME = 4;
+    private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation FLY_ANIM = RawAnimation.begin().thenLoop("fly");
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ShimaEnagaEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
@@ -150,19 +155,30 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     }
 
     private PlayState predicate(AnimationState<?> event) {
+        var controller = event.getController();
+
         if (isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
+            controller.transitionLength(0);
+            controller.setAnimation(SIT_ANIM);
         } else if (onGround()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+            if (event.isCurrentAnimation(SIT_ANIM)) {
+                controller.transitionLength(0);
+            } else {
+                controller.transitionLength(TRANSITION_TICK_TIME);
+            }
+
+            controller.setAnimation(IDLE_ANIM);
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("fly"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(FLY_ANIM);
         }
+
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", TRANSITION_TICK_TIME, this::predicate));
     }
 
     @Override
