@@ -29,7 +29,7 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
     }
 
     public static <T extends GeoAnimatable & BehaviourDriven> AnimationController<T> createController(T animatable) {
-        return new AnimationController<>(animatable, "controller", 0, new BugAnimations<>(animatable.getBehaviours()));
+        return new AnimationController<>(animatable, "controller", 4, new BugAnimations<>(animatable.getBehaviours()));
     }
 
     @Override
