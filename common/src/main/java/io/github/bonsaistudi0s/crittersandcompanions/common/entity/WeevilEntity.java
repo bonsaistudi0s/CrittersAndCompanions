@@ -10,9 +10,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -45,8 +44,9 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private final AnimatedDelayedRangedAttackGoal<WeevilEntity> rangedAttackGoal = new AnimatedDelayedRangedAttackGoal<>(this, 1, 20, 8, "controller", "throw", 5);
+    private final OwnerHurtByTargetGoal ownerHurtByTargetGoal = new OwnerHurtByTargetGoal(this);
+    private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
     private final HurtByTargetGoal hurtByTargetGoal = new HurtByTargetGoal(this);
-    private final NearestAttackableTargetGoal<Mob> attackTargetGoal = new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, false, this::shouldAttack);
 
     public WeevilEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -84,18 +84,16 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
 
     private void reassessTameGoals() {
         goalSelector.removeGoal(rangedAttackGoal);
+        targetSelector.removeGoal(this.ownerHurtByTargetGoal);
+        targetSelector.removeGoal(this.ownerHurtTargetGoal);
         targetSelector.removeGoal(this.hurtByTargetGoal);
-        targetSelector.removeGoal(this.attackTargetGoal);
 
         if (isTame()) {
             goalSelector.addGoal(3, rangedAttackGoal);
-            targetSelector.addGoal(1, this.hurtByTargetGoal);
-            targetSelector.addGoal(2, this.attackTargetGoal);
+            targetSelector.addGoal(1, this.ownerHurtByTargetGoal);
+            targetSelector.addGoal(2, this.ownerHurtTargetGoal);
+            targetSelector.addGoal(3, this.hurtByTargetGoal);
         }
-    }
-
-    public boolean shouldAttack(LivingEntity entity) {
-        return entity instanceof Enemy && !(entity instanceof Creeper);
     }
 
     @Override
