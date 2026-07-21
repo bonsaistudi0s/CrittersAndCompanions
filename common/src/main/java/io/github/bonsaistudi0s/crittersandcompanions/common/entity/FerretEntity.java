@@ -58,6 +58,14 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_COLLAR_COLOR = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
 
+    private static final int TRANSITION_TICK_TIME = 4;
+    private static final RawAnimation DIG_ANIM = RawAnimation.begin().then("dig", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
+    private static final RawAnimation SLEEP_ANIM = RawAnimation.begin().thenLoop("sleep");
+    private static final RawAnimation SWIM_ANIM = RawAnimation.begin().thenLoop("swim");
+    private static final RawAnimation RUN_ANIM = RawAnimation.begin().thenLoop("run");
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
+
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.FERRET.getKey());
     public static final TagKey<Block> DIG_GROUNDS_TAG = TagKey.create(Registries.BLOCK, CrittersAndCompanions.createId("ferret_dig_grounds"));
 
@@ -261,25 +269,39 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<?> event) {
+        var controller = event.getController();
+
         if (this.isDigging()) {
-            event.getController().setAnimation(RawAnimation.begin().then("dig", Animation.LoopType.PLAY_ONCE));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(DIG_ANIM);
         } else if (this.isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
+            controller.transitionLength(0);
+            controller.setAnimation(SIT_ANIM);
         } else if (this.isSleeping()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("sleep"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(SLEEP_ANIM);
         } else if (isInWater()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("swim"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(SWIM_ANIM);
         } else if (event.isMoving()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("run"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(RUN_ANIM);
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+            if (event.isCurrentAnimation(SIT_ANIM)) {
+                controller.transitionLength(0);
+            } else {
+                controller.transitionLength(TRANSITION_TICK_TIME);
+            }
+
+            controller.setAnimation(IDLE_ANIM);
         }
+
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", TRANSITION_TICK_TIME, this::predicate));
     }
 
     @Override

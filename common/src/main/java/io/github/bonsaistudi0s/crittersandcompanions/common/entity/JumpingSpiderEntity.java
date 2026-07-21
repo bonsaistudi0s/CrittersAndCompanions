@@ -17,9 +17,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
-import net.minecraft.world.entity.monster.Endermite;
-import net.minecraft.world.entity.monster.Silverfish;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -46,6 +45,12 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(JumpingSpiderEntity.class,
             EntityDataSerializers.INT);
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.JUMPING_SPIDER.getKey());
+
+    private static final int TRANSITION_TICK_TIME = 4;
+    private static final RawAnimation DANCE_ANIM = RawAnimation.begin().thenLoop("dance");
+    private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
+    private static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -138,21 +143,33 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<?> event) {
+        var controller = event.getController();
+
         if (dancingBehaviour.isDancing()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("dance"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(DANCE_ANIM);
         } else if (this.isInSittingPose()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("sit"));
+            controller.transitionLength(0);
+            controller.setAnimation(SIT_ANIM);
         } else if (event.isMoving()) {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("walk"));
+            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.setAnimation(WALK_ANIM);
         } else {
-            event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+            if (event.isCurrentAnimation(SIT_ANIM)) {
+                controller.transitionLength(0);
+            } else {
+                controller.transitionLength(TRANSITION_TICK_TIME);
+            }
+
+            controller.setAnimation(IDLE_ANIM);
         }
+
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<GeoAnimatable>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<GeoAnimatable>(this, "controller", TRANSITION_TICK_TIME, this::predicate));
     }
 
     @Override
@@ -167,6 +184,10 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
+        if (target instanceof Creeper || target instanceof Ghast || target instanceof ArmorStand) {
+            return false;
+        }
+
         if (target instanceof TamableAnimal tamable) {
             return !tamable.isTame() || tamable.getOwner() != owner;
         }

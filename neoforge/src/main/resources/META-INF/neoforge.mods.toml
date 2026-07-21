@@ -45,7 +45,7 @@ side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "yet_another_config_lib_v3"
-mandatory = true
+type = "required"
 versionRange = "[${yacl_version},)"
 ordering = "NONE"
 side = "CLIENT"

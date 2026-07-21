@@ -54,6 +54,16 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class OtterEntity extends Animal implements GeoEntity {
     private static final EntityDataAccessor<Boolean> FLOATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private static final RawAnimation SWIM_2_ANIM = RawAnimation.begin().thenLoop("swim_2");
+    private static final RawAnimation STANDING_EAT_CLAM_ANIM = RawAnimation.begin().then("standing_eat_clam", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation STANDING_EAT_ANIM = RawAnimation.begin().then("standing_eat", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation SWIM_ANIM = RawAnimation.begin().thenLoop("swim");
+    private static final RawAnimation RUN_ANIM = RawAnimation.begin().thenLoop("run");
+    private static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation FLOATING_EAT_ANIM = RawAnimation.begin().then("floating_eat", Animation.LoopType.PLAY_ONCE);
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.OTTER.getKey());
@@ -393,30 +403,30 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     private RawAnimation animation(AnimationState<?> event) {
         if (isFloating()) {
-            return RawAnimation.begin().thenLoop("swim_2");
+            return SWIM_2_ANIM;
         }
 
         if (isEating()) {
             if (getMainHandItem().is(CACItems.CLAM.get())) {
-                return RawAnimation.begin().then("standing_eat_clam", Animation.LoopType.PLAY_ONCE);
+                return STANDING_EAT_CLAM_ANIM;
             }
 
-            return RawAnimation.begin().then("standing_eat", Animation.LoopType.PLAY_ONCE);
+            return STANDING_EAT_ANIM;
         }
 
         if (isInWater()) {
-            return RawAnimation.begin().thenLoop("swim");
+            return SWIM_ANIM;
         }
 
         if (event.isMoving()) {
             if (getDeltaMovement().length() >= 0.18F) {
-                return RawAnimation.begin().thenLoop("run");
+                return RUN_ANIM;
             } else {
-                return RawAnimation.begin().thenLoop("walk");
+                return WALK_ANIM;
             }
         }
 
-        return RawAnimation.begin().thenLoop("idle");
+        return IDLE_ANIM;
     }
 
     private PlayState predicate(AnimationState<?> event) {
@@ -426,7 +436,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     private PlayState floatingHandsPredicate(AnimationState<?> event) {
         if (isFloating() && isEating()) {
-            event.getController().setAnimation(RawAnimation.begin().then("floating_eat", Animation.LoopType.PLAY_ONCE));
+            event.getController().setAnimation(FLOATING_EAT_ANIM);
             return PlayState.CONTINUE;
         }
         event.getController().forceAnimationReset();
@@ -435,7 +445,7 @@ public class OtterEntity extends Animal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", 4, this::predicate));
         controllers.add(new AnimationController<>(this, "floating_hands_controller", 4, this::floatingHandsPredicate));
     }
 

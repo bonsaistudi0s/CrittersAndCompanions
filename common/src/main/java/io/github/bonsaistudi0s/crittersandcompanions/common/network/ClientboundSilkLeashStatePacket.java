@@ -62,28 +62,33 @@ public record ClientboundSilkLeashStatePacket(List<LeashData> leashDataList) imp
     }
 
     public void handle(NetworkManager.PacketContext context) {
-        ClientLevel level = Minecraft.getInstance().level;
-
-        for (LeashData data : leashDataList) {
-            Entity entity = level.getEntity(data.leashOwner());
-
-            if (entity instanceof ISilkLeashState leashState) {
-                leashState.getLeashingEntities().clear();
-                leashState.getLeashedByEntities().clear();
-
-                data.leashingEntities().forEach(id -> {
-                    Entity leashingEntity = level.getEntity(id);
-                    if (leashingEntity instanceof LivingEntity) {
-                        leashState.getLeashingEntities().add((LivingEntity) leashingEntity);
-                    }
-                });
-                data.leashedByEntities().forEach(id -> {
-                    Entity leashedByEntity = level.getEntity(id);
-                    if (leashedByEntity instanceof LivingEntity) {
-                        leashState.getLeashedByEntities().add(((LivingEntity) leashedByEntity));
-                    }
-                });
+        context.queue(() -> {
+            var level = Minecraft.getInstance().level;
+            if (level == null) {
+                return;
             }
-        }
+
+            for (var data : leashDataList) {
+                var entity = level.getEntity(data.leashOwner());
+
+                if (entity instanceof ISilkLeashState leashState) {
+                    leashState.getLeashingEntities().clear();
+                    leashState.getLeashedByEntities().clear();
+
+                    data.leashingEntities().forEach(id -> {
+                        var leashingEntity = level.getEntity(id);
+                        if (leashingEntity instanceof LivingEntity) {
+                            leashState.getLeashingEntities().add((LivingEntity) leashingEntity);
+                        }
+                    });
+                    data.leashedByEntities().forEach(id -> {
+                        var leashedByEntity = level.getEntity(id);
+                        if (leashedByEntity instanceof LivingEntity) {
+                            leashState.getLeashedByEntities().add(((LivingEntity) leashedByEntity));
+                        }
+                    });
+                }
+            }
+        });
     }
 }

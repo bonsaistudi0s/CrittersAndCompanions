@@ -21,6 +21,8 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
     private static final RawAnimation FLY_ANIM = RawAnimation.begin().thenLoop("fly");
     private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
 
+    private static final int TRANSITION_TICK_TIME = 4;
+
     @Nullable
     private final DancingBehaviour dancingBehaviour;
 
@@ -29,7 +31,7 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
     }
 
     public static <T extends GeoAnimatable & BehaviourDriven> AnimationController<T> createController(T animatable) {
-        return new AnimationController<>(animatable, "controller", 0, new BugAnimations<>(animatable.getBehaviours()));
+        return new AnimationController<>(animatable, "controller", TRANSITION_TICK_TIME, new BugAnimations<>(animatable.getBehaviours()));
     }
 
     @Override
@@ -49,20 +51,32 @@ public class BugAnimations<T extends GeoAnimatable & BehaviourDriven> implements
     }
 
     private RawAnimation createAnimation(AnimationState<T> state) {
+        var controller = state.getController();
+
         if (state.getAnimatable() instanceof FlyingAnimal animal && animal.isFlying()) {
+            controller.transitionLength(TRANSITION_TICK_TIME);
             return FLY_ANIM;
         }
 
         if (dancingBehaviour != null && dancingBehaviour.isDancing()) {
+            controller.transitionLength(TRANSITION_TICK_TIME);
             return RawAnimation.begin().thenLoop(dancingBehaviour.getDanceAnimationName());
         }
 
         if (state.getAnimatable() instanceof TamableAnimal animal && animal.isInSittingPose()) {
+            controller.transitionLength(0);
             return SIT_ANIM;
         }
 
         if (state.isMoving()) {
+            controller.transitionLength(TRANSITION_TICK_TIME);
             return WALK_ANIM;
+        }
+
+        if (state.isCurrentAnimation(SIT_ANIM)) {
+            controller.transitionLength(0);
+        } else {
+            controller.transitionLength(TRANSITION_TICK_TIME);
         }
 
         return IDLE_ANIM;
