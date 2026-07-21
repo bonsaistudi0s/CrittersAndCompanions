@@ -12,6 +12,9 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -181,5 +184,14 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
         }
 
         return super.canAttack(target);
+    }
+
+    @Override
+    public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
+        if (target instanceof Creeper || target instanceof Ghast || target instanceof ArmorStand) {
+            return false;
+        }
+
+        return super.wantsToAttack(target, owner);
     }
 }
