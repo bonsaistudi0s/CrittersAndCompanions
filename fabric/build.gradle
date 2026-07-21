@@ -28,11 +28,6 @@ repositories {
     // Porting Lib
     maven { url = "https://mvn.devos.one/snapshots/" }
 
-    // Trinkets & ModMenu
-    maven {
-        url = uri("https://maven.terraformersmc.com/")
-    }
-
     // Required by Trinkets
     maven {
         url = uri("https://maven.ladysnake.org/releases")
@@ -70,11 +65,12 @@ dependencies {
     modImplementation include("io.github.fabricators_of_create.Porting-Lib:gametest:${porting_lib_version}")
     modImplementation include("io.github.fabricators_of_create.Porting-Lib:attributes:${porting_lib_version}")
 
-    modImplementation("dev.emi:trinkets:${trinkets_version}")
+    modImplementation "maven.modrinth:trinkets:${trinkets_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:5.2.1"
 
-    modImplementation("dev.isxander:yet-another-config-lib:${yacl_version}-fabric")
+    modImplementation "dev.isxander:yet-another-config-lib:${yacl_version}-fabric"
 
-    modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
+    modImplementation "maven.modrinth:modmenu:${modmenu_version}"
 
     modRuntimeOnly "maven.modrinth:jade:${jade_version}+fabric"
 
