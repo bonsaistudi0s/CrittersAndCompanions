@@ -73,7 +73,7 @@ jobs:
           version-type: release
           changelog-file: CHANGELOG.md
 
-      - name: Upload to Modrinth & CurseForge (NeoForge)
+      - name: Upload to Modrinth & CurseForge (Forge)
         if: steps.semantic-release.outputs.new-release-published == 'true'
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -83,9 +83,9 @@ jobs:
           curseforge-id: ${{ vars.CURSEFORGE_ID }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          files: neoforge/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: forge/build/libs/!(*-@(dev-shadow|sources)).jar
 
-          name: "[NeoForge] ${{ steps.properties.outputs.mod_name }} ${{ steps.semantic-release.outputs.new-release-version }}"
+          name: "[Forge] ${{ steps.properties.outputs.mod_name }} ${{ steps.semantic-release.outputs.new-release-version }}"
           version: ${{ steps.semantic-release.outputs.new-release-version }}
           version-type: release
           changelog-file: CHANGELOG.md

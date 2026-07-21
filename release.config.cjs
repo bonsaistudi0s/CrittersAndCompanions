@@ -58,7 +58,7 @@ module.exports = {
       {
         assets: [
           'fabric/build/libs/!(*-@(dev-shadow|sources)).jar',
-          'neoforge/build/libs/!(*-@(dev-shadow|sources)).jar',
+          'forge/build/libs/!(*-@(dev-shadow|sources)).jar',
         ],
       },
     ],
