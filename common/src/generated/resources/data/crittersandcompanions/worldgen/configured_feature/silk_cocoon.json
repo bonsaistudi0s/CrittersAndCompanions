@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "crittersandcompanions:silk_cocoon",
+        "Properties": {
+          "hanging": "false",
+          "waterlogged": "false"
+        }
+      }
+    }
+  }
+}

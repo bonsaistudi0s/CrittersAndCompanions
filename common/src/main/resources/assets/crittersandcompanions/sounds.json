@@ -3,7 +3,7 @@
     "sounds": [
       "crittersandcompanions:entity/dragonfly/ambient"
     ],
-    "subtitle": "subtitles.crittersandcompanions.dragonfly.ambient"
+    "subtitle": "subtitles.crittersandcompanions.entity.dragonfly.ambient"
   },
   "entity.ferret.ambient": {
     "sounds": [
@@ -14,7 +14,7 @@
       "crittersandcompanions:entity/ferret/ambient_5",
       "crittersandcompanions:entity/ferret/ambient_6"
     ],
-    "subtitle": "subtitles.crittersandcompanions.ferret.ambient"
+    "subtitle": "subtitles.crittersandcompanions.entity.ferret.ambient"
   },
   "entity.ferret.death": {
     "sounds": [
@@ -22,20 +22,20 @@
       "crittersandcompanions:entity/ferret/death_2",
       "crittersandcompanions:entity/ferret/death_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.ferret.death"
+    "subtitle": "subtitles.crittersandcompanions.entity.ferret.death"
   },
   "entity.ferret.hurt": {
     "sounds": [
       "crittersandcompanions:entity/ferret/hurt_1",
       "crittersandcompanions:entity/ferret/hurt_2"
     ],
-    "subtitle": "subtitles.crittersandcompanions.ferret.hurt"
+    "subtitle": "subtitles.crittersandcompanions.entity.ferret.hurt"
   },
   "entity.leaf_insect.death": {
     "sounds": [
       "crittersandcompanions:entity/leaf_insect/death"
     ],
-    "subtitle": "subtitles.crittersandcompanions.leaf_insect.death"
+    "subtitle": "subtitles.crittersandcompanions.entity.leaf_insect.death"
   },
   "entity.leaf_insect.hurt": {
     "sounds": [
@@ -44,7 +44,7 @@
       "crittersandcompanions:entity/leaf_insect/hurt_3",
       "crittersandcompanions:entity/leaf_insect/hurt_4"
     ],
-    "subtitle": "subtitles.crittersandcompanions.leaf_insect.hurt"
+    "subtitle": "subtitles.crittersandcompanions.entity.leaf_insect.hurt"
   },
   "entity.otter.ambient": {
     "sounds": [
@@ -54,14 +54,14 @@
       "crittersandcompanions:entity/otter/ambient_4",
       "crittersandcompanions:entity/otter/ambient_5"
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.ambient"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.ambient"
   },
   "entity.otter.death": {
     "sounds": [
       "crittersandcompanions:entity/otter/death_1",
       "crittersandcompanions:entity/otter/death_2"
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.death"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.death"
   },
   "entity.otter.eat": {
     "sounds": [
@@ -69,7 +69,7 @@
       "crittersandcompanions:entity/otter/eat_2",
       "crittersandcompanions:entity/otter/eat_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.eat"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.eat"
   },
   "entity.otter.clam_break": {
     "sounds": [
@@ -94,7 +94,7 @@
         "pitch": 1.5
       }
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.eat"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.eat"
   },
   "entity.otter.clam_break_land": {
     "sounds": [
@@ -102,14 +102,14 @@
       "crittersandcompanions:entity/otter/clam_break_land_2",
       "crittersandcompanions:entity/otter/clam_break_land_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.eat"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.eat"
   },
   "entity.otter.hurt": {
     "sounds": [
       "crittersandcompanions:entity/otter/hurt_1",
       "crittersandcompanions:entity/otter/hurt_2"
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.hurt"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.hurt"
   },
   "entity.otter.swim": {
     "sounds": [
@@ -117,7 +117,7 @@
       "crittersandcompanions:entity/otter/swim_2",
       "crittersandcompanions:entity/otter/swim_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.otter.swim"
+    "subtitle": "subtitles.crittersandcompanions.entity.otter.swim"
   },
   "entity.red_panda.ambient": {
     "sounds": [
@@ -126,28 +126,28 @@
       "crittersandcompanions:entity/red_panda/ambient_3",
       "crittersandcompanions:entity/red_panda/ambient_4"
     ],
-    "subtitle": "subtitles.crittersandcompanions.red_panda.ambient"
+    "subtitle": "subtitles.crittersandcompanions.entity.red_panda.ambient"
   },
   "entity.red_panda.death": {
     "sounds": [
       "crittersandcompanions:entity/red_panda/death_1",
       "crittersandcompanions:entity/red_panda/death_2"
     ],
-    "subtitle": "subtitles.crittersandcompanions.red_panda.death"
+    "subtitle": "subtitles.crittersandcompanions.entity.red_panda.death"
   },
   "entity.red_panda.hurt": {
     "sounds": [
       "crittersandcompanions:entity/red_panda/hurt_1",
       "crittersandcompanions:entity/red_panda/hurt_2"
     ],
-    "subtitle": "subtitles.crittersandcompanions.red_panda.hurt"
+    "subtitle": "subtitles.crittersandcompanions.entity.red_panda.hurt"
   },
   "entity.sea_bunny.death": {
     "sounds": [
       "crittersandcompanions:entity/sea_bunny/death_1",
       "crittersandcompanions:entity/sea_bunny/death_2"
     ],
-    "subtitle": "subtitles.crittersandcompanions.sea_bunny.death"
+    "subtitle": "subtitles.crittersandcompanions.entity.sea_bunny.death"
   },
   "entity.sea_bunny.hurt": {
     "sounds": [
@@ -155,7 +155,7 @@
       "crittersandcompanions:entity/sea_bunny/hurt_2",
       "crittersandcompanions:entity/sea_bunny/hurt_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.sea_bunny.hurt"
+    "subtitle": "subtitles.crittersandcompanions.entity.sea_bunny.hurt"
   },
   "entity.shima_enaga.ambient": {
     "sounds": [
@@ -164,7 +164,7 @@
       "crittersandcompanions:entity/shima_enaga/ambient_3",
       "crittersandcompanions:entity/shima_enaga/ambient_4"
     ],
-    "subtitle": "subtitles.crittersandcompanions.shima_enaga.ambient"
+    "subtitle": "subtitles.crittersandcompanions.entity.shima_enaga.ambient"
   },
   "entity.bite_attack": {
     "sounds": [
@@ -172,12 +172,64 @@
       "crittersandcompanions:entity/bite_attack_2",
       "crittersandcompanions:entity/bite_attack_3"
     ],
-    "subtitle": "subtitles.crittersandcompanions.bite_attack"
+    "subtitle": "subtitles.crittersandcompanions.entity.bite_attack"
   },
   "entity.bubble_pop": {
     "sounds": [
       "crittersandcompanions:entity/bubble_pop"
     ],
-    "subtitle": "subtitles.crittersandcompanions.bubble_pop"
+    "subtitle": "subtitles.crittersandcompanions.entity.bubble_pop"
+  },
+  "entity.bugs.walk": {
+    "sounds": [
+      "crittersandcompanions:entity/bugs/walk_loop"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.bugs.walk"
+  },
+  "entity.bugs.hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/bugs/hurt_1",
+      "crittersandcompanions:entity/bugs/hurt_2",
+      "crittersandcompanions:entity/bugs/hurt_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.bugs.hurt"
+  },
+  "entity.snail.walk": {
+    "sounds": [
+      "crittersandcompanions:entity/snail/walk_loop"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.snail.walk"
+  },
+  "entity.snail.gary_idle": {
+    "sounds": [
+      "crittersandcompanions:entity/snail/gary_idle_1",
+      "crittersandcompanions:entity/snail/gary_idle_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.snail.gary_idle"
+  },
+  "entity.snail.gary_purr": {
+    "sounds": [
+      "crittersandcompanions:entity/snail/gary_purr"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.snail.gary_purr"
+  },
+  "entity.snail.gary_sing": {
+    "sounds": [
+      "crittersandcompanions:entity/snail/gary_sing"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.snail.gary_sing"
+  },
+  "entity.snail.gary_hurt": {
+    "sounds": [
+      "crittersandcompanions:entity/snail/gary_hurt_1",
+      "crittersandcompanions:entity/snail/gary_hurt_2"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.snail.gary_hurt"
+  },
+  "entity.ladybug.fly": {
+    "sounds": [
+      "crittersandcompanions:entity/ladybug/fly_loop"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.ladybug.fly"
   }
 }

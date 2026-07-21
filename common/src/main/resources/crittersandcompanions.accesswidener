@@ -1,0 +1,11 @@
+accessWidener v1 named
+
+accessible class net/minecraft/server/level/ChunkMap$TrackedEntity
+accessible field net/minecraft/server/level/ChunkMap entityMap Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
+accessible field net/minecraft/server/level/ChunkMap$TrackedEntity seenBy Ljava/util/Set;
+
+accessible field net/minecraft/world/entity/ai/goal/AvoidEntityGoal avoidEntityTargeting Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;
+
+accessible method net/minecraft/world/entity/ai/goal/FollowOwnerGoal teleportToOwner ()V
+
+accessible method net/minecraft/world/item/alchemy/PotionBrewing addMix (Lnet/minecraft/world/item/alchemy/Potion;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/alchemy/Potion;)V

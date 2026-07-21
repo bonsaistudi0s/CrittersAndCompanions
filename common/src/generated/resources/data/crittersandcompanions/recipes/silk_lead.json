@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:slime_ball"
+    },
+    "S": {
+      "item": "crittersandcompanions:silk"
+    }
+  },
+  "pattern": [
+    "SS ",
+    "SB ",
+    "  S"
+  ],
+  "result": {
+    "item": "crittersandcompanions:silk_lead"
+  },
+  "show_notification": true
+}

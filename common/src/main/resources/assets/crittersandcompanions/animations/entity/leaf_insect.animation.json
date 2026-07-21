@@ -1,7 +1,7 @@
 {
   "format_version": "1.8.0",
   "animations": {
-    "leaf_insect_walk": {
+    "walk": {
       "loop": true,
       "animation_length": 0.48,
       "bones": {
@@ -360,7 +360,7 @@
         }
       }
     },
-    "leaf_insect_idle": {
+    "idle": {
       "loop": true,
       "animation_length": 1.04,
       "bones": {
@@ -461,7 +461,7 @@
         }
       }
     },
-    "leaf_insect_dance": {
+    "dance": {
       "loop": true,
       "animation_length": 0.72,
       "bones": {

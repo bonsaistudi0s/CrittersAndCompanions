@@ -1,0 +1,124 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+repositories {
+    // Porting Lib
+    maven { url = "https://mvn.devos.one/snapshots/" }
+
+    // Trinkets & ModMenu
+    maven {
+        url = uri("https://maven.terraformersmc.com/")
+    }
+
+    // Required by Trinkets
+    maven {
+        url = uri("https://maven.ladysnake.org/releases")
+        content {
+            includeGroup("org.ladysnake.cardinal-components-api")
+        }
+    }
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://maven.ladysnake.org/releases'
+    }
+
+    // Required by Porting Lib (Attributes)
+    maven {
+        url "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+
+    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
+    implementation "com.eliotlash.mclib:mclib:20"
+
+    modImplementation include("io.github.fabricators_of_create.Porting-Lib:core:${porting_lib_version}")
+    modImplementation include("io.github.fabricators_of_create.Porting-Lib:gametest:${porting_lib_version}")
+    modImplementation include("io.github.fabricators_of_create.Porting-Lib:attributes:${porting_lib_version}")
+
+    modImplementation("dev.emi:trinkets:${trinkets_version}")
+
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl_version}-fabric")
+
+    modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
+
+    modRuntimeOnly "maven.modrinth:jade:${jade_version}+fabric"
+
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:12.1.785"
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+processResources {
+    def props = [
+            'mod_id'                   : rootProject.mod_id,
+            'mod_name'                 : rootProject.mod_name,
+            'version'                  : rootProject.version,
+            'description'              : rootProject.mod_description,
+            'minecraft_version'        : rootProject.minecraft_version,
+            'architectury_api_version' : rootProject.architectury_api_version,
+            'geckolib_version'         : rootProject.geckolib_version,
+            'yacl_version'             : rootProject.yacl_version_short,
+    ]
+
+    inputs.properties props
+
+    filesMatching('fabric.mod.json') {
+        expand props
+    }
+
+    from(project(":common").sourceSets.main.resources) {
+        include "resourcepacks/**"
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+
+    exclude "architectury.common.json"
+    exclude "assets/$rootProject.mod_id/models/entity/**"
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+}

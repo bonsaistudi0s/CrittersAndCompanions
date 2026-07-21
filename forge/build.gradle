@@ -1,0 +1,214 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+loom {
+    forge {
+        mixinConfig "crittersandcompanions.mixins.json"
+    }
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+repositories {
+    // Curios
+    repositories {
+        maven {
+            name = "Illusive Soulworks maven"
+            url = "https://maven.theillusivec4.top/"
+        }
+    }
+
+    // YACL Dependency
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
+
+    // Debug Utils
+    maven {
+        url "https://cursemaven.com"
+    }
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:$rootProject.forge_version"
+
+    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    modImplementation "dev.architectury:architectury-forge:$rootProject.architectury_api_version"
+
+    modImplementation "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
+    implementation "com.eliotlash.mclib:mclib:20"
+
+    compileOnly "top.theillusivec4.curios:curios-forge:${curios_version}:api"
+    modRuntimeOnly "top.theillusivec4.curios:curios-forge:${curios_version}"
+
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl_version}-forge") { transitive = false }
+
+    modRuntimeOnly "maven.modrinth:jade:${jade_version}+forge"
+
+    modRuntimeOnly "curse.maven:debug-utils-783008:6800027"
+
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:12.1.785"
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionForge')
+}
+
+loom {
+    runs {
+        create("data") {
+            data()
+            programArgs("--all", "--mod", project.rootProject.mod_id)
+            programArgs("--output", project(":common").file("src/generated/resources").absolutePath)
+            programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+            programArg("datagen")
+        }
+    }
+
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+processResources {
+    def props = [
+            'mod_id'                   : rootProject.mod_id,
+            'mod_name'                 : rootProject.mod_name,
+            'version'                  : rootProject.version,
+            'description'              : rootProject.mod_description,
+            'minecraft_version'        : rootProject.minecraft_version,
+            'architectury_api_version' : rootProject.architectury_api_version,
+            'geckolib_version'         : rootProject.geckolib_version,
+            'yacl_version'             : rootProject.yacl_version,
+    ]
+
+    inputs.properties props
+
+    filesMatching('META-INF/mods.toml') {
+        expand props
+    }
+
+    from(project(":common").sourceSets.main.resources) {
+        include "resourcepacks/**"
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+
+    exclude "architectury.common.json"
+    exclude "**/$rootProject.mod_id/datagen/**"
+    exclude "assets/$rootProject.mod_id/models/entity/**"
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+    atAccessWideners.add "crittersandcompanions.accesswidener"
+}
+
+// Workaround for an architectury-loom bug: when Loom remaps a mod jar for the dev run
+// (here: YetAnotherConfigLib), it strips META-INF/jarjar/metadata.json (and can leave the
+// nested META-INF/jars/*.jar out of sync). This breaks Forge's real JarJar mechanism in
+// the dev/IDE environment specifically, causing NoClassDefFoundError for classes that YACL
+// embeds via JarJar (like org.quiltmc.parsers). Production launches are unaffected because
+// they use the original, un-remapped artifact where the metadata is intact.
+// This task copies the missing jarjar metadata (and any missing nested jars) from the
+// original resolved YACL artifact into the remapped dev-run copy before launch.
+def yaclDependencyNotation = "dev.isxander:yet-another-config-lib:${yacl_version}-forge"
+def yaclOriginalConfig = configurations.detachedConfiguration(
+        dependencies.create(yaclDependencyNotation)
+)
+yaclOriginalConfig.transitive = false
+
+tasks.register('fixYaclDevJarJarMetadata') {
+    doLast {
+        def originalJar = yaclOriginalConfig.resolvedConfiguration.resolvedArtifacts
+                .find { it.name == 'yet-another-config-lib' }?.file
+        if (originalJar == null) {
+            logger.lifecycle("[fixYaclDevJarJarMetadata] Could not resolve original YACL artifact, skipping.")
+            return
+        }
+        def remappedDir = file("${rootProject.projectDir}/.gradle/loom-cache/remapped_mods/remapped/dev/isxander")
+        if (!remappedDir.exists()) {
+            logger.lifecycle("[fixYaclDevJarJarMetadata] No remapped YACL jar found yet, skipping.")
+            return
+        }
+
+        def remappedJars = fileTree(remappedDir) {
+            include '**/*.jar'
+            exclude '**/*-sources.jar'
+        }.files
+        remappedJars.each { remappedJar ->
+            def entriesToCopy = []
+            new java.util.zip.ZipFile(originalJar).withCloseable { origZip ->
+                new java.util.zip.ZipFile(remappedJar).withCloseable { remappedZip ->
+                    origZip.entries().each { entry ->
+                        if (!entry.name.startsWith('META-INF/jarjar/') && !entry.name.startsWith('META-INF/jars/')) return
+                        if (remappedZip.getEntry(entry.name) != null) return
+                        entriesToCopy << entry.name
+                    }
+                }
+            }
+
+            if (entriesToCopy.isEmpty()) {
+                return
+            }
+
+            def uri = URI.create("jar:" + remappedJar.toURI())
+            def fs
+            try {
+                fs = java.nio.file.FileSystems.newFileSystem(uri, [create: 'false'])
+            } catch (java.nio.file.FileSystemAlreadyExistsException ignored) {
+                fs = java.nio.file.FileSystems.getFileSystem(uri)
+            }
+            try {
+                new java.util.zip.ZipFile(originalJar).withCloseable { origZip ->
+                    entriesToCopy.each { name ->
+                        def entry = origZip.getEntry(name)
+                        if (entry.isDirectory()) return
+                        byte[] data = origZip.getInputStream(entry).bytes
+                        def path = fs.getPath(name)
+                        java.nio.file.Files.createDirectories(path.parent)
+                        java.nio.file.Files.write(path, data)
+                    }
+                }
+                logger.lifecycle("[fixYaclDevJarJarMetadata] Restored ${entriesToCopy.size()} missing JarJar entr${entriesToCopy.size() == 1 ? 'y' : 'ies'} in ${remappedJar.name}")
+            } finally {
+                try {
+                    fs.close()
+                } catch (Exception ignored) {
+                    // The jar may still be memory-mapped/locked by a previous run; the write
+                    // above already succeeded, so a failure to close here is not fatal.
+                }
+            }
+        }
+    }
+}
+
+
+tasks.matching { it.name in ['runClient', 'runServer', 'runData'] }.configureEach {
+    dependsOn 'fixYaclDevJarJarMetadata'
+}
+tasks.named('fixYaclDevJarJarMetadata') {
+    mustRunAfter 'configureLaunch', 'configureClientLaunch'
+}
