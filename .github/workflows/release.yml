@@ -1,37 +1,91 @@
 name: Release
-on:
-   release:
-      types: [published]
 
-env:
-   CI: true
+on:
+  push:
+    branches: [ "1.20.1/main" ]
 
 jobs:
-   build:
-      runs-on: ubuntu-latest
-      timeout-minutes: 20
-      permissions:
-         contents: read
-         packages: write
-      steps:
-         - uses: actions/checkout@v4
-           with:
-              lfs: true
+  release:
+    runs-on: ubuntu-latest
 
-         - uses: actions/setup-java@v4
-           with:
-              java-version: 21
-              distribution: temurin
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
 
-         - name: Setup Gradle
-           uses: gradle/actions/setup-gradle@v4
+    env:
+      # use github-actions[bot] user for semantic-release
+      GIT_AUTHOR_NAME: github-actions[bot]
+      GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      GIT_COMMITTER_NAME: github-actions[bot]
+      GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
 
-         - name: Build and upload
-           uses: gradle/gradle-build-action@v2
-           with:
-              arguments: build publish
-           env:
-              MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-              CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-              CHANGELOG: ${{ github.event.release.body }}
-              RELEASE_VERSION: ${{ github.event.release.tag_name }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: madhead/read-java-properties@latest
+        id: properties
+        with:
+          file: gradle.properties
+          all: true
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run semantic-release
+        id: semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release@24
+
+      - name: Upload to Modrinth & CurseForge (Fabric)
+        if: steps.semantic-release.outputs.new-release-published == 'true'
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: ${{ vars.CURSEFORGE_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          files: fabric/build/libs/!(*-@(dev-shadow|sources)).jar
+
+          name: "[Fabric] ${{ steps.properties.outputs.mod_name }} ${{ steps.semantic-release.outputs.new-release-version }}"
+          version: ${{ steps.semantic-release.outputs.new-release-version }}
+          version-type: release
+          changelog-file: CHANGELOG.md
+
+      - name: Upload to Modrinth & CurseForge (NeoForge)
+        if: steps.semantic-release.outputs.new-release-published == 'true'
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: ${{ vars.CURSEFORGE_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          files: neoforge/build/libs/!(*-@(dev-shadow|sources)).jar
+
+          name: "[NeoForge] ${{ steps.properties.outputs.mod_name }} ${{ steps.semantic-release.outputs.new-release-version }}"
+          version: ${{ steps.semantic-release.outputs.new-release-version }}
+          version-type: release
+          changelog-file: CHANGELOG.md

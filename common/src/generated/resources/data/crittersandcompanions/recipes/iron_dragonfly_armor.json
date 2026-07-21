@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "  I",
+    " I ",
+    "I  "
+  ],
+  "result": {
+    "item": "crittersandcompanions:iron_dragonfly_armor"
+  },
+  "show_notification": true
+}

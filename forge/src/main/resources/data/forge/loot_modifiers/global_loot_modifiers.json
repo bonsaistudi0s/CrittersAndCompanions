@@ -3,6 +3,7 @@
   "entries": [
     "crittersandcompanions:inject_clams",
     "crittersandcompanions:inject_fishing",
-    "crittersandcompanions:replace_drowned_flesh"
+    "crittersandcompanions:replace_drowned_flesh",
+    "crittersandcompanions:inject_oak_leaves_acorn"
   ]
 }

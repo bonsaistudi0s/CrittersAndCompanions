@@ -1,0 +1,27 @@
+architectury {
+    common rootProject.enabled_platforms.split(',')
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/${project.rootProject.mod_id}.accesswidener")
+}
+
+dependencies {
+    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
+    // which get remapped to the correct annotations on each platform.
+    // Do NOT use other classes from Fabric Loader.
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+
+    // https://github.com/bernie-g/geckolib/wiki/Installation-(Geckolib4)#1204-and-below
+    modCompileOnly "software.bernie.geckolib:geckolib-forge-${rootProject.minecraft_version}:${rootProject.geckolib_version}"
+
+    // "YACL provides no common artifact. Because Architectury is Loom-based, use the fabric artifact as the common one."
+    modCompileOnly "dev.isxander:yet-another-config-lib:${yacl_version}-fabric"
+}
+
+processResources {
+    exclude ".cache"
+}

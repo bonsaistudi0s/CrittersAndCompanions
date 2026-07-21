@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "crittersandcompanions:silk"
+    }
+  },
+  "pattern": [
+    "SS ",
+    "SI ",
+    "  S"
+  ],
+  "result": {
+    "item": "crittersandcompanions:grappling_hook"
+  },
+  "show_notification": true
+}

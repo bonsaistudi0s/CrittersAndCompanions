@@ -1,7 +1,7 @@
 {
   "format_version": "1.8.0",
   "animations": {
-    "shima_enaga_idle": {
+    "idle": {
       "loop": true,
       "animation_length": 5.64,
       "bones": {
@@ -578,7 +578,7 @@
         }
       }
     },
-    "shima_enaga_fly": {
+    "fly": {
       "loop": true,
       "animation_length": 0.48,
       "bones": {
@@ -817,7 +817,7 @@
         }
       }
     },
-    "shima_enaga_sit": {
+    "sit": {
       "loop": true,
       "animation_length": 5.64,
       "bones": {

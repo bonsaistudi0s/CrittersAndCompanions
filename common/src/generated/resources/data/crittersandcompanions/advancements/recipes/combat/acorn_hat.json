@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_acorn": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "crittersandcompanions:acorn"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "crittersandcompanions:acorn_hat"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_acorn",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "crittersandcompanions:acorn_hat"
+    ]
+  },
+  "sends_telemetry_event": false
+}

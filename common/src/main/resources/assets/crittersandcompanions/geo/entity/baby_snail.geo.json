@@ -1,0 +1,152 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.baby_snail",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 2,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [
+          0,
+          0.25,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "main",
+          "pivot": [
+            0,
+            0,
+            -2
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "main",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                0,
+                -2.5
+              ],
+              "size": [
+                2,
+                2,
+                5
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "left_eye",
+          "parent": "body",
+          "pivot": [
+            0.6,
+            1.8,
+            -2
+          ],
+          "rotation": [
+            30,
+            0,
+            40
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0.3,
+                1.4,
+                -2.7
+              ],
+              "size": [
+                1,
+                2,
+                1
+              ],
+              "uv": [
+                13,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "name": "right_eye",
+          "parent": "body",
+          "pivot": [
+            -0.6,
+            1.8,
+            -2
+          ],
+          "rotation": [
+            30,
+            0,
+            -40
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.3,
+                1.4,
+                -2.7
+              ],
+              "size": [
+                1,
+                2,
+                1
+              ],
+              "uv": [
+                13,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "name": "body_2",
+          "parent": "body",
+          "pivot": [
+            0,
+            2.5,
+            1
+          ],
+          "rotation": [
+            -7.5,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                0.6,
+                -1
+              ],
+              "size": [
+                3,
+                3,
+                3
+              ],
+              "uv": [
+                0,
+                8
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,24 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-license = "MIT"
+issueTrackerURL = "https://github.com/bonsaistudi0s/CrittersAndCompanions/issues"
+license = "ARR"
 
 [[mods]]
 modId = "${mod_id}"
-version = "${mod_version}"
+version = "${version}"
 displayName = "${mod_name}"
+authors = "Joosh, EterDelta"
+description = "${description}"
 logoFile = "logo.png"
-authors = "${mod_author}"
-description = '''
-Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.
-'''
-updateJSONURL = 'https://api.modrinth.com/updates/critters-and-companions/forge_updates.json'
-
-[[dependencies.${mod_id}]]
-modId = "geckolib"
-mandatory = true
-versionRange = "[4.4.2,)"
-ordering = "AFTER"
-side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "forge"
@@ -30,6 +21,35 @@ side = "BOTH"
 [[dependencies.${mod_id}]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.1,)"
+versionRange = "[${minecraft_version}]"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "architectury"
+mandatory = true
+versionRange = "[${architectury_api_version},)"
+ordering = "AFTER"
+side = "BOTH"
+[dependencies.${mod_id}.mc-publish]
+    ignore = false
+    modrinth = "architectury-api"
+    curseforge = "architectury-api"
+
+[[dependencies.${mod_id}]]
+modId = "geckolib"
+mandatory = true
+versionRange = "[${geckolib_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "yet_another_config_lib_v3"
+mandatory = true
+versionRange = "[${yacl_version},)"
+ordering = "NONE"
+side = "CLIENT"
+[dependencies.${mod_id}.mc-publish]
+    ignore = false
+    modrinth = "yacl"
+    curseforge = "yacl"

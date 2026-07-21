@@ -1,32 +1,60 @@
 {
   "schemaVersion": 1,
   "id": "${mod_id}",
-  "version": "${mod_version}",
+  "version": "${version}",
   "name": "${mod_name}",
-  "description": "Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals.",
+  "description": "${description}",
   "authors": [
-    "${mod_author}"
+    "Joosh",
+    "EterDelta"
   ],
+  "contact": {
+    "sources": "https://github.com/bonsaistudi0s/CrittersAndCompanions",
+    "issues": "https://github.com/bonsaistudi0s/CrittersAndCompanions/issues"
+  },
+  "license": "ARR",
   "icon": "logo.png",
-  "license": "CC0-1.0",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.eterdelta.crittersandcompanions.CrittersAndCompanionsFabric"
+      "io.github.bonsaistudi0s.crittersandcompanions.fabric.CrittersAndCompanionsFabric"
     ],
     "client": [
-      "com.github.eterdelta.crittersandcompanions.CrittersAndCompanionsFabricClient"
+      "io.github.bonsaistudi0s.crittersandcompanions.fabric.client.CrittersAndCompanionsFabricClient"
+    ],
+    "modmenu": [
+      "io.github.bonsaistudi0s.crittersandcompanions.fabric.client.compat.ModMenuCompat"
     ]
   },
+  "accessWidener": "${mod_id}.accesswidener",
   "mixins": [
-    "${mod_id}.mixins.json",
-    "${mod_id}.fabric.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15",
-    "fabric": "*",
-    "minecraft": "1.20.x",
+    "fabricloader": ">=0.19.3",
+    "minecraft": "=${minecraft_version}",
     "java": ">=17",
-    "geckolib": "*"
+    "architectury": ">=${architectury_api_version}",
+    "fabric-api": "*",
+    "geckolib": ">=${geckolib_version}",
+    "yet_another_config_lib_v3": ">=${yacl_version}"
+  },
+  "suggests": {
+    "modmenu": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/bonsai-studios-675743114173874176"
+      }
+    },
+    "mc-publish": {
+      "dependencies": [
+        "architectury#(ignore)",
+        "architectury-api@>=${architectury_api_version}(required)",
+        "yet_another_config_lib_v3#(ignore)",
+        "yacl@>=${yacl_version}(required)"
+      ]
+    }
   }
 }
