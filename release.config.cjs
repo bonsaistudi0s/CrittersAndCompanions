@@ -10,8 +10,7 @@ module.exports = {
       {
         preset: 'angular',
         releaseRules: [
-          { type: 'tweak', release: 'patch' },
-          { type: 'feat', release: 'patch' }
+          { type: 'tweak', release: 'patch' }
         ]
       }
     ],
