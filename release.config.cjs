@@ -1,9 +1,11 @@
+const mcVersion = '1.20.1';
+
 /**
  * @type {import('semantic-release').GlobalConfig}
  */
 module.exports = {
-  branches: ['1.20.1/main'],
-  tagFormat: "1.20.1-v${version}",
+  branches: [`${mcVersion}/main`],
+  tagFormat: `${mcVersion}-v\${version}`,
   plugins: [
     [
       '@semantic-release/commit-analyzer',
