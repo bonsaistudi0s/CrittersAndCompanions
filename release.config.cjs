@@ -1,17 +1,18 @@
+const mcVersion = '1.20.1';
+
 /**
  * @type {import('semantic-release').GlobalConfig}
  */
 module.exports = {
-  branches: ['1.20.1/main'],
-  tagFormat: "1.20.1-v${version}",
+  branches: [`${mcVersion}/main`],
+  tagFormat: `${mcVersion}-v\${version}`,
   plugins: [
     [
       '@semantic-release/commit-analyzer',
       {
         preset: 'angular',
         releaseRules: [
-          { type: 'tweak', release: 'patch' },
-          { type: 'feat', release: 'patch' }
+          { type: 'tweak', release: 'patch' }
         ]
       }
     ],
@@ -50,6 +51,7 @@ module.exports = {
       '@semantic-release/exec',
       {
         prepareCmd: './gradlew build --build-cache',
+        successCmd: `git fetch origin ${mcVersion}/dev && git checkout ${mcVersion}/dev && git merge HEAD && git push origin ${mcVersion}/dev`,
       },
     ],
     // --------------------
