@@ -104,6 +104,7 @@ processResources {
 
     from(project(":common").sourceSets.main.resources) {
         include "resourcepacks/**"
+        include "${rootProject.mod_id}.accesswidener"
     }
 }
 
