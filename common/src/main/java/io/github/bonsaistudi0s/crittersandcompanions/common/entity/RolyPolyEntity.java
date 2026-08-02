@@ -142,4 +142,9 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
         return baseDimensions;
     }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
 }

@@ -380,6 +380,11 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         return getWakingUpTicks() >= 0;
     }
 
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
+
     private static class SnailNavigation extends WallClimberNavigation {
 
         public SnailNavigation(SnailEntity mob, Level level) {

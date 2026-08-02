@@ -194,4 +194,9 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
 
         return super.wantsToAttack(target, owner);
     }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
 }

@@ -164,4 +164,9 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return CACSounds.BUGS_HURT.get();
     }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
 }

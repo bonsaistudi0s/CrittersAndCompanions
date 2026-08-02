@@ -165,6 +165,11 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         return super.getAttackBoundingBox().inflate(1.0D, 0.0D, 1.0D);
     }
 
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
+
     private static class StagBeetleAnimations extends BugAnimations<StagBeetleEntity> {
 
         private static final RawAnimation HIT = RawAnimation.begin().thenPlay("hit");
