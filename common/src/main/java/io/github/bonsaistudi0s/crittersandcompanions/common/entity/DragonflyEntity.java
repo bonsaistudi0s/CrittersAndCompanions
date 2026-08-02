@@ -239,6 +239,11 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
         return cache;
     }
 
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
+
     public class RandomFlyGoal extends Goal {
         private static final int horizontalRange = 14;
         private static final int verticalRange = 4;

@@ -116,4 +116,9 @@ public class LeafInsectEntity extends Animal implements GeoEntity {
     public boolean isFood(ItemStack stack) {
         return stack.is(TAGS.food());
     }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !hasCustomName();
+    }
 }
