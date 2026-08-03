@@ -18,7 +18,7 @@ public class CACEntities {
     public static final RegistrySupplier<EntityType<DragonflyEntity>> DRAGONFLY = register("dragonfly", () -> EntityType.Builder.of(DragonflyEntity::new, MobCategory.AMBIENT).sized(0.9F, 0.4F));
     public static final RegistrySupplier<EntityType<DumboOctopusEntity>> DUMBO_OCTOPUS = register("dumbo_octopus", () -> EntityType.Builder.of(DumboOctopusEntity::new, MobCategory.WATER_AMBIENT).sized(0.4F, 0.4F));
     public static final RegistrySupplier<EntityType<FerretEntity>> FERRET = register("ferret", () -> EntityType.Builder.of(FerretEntity::new, MobCategory.CREATURE).sized(0.8F, 0.7F));
-    public static final RegistrySupplier<EntityType<JumpingSpiderEntity>> JUMPING_SPIDER = register("jumping_spider", () -> EntityType.Builder.of(JumpingSpiderEntity::new, MobCategory.CREATURE).sized(0.5F, 0.4F));
+    public static final RegistrySupplier<EntityType<JumpingSpiderEntity>> JUMPING_SPIDER = register("jumping_spider", () -> EntityType.Builder.of(JumpingSpiderEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.4F));
     public static final RegistrySupplier<EntityType<KoiFishEntity>> KOI_FISH = register("koi_fish", () -> EntityType.Builder.of(KoiFishEntity::new, MobCategory.WATER_AMBIENT).sized(0.6F, 0.3F));
     public static final RegistrySupplier<EntityType<LeafInsectEntity>> LEAF_INSECT = register("leaf_insect", () -> EntityType.Builder.of(LeafInsectEntity::new, MobCategory.AMBIENT).sized(0.4F, 0.3F));
     public static final RegistrySupplier<EntityType<OtterEntity>> OTTER = register("otter", () -> EntityType.Builder.of(OtterEntity::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F));
