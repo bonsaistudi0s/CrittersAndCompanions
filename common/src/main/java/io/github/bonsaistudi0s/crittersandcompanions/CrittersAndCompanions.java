@@ -9,6 +9,7 @@ import net.minecraft.world.item.context.UseOnContext;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -20,6 +21,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandle
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.SpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.CACPacketHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.world.CACWorldGen;
 
 public class CrittersAndCompanions {
 
@@ -53,7 +55,11 @@ public class CrittersAndCompanions {
         registerColors();
 
         AttributeHandler.registerAttributes();
-        SpawnHandler.registerSpawnPlacements();
+
+        LifecycleEvent.SETUP.register(() -> {
+            SpawnHandler.register();
+            CACWorldGen.register();
+        });
 
         CACCommonConfig.HANDLER.load();
 
