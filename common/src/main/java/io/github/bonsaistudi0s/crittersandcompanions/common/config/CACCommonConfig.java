@@ -99,12 +99,12 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> ladybug = List.of(
                 cTag("is_forest", 6, 1, 3),
-                cTag("is_lush", 12, 1, 2),
+                cTag("is_lush", 10, 1, 2),
                 cTag("is_floral", 12, 1, 2));
         @SerialEntry
         public List<SpawnEntry> stagBeetle = List.of(
                 cTag("is_forest", 4, 1, 2),
-                cTag("is_lush", 8, 1, 2));
+                cTag("is_lush", 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> rolyPoly = List.of(
                 cTag("is_forest", 5, 1, 3),
@@ -113,16 +113,16 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> snail = List.of(
                 cTag("is_forest", 5, 1, 2),
-                cTag("is_lush", 10, 1, 2),
+                cTag("is_lush", 8, 1, 2),
                 cTag("is_swamp", 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> stickBug = List.of(
                 cTag("is_forest", 4, 1, 2),
-                cTag("is_lush", 4, 1, 2));
+                cTag("is_lush", 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> weevil = List.of(
                 cTag("is_forest", 4, 1, 3),
-                cTag("is_lush", 4, 1, 2));
+                cTag("is_lush", 10, 1, 2));
 
         private static final List<Field> ENTITY_FIELDS = Arrays.stream(SpawningConfig.class.getDeclaredFields())
                 .filter(field -> !java.lang.reflect.Modifier.isStatic(field.getModifiers()))

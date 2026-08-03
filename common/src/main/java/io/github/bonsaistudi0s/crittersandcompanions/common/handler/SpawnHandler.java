@@ -33,7 +33,6 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACTags;
 
 public class SpawnHandler {
 
-    public static void registerSpawnPlacements() {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpawnHandler.class);
 
     public static void register() {
@@ -60,9 +59,19 @@ public class SpawnHandler {
                 var spawnerData = new MobSpawnSettings.SpawnerData(type, spawn.weight(), spawn.min(), spawn.max());
 
                 if (spawn.isTag()) {
+                    if (spawn.biomeLocation().equals(ResourceLocation.fromNamespaceAndPath("c", "is_lush"))) {
+                        LushCaveSpawnHandler.addSpawnerData(spawnerData);
+                        continue;
+                    }
+
                     var tag = TagKey.create(Registries.BIOME, spawn.biomeLocation());
                     BiomeModifications.addProperties(context -> context.hasTag(tag), (context, properties) -> properties.getSpawnProperties().addSpawn(type.getCategory(), spawnerData));
                 } else {
+                    if (spawn.biomeLocation().equals(Biomes.LUSH_CAVES.location())) {
+                        LushCaveSpawnHandler.addSpawnerData(spawnerData);
+                        continue;
+                    }
+
                     BiomeModifications.addProperties(context -> context.getKey().isPresent() && context.getKey().get().equals(spawn.biomeLocation()), (context, properties) -> properties.getSpawnProperties().addSpawn(type.getCategory(), spawnerData));
                 }
             }
