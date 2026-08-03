@@ -16,10 +16,8 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.bonsaistudi0s.crittersandcompanions.common.api.CACColors;
 import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
-import io.github.bonsaistudi0s.crittersandcompanions.common.handler.AttributeHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.LushCaveSpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandler;
-import io.github.bonsaistudi0s.crittersandcompanions.common.handler.SpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.CACPacketHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.world.CACWorldGen;
@@ -54,10 +52,8 @@ public class CrittersAndCompanions {
 
         registerColors();
 
-        AttributeHandler.registerAttributes();
-
         LifecycleEvent.SETUP.register(() -> {
-            SpawnHandler.register();
+            CACEntities.setup();
             CACWorldGen.register();
         });
 
