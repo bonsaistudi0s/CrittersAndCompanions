@@ -20,6 +20,7 @@ import dev.architectury.platform.Platform;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
@@ -154,6 +155,8 @@ public class CACCommonConfig {
                     .name(displayName(field))
                     .description(OptionDescription.of(Component.literal(
                             """
+                                    (Changes take effect after a restart)
+                                    
                                     Each entry is one biome spawn rule in the format "biome;weight;min;max".
                                     
                                     Use a biome id (e.g. minecraft:forest) or a tag prefixed with # (e.g. #c:is_forest).
@@ -247,6 +250,8 @@ public class CACCommonConfig {
         public double maxSpeed = 4.0;
         @SerialEntry
         public double maxDistance = 32.0;
+        @SerialEntry
+        public boolean enableDurability = true;
 
         public ConfigCategory buildCategory() {
             return ConfigCategory.createBuilder()
@@ -268,6 +273,13 @@ public class CACCommonConfig {
                             .name(Component.literal("Max Distance"))
                             .binding(32.0, () -> this.maxDistance, newVal -> this.maxDistance = newVal)
                             .controller(opt -> DoubleSliderControllerBuilder.create(opt).range(4.0, 128.0).step(1.0))
+                            .build())
+
+                    .option(Option.<Boolean>createBuilder()
+                            .name(Component.literal("Enable Durability"))
+                            .description(val -> OptionDescription.of(Component.literal("(Changes take effect after a restart)")))
+                            .binding(true, () -> this.enableDurability, newVal -> this.enableDurability = newVal)
+                            .controller(TickBoxControllerBuilder::create)
                             .build())
 
                     .build();
