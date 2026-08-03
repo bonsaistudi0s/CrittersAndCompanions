@@ -194,4 +194,9 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
         return super.wantsToAttack(target, owner);
     }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
 }
