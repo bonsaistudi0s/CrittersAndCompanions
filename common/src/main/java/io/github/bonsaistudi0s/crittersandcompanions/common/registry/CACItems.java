@@ -6,6 +6,7 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
 import io.github.bonsaistudi0s.crittersandcompanions.common.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +39,15 @@ public class CACItems {
     public static final RegistrySupplier<Item> SEA_BUNNY_SLIME_BLOCK = ITEMS.register("sea_bunny_slime_block", () -> new BlockItem(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get(), baseProperties()));
 
     public static final RegistrySupplier<Item> SILK_LEAD = ITEMS.register("silk_lead", () -> new SilkLeashItem(baseProperties()));
-    public static final RegistrySupplier<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem(baseProperties().stacksTo(1).durability(128)));
+    public static final RegistrySupplier<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> {
+        var properties = baseProperties().stacksTo(1);
+
+        if (CACCommonConfig.HANDLER.instance().grapplingHook.enableDurability) {
+            properties = properties.durability(128);
+        }
+
+        return new GrapplingHookItem(properties);
+    });
 
     public static final RegistrySupplier<Item> PEARL_NECKLACE_1 = ITEMS.register("pearl_necklace_1", () -> new PearlNecklaceItem(baseProperties().stacksTo(1), 1));
     public static final RegistrySupplier<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(baseProperties().stacksTo(1), 2));
