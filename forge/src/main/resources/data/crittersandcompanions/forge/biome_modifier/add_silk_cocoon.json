@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#crittersandcompanions:silk_cocoon_spawns",
-  "features": "crittersandcompanions:silk_cocoon",
-  "step": "top_layer_modification"
-}

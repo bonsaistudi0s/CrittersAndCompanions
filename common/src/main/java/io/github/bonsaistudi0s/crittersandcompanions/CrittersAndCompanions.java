@@ -1,5 +1,12 @@
 package io.github.bonsaistudi0s.crittersandcompanions;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.context.UseOnContext;
+
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -14,12 +21,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandle
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.SpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.CACPacketHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.context.UseOnContext;
+import io.github.bonsaistudi0s.crittersandcompanions.common.world.CACWorldGen;
 
 public class CrittersAndCompanions {
 
@@ -52,7 +54,11 @@ public class CrittersAndCompanions {
         registerColors();
 
         AttributeHandler.registerAttributes();
-        SpawnHandler.registerSpawnPlacements();
+
+        LifecycleEvent.SETUP.register(() -> {
+            SpawnHandler.register();
+            CACWorldGen.register();
+        });
 
         CACCommonConfig.HANDLER.load();
 
