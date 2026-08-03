@@ -61,6 +61,11 @@ public class SpawnHandler {
                     var tag = TagKey.create(Registries.BIOME, spawn.biomeLocation());
                     BiomeModifications.addProperties(context -> context.hasTag(tag), (context, properties) -> properties.getSpawnProperties().addSpawn(type.getCategory(), spawnerData));
                 } else {
+                    if (spawn.biomeLocation().equals(Biomes.LUSH_CAVES.location())) {
+                        LushCaveSpawnHandler.addSpawnerData(spawnerData);
+                        continue;
+                    }
+
                     BiomeModifications.addProperties(context -> context.getKey().isPresent() && context.getKey().get().equals(spawn.biomeLocation()), (context, properties) -> properties.getSpawnProperties().addSpawn(type.getCategory(), spawnerData));
                 }
             }

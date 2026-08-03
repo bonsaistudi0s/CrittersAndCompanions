@@ -99,14 +99,14 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> ladybug = List.of(
                 biomeTag(BiomeTags.IS_FOREST, 6, 1, 3),
-                biome(Biomes.LUSH_CAVES, 12, 1, 2),
+                biome(Biomes.LUSH_CAVES, 10, 1, 2),
                 biome(Biomes.CHERRY_GROVE, 12, 1, 2),
                 biome(Biomes.SUNFLOWER_PLAINS, 12, 1, 2),
                 biome(Biomes.MEADOW, 12, 1, 2));
         @SerialEntry
         public List<SpawnEntry> stagBeetle = List.of(
                 biomeTag(BiomeTags.IS_FOREST, 4, 1, 2),
-                biome(Biomes.LUSH_CAVES, 8, 1, 2));
+                biome(Biomes.LUSH_CAVES, 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> rolyPoly = List.of(
                 biomeTag(BiomeTags.IS_FOREST, 5, 1, 3),
@@ -115,16 +115,16 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> snail = List.of(
                 biomeTag(BiomeTags.IS_FOREST, 5, 1, 2),
-                biome(Biomes.LUSH_CAVES, 10, 1, 2),
+                biome(Biomes.LUSH_CAVES, 8, 1, 2),
                 biome(Biomes.SWAMP, 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> stickBug = List.of(
                 biomeTag(BiomeTags.IS_FOREST, 4, 1, 2),
-                biome(Biomes.LUSH_CAVES, 4, 1, 2));
+                biome(Biomes.LUSH_CAVES, 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> weevil = List.of(
                 biomeTag(BiomeTags.IS_FOREST, 4, 1, 3),
-                biome(Biomes.LUSH_CAVES, 4, 1, 2));
+                biome(Biomes.LUSH_CAVES, 10, 1, 2));
 
         private static final List<Field> ENTITY_FIELDS = Arrays.stream(SpawningConfig.class.getDeclaredFields())
                 .filter(field -> !java.lang.reflect.Modifier.isStatic(field.getModifiers()))

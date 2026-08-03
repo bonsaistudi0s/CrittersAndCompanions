@@ -17,6 +17,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.bonsaistudi0s.crittersandcompanions.common.api.CACColors;
 import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.AttributeHandler;
+import io.github.bonsaistudi0s.crittersandcompanions.common.handler.LushCaveSpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.SpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.CACPacketHandler;
@@ -86,6 +87,7 @@ public class CrittersAndCompanions {
 
     private static void registerEvents() {
         TickEvent.PLAYER_POST.register(PlayerHandler::onPlayerTick);
+        TickEvent.SERVER_POST.register(LushCaveSpawnHandler::tick);
 
         InteractionEvent.INTERACT_ENTITY.register((player, entity, hand) -> {
             if (player.level().isClientSide()) {
