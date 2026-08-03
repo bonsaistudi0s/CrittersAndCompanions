@@ -1,19 +1,40 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.registry;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.Heightmap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.function.Supplier;
 
+import dev.architectury.registry.level.biome.BiomeModifications;
+import dev.architectury.registry.level.entity.EntityAttributeRegistry;
+import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.base.AgeableWaterAnimal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.projectiles.MudBallProjectile;
+import io.github.bonsaistudi0s.crittersandcompanions.common.handler.LushCaveSpawnHandler;
 
 public class CACEntities {
+
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(CrittersAndCompanions.MODID, Registries.ENTITY_TYPE);
 
     public static final RegistrySupplier<EntityType<DragonflyEntity>> DRAGONFLY = register("dragonfly", () -> EntityType.Builder.of(DragonflyEntity::new, MobCategory.AMBIENT).sized(0.9F, 0.4F));
@@ -37,11 +58,111 @@ public class CACEntities {
     public static final RegistrySupplier<EntityType<GrapplingHookEntity>> GRAPPLING_HOOK = register("grappling_hook", () -> EntityType.Builder.<GrapplingHookEntity>of(GrapplingHookEntity::new, MobCategory.MISC).sized(0.2F, 0.2F).noSave().noSummon());
     public static final RegistrySupplier<EntityType<MudBallProjectile>> MUD_BALL = register("mud_ball", () -> EntityType.Builder.<MudBallProjectile>of(MudBallProjectile::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CACEntities.class);
+
     private static <T extends Entity> RegistrySupplier<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> factory) {
         return ENTITIES.register(name, () -> factory.get().build(name));
     }
 
     public static void init() {
         ENTITIES.register();
+        registerAttributes();
+        registerSpawnPlacements();
+    }
+
+    public static void setup() {
+        registerSpawns();
+    }
+
+    private static void registerSpawns() {
+        var spawningConfig = CACCommonConfig.HANDLER.instance().spawning;
+
+        for (var entityEntry : spawningConfig.getAllEntries().entrySet()) {
+            var entityPath = entityEntry.getKey();
+            var type = CACSpawnConfig.resolveEntityType(entityPath);
+            if (type == null) {
+                LOGGER.warn("Unknown entity '{}' in spawn config, skipping", entityPath);
+                continue;
+            }
+
+            for (var spawn : entityEntry.getValue()) {
+                if (spawn.weight() <= 0) {
+                    continue;
+                }
+
+                var spawnerData = new MobSpawnSettings.SpawnerData(type, spawn.weight(), spawn.min(), spawn.max());
+
+                if (spawn.isTag()) {
+                    if (spawn.biomeLocation().equals(ResourceLocation.fromNamespaceAndPath("c", "is_lush"))) {
+                        LushCaveSpawnHandler.addSpawnerData(spawnerData);
+                        continue;
+                    }
+
+                    var tag = TagKey.create(Registries.BIOME, spawn.biomeLocation());
+                    BiomeModifications.addProperties(context -> context.hasTag(tag), (context, properties) -> properties.getSpawnProperties().addSpawn(type.getCategory(), spawnerData));
+                } else {
+                    if (spawn.biomeLocation().equals(Biomes.LUSH_CAVES.location())) {
+                        LushCaveSpawnHandler.addSpawnerData(spawnerData);
+                        continue;
+                    }
+
+                    BiomeModifications.addProperties(context -> context.getKey().isPresent() && context.getKey().get().equals(spawn.biomeLocation()), (context, properties) -> properties.getSpawnProperties().addSpawn(type.getCategory(), spawnerData));
+                }
+            }
+        }
+    }
+
+    private static void registerSpawnPlacements() {
+        SpawnPlacementsRegistry.register(CACEntities.OTTER, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.KOI_FISH, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.DRAGONFLY, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, DragonflyEntity::checkDragonflySpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.SEA_BUNNY, SpawnPlacementTypes.IN_WATER, Heightmap.Types.OCEAN_FLOOR, AgeableWaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.FERRET, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.DUMBO_OCTOPUS, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.LEAF_INSECT, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, LeafInsectEntity::checkLeafInsectSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.RED_PANDA, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.SHIMA_ENAGA, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Animal::checkAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.JUMPING_SPIDER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (e, l, s, p, r) -> true);
+        SpawnPlacementsRegistry.register(CACEntities.LADYBUG, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CACEntities::checkBugSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.STAG_BEETLE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CACEntities::checkBugSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.ROLY_POLY, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CACEntities::checkBugSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.SNAIL, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CACEntities::checkBugSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.STICK_BUG, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CACEntities::checkBugSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.WEEVIL, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CACEntities::checkBugSpawnRules);
+    }
+
+    private static boolean checkBugSpawnRules(EntityType<? extends Animal> animal, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        var belowState = level.getBlockState(pos.below());
+        var isValidFloor = belowState.is(CACTags.BUG_SPAWN_GROUND);
+
+        var isLushCave = level.getBiome(pos).is(CACTags.IS_LUSH);
+        if (isLushCave) {
+            if (level.getBrightness(LightLayer.BLOCK, pos) == 0) {
+                return false;
+            }
+
+            return isValidFloor || belowState.is(BlockTags.BASE_STONE_OVERWORLD);
+        }
+
+        return isValidFloor && level.getRawBrightness(pos, 0) >= 5;
+    }
+
+    private static void registerAttributes() {
+        EntityAttributeRegistry.register(OTTER, OtterEntity::createAttributes);
+        EntityAttributeRegistry.register(JUMPING_SPIDER, JumpingSpiderEntity::createAttributes);
+        EntityAttributeRegistry.register(KOI_FISH, KoiFishEntity::createAttributes);
+        EntityAttributeRegistry.register(DRAGONFLY, DragonflyEntity::createAttributes);
+        EntityAttributeRegistry.register(SEA_BUNNY, SeaBunnyEntity::createAttributes);
+        EntityAttributeRegistry.register(SHIMA_ENAGA, ShimaEnagaEntity::createAttributes);
+        EntityAttributeRegistry.register(FERRET, FerretEntity::createAttributes);
+        EntityAttributeRegistry.register(DUMBO_OCTOPUS, DumboOctopusEntity::createAttributes);
+        EntityAttributeRegistry.register(LEAF_INSECT, LeafInsectEntity::createAttributes);
+        EntityAttributeRegistry.register(RED_PANDA, RedPandaEntity::createAttributes);
+        EntityAttributeRegistry.register(LADYBUG, LadybugEntity::createAttributes);
+        EntityAttributeRegistry.register(STAG_BEETLE, StagBeetleEntity::createAttributes);
+        EntityAttributeRegistry.register(ROLY_POLY, RolyPolyEntity::createAttributes);
+        EntityAttributeRegistry.register(SNAIL, SnailEntity::createAttributes);
+        EntityAttributeRegistry.register(STICK_BUG, StickBugEntity::createAttributes);
+        EntityAttributeRegistry.register(WEEVIL, WeevilEntity::createAttributes);
     }
 }
