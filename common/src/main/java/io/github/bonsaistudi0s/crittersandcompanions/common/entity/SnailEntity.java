@@ -133,7 +133,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 12.0)
+                .add(Attributes.MAX_HEALTH, 16.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
     }
