@@ -4,6 +4,9 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behavio
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.SprintingFollowOwnerGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableLieOnBedGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableRelaxOnOwnerGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableSitOnBlockGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
@@ -19,7 +22,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -62,7 +64,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     private static final int TRANSITION_TICK_TIME = 3;
     private static final RawAnimation ANGRY_ANIM = RawAnimation.begin().then("angry", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
-    private static final RawAnimation SLEEPING_ANIM = RawAnimation.begin().thenLoop("sleeping");
+    private static final RawAnimation SLEEP_ANIM = RawAnimation.begin().thenLoop("sleep");
     private static final RawAnimation SWIM_ANIM = RawAnimation.begin().thenLoop("swim");
     private static final RawAnimation RUN_ANIM = RawAnimation.begin().thenLoop("run");
     private static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("walk");
@@ -74,7 +76,6 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     public RedPandaEntity(EntityType<? extends RedPandaEntity> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new RedPandaMoveControl(this);
         EntityUtils.applyAwarenessMaluses(this);
     }
 
@@ -101,15 +102,17 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new AlertGoal());
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(4, new SleepGoal(140));
+        this.goalSelector.addGoal(4, new TamableRelaxOnOwnerGoal<>(this, RedPandaEntity::isSleeping, this::setSleeping));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(6, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(7, new SprintingFollowOwnerGoal(this, 1.25D, 10.0F, 5.0F, 2.0F));
-        this.goalSelector.addGoal(8, new FollowParentGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, TAGS.sittingTemptGoal(this));
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new TamableLieOnBedGoal<>(this, 1.1D, 8, RedPandaEntity::isSleeping, this::setSleeping));
+        this.goalSelector.addGoal(8, new SprintingFollowOwnerGoal(this, 1.25D, 10.0F, 5.0F, 2.0F));
+        this.goalSelector.addGoal(9, new FollowParentGoal(this, 1.0D));
+        this.goalSelector.addGoal(10, new TamableSitOnBlockGoal(this, 0.8D));
+        this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(12, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(13, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(14, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -124,6 +127,17 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         super.readAdditionalSaveData(compound);
         this.setSleeping(compound.getBoolean("Sleeping"));
         this.setAlert(compound.getBoolean("Alert"));
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+        if (this.isSleeping()) {
+            this.setXRot(0.0F);
+            this.yHeadRot = this.yBodyRot;
+            this.yHeadRotO = this.yBodyRotO;
+        }
     }
 
     @Override
@@ -185,8 +199,8 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
             controller.transitionLength(0);
             controller.setAnimation(SIT_ANIM);
         } else if (this.isSleeping()) {
-            controller.transitionLength(TRANSITION_TICK_TIME);
-            controller.setAnimation(SLEEPING_ANIM);
+            controller.transitionLength(0);
+            controller.setAnimation(SLEEP_ANIM);
         } else if (isInWater()) {
             controller.transitionLength(TRANSITION_TICK_TIME);
             controller.setAnimation(SWIM_ANIM);
@@ -199,7 +213,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
                 controller.setAnimation(WALK_ANIM);
             }
         } else {
-            if (event.isCurrentAnimation(SIT_ANIM)) {
+            if (event.isCurrentAnimation(SIT_ANIM) || event.isCurrentAnimation(SLEEP_ANIM)) {
                 controller.transitionLength(0);
             } else {
                 controller.transitionLength(TRANSITION_TICK_TIME);
@@ -222,6 +236,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         return cache;
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -236,22 +251,6 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
     protected void setAlert(boolean alert) {
         this.entityData.set(ALERT, alert);
-    }
-
-    static class RedPandaMoveControl extends MoveControl {
-        private final RedPandaEntity redPanda;
-
-        public RedPandaMoveControl(RedPandaEntity redPandaEntity) {
-            super(redPandaEntity);
-            this.redPanda = redPandaEntity;
-        }
-
-        @Override
-        public void tick() {
-            if (!this.redPanda.isSleeping()) {
-                super.tick();
-            }
-        }
     }
 
     public class SleepGoal extends Goal {

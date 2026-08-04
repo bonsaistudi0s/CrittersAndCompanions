@@ -11,6 +11,7 @@
   "mixins": [
     "AbstractIllagerMixin",
     "CatMixin",
+    "ChestBlockMixin",
     "DrownedMixin",
     "EndermiteMixin",
     "EntityAccessor",

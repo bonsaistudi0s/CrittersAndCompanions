@@ -5,10 +5,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behavio
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.VariantBehaviour;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FerretDigGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FerretSleepGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.SprintingFollowOwnerGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameableFollowParentGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
@@ -28,7 +25,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -78,7 +74,6 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     public FerretEntity(EntityType<? extends FerretEntity> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new FerretMoveControl();
         EntityUtils.applyAwarenessMaluses(this);
     }
 
@@ -115,17 +110,19 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
         goalSelector.addGoal(2, new FerretDigGoal(this));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
-        goalSelector.addGoal(4, new FerretSleepGoal(this, 200));
+        goalSelector.addGoal(4, new TamableRelaxOnOwnerGoal<>(this, FerretEntity::isSleeping, this::setSleeping));
         goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())));
-        goalSelector.addGoal(6, new BreedGoal(this, 1.25D));
-        goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.5D, true));
-        goalSelector.addGoal(7, new SprintingFollowOwnerGoal(this, 1.4D, 10.0F, 5.0F, 2.0F));
+        goalSelector.addGoal(6, new BreedGoal(this, 1.1D));
+        goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.2D, true));
         goalSelector.addGoal(8, TAGS.temptGoal(this));
-        goalSelector.addGoal(10, new TameableFollowParentGoal(this, 1.0D));
-        goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        goalSelector.addGoal(12, TAGS.sittingTemptGoal(this));
-        goalSelector.addGoal(13, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        goalSelector.addGoal(14, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(9, new TamableLieOnBedGoal<>(this, 1.1D, 8, FerretEntity::isSleeping, this::setSleeping));
+        goalSelector.addGoal(10, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        goalSelector.addGoal(11, new TameableFollowParentGoal(this, 1.0D));
+        goalSelector.addGoal(12, new TamableSitOnBlockGoal(this, 1.1D));
+        goalSelector.addGoal(13, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        goalSelector.addGoal(14, TAGS.sittingTemptGoal(this));
+        goalSelector.addGoal(15, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        goalSelector.addGoal(16, new RandomLookAroundGoal(this));
 
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
     }
@@ -158,6 +155,17 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         super.customServerAiStep();
         if (this.digCooldown > 0) {
             this.digCooldown--;
+        }
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+        if (this.isSleeping()) {
+            this.setXRot(0.0F);
+            this.yHeadRot = this.yBodyRot;
+            this.yHeadRotO = this.yBodyRotO;
         }
     }
 
@@ -284,7 +292,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
             controller.transitionLength(0);
             controller.setAnimation(SIT_ANIM);
         } else if (this.isSleeping()) {
-            controller.transitionLength(TRANSITION_TICK_TIME);
+            controller.transitionLength(0);
             controller.setAnimation(SLEEP_ANIM);
         } else if (isInWater()) {
             controller.transitionLength(TRANSITION_TICK_TIME);
@@ -293,7 +301,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
             controller.transitionLength(TRANSITION_TICK_TIME);
             controller.setAnimation(RUN_ANIM);
         } else {
-            if (event.isCurrentAnimation(SIT_ANIM)) {
+            if (event.isCurrentAnimation(SIT_ANIM) || event.isCurrentAnimation(SLEEP_ANIM)) {
                 controller.transitionLength(0);
             } else {
                 controller.transitionLength(TRANSITION_TICK_TIME);
@@ -315,6 +323,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         return cache;
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -342,17 +351,5 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
 
     private void setCollarColor(DyeColor color) {
         entityData.set(DATA_COLLAR_COLOR, color.getId());
-    }
-
-    class FerretMoveControl extends MoveControl {
-        public FerretMoveControl() {
-            super(FerretEntity.this);
-        }
-
-        public void tick() {
-            if (!mob.isSleeping()) {
-                super.tick();
-            }
-        }
     }
 }
