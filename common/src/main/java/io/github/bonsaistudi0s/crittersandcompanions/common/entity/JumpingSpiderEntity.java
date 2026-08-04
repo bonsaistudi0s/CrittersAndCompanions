@@ -42,7 +42,6 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.level.pathfinder.PathType;
 
-
 public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(JumpingSpiderEntity.class,
