@@ -192,7 +192,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
         if (!(player instanceof IBubbleState bubbleState)) return;
 
         bubbleState.setBubbleActive(state);
-        CACPacketHandler.sendToTracking(player, new ClientboundBubbleStatePacket(state, player.getId()));
+        CACPacketHandler.sendToTrackingAndSelf(player, new ClientboundBubbleStatePacket(state, player.getId()));
     }
 
     public ServerPlayer getBubbledPlayer() {
