@@ -7,6 +7,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Fl
 import io.github.bonsaistudi0s.crittersandcompanions.common.item.DragonflyArmorItem;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -58,10 +59,9 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new DragonflyMoveControl(this);
-
-        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

@@ -6,6 +6,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behavio
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -25,7 +26,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -50,8 +50,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     public ShimaEnagaEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FlyingMoveControl(this, 10, false);
-        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

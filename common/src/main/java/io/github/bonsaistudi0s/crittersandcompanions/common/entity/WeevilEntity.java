@@ -9,6 +9,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.projectiles.M
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -51,6 +52,7 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
 
     public WeevilEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
         reassessTameGoals();
     }
 

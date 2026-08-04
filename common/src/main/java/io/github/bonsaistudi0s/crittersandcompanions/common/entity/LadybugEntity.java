@@ -6,6 +6,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Fl
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -40,6 +41,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     public LadybugEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
         this.moveControl = new FlyingMoveControl(this, 10, false);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

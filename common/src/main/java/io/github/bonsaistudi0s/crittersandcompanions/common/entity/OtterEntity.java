@@ -7,6 +7,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.OtterMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -54,6 +55,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class OtterEntity extends Animal implements GeoEntity {
+
     private static final EntityDataAccessor<Boolean> FLOATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(OtterEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -81,8 +83,9 @@ public class OtterEntity extends Animal implements GeoEntity {
         super(entityType, level);
         this.moveControl = new OtterMoveControl(this);
         this.lookControl = new OtterLookControl(this);
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         this.setCanPickUpLoot(true);
+        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

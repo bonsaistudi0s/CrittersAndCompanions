@@ -9,6 +9,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -65,6 +66,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public SnailEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

@@ -7,6 +7,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Ta
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -38,6 +39,7 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
 
     public StickBugEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

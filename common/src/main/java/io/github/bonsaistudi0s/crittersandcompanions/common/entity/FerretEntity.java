@@ -12,6 +12,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Ta
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -53,6 +54,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 
 public class FerretEntity extends TamableAnimal implements GeoEntity {
+
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
@@ -77,6 +79,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     public FerretEntity(EntityType<? extends FerretEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FerretMoveControl();
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

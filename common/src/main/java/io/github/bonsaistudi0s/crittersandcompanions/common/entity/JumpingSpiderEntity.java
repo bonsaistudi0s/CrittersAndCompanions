@@ -6,6 +6,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Da
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -59,6 +60,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new JumpingSpiderMoveControl(this);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
