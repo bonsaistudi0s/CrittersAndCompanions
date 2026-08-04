@@ -11,8 +11,13 @@ public record LadybugHealingAuraBehaviour(TamableAnimal owner) implements Behavi
 
     @Override
     public void serverTick() {
-        if (!owner.isTame()) return;
-        if (owner.tickCount % TICK_INTERVAL != 0) return;
+        if (!owner.isTame()) {
+            return;
+        }
+
+        if (owner.tickCount % TICK_INTERVAL != 0) {
+            return;
+        }
 
         owner.level()
                 .getEntitiesOfClass(
@@ -24,7 +29,7 @@ public record LadybugHealingAuraBehaviour(TamableAnimal owner) implements Behavi
                                 return false;
                             }
 
-                            if (!tamableAnimal.isTame()) {
+                            if (!tamableAnimal.isTame() || tamableAnimal.isDeadOrDying()) {
                                 return false;
                             }
 
