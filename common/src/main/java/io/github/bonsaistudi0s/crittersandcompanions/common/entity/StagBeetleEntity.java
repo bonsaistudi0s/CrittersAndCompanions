@@ -34,6 +34,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Ta
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -41,6 +42,8 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.level.pathfinder.PathType;
+
 
 public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
 
@@ -51,6 +54,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
 
     public StagBeetleEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

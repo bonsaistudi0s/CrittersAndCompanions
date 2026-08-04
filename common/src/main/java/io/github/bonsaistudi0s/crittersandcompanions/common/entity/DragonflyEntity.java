@@ -37,6 +37,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control
 import io.github.bonsaistudi0s.crittersandcompanions.common.item.DragonflyArmorItem;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -53,10 +54,9 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new DragonflyMoveControl(this);
-
-        this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(PathType.COCOA, -1.0F);
         this.setPathfindingMalus(PathType.FENCE, -1.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

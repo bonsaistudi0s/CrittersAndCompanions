@@ -45,6 +45,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.OtterMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -79,8 +80,9 @@ public class OtterEntity extends Animal implements GeoEntity {
         super(entityType, level);
         this.moveControl = new OtterMoveControl(this);
         this.lookControl = new OtterLookControl(this);
-        this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.setCanPickUpLoot(true);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

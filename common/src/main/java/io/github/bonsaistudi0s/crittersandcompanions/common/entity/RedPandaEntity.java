@@ -31,11 +31,14 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Sp
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.level.pathfinder.PathType;
+
 
 public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
@@ -72,6 +75,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     public RedPandaEntity(EntityType<? extends RedPandaEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new RedPandaMoveControl(this);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override

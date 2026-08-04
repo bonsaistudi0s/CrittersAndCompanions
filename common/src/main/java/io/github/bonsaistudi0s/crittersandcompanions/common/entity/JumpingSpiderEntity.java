@@ -34,11 +34,14 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Da
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.level.pathfinder.PathType;
+
 
 public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
 
@@ -59,6 +62,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new JumpingSpiderMoveControl(this);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

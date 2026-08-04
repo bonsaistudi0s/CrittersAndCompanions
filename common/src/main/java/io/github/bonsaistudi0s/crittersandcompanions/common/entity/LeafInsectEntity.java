@@ -30,10 +30,13 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.Da
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.level.pathfinder.PathType;
+
 
 public class LeafInsectEntity extends Animal implements GeoEntity {
 
@@ -45,6 +48,7 @@ public class LeafInsectEntity extends Animal implements GeoEntity {
 
     public LeafInsectEntity(EntityType<? extends LeafInsectEntity> entityType, Level level) {
         super(entityType, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
