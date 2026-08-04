@@ -87,8 +87,17 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
                 var maxSpeed = CACCommonConfig.HANDLER.instance().grapplingHook.maxSpeed;
                 var scale = Math.min(maxSpeed, 0.01D * Math.sqrt(offsetLengthSqr));
                 if (scale >= 0) {
+                    double oldY = owner.getDeltaMovement().y();
                     owner.setDeltaMovement(owner.getDeltaMovement().add(direction.scale(scale)));
+                    double newY = owner.getDeltaMovement().y();
                     owner.hurtMarked = true;
+                    if (oldY < 0) {
+                        if (newY >= 0) {
+                            owner.resetFallDistance();
+                        } else if (newY > oldY) {
+                            owner.fallDistance *= (float) (newY / oldY);
+                        }
+                    }
                 }
             }
             setDeltaMovement(0.0D, 0.0D, 0.0D);
@@ -117,7 +126,16 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
                 var maxSpeed = CACCommonConfig.HANDLER.instance().grapplingHook.maxSpeed;
                 var direction = position().subtract(getOwner().position()).normalize();
                 var distance = distanceTo(getOwner());
+                double oldY = getOwner().getDeltaMovement().y();
                 getOwner().setDeltaMovement(direction.scale(Math.min(maxSpeed, pullSpeed * distance)));
+                double newY = getOwner().getDeltaMovement().y();
+                if (oldY < 0) {
+                    if (newY >= 0) {
+                        getOwner().resetFallDistance();
+                    } else if (newY > oldY) {
+                        getOwner().fallDistance *= (float) (newY / oldY);
+                    }
+                }
             }
             discard();
         }
