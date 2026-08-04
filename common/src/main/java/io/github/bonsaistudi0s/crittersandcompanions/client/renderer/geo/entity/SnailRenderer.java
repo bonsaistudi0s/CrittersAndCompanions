@@ -23,4 +23,9 @@ public class SnailRenderer extends GeoEntityRenderer<SnailEntity> {
             super.applyRotations(animatable, poseStack, ageInTicks, rotationYaw, partialTick);
         }
     }
+
+    @Override
+    public float getMotionAnimThreshold(SnailEntity animatable) {
+        return 0.005f;
+    }
 }
