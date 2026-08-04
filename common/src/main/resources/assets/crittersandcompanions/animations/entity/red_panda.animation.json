@@ -1,11 +1,14 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"sleeping": {
+		"sleep": {
 			"loop": true,
 			"animation_length": 1.2,
 			"bones": {
 				"body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
 					"position": {
 						"0.0": {
 							"vector": [0, -4, 0]
@@ -102,6 +105,9 @@
 							"vector": [-8.37, -2.53, -36.73],
 							"easing": "easeInSine"
 						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
 					}
 				},
 				"left_ear": {
@@ -121,6 +127,9 @@
 							"vector": [-7.75, 2.5, 38],
 							"easing": "easeInSine"
 						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
 					}
 				},
 				"left_arm": {
@@ -181,6 +190,14 @@
 					},
 					"position": {
 						"vector": [0, -2, 0]
+					}
+				},
+				"main": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
 					}
 				}
 			}
