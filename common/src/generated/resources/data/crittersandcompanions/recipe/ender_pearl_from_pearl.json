@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     {
       "item": "crittersandcompanions:pearl"
@@ -9,7 +10,7 @@
     }
   ],
   "result": {
-    "id": "minecraft:ender_pearl",
-    "count": 1
+    "count": 1,
+    "id": "minecraft:ender_pearl"
   }
 }

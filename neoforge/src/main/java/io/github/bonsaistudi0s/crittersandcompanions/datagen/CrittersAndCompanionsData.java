@@ -17,6 +17,7 @@ public class CrittersAndCompanionsData {
 
         event.addProvider(new CACLang(output));
         event.addProvider(new CACItemModels(output, fileHelper));
+        event.addProvider(new CACRecipes(output, lookup));
 
         var blockTags = event.addProvider(new CACBlockTags(output, lookup, fileHelper));
         event.addProvider(new CACEntityTags(output, lookup, fileHelper));

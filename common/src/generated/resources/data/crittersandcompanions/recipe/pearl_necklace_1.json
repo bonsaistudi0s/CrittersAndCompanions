@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "crittersandcompanions:pearl"
+    }
+  },
+  "pattern": [
+    " P ",
+    "P P",
+    " P "
+  ],
+  "result": {
+    "count": 1,
+    "id": "crittersandcompanions:pearl_necklace_1"
+  }
+}

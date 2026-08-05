@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sea_bunny_slime_bottle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "crittersandcompanions:sea_bunny_slime_bottle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "crittersandcompanions:sea_bunny_slime_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sea_bunny_slime_bottle"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "crittersandcompanions:sea_bunny_slime_block"
+    ]
+  }
+}

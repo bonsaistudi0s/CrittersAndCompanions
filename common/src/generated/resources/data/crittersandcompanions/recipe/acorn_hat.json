@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "AAA",
-    "A A",
-    "   "
-  ],
+  "category": "misc",
   "key": {
     "A": {
       "item": "crittersandcompanions:acorn"
     }
   },
+  "pattern": [
+    "AAA",
+    "A A"
+  ],
   "result": {
-    "id": "crittersandcompanions:acorn_hat",
-    "count": 1
+    "count": 1,
+    "id": "crittersandcompanions:acorn_hat"
   }
 }
