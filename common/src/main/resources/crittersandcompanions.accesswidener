@@ -13,3 +13,5 @@ accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal navigation L
 accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal speedModifier D
 
 accessible method net/minecraft/world/item/alchemy/PotionBrewing addMix (Lnet/minecraft/world/item/alchemy/Potion;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/alchemy/Potion;)V
+
+accessible method net/minecraft/world/level/block/ComposterBlock add (FLnet/minecraft/world/level/ItemLike;)V

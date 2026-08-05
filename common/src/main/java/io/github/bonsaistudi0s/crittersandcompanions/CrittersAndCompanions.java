@@ -55,6 +55,7 @@ public class CrittersAndCompanions {
         LifecycleEvent.SETUP.register(() -> {
             CACEntities.setup();
             CACWorldGen.register();
+            CACItems.registerCompostables();
         });
 
         CACCommonConfig.HANDLER.load();

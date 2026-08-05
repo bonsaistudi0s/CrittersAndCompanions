@@ -17,6 +17,7 @@ import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.function.Supplier;
@@ -99,6 +100,10 @@ public class CACItems {
 
     public static void init() {
         ITEMS.register();
+    }
+
+    public static void registerCompostables() {
+        ComposterBlock.add(0.3F, CACItems.ACORN.get());
     }
 
     @ExpectPlatform
