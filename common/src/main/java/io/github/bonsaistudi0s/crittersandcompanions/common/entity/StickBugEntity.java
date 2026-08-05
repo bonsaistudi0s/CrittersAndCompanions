@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
@@ -34,7 +33,6 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.world.level.pathfinder.PathType;
 
 
 public class StickBugEntity extends TamableAnimal implements GeoEntity {
@@ -61,7 +59,7 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new TamableAnimal.TamableAnimalPanicGoal(1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));

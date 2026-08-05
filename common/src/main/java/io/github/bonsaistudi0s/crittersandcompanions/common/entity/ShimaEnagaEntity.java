@@ -25,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FlyingTamablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
@@ -64,7 +65,7 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new FlyingTamablePanicGoal(this, 1.25D));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(4, TAGS.temptGoal(this));

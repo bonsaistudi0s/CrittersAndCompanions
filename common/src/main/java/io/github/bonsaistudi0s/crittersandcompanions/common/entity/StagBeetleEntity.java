@@ -30,7 +30,6 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.Bug
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.AnimatedDelayedMeleeAttackGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
@@ -42,7 +41,6 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.world.level.pathfinder.PathType;
 
 
 public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
@@ -69,7 +67,7 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new TamableAnimal.TamableAnimalPanicGoal(1.25D, DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new AnimatedDelayedMeleeAttackGoal<>(this, 1.0D, true, "controller", "hit", 4));
         goalSelector.addGoal(4, new BreedGoal(this, 1.25D));

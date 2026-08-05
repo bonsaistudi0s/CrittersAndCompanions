@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.Bucketable;
@@ -90,8 +91,9 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new BubblePlayerGoal());
-        this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1.0D, 40));
+        this.goalSelector.addGoal(0, new PanicGoal(this, 1.5D));
+        this.goalSelector.addGoal(1, new BubblePlayerGoal());
+        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1.0D, 40));
     }
 
     @Override

@@ -108,7 +108,7 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
+        goalSelector.addGoal(1, new TamableAnimal.TamableAnimalPanicGoal(1.5D));
         goalSelector.addGoal(2, new FerretDigGoal(this));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(4, new TamableRelaxOnOwnerGoal<>(this, FerretEntity::isSleeping, this::setSleeping));
