@@ -57,9 +57,10 @@ public class CACItems {
     public static final RegistrySupplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new ArchitecturyMobBucketItem(CACEntities.KOI_FISH, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1)));
     public static final RegistrySupplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new ArchitecturyMobBucketItem(CACEntities.SEA_BUNNY, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1)));
 
-    public static final RegistrySupplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.DIAMOND, "diamond", baseProperties().stacksTo(1)));
-    public static final RegistrySupplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.GOLD, "gold", baseProperties().stacksTo(1)));
     public static final RegistrySupplier<Item> IRON_DRAGONFLY_ARMOR = ITEMS.register("iron_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.IRON, "iron", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.GOLD, "gold", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.DIAMOND, "diamond", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> NETHERITE_DRAGONFLY_ARMOR = ITEMS.register("netherite_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.NETHERITE, "netherite", baseProperties().stacksTo(1)));
 
     public static final RegistrySupplier<Item> DRAGONFLY_SPAWN_EGG = registerSpawnEgg(CACEntities.DRAGONFLY, 0x08EECF, 0xD3FF96);
     public static final RegistrySupplier<Item> FERRET_SPAWN_EGG = registerSpawnEgg(CACEntities.FERRET, 0xC5AC88, 0x37212D);
