@@ -12,7 +12,9 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.network.ClientboundB
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.ClientboundGrapplingStatePacket;
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.ClientboundSilkLeashStatePacket;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.ParticleUtils;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,9 +28,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.OptionalInt;
 import java.util.Set;
 
@@ -82,12 +85,21 @@ public class PlayerHandler {
     }
 
     public static void onPlayerTick(Player player) {
-        if (player.level().isClientSide()) return;
-
-        List<KoiFishEntity> nearKoiFishes = player.level().getEntitiesOfClass(KoiFishEntity.class, player.getBoundingBox().inflate(10.0D), EntitySelector.ENTITY_STILL_ALIVE);
-
-        if (nearKoiFishes.size() >= 3) {
-            player.addEffect(new MobEffectInstance(MobEffects.LUCK, 210, 0, false, false));
+        if (player.level().isClientSide()) {
+            if (player.tickCount % 2 == 0 && player instanceof IBubbleState bubbleState && bubbleState.isBubbleActive()) {
+                ParticleUtils.drawPotionEffectLikeParticles(
+                        ParticleTypes.BUBBLE,
+                        player.level(),
+                        AABB.ofSize(player.getEyePosition(), 1.0D, 1.0D, 1.0D),
+                        Vec3.ZERO,
+                        1
+                );
+            }
+        } else {
+            var nearKoiFishes = player.level().getEntitiesOfClass(KoiFishEntity.class, player.getBoundingBox().inflate(10.0D), EntitySelector.ENTITY_STILL_ALIVE);
+            if (nearKoiFishes.size() >= 3) {
+                player.addEffect(new MobEffectInstance(MobEffects.LUCK, 210, 0, false, false));
+            }
         }
     }
 
@@ -108,7 +120,7 @@ public class PlayerHandler {
             var bubbleState = (IBubbleState) trackedPlayer;
             var grappleState = (IGrapplingState) trackedPlayer;
 
-            CACPacketHandler.sendToPlayer(fromPlayer, new ClientboundBubbleStatePacket(bubbleState.isBubbleActive(), trackedPlayer.getId()));
+            CACPacketHandler.sendToPlayer(fromPlayer, new ClientboundBubbleStatePacket(bubbleState.isBubbleActive(), trackedPlayer.getId(), OptionalInt.empty()));
             CACPacketHandler.sendToPlayer(fromPlayer, new ClientboundGrapplingStatePacket(grappleState.getHook() != null ? OptionalInt.of(grappleState.getHook().getId()) : OptionalInt.empty(), trackedPlayer.getId()));
         }
     }
