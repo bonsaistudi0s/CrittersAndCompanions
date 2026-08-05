@@ -76,6 +76,8 @@ public final class CACItemTags extends ItemTagsProvider {
         temptWithFood(SeaBunnyEntity.TAGS);
 
         tag(CACTags.WOODEN_CHESTS).add(Items.CHEST, Items.TRAPPED_CHEST).addOptionalTag(Tags.Items.CHESTS_WOODEN).addOptionalTag(cTag("wooden_chests"));
+
+        tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("enchantable/durability"))).add(CACItems.GRAPPLING_HOOK.get());
     }
 
     private void temptWithFood(AnimalTags tags) {
