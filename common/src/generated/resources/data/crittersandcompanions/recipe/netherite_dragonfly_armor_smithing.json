@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "tag": "c:ingots/netherite"
+  },
+  "base": {
+    "item": "crittersandcompanions:diamond_dragonfly_armor"
+  },
+  "result": {
+    "count": 1,
+    "id": "crittersandcompanions:netherite_dragonfly_armor"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  }
+}

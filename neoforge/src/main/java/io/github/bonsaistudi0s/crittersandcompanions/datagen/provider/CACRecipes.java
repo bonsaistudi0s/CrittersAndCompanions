@@ -2,19 +2,16 @@ package io.github.bonsaistudi0s.crittersandcompanions.datagen.provider;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
 
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACBlocks;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 
 public final class CACRecipes extends RecipeProvider {
 
@@ -125,5 +122,14 @@ public final class CACRecipes extends RecipeProvider {
                 .requires(CACItems.SNAIL_SLIME_BOTTLE.get())
                 .unlockedBy("has_snail_slime_bottle", has(CACItems.SNAIL_SLIME_BOTTLE.get()))
                 .save(output, CrittersAndCompanions.createId("slime_ball_from_snail_slime_bottle"));
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                        Ingredient.of(CACItems.DIAMOND_DRAGONFLY_ARMOR.get()),
+                        Ingredient.of(Tags.Items.INGOTS_NETHERITE),
+                        RecipeCategory.COMBAT,
+                        CACItems.NETHERITE_DRAGONFLY_ARMOR.get()
+                ).unlocks("has_netherite_ingot", has(Tags.Items.INGOTS_NETHERITE))
+                .save(output, CrittersAndCompanions.createId("netherite_dragonfly_armor_smithing"));
     }
 }
