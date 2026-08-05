@@ -81,15 +81,16 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FlyingTamablePanicGoal(this, 1.25D));
-        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new FlyingAvoidJumpingSpidersGoal(this, 8.0F, 1.0D, 1.2D));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F, true));
-        this.goalSelector.addGoal(5, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(6, new RandomFlyGoal());
-        this.goalSelector.addGoal(7, TAGS.sittingTemptGoal(this));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new FlyingTamablePanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(3, new FlyingAvoidJumpingSpidersGoal(this, 8.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F, true));
+        this.goalSelector.addGoal(6, TAGS.temptGoal(this));
+        this.goalSelector.addGoal(7, new RandomFlyGoal());
+        this.goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
     }
