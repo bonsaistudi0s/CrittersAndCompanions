@@ -49,13 +49,14 @@ public class CACItems {
     public static final RegistrySupplier<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(baseProperties().stacksTo(1), 2));
     public static final RegistrySupplier<Item> PEARL_NECKLACE_3 = ITEMS.register("pearl_necklace_3", () -> new PearlNecklaceItem(baseProperties().stacksTo(1), 3));
 
-    public static final RegistrySupplier<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", () -> new MobBucketItem(CACEntities.DUMBO_OCTOPUS.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (baseProperties()).stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
-    public static final RegistrySupplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new MobBucketItem(CACEntities.KOI_FISH.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (baseProperties()).stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
-    public static final RegistrySupplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new MobBucketItem(CACEntities.SEA_BUNNY.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (baseProperties()).stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
+    public static final RegistrySupplier<Item> DUMBO_OCTOPUS_BUCKET = ITEMS.register("dumbo_octopus_bucket", () -> new MobBucketItem(CACEntities.DUMBO_OCTOPUS.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
+    public static final RegistrySupplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new MobBucketItem(CACEntities.KOI_FISH.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
+    public static final RegistrySupplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new MobBucketItem(CACEntities.SEA_BUNNY.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
 
-    public static final RegistrySupplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.DIAMOND, "diamond", (baseProperties()).stacksTo(1)));
-    public static final RegistrySupplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.GOLD, "gold", (baseProperties()).stacksTo(1)));
-    public static final RegistrySupplier<Item> IRON_DRAGONFLY_ARMOR = ITEMS.register("iron_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.IRON, "iron", (baseProperties()).stacksTo(1)));
+    public static final RegistrySupplier<Item> IRON_DRAGONFLY_ARMOR = ITEMS.register("iron_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.IRON, "iron", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.GOLD, "gold", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.DIAMOND, "diamond", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> NETHERITE_DRAGONFLY_ARMOR = ITEMS.register("netherite_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.NETHERITE, "netherite", baseProperties().stacksTo(1)));
 
     public static final RegistrySupplier<Item> DRAGONFLY_SPAWN_EGG = registerSpawnEgg(CACEntities.DRAGONFLY, 0x08EECF, 0xD3FF96);
     public static final RegistrySupplier<Item> FERRET_SPAWN_EGG = registerSpawnEgg(CACEntities.FERRET, 0xC5AC88, 0x37212D);

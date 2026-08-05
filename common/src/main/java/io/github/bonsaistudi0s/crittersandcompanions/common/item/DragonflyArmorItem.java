@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
 
 public class DragonflyArmorItem extends Item {
+
     private final ResourceLocation texture;
     private final Supplier<ItemAttributeModifiers> attributes;
 

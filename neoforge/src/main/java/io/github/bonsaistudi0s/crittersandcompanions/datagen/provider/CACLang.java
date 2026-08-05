@@ -53,6 +53,7 @@ public final class CACLang extends LanguageProvider {
         add(CACItems.SEA_BUNNY_BUCKET.get(), "Bucket of Sea Bunny");
         add(CACItems.KOI_FISH_BUCKET.get(), "Bucket of Koi Fish");
 
+        translate(CACItems.NETHERITE_DRAGONFLY_ARMOR.getKey());
         translate(CACItems.DIAMOND_DRAGONFLY_ARMOR.getKey());
         translate(CACItems.GOLD_DRAGONFLY_ARMOR.getKey());
         translate(CACItems.IRON_DRAGONFLY_ARMOR.getKey());
