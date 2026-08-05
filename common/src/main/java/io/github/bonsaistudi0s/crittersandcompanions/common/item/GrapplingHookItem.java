@@ -49,4 +49,14 @@ public class GrapplingHookItem extends Item {
     public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
         return repairCandidate.is(CACItems.SILK) || super.isValidRepairItem(stack, repairCandidate);
     }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return stack.getMaxDamage() > 0;
+    }
 }
