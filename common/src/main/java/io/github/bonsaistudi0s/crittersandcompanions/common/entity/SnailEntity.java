@@ -90,7 +90,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
-        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 8F, 2F));
         goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
             @Override
@@ -189,6 +189,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         return new SnailNavigation(this, level);
+    }
+
+    @Override
+    public boolean shouldTryTeleportToOwner() {
+        LivingEntity livingEntity = this.getOwner();
+        return livingEntity != null && this.distanceToSqr(this.getOwner()) >= (double)196.0F;
     }
 
     @Override
