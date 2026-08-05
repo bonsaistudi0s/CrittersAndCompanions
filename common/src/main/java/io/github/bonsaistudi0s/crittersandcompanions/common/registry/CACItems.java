@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.material.Fluids;
 
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
@@ -94,5 +95,9 @@ public class CACItems {
 
     public static void init() {
         ITEMS.register();
+    }
+
+    public static void registerCompostables() {
+        ComposterBlock.add(0.3F, CACItems.ACORN.get());
     }
 }
