@@ -39,7 +39,7 @@ public class CACItems {
         var properties = baseProperties().stacksTo(1);
 
         if (CACCommonConfig.HANDLER.instance().grapplingHook.enableDurability) {
-            properties = properties.durability(128);
+            properties = properties.durability(256);
         }
 
         return new GrapplingHookItem(properties);
