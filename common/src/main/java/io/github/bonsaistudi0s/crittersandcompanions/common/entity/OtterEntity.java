@@ -220,6 +220,8 @@ public class OtterEntity extends Animal implements GeoEntity {
                         this.startEating();
                     }
                 }
+            } else if (!held.isEmpty()) {
+                this.rejectFood();
             }
 
             if (this.huntDelay > 0) {
@@ -240,7 +242,8 @@ public class OtterEntity extends Animal implements GeoEntity {
                 CACSounds.OTTER_CLAM_BREAK.get()
                 : CACSounds.OTTER_EAT.get();
         playSound(sound, 1.2F, 1.0F);
-        eatOrOpen(level, held);
+        var result = eatOrOpen(level, held);
+        setItemInHand(InteractionHand.MAIN_HAND, result);
         setEating(false);
     }
 
@@ -257,7 +260,12 @@ public class OtterEntity extends Animal implements GeoEntity {
             itemStack.shrink(1);
             return itemStack;
         } else {
-            return eat(level, itemStack);
+            var initialCount = itemStack.getCount();
+            var result = eat(level, itemStack);
+            if (result.getCount() == initialCount) {
+                result.shrink(1);
+            }
+            return result;
         }
     }
 
