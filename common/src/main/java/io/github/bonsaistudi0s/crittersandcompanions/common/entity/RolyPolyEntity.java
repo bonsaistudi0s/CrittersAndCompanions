@@ -4,7 +4,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.Bug
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FreezeWhileChestAccessedGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableAnimalPanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.menu.RolyPolyMenu;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
@@ -63,7 +63,7 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new FreezeWhileChestAccessedGoal(this));
-        goalSelector.addGoal(2, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(2, new TamableAnimalPanicGoal(this, 1.25D));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(5, TAGS.temptGoal(this));

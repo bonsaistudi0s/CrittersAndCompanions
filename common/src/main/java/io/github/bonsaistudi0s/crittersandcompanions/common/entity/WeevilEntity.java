@@ -4,7 +4,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.Bug
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.AnimatedDelayedRangedAttackGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableAnimalPanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.projectiles.MudBallProjectile;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
@@ -67,7 +67,7 @@ public class WeevilEntity extends TamableAnimal implements GeoEntity, RangedAtta
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new TamableAnimalPanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));

@@ -1,12 +1,19 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal;
 
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.util.AirRandomPos;
 import net.minecraft.world.phys.Vec3;
 
-public class FlyingTameablePanicGoal extends TameablePanicGoal {
-    public FlyingTameablePanicGoal(TamableAnimal animal, double speedModifier) {
-        super(animal, speedModifier);
+public class FlyingTamablePanicGoal extends TamableAnimalPanicGoal {
+
+    public FlyingTamablePanicGoal(TamableAnimal tamable, double speedModifier) {
+        super(tamable, speedModifier);
+    }
+
+    public FlyingTamablePanicGoal(TamableAnimal tamable, double speedModifier, TagKey<DamageType> panicCausingDamageTypes) {
+        super(tamable, speedModifier, panicCausingDamageTypes);
     }
 
     @Override
