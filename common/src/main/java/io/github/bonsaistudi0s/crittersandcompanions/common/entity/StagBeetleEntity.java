@@ -83,16 +83,6 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
     }
 
-    @Override
-    public void setTarget(@Nullable LivingEntity target) {
-        if (isBaby()) {
-            super.setTarget(null);
-            return;
-        }
-
-        super.setTarget(target);
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0D)
