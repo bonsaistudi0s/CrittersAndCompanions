@@ -88,7 +88,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
-        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F, false));
+        goalSelector.addGoal(6, new SnailFollowOwnerGoal());
         goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
             @Override
@@ -451,6 +451,26 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             }
 
             return null;
+        }
+    }
+
+    private class SnailFollowOwnerGoal extends FollowOwnerGoal {
+
+        public SnailFollowOwnerGoal() {
+            super(SnailEntity.this, 1.4D, 8F, 2F, false);
+        }
+
+        @Override
+        public void tick() {
+            SnailEntity.this.getLookControl().setLookAt(this.owner, 10.0F, (float)SnailEntity.this.getMaxHeadXRot());
+            if (--this.timeToRecalcPath <= 0) {
+                this.timeToRecalcPath = this.adjustedTickDelay(10);
+                if (SnailEntity.this.distanceToSqr(this.owner) >= 196.0) {
+                    this.teleportToOwner();
+                } else {
+                    this.navigation.moveTo(this.owner, this.speedModifier);
+                }
+            }
         }
     }
 }
