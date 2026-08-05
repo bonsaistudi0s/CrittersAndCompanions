@@ -306,7 +306,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
             DumboOctopusEntity.this.bubblingPlayer = false;
             DumboOctopusEntity.this.sendBubble(DumboOctopusEntity.this.bubbledPlayer, false);
             this.bubbleSent = false;
-            DumboOctopusEntity.this.bubbledPlayer.playSound(CACSounds.BUBBLE_POP.get());
+            DumboOctopusEntity.this.level().playSound(null, DumboOctopusEntity.this.bubbledPlayer.getX(), DumboOctopusEntity.this.bubbledPlayer.getY(), DumboOctopusEntity.this.bubbledPlayer.getZ(), CACSounds.BUBBLE_POP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             DumboOctopusEntity.this.bubbledPlayer = null;
             this.navigation.stop();
         }
