@@ -134,5 +134,10 @@ public final class CACRecipes extends RecipeProvider {
                 .define('B', commonIngredient(Tags.Items.SLIMEBALLS, C_SLIMEBALLS, Items.SLIME_BALL))
                 .unlockedBy("has_silk", has(CACItems.SILK.get()))
                 .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.BONE_MEAL, 3)
+                .requires(CACItems.CLAM.get())
+                .unlockedBy("has_clam", has(CACItems.CLAM.get()))
+                .save(consumer, CrittersAndCompanions.createId("bone_meal_from_clam"));
     }
 }
