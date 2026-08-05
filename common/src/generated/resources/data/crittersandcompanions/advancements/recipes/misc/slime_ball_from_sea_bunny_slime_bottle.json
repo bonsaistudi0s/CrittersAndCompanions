@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_sea_bunny_slime": {
+    "has_sea_bunny_slime_bottle": {
       "conditions": {
         "items": [
           {
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "crittersandcompanions:slime_ball_from_sea_bunny_slime"
+        "recipe": "crittersandcompanions:slime_ball_from_sea_bunny_slime_bottle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_sea_bunny_slime",
+      "has_sea_bunny_slime_bottle",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "crittersandcompanions:slime_ball_from_sea_bunny_slime"
+      "crittersandcompanions:slime_ball_from_sea_bunny_slime_bottle"
     ]
   },
   "sends_telemetry_event": false
