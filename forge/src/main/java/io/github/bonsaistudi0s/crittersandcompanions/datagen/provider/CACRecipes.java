@@ -24,6 +24,7 @@ public final class CACRecipes extends RecipeProvider {
     private static final TagKey<Item> C_GOLD_INGOTS = cTag("gold_ingots");
     private static final TagKey<Item> C_DIAMONDS = cTag( "diamonds");
     private static final TagKey<Item> C_SLIMEBALLS = cTag( "slimeballs");
+    private static final TagKey<Item> C_NETHERITE_INGOTS = cTag( "netherite_ingots");
 
     public CACRecipes(PackOutput packOutput) {
         super(packOutput);
@@ -144,5 +145,14 @@ public final class CACRecipes extends RecipeProvider {
                 .requires(CACItems.SNAIL_SLIME_BOTTLE.get())
                 .unlockedBy("has_snail_slime_bottle", has(CACItems.SNAIL_SLIME_BOTTLE.get()))
                 .save(consumer, CrittersAndCompanions.createId("slime_ball_from_snail_slime_bottle"));
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                        Ingredient.of(CACItems.DIAMOND_DRAGONFLY_ARMOR.get()),
+                        commonIngredient(Tags.Items.INGOTS_NETHERITE, C_NETHERITE_INGOTS, Items.NETHERITE_INGOT),
+                        RecipeCategory.COMBAT,
+                        CACItems.NETHERITE_DRAGONFLY_ARMOR.get()
+                ).unlocks("has_netherite_ingot", has(Items.NETHERITE_INGOT))
+                .save(consumer, CrittersAndCompanions.createId("netherite_dragonfly_armor_smithing"));
     }
 }
