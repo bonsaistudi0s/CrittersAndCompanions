@@ -120,5 +120,10 @@ public final class CACRecipes extends RecipeProvider {
                 .requires(CACItems.CLAM.get())
                 .unlockedBy("has_clam", has(CACItems.CLAM.get()))
                 .save(output, CrittersAndCompanions.createId("bone_meal_from_clam"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
+                .requires(CACItems.SNAIL_SLIME_BOTTLE.get())
+                .unlockedBy("has_snail_slime_bottle", has(CACItems.SNAIL_SLIME_BOTTLE.get()))
+                .save(output, CrittersAndCompanions.createId("slime_ball_from_snail_slime_bottle"));
     }
 }
