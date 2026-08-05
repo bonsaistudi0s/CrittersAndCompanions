@@ -16,21 +16,10 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.extension.IGrappling
 
 public record ClientboundGrapplingStatePacket(OptionalInt hook, int playerId) implements CustomPacketPayload {
 
-    private static final StreamCodec<FriendlyByteBuf, OptionalInt> OPTIONAL_VAR_INT = StreamCodec.of(
-            (buffer, value) -> {
-                buffer.writeBoolean(value.isPresent());
-                value.ifPresent(buffer::writeVarInt);
-            },
-            buffer -> {
-                if (buffer.readBoolean()) return OptionalInt.of(buffer.readVarInt());
-                return OptionalInt.empty();
-            }
-    );
-
     public static final TypeAndCodec<FriendlyByteBuf, ClientboundGrapplingStatePacket> TYPE = new TypeAndCodec<>(
             new Type<>(CrittersAndCompanions.createId("grappling_state")),
             StreamCodec.composite(
-                    OPTIONAL_VAR_INT,
+                    CACCodecs.OPTIONAL_VAR_INT,
                     ClientboundGrapplingStatePacket::hook,
                     ByteBufCodecs.VAR_INT,
                     ClientboundGrapplingStatePacket::playerId,
