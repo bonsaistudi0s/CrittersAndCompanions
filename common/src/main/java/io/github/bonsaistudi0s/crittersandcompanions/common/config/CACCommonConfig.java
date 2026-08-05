@@ -249,7 +249,7 @@ public class CACCommonConfig {
         @SerialEntry
         public double launchSpeed = 1.0;
         @SerialEntry
-        public double maxSpeed = 4.0;
+        public double maxSpeed = 2.0;
         @SerialEntry
         public double maxDistance = 32.0;
         @SerialEntry
@@ -267,7 +267,7 @@ public class CACCommonConfig {
 
                     .option(Option.<Double>createBuilder()
                             .name(Component.literal("Max Speed"))
-                            .binding(4.0, () -> this.maxSpeed, newVal -> this.maxSpeed = newVal)
+                            .binding(2.0, () -> this.maxSpeed, newVal -> this.maxSpeed = newVal)
                             .controller(opt -> DoubleFieldControllerBuilder.create(opt).range(1.0, 1000.0))
                             .build())
 
