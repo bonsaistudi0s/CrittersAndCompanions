@@ -1,5 +1,16 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.registry;
 
+import dev.architectury.registry.level.biome.BiomeModifications;
+import dev.architectury.registry.level.entity.EntityAttributeRegistry;
+import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.projectiles.MudBallProjectile;
+import io.github.bonsaistudi0s.crittersandcompanions.common.handler.LushCaveSpawnHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
@@ -13,24 +24,10 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.Supplier;
-
-import dev.architectury.registry.level.biome.BiomeModifications;
-import dev.architectury.registry.level.entity.EntityAttributeRegistry;
-import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
-import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.RegistrySupplier;
-import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
-import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.*;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.base.AgeableWaterAnimal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.projectiles.MudBallProjectile;
-import io.github.bonsaistudi0s.crittersandcompanions.common.handler.LushCaveSpawnHandler;
 
 public class CACEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(CrittersAndCompanions.MODID, Registries.ENTITY_TYPE);
@@ -109,7 +106,7 @@ public class CACEntities {
         SpawnPlacementsRegistry.register(CACEntities.OTTER, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.KOI_FISH, SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.DRAGONFLY, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, DragonflyEntity::checkDragonflySpawnRules);
-        SpawnPlacementsRegistry.register(CACEntities.SEA_BUNNY, SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, AgeableWaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.SEA_BUNNY, SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, SeaBunnyEntity::checkSeaBunnySpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.FERRET, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.DUMBO_OCTOPUS, SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.LEAF_INSECT, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, LeafInsectEntity::checkLeafInsectSpawnRules);
