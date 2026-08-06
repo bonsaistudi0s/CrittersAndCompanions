@@ -191,7 +191,7 @@ public abstract class LivingEntityMixin extends Entity implements ISilkLeashStat
 
     @Override
     public void sendLeashState() {
-        CACPacketHandler.sendToTracking(this,
+        CACPacketHandler.sendToTrackingAndSelf(this,
                 new ClientboundSilkLeashStatePacket(
                         new ClientboundSilkLeashStatePacket.LeashData(
                                 this.getId(),

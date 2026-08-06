@@ -6,7 +6,8 @@
   "client": [
     "ClientPacketListenerMixin",
     "ItemPropertiesAccessor",
-    "LivingEntityRendererMixin"
+    "LivingEntityRendererMixin",
+    "GeoEntityRendererMixin"
   ],
   "mixins": [
     "AbstractIllagerMixin",
