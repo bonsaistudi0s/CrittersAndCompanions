@@ -162,6 +162,18 @@ public class StagBeetleEntity extends TamableAnimal implements GeoEntity {
         return !isTame() && !hasCustomName();
     }
 
+    @Override
+    public void knockback(double strength, double x, double z) {
+        if (this.isDeadOrDying()) return;
+        super.knockback(strength, x, z);
+    }
+
+    @Override
+    protected void tickDeath() {
+        super.tickDeath();
+        this.setDeltaMovement(0.0D, this.getDeltaMovement().y, 0.0D);
+    }
+
     private static class StagBeetleAnimations extends BugAnimations<StagBeetleEntity> {
 
         private static final RawAnimation HIT = RawAnimation.begin().thenPlay("hit");
