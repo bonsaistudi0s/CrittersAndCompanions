@@ -116,7 +116,7 @@ public class CACEntities {
         SpawnPlacementsRegistry.register(CACEntities.OTTER, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, OtterEntity::checkOtterSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.KOI_FISH, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.DRAGONFLY, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, DragonflyEntity::checkDragonflySpawnRules);
-        SpawnPlacementsRegistry.register(CACEntities.SEA_BUNNY, SpawnPlacementTypes.IN_WATER, Heightmap.Types.OCEAN_FLOOR, AgeableWaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CACEntities.SEA_BUNNY, SpawnPlacementTypes.IN_WATER, Heightmap.Types.OCEAN_FLOOR, SeaBunnyEntity::checkSeaBunnySpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.FERRET, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.DUMBO_OCTOPUS, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacementsRegistry.register(CACEntities.LEAF_INSECT, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, LeafInsectEntity::checkLeafInsectSpawnRules);

@@ -1,6 +1,7 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -9,12 +10,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
@@ -29,6 +33,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -46,12 +52,10 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
-import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.world.level.pathfinder.PathType;
 
 
 public class SeaBunnyEntity extends AgeableWaterAnimal implements Bucketable, GeoEntity {
@@ -253,6 +257,13 @@ public class SeaBunnyEntity extends AgeableWaterAnimal implements Bucketable, Ge
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+
+    public static boolean checkSeaBunnySpawnRules(EntityType<SeaBunnyEntity> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        int i = level.getSeaLevel();
+        int j = i - 13;
+        return pos.getY() >= j && pos.getY() <= i && level.getFluidState(pos).is(FluidTags.WATER) && level.getBlockState(pos.above()).is(
+                Blocks.WATER) && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP);
     }
 
     static class RandomStrollGoal extends net.minecraft.world.entity.ai.goal.RandomStrollGoal {
