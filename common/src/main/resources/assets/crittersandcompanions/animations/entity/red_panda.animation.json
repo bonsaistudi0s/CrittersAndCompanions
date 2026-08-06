@@ -367,7 +367,6 @@
 			}
 		},
 		"angry": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 1.24,
 			"bones": {
 				"body": {

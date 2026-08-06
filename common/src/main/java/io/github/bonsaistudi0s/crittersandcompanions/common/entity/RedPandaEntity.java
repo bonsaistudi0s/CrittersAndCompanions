@@ -39,7 +39,6 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.world.level.pathfinder.PathType;
 
 public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
@@ -61,7 +60,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<Boolean> ALERT = SynchedEntityData.defineId(RedPandaEntity.class, EntityDataSerializers.BOOLEAN);
 
     private static final int TRANSITION_TICK_TIME = 3;
-    private static final RawAnimation ANGRY_ANIM = RawAnimation.begin().then("angry", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation ANGRY_ANIM = RawAnimation.begin().thenPlay("angry");
     private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
     private static final RawAnimation SLEEP_ANIM = RawAnimation.begin().thenLoop("sleep");
     private static final RawAnimation SWIM_ANIM = RawAnimation.begin().thenLoop("swim");
@@ -256,7 +255,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
         public AlertGoal() {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-            this.time = reducedTickDelay(40);
+            this.time = reducedTickDelay(25);
         }
 
         @Override
@@ -281,6 +280,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public void start() {
+            this.time = reducedTickDelay(25);
             RedPandaEntity.this.setAlert(true);
             RedPandaEntity.this.getNavigation().stop();
             RedPandaEntity.this.getMoveControl().setWantedPosition(RedPandaEntity.this.getX(), RedPandaEntity.this.getY(), RedPandaEntity.this.getZ(), 0.0D);
@@ -294,7 +294,7 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public void stop() {
-            this.time = 20;
+            this.time = 25;
             RedPandaEntity.this.setAlert(false);
         }
     }
