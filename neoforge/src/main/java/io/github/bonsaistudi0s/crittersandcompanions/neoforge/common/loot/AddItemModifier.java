@@ -30,7 +30,7 @@ public class AddItemModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> drops, LootContext context) {
-        drops.add(item);
+        drops.add(item.copy());
         return drops;
     }
 
