@@ -14,7 +14,7 @@ public class RolyPolyModel extends AgedVariantGeoModel<RolyPolyEntity> {
     public void setCustomAnimations(RolyPolyEntity animatable, long instanceId, AnimationState<RolyPolyEntity> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
 
-        var controller = animationState.getController();
+        var controller = animatable.getAnimatableInstanceCache().getManagerForId(instanceId).getAnimationControllers().get("controller");
         if (controller == null) {
             return;
         }
