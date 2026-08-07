@@ -37,7 +37,7 @@ public class ReplaceItemModifier extends LootModifier {
         if (drops.size() > index) {
             items.getRandom(context.getRandom())
                     .map(WeightedEntry.Wrapper::getData)
-                    .ifPresent(it -> drops.set(index, it));
+                    .ifPresent(it -> drops.set(index, it.copy()));
         }
         return drops;
     }
