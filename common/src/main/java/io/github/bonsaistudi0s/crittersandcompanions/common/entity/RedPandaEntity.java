@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -250,12 +251,27 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
         this.entityData.set(ALERT, alert);
     }
 
+    private void lerpBodyRotationToMatchLookDirection() {
+        this.yBodyRot = Mth.approachDegrees(this.yBodyRot, this.yHeadRot, 7.0f);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (isAlert()) {
+            lerpBodyRotationToMatchLookDirection();
+        }
+    }
+
     public class AlertGoal extends Goal {
+
+        private static final int ALERT_DURATION = 30;
+
         private int time;
 
         public AlertGoal() {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-            this.time = reducedTickDelay(25);
         }
 
         @Override
@@ -275,12 +291,13 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public boolean canContinueToUse() {
-            return this.time > 0;
+            return this.time > 0 && RedPandaEntity.this.alerter != null && RedPandaEntity.this.alerter.isAlive();
         }
 
         @Override
         public void start() {
-            this.time = reducedTickDelay(25);
+            this.time = this.adjustedTickDelay(ALERT_DURATION);
+
             RedPandaEntity.this.setAlert(true);
             RedPandaEntity.this.getNavigation().stop();
             RedPandaEntity.this.getMoveControl().setWantedPosition(RedPandaEntity.this.getX(), RedPandaEntity.this.getY(), RedPandaEntity.this.getZ(), 0.0D);
@@ -288,13 +305,15 @@ public class RedPandaEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         public void tick() {
-            RedPandaEntity.this.getLookControl().setLookAt(RedPandaEntity.this.alerter);
+            if (RedPandaEntity.this.alerter != null) {
+                RedPandaEntity.this.getLookControl().setLookAt(RedPandaEntity.this.alerter);
+            }
+
             --this.time;
         }
 
         @Override
         public void stop() {
-            this.time = 25;
             RedPandaEntity.this.setAlert(false);
         }
     }

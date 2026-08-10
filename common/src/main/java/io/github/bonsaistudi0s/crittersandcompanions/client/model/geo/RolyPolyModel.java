@@ -1,6 +1,7 @@
 package io.github.bonsaistudi0s.crittersandcompanions.client.model.geo;
 
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.client.util.AnimationUtils;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.RolyPolyEntity;
 import software.bernie.geckolib.animation.AnimationState;
 
@@ -14,17 +15,11 @@ public class RolyPolyModel extends AgedVariantGeoModel<RolyPolyEntity> {
     public void setCustomAnimations(RolyPolyEntity animatable, long instanceId, AnimationState<RolyPolyEntity> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
 
-        var controller = animatable.getAnimatableInstanceCache().getManagerForId(instanceId).getAnimationControllers().get("controller");
-        if (controller == null) {
-            return;
-        }
-
-        var currentAnimation = controller.getCurrentAnimation();
-        var animName = currentAnimation != null ? currentAnimation.animation().name() : "";
+        var animName = AnimationUtils.getCurrentAnimationName(animatable, instanceId);
 
         switch (animName) {
             case "walk", "dance_2", "flipped" -> toggleLegs(true);
-            default -> toggleLegs(false);
+            case null, default -> toggleLegs(false);
         }
     }
 
