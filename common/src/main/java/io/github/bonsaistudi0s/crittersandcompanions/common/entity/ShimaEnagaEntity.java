@@ -11,6 +11,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -45,6 +46,13 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     private static final RawAnimation SIT_ANIM = RawAnimation.begin().thenLoop("sit");
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation FLY_ANIM = RawAnimation.begin().thenLoop("fly");
+
+    public float flap;
+    public float flapSpeed;
+    public float oFlapSpeed;
+    public float oFlap;
+    private float flapping = 1.0F;
+    private float nextFlap = 1.0F;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -144,6 +152,35 @@ public class ShimaEnagaEntity extends TamableAnimal implements FlyingAnimal, Geo
     @Override
     protected SoundEvent getAmbientSound() {
         return CACSounds.SHIMA_ENAGA_AMBIENT.get();
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.calculateFlapping();
+    }
+
+    private void calculateFlapping() {
+        this.oFlap = this.flap;
+        this.oFlapSpeed = this.flapSpeed;
+        this.flapSpeed += (float)(!this.onGround() && !this.isPassenger() ? 4 : -1) * 0.3F;
+        this.flapSpeed = Mth.clamp(this.flapSpeed, 0.0F, 1.0F);
+        if (!this.onGround() && this.flapping < 1.0F) {
+            this.flapping = 1.0F;
+        }
+        this.flapping *= 0.9F;
+        this.flap += this.flapping * 2.0F;
+    }
+
+    @Override
+    protected boolean isFlapping() {
+        return this.flyDist > this.nextFlap;
+    }
+
+    @Override
+    protected void onFlap() {
+        this.playSound(CACSounds.SHIMA_ENAGA_FLY.get(), 0.15F, 1.0F);
+        this.nextFlap = this.flyDist + this.flapSpeed / 2.0F;
     }
 
     @Override

@@ -100,6 +100,7 @@ public final class CACLang extends LanguageProvider {
         subtitle(CACSounds.SEA_BUNNY_DEATH.get(), "Sea Bunny dies");
         subtitle(CACSounds.SEA_BUNNY_HURT.get(), "Sea Bunny hurts");
         subtitle(CACSounds.SHIMA_ENAGA_AMBIENT.get(), "Shima Enaga sings");
+        subtitle(CACSounds.SHIMA_ENAGA_FLY.get(), "Shima Enaga flutters");
         subtitle(CACSounds.BITE_ATTACK.get(), "Animal bites");
         subtitle(CACSounds.BUBBLE_POP.get(), "Bubble pops");
         subtitle(CACSounds.BUGS_HURT.get(), "Bug chitters");
