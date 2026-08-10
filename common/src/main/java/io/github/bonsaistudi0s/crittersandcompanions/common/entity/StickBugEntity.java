@@ -54,6 +54,7 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new HealthRegenerationBehaviour(this));
         behaviours.add(new BabyHealthPenaltyBehaviour(this));
+        behaviours.add(new BabySpeedModifierBehaviour(this, 0.5D));
     }
 
     @Override
