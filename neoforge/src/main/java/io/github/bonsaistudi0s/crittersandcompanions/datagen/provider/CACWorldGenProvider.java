@@ -90,7 +90,7 @@ public class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
                         configuredFeatures.getOrThrow(SILK_COCOON_CF), List.of(
                         CountPlacement.of(4),
                         InSquarePlacement.spread(),
-                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(140)),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(60), VerticalAnchor.absolute(140)),
                         EnvironmentScanPlacement.scanningFor(
                                 Direction.DOWN,
                                 BlockPredicate.alwaysTrue(),
@@ -128,7 +128,7 @@ public class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
                         configuredFeatures.getOrThrow(HANGING_SILK_COCOON_CF), List.of(
                         CountPlacement.of(4),
                         InSquarePlacement.spread(),
-                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(140)),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(60), VerticalAnchor.absolute(140)),
                         EnvironmentScanPlacement.scanningFor(
                                 Direction.UP,
                                 BlockPredicate.hasSturdyFace(Direction.DOWN),
