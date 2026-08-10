@@ -1,5 +1,5 @@
 {
-  "feature": "crittersandcompanions:hanging_silk_cocoon",
+  "feature": "crittersandcompanions:silk_cocoon",
   "placement": [
     {
       "type": "minecraft:count",
@@ -26,17 +26,26 @@
         "type": "minecraft:matching_blocks",
         "blocks": "minecraft:air"
       },
-      "direction_of_search": "up",
+      "direction_of_search": "down",
       "max_steps": 12,
       "target_condition": {
-        "type": "minecraft:has_sturdy_face",
-        "direction": "down"
+        "type": "minecraft:true"
       }
     },
     {
       "type": "minecraft:random_offset",
       "xz_spread": 0,
       "y_spread": -1
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:not",
+        "predicate": {
+          "type": "minecraft:matching_blocks",
+          "blocks": "minecraft:water"
+        }
+      }
     },
     {
       "type": "minecraft:biome"

@@ -23,6 +23,8 @@ public class CrittersAndCompanionsData {
         event.addProvider(new CACEntityTags(output, lookup, fileHelper));
         event.addProvider(new CACBiomeTags(output, lookup, fileHelper));
         event.addProvider(new CACItemTags(output, lookup, blockTags.contentsGetter(), fileHelper));
+        
+        event.addProvider(new CACWorldGenProvider(output, lookup));
     }
 
 }

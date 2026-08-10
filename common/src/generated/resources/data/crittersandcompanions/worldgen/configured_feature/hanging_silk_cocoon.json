@@ -6,7 +6,8 @@
       "state": {
         "Name": "crittersandcompanions:silk_cocoon",
         "Properties": {
-          "hanging": "true"
+          "hanging": "true",
+          "waterlogged": "false"
         }
       }
     }

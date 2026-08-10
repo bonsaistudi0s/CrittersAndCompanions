@@ -4,7 +4,11 @@
     "to_place": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "crittersandcompanions:silk_cocoon"
+        "Name": "crittersandcompanions:silk_cocoon",
+        "Properties": {
+          "hanging": "false",
+          "waterlogged": "false"
+        }
       }
     }
   }

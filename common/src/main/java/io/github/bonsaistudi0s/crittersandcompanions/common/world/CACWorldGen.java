@@ -20,6 +20,11 @@ public class CACWorldGen {
     }
 
     private static void addFeatureTo(TagKey<Biome> biome, String feature) {
-        BiomeModifications.addProperties(context -> context.hasTag(biome), (context, properties) -> properties.getGenerationProperties().addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, ResourceKey.create(Registries.PLACED_FEATURE, CrittersAndCompanions.createId(feature))));
+        BiomeModifications.addProperties(context -> context.hasTag(biome),
+                (context, properties) -> properties.getGenerationProperties().addFeature(
+                        GenerationStep.Decoration.TOP_LAYER_MODIFICATION,
+                        ResourceKey.create(Registries.PLACED_FEATURE, CrittersAndCompanions.createId(feature))
+                )
+        );
     }
 }
