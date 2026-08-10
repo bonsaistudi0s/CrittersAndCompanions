@@ -46,6 +46,14 @@
     ],
     "subtitle": "subtitles.crittersandcompanions.entity.leaf_insect.hurt"
   },
+  "entity.leaf_insect.eat": {
+    "sounds": [
+      "crittersandcompanions:entity/leaf_insect/eat_1",
+      "crittersandcompanions:entity/leaf_insect/eat_2",
+      "crittersandcompanions:entity/leaf_insect/eat_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.leaf_insect.eat"
+  },
   "entity.otter.ambient": {
     "sounds": [
       "crittersandcompanions:entity/otter/ambient_1",

@@ -88,6 +88,7 @@ public final class CACLang extends LanguageProvider {
         subtitle(CACSounds.FERRET_HURT.get(), "Ferret hurts");
         subtitle(CACSounds.LEAF_INSECT_DEATH.get(), "Leaf insect dies");
         subtitle(CACSounds.LEAF_INSECT_HURT.get(), "Leaf insect hurts");
+        subtitle(CACSounds.LEAF_INSECT_EAT.get(), "Leaf insect eats");
         subtitle(CACSounds.OTTER_AMBIENT.get(), "Otter squeaks");
         subtitle(CACSounds.OTTER_DEATH.get(), "Otter dies");
         subtitle(CACSounds.OTTER_HURT.get(), "Otter hurts");

@@ -18,6 +18,7 @@ public class CACSounds {
     public static final RegistrySupplier<SoundEvent> FERRET_HURT = SOUNDS.register("entity.ferret.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ferret.hurt")));
     public static final RegistrySupplier<SoundEvent> LEAF_INSECT_DEATH = SOUNDS.register("entity.leaf_insect.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.leaf_insect.death")));
     public static final RegistrySupplier<SoundEvent> LEAF_INSECT_HURT = SOUNDS.register("entity.leaf_insect.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.leaf_insect.hurt")));
+    public static final RegistrySupplier<SoundEvent> LEAF_INSECT_EAT = SOUNDS.register("entity.leaf_insect.eat", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.leaf_insect.eat")));
     public static final RegistrySupplier<SoundEvent> OTTER_AMBIENT = SOUNDS.register("entity.otter.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.ambient")));
     public static final RegistrySupplier<SoundEvent> OTTER_DEATH = SOUNDS.register("entity.otter.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.death")));
     public static final RegistrySupplier<SoundEvent> OTTER_EAT = SOUNDS.register("entity.otter.eat", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.eat")));
