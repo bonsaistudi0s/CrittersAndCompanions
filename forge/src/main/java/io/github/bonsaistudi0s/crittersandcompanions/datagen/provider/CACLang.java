@@ -38,11 +38,10 @@ public final class CACLang extends LanguageProvider {
         withSpawnEgg(CACEntities.LEAF_INSECT);
         withSpawnEgg(CACEntities.LADYBUG);
         withSpawnEgg(CACEntities.STAG_BEETLE);
-        add(CACEntities.ROLY_POLY.get(), "Roly-Poly");
-        addSpawnEgg(CACEntities.ROLY_POLY, "Roly-Poly");
+        withSpawnEggAndCustomTranslation(CACEntities.ROLY_POLY, "Roly-Poly");
         withSpawnEgg(CACEntities.SNAIL);
         withSpawnEgg(CACEntities.STICK_BUG);
-        withSpawnEgg(CACEntities.WEEVIL);
+        withSpawnEggAndCustomTranslation(CACEntities.WEEVIL, "Acorn Weevil");
         add("entity.%s.%s".formatted(CACEntities.GRAPPLING_HOOK.getKey().location().getNamespace(), CACEntities.GRAPPLING_HOOK.getKey().location().getPath()), "Grappling Hook");
 
         translate(CACBlocks.SILK_COCOON.getKey());
@@ -136,6 +135,11 @@ public final class CACLang extends LanguageProvider {
         // (registry objects are not present yet when addTranslations() runs)
         add("entity.%s.%s".formatted(id.getNamespace(), id.getPath()), translation);
         add("item.%s.%s_spawn_egg".formatted(id.getNamespace(), id.getPath()), translation + " Spawn Egg");
+    }
+
+    private void withSpawnEggAndCustomTranslation(RegistrySupplier<? extends EntityType<?>> type, String customTranslation) {
+        add(type.get(), customTranslation);
+        addSpawnEgg(type, customTranslation);
     }
 
     private void addSpawnEgg(RegistrySupplier<? extends EntityType<?>> type, String translation) {
