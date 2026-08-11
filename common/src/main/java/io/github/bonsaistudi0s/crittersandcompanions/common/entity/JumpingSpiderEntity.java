@@ -1,5 +1,6 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.JumpingSpiderLeapGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -82,7 +83,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
-        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new JumpingSpiderLeapGoal(this, 0.4F, 0.8F));
         this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(7, TAGS.temptGoal(this));
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
