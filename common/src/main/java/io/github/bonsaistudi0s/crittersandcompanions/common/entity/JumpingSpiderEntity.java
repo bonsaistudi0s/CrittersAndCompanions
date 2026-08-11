@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
@@ -118,6 +119,11 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         if (!blockState.is(Blocks.COBWEB)) {
             super.makeStuckInBlock(blockState, p_33797_);
         }
+    }
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return super.causeFallDamage(fallDistance - 3.0F, multiplier, source);
     }
 
     @Override
