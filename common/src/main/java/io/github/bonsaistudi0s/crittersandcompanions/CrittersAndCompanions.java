@@ -59,7 +59,7 @@ public class CrittersAndCompanions {
             CACItems.registerCompostables();
         });
 
-        CACCommonConfig.HANDLER.load();
+        CACCommonConfig.loadAndMigrate();
 
         registerEvents();
     }
