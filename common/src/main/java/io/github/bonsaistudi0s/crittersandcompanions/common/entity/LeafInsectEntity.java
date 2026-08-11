@@ -1,5 +1,6 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 
+import io.github.bonsaistudi0s.crittersandcompanions.client.util.AnimationUtils;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.BabyHealthPenaltyBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.Behaviours;
@@ -49,6 +50,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -118,6 +120,7 @@ public class LeafInsectEntity extends Animal implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(LeafInsectAnimations.createController(this));
+        controllers.add(LeafInsectAnimations.createEatController(this));
     }
 
     @Override
@@ -182,7 +185,7 @@ public class LeafInsectEntity extends Animal implements GeoEntity {
             this.take(itemEntity, equippedWithStack.getCount());
             this.barterTime = 10;
             if (!level().isClientSide) {
-                this.triggerAnim("controller", "eat");
+                this.triggerAnim("eat_controller", "eat");
             }
         }
 
@@ -256,10 +259,7 @@ public class LeafInsectEntity extends Animal implements GeoEntity {
     public float lookBlendWeightO = 1.0f;
 
     private boolean shouldUseAnimationHeadRotation() {
-        var controller = this.getAnimatableInstanceCache()
-                .getManagerForId(this.getId())
-                .getAnimationControllers()
-                .get("controller");
+        var controller = AnimationUtils.getAnimationController(this, this.getId(), "eat_controller");
 
         var isPlayingEatAnim = controller != null
                 && controller.getCurrentAnimation() != null
@@ -291,7 +291,11 @@ public class LeafInsectEntity extends Animal implements GeoEntity {
         }
 
         public static AnimationController<LeafInsectEntity> createController(LeafInsectEntity animatable) {
-            return new AnimationController<>(animatable, "controller", TRANSITION_TICK_TIME, new LeafInsectEntity.LeafInsectAnimations(animatable.getBehaviours()))
+            return new AnimationController<>(animatable, "controller", TRANSITION_TICK_TIME, new LeafInsectEntity.LeafInsectAnimations(animatable.getBehaviours()));
+        }
+
+        public static AnimationController<LeafInsectEntity> createEatController(LeafInsectEntity animatable) {
+            return new AnimationController<>(animatable, "eat_controller", 0, state -> PlayState.STOP)
                     .triggerableAnim("eat", EAT_ANIM);
         }
     }

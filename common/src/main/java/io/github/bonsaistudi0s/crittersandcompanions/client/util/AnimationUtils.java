@@ -5,6 +5,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,12 +40,16 @@ public abstract class AnimationUtils {
         return invertedEulers;
     }
 
+    public static AnimationController<?> getAnimationController(GeoAnimatable animatable, long instanceId, String controllerName) {
+        return animatable.getAnimatableInstanceCache().getManagerForId(instanceId).getAnimationControllers().get(controllerName);
+    }
+
     public static @Nullable String getCurrentAnimationName(GeoAnimatable animatable, long instanceId) {
         return getCurrentAnimationName(animatable, instanceId, "controller");
     }
 
     public static @Nullable String getCurrentAnimationName(GeoAnimatable animatable, long instanceId, String controllerName) {
-        var controller = animatable.getAnimatableInstanceCache().getManagerForId(instanceId).getAnimationControllers().get(controllerName);
+        var controller = getAnimationController(animatable, instanceId, controllerName);
         if (controller == null) {
             return null;
         }
