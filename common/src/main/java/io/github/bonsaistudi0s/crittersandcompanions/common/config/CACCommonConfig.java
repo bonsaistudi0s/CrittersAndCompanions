@@ -1,15 +1,21 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.config;
 
-import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.biome;
-import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.cTag;
-
 import com.google.common.base.CaseFormat;
-
+import dev.architectury.platform.Platform;
+import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
+import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
+import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
+import dev.isxander.yacl3.config.v2.api.SerialEntry;
+import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
+import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.SpawnEntry;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.SpawnEntryController;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biomes;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,17 +28,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import dev.architectury.platform.Platform;
-import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
-import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
-import dev.isxander.yacl3.config.v2.api.SerialEntry;
-import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
-import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.SpawnEntry;
-import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.SpawnEntryController;
+import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.biome;
+import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.cTag;
 
 public class CACCommonConfig {
 
@@ -128,6 +125,9 @@ public class CACCommonConfig {
     @SuppressWarnings("unused")
     public static class SpawningConfig {
 
+        @SerialEntry
+        public boolean preventMonsterSpawnsInLushCaves = false;
+
         // Just add any new entries as new fields below here, they'll be resolved via reflection
         // (transform snake_case entity id to camelCase field name)
 
@@ -220,6 +220,13 @@ public class CACCommonConfig {
             var builder = ConfigCategory.createBuilder()
                     .name(Component.literal("Spawning"));
 
+            builder.option(Option.<Boolean>createBuilder()
+                    .name(Component.literal("Prevent monster spawns in Lush Caves"))
+                    .description(val -> OptionDescription.of(Component.literal("(Changes take effect after a restart)")))
+                    .binding(false, () -> this.preventMonsterSpawnsInLushCaves, newVal -> this.preventMonsterSpawnsInLushCaves = newVal)
+                    .controller(TickBoxControllerBuilder::create)
+                    .build());
+
             var defaults = HANDLER.defaults().spawning;
             for (var field : ENTITY_FIELDS) {
                 builder.group(buildGroup(field, defaults));
@@ -240,6 +247,8 @@ public class CACCommonConfig {
                                     Use a biome id (e.g. minecraft:forest) or a tag prefixed with # (e.g. #c:is_forest).
                                     
                                     Weight is relative to other mobs in the same category. Min/max define the group size range.
+                                    
+                                    (Lush Caves spawns are handled by a separate spawning system.)
                                     """)))
                     .binding(get(defaults, field), () -> get(this, field), v -> set(this, field, v))
                     .initial(() -> new SpawnEntry("minecraft:plains", 1, 1, 1))
