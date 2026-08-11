@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "crittersandcompanions:gameplay/digging/trash",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "crittersandcompanions:gameplay/digging/common",
+          "weight": 18
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "crittersandcompanions:gameplay/digging/treasure",
+          "weight": 2
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "crittersandcompanions:gameplay/digging"
+}

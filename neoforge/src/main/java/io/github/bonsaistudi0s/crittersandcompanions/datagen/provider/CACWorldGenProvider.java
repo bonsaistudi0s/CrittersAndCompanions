@@ -1,5 +1,8 @@
 package io.github.bonsaistudi0s.crittersandcompanions.datagen.provider;
 
+import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.block.SilkCocoonBlock;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -23,11 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.block.SilkCocoonBlock;
-import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACBlocks;
+public final class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
 
-public class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SILK_COCOON_CF = ResourceKey.create(
             Registries.CONFIGURED_FEATURE,
             CrittersAndCompanions.createId("silk_cocoon")
