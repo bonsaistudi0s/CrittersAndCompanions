@@ -75,7 +75,7 @@ public final class CACRecipes extends RecipeProvider {
                 .unlockedBy("has_pearl", has(CACItems.PEARL.get()))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING, 2)
                 .requires(CACItems.SILK.get())
                 .unlockedBy("has_silk", has(CACItems.SILK.get()))
                 .save(consumer, CrittersAndCompanions.createId("string_from_silk"));
