@@ -126,6 +126,9 @@ public class CACCommonConfig {
     @SuppressWarnings("unused")
     public static class SpawningConfig {
 
+        @SerialEntry
+        public boolean preventMonsterSpawnsInLushCaves = false;
+
         // Just add any new entries as new fields below here, they'll be resolved via reflection
         // (transform snake_case entity id to camelCase field name)
 
@@ -221,6 +224,13 @@ public class CACCommonConfig {
             var builder = ConfigCategory.createBuilder()
                     .name(Component.literal("Spawning"));
 
+            builder.option(Option.<Boolean>createBuilder()
+                    .name(Component.literal("Prevent monster spawns in Lush Caves"))
+                    .description(val -> OptionDescription.of(Component.literal("(Changes take effect after a restart)")))
+                    .binding(false, () -> this.preventMonsterSpawnsInLushCaves, newVal -> this.preventMonsterSpawnsInLushCaves = newVal)
+                    .controller(TickBoxControllerBuilder::create)
+                    .build());
+
             var defaults = HANDLER.defaults().spawning;
             for (var field : ENTITY_FIELDS) {
                 builder.group(buildGroup(field, defaults));
@@ -241,6 +251,8 @@ public class CACCommonConfig {
                                     Use a biome id (e.g. minecraft:forest) or a tag prefixed with # (e.g. #c:is_forest).
                                     
                                     Weight is relative to other mobs in the same category. Min/max define the group size range.
+                                    
+                                    (Lush Caves spawns are handled by a separate spawning system.)
                                     """)))
                     .binding(get(defaults, field), () -> get(this, field), v -> set(this, field, v))
                     .initial(() -> new SpawnEntry("minecraft:plains", 1, 1, 1))
