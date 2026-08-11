@@ -1,5 +1,8 @@
 package io.github.bonsaistudi0s.crittersandcompanions.datagen.provider;
 
+import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACBlocks;
+import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -8,10 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
-
-import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACBlocks;
-import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 
 public final class CACRecipes extends RecipeProvider {
 
@@ -52,7 +51,7 @@ public final class CACRecipes extends RecipeProvider {
                 .unlockedBy("has_pearl", has(CACItems.PEARL.get()))
                 .save(output);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING, 2)
                 .requires(CACItems.SILK.get())
                 .unlockedBy("has_silk", has(CACItems.SILK.get()))
                 .save(output, CrittersAndCompanions.createId("string_from_silk"));
