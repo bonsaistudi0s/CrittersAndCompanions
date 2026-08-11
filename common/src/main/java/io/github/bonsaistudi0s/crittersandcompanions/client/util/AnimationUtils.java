@@ -3,13 +3,13 @@ package io.github.bonsaistudi0s.crittersandcompanions.client.util;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.cache.object.GeoBone;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.cache.object.GeoBone;
 
 public abstract class AnimationUtils {
 
@@ -40,12 +40,16 @@ public abstract class AnimationUtils {
         return invertedEulers;
     }
 
+    public static AnimationController<?> getAnimationController(GeoAnimatable animatable, long instanceId, String controllerName) {
+        return animatable.getAnimatableInstanceCache().getManagerForId(instanceId).getAnimationControllers().get(controllerName);
+    }
+
     public static @Nullable String getCurrentAnimationName(GeoAnimatable animatable, long instanceId) {
         return getCurrentAnimationName(animatable, instanceId, "controller");
     }
 
     public static @Nullable String getCurrentAnimationName(GeoAnimatable animatable, long instanceId, String controllerName) {
-        var controller = animatable.getAnimatableInstanceCache().getManagerForId(instanceId).getAnimationControllers().get(controllerName);
+        var controller = getAnimationController(animatable, instanceId, controllerName);
         if (controller == null) {
             return null;
         }
