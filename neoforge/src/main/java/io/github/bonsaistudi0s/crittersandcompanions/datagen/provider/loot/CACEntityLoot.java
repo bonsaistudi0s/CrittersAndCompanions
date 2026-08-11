@@ -37,7 +37,10 @@ public final class CACEntityLoot extends EntityLootSubProvider {
                 CACEntities.JUMPING_SPIDER.get(), LootTable.lootTable()
                         .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                                 .add(LootItem.lootTableItem(CACItems.SILK.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))))
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))
+                                .add(LootItem.lootTableItem(Items.SPIDER_EYE)
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))
+                        )
         );
 
         this.add(
