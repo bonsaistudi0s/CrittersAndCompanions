@@ -17,8 +17,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biomes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,6 +34,8 @@ import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpa
 
 public class CACCommonConfig {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CACCommonConfig.class);
+
     public static final ConfigClassHandler<CACCommonConfig> HANDLER = ConfigClassHandler.createBuilder(CACCommonConfig.class)
             .id(CrittersAndCompanions.createId("common_config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
@@ -36,6 +43,76 @@ public class CACCommonConfig {
                     .setJson5(true)
                     .build())
             .build();
+
+    @SuppressWarnings("ConstantValue")
+    public static void loadAndMigrate() {
+        renameOldTomlConfigs();
+
+        HANDLER.load();
+
+        var config = HANDLER.instance();
+        var needsSave = false;
+
+        needsSave |= runMigration(config, 2, () -> {
+            migrateSpawnRule(config.spawning.leafInsect, "#minecraft:is_forest", 14, 1, 1, 6, 1, 1);
+            migrateSpawnRule(config.spawning.ladybug, "minecraft:lush_caves", 12, 1, 2, 10, 1, 2);
+            migrateSpawnRule(config.spawning.stagBeetle, "minecraft:lush_caves", 8, 1, 2, 10, 1, 2);
+            migrateSpawnRule(config.spawning.snail, "minecraft:lush_caves", 10, 1, 2, 8, 1, 2);
+            migrateSpawnRule(config.spawning.stickBug, "minecraft:lush_caves", 4, 1, 2, 10, 1, 2);
+            migrateSpawnRule(config.spawning.weevil, "minecraft:lush_caves", 4, 1, 2, 10, 1, 2);
+
+            if (config.grapplingHook.maxSpeed == 4.0) {
+                config.grapplingHook.maxSpeed = 2.0;
+            }
+        });
+
+        // add more migration steps here if defaults change
+
+        if (needsSave) {
+            HANDLER.save();
+        }
+    }
+
+    private static boolean runMigration(CACCommonConfig config, int targetVersion, Runnable migrationStrategy) {
+        if (config.configVersion < targetVersion) {
+            LOGGER.info("Migrating config defaults to version {}", targetVersion);
+            migrationStrategy.run();
+            config.configVersion = targetVersion;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void migrateSpawnRule(List<SpawnEntry> list, String biomeSpec, int oldWeight, int oldMin, int oldMax, int newWeight, int newMin, int newMax) {
+        for (var i = 0; i < list.size(); i++) {
+            var entry = list.get(i);
+            if (entry.biomeSpec().equals(biomeSpec)) {
+                if (entry.weight() == oldWeight && entry.min() == oldMin && entry.max() == oldMax) {
+                    list.set(i, new SpawnEntry(biomeSpec, newWeight, newMin, newMax));
+                }
+            }
+        }
+    }
+
+    private static void renameOldTomlConfigs() {
+        var configDir = Platform.getConfigFolder();
+        var oldFiles = new String[]{"crittersandcompanions-common.toml", "crittersandcompanions-spawns.toml"};
+
+        for (var oldFileName : oldFiles) {
+            var oldFile = configDir.resolve(oldFileName);
+            if (Files.exists(oldFile)) {
+                try {
+                    Files.move(oldFile, configDir.resolve(oldFileName + ".old"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @SerialEntry
+    public int configVersion = 1; // do not change this
 
     @SerialEntry
     public final SpawningConfig spawning = new SpawningConfig();
@@ -55,7 +132,7 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> leafInsect = List.of(
                 biomeTag(BiomeTags.IS_JUNGLE, 14, 1, 1),
-                biomeTag(BiomeTags.IS_FOREST, 14, 1, 1));
+                biomeTag(BiomeTags.IS_FOREST, 6, 1, 1));
         @SerialEntry
         public List<SpawnEntry> redPanda = List.of(
                 biomeTag(BiomeTags.IS_JUNGLE, 8, 1, 2));
@@ -128,13 +205,13 @@ public class CACCommonConfig {
                 biome(Biomes.LUSH_CAVES, 10, 1, 2));
 
         private static final List<Field> ENTITY_FIELDS = Arrays.stream(SpawningConfig.class.getDeclaredFields())
-                .filter(field -> !java.lang.reflect.Modifier.isStatic(field.getModifiers()))
+                .filter(field -> !Modifier.isStatic(field.getModifiers()))
                 .filter(field -> field.getType() == List.class)
                 .toList();
 
         public Map<String, List<SpawnEntry>> getAllEntries() {
             Map<String, List<SpawnEntry>> entries = new LinkedHashMap<>();
-            for (Field field : ENTITY_FIELDS) {
+            for (var field : ENTITY_FIELDS) {
                 entries.put(entityId(field), get(this, field));
             }
             return entries;
@@ -144,7 +221,7 @@ public class CACCommonConfig {
             var builder = ConfigCategory.createBuilder()
                     .name(Component.literal("Spawning"));
 
-            SpawningConfig defaults = HANDLER.defaults().spawning;
+            var defaults = HANDLER.defaults().spawning;
             for (var field : ENTITY_FIELDS) {
                 builder.group(buildGroup(field, defaults));
             }
