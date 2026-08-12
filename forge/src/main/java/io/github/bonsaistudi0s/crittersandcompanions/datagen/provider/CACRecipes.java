@@ -18,14 +18,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public final class CACRecipeProvider extends RecipeProvider {
+public final class CACRecipes extends RecipeProvider {
 
     private static final TagKey<Item> C_IRON_INGOTS = cTag("iron_ingots");
     private static final TagKey<Item> C_GOLD_INGOTS = cTag("gold_ingots");
     private static final TagKey<Item> C_DIAMONDS = cTag( "diamonds");
     private static final TagKey<Item> C_SLIMEBALLS = cTag( "slimeballs");
 
-    public CACRecipeProvider(PackOutput packOutput) {
+    public CACRecipes(PackOutput packOutput) {
         super(packOutput);
     }
 

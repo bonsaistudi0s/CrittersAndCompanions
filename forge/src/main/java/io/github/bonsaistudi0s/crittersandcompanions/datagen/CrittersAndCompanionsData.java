@@ -25,7 +25,7 @@ public class CrittersAndCompanionsData {
         generator.addProvider(event.includeServer(), new CACItemTags(output, lookup, blockTags.contentsGetter(), fileHelper));
         generator.addProvider(event.includeServer(), new CACDamageTypeTags(output, lookup, fileHelper));
 
-        generator.addProvider(event.includeServer(), new CACRecipeProvider(output));
+        generator.addProvider(event.includeServer(), new CACRecipes(output));
         generator.addProvider(event.includeServer(), CACLootTableProvider.create(output));
         generator.addProvider(event.includeServer(), new CACWorldGenProvider(output, lookup));
     }
