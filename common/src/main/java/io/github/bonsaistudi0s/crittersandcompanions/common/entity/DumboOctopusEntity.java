@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.Bucketable;
@@ -45,6 +47,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.EnumSet;
+import java.util.OptionalInt;
 
 public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucketable {
     private static final EntityDataAccessor<Boolean> RESTING = SynchedEntityData.defineId(DumboOctopusEntity.class, EntityDataSerializers.BOOLEAN);
@@ -90,8 +93,9 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new BubblePlayerGoal());
-        this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1.0D, 40));
+        this.goalSelector.addGoal(0, new PanicGoal(this, 1.5D));
+        this.goalSelector.addGoal(1, new BubblePlayerGoal());
+        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1.0D, 40));
     }
 
     @Override
@@ -199,7 +203,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
         if (!(player instanceof IBubbleState bubbleState)) return;
 
         bubbleState.setBubbleActive(state);
-        CACPacketHandler.sendToTracking(player, new ClientboundBubbleStatePacket(state, player.getId()));
+        CACPacketHandler.sendToTrackingAndSelf(player, new ClientboundBubbleStatePacket(state, player.getId(), state ? OptionalInt.of(getId()) : OptionalInt.empty()));
     }
 
     public ServerPlayer getBubbledPlayer() {
@@ -273,6 +277,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
         @Override
         public void start() {
             DumboOctopusEntity.this.bubblingPlayer = true;
+            DumboOctopusEntity.this.setResting(false);
             this.timeToRecalcPath = 0;
         }
 
@@ -280,7 +285,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
         public void tick() {
             DumboOctopusEntity.this.getLookControl().setLookAt(DumboOctopusEntity.this.bubbledPlayer, 10.0F, (float) DumboOctopusEntity.this.getMaxHeadXRot());
 
-            if (DumboOctopusEntity.this.distanceToSqr(DumboOctopusEntity.this.bubbledPlayer) > 2.0D) {
+            if (DumboOctopusEntity.this.distanceToSqr(DumboOctopusEntity.this.bubbledPlayer) > 4.0D) {
                 this.timeToRecalcPath--;
 
                 if (this.timeToRecalcPath <= 0) {
@@ -292,6 +297,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
             } else {
                 if (!this.bubbleSent) {
                     DumboOctopusEntity.this.sendBubble(DumboOctopusEntity.this.bubbledPlayer, true);
+                    DumboOctopusEntity.this.level().playSound(null, DumboOctopusEntity.this.bubbledPlayer.getX(), DumboOctopusEntity.this.bubbledPlayer.getY(), DumboOctopusEntity.this.bubbledPlayer.getZ(), SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, SoundSource.PLAYERS, 1.0F, 1.0F);
                     this.bubbleSent = true;
                 }
             }
@@ -306,7 +312,7 @@ public class DumboOctopusEntity extends WaterAnimal implements GeoEntity, Bucket
             DumboOctopusEntity.this.bubblingPlayer = false;
             DumboOctopusEntity.this.sendBubble(DumboOctopusEntity.this.bubbledPlayer, false);
             this.bubbleSent = false;
-            DumboOctopusEntity.this.bubbledPlayer.playSound(CACSounds.BUBBLE_POP.get());
+            DumboOctopusEntity.this.level().playSound(null, DumboOctopusEntity.this.bubbledPlayer.getX(), DumboOctopusEntity.this.bubbledPlayer.getY(), DumboOctopusEntity.this.bubbledPlayer.getZ(), CACSounds.BUBBLE_POP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             DumboOctopusEntity.this.bubbledPlayer = null;
             this.navigation.stop();
         }

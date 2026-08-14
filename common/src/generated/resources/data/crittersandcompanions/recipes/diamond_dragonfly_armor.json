@@ -2,9 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "D": {
-      "item": "minecraft:diamond"
-    }
+    "D": [
+      {
+        "tag": "forge:gems/diamond"
+      },
+      {
+        "tag": "c:diamonds"
+      },
+      {
+        "item": "minecraft:diamond"
+      }
+    ]
   },
   "pattern": [
     "  D",

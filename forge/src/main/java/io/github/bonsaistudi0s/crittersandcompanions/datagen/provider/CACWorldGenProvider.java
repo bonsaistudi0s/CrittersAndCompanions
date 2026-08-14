@@ -58,9 +58,10 @@ public final class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
         List<PlacementModifier> silkCocoonPlacement = List.of(
                 CountPlacement.of(4),
                 InSquarePlacement.spread(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(140)),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(60), VerticalAnchor.absolute(140)),
                 EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.alwaysTrue(), BlockPredicate.matchesBlocks(Blocks.AIR), 12),
                 RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.WATER))),
                 BiomeFilter.biome()
         );
 
@@ -70,15 +71,17 @@ public final class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(140)),
                 EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.alwaysTrue(), BlockPredicate.matchesBlocks(Blocks.AIR), 12),
                 RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.WATER))),
                 BiomeFilter.biome()
         );
 
         List<PlacementModifier> hangingSilkCocoonPlacement = List.of(
                 CountPlacement.of(4),
                 InSquarePlacement.spread(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(140)),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(60), VerticalAnchor.absolute(140)),
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.matchesBlocks(Blocks.AIR), 12),
                 RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.WATER))),
                 BiomeFilter.biome()
         );
 
@@ -88,6 +91,7 @@ public final class CACWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(140)),
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.matchesBlocks(Blocks.AIR), 12),
                 RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.WATER))),
                 BiomeFilter.biome()
         );
 

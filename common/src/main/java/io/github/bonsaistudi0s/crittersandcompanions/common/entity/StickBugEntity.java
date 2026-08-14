@@ -3,10 +3,11 @@ package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableAnimalPanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -38,6 +39,7 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
 
     public StickBugEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
@@ -47,12 +49,13 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
         behaviours.add(new TameableBehaviour(this, TAGS));
         behaviours.add(new HealthRegenerationBehaviour(this));
         behaviours.add(new BabyHealthPenaltyBehaviour(this));
+        behaviours.add(new BabySpeedModifierBehaviour(this, 0.5D));
     }
 
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new TamableAnimalPanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
@@ -114,5 +117,10 @@ public class StickBugEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return CACSounds.BUGS_HURT.get();
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
     }
 }

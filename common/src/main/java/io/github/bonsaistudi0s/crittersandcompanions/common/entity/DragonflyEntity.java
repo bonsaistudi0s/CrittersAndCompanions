@@ -4,9 +4,11 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behavio
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.TameableBehaviour;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.DragonflyMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FlyingAvoidEntityGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FlyingTamablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.item.DragonflyArmorItem;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -58,10 +60,9 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     public DragonflyEntity(EntityType<? extends DragonflyEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new DragonflyMoveControl(this);
-
-        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
@@ -80,14 +81,16 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(1, new FlyingAvoidJumpingSpidersGoal(this, 8.0F, 1.0D, 1.2D));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F, true));
-        this.goalSelector.addGoal(4, TAGS.temptGoal(this));
-        this.goalSelector.addGoal(5, new RandomFlyGoal());
-        this.goalSelector.addGoal(6, TAGS.sittingTemptGoal(this));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new FlyingTamablePanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(3, new FlyingAvoidJumpingSpidersGoal(this, 8.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.0D, 6.0F, 2.0F, true));
+        this.goalSelector.addGoal(6, TAGS.temptGoal(this));
+        this.goalSelector.addGoal(7, new RandomFlyGoal());
+        this.goalSelector.addGoal(8, TAGS.sittingTemptGoal(this));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
 
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
     }
@@ -237,6 +240,11 @@ public class DragonflyEntity extends TamableAnimal implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
     }
 
     public class RandomFlyGoal extends Goal {

@@ -1,11 +1,11 @@
 package io.github.bonsaistudi0s.crittersandcompanions.client.model.geo;
 
+import io.github.bonsaistudi0s.crittersandcompanions.client.util.AnimationUtils;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.RedPandaEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.model.data.EntityModelData;
 
 public class RedPandaModel extends AgingGeoModel<RedPandaEntity> {
 
@@ -18,7 +18,7 @@ public class RedPandaModel extends AgingGeoModel<RedPandaEntity> {
 
     @Override
     public ResourceLocation getTextureResource(RedPandaEntity object) {
-        if(!object.isBaby() && object.isSleeping()) return  sleepingTexture;
+        if (!object.isBaby() && object.isSleeping()) return sleepingTexture;
         return super.getTextureResource(object);
     }
 
@@ -26,14 +26,29 @@ public class RedPandaModel extends AgingGeoModel<RedPandaEntity> {
     public void setCustomAnimations(RedPandaEntity animatable, long instanceId, AnimationState<RedPandaEntity> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
 
-        EntityModelData data = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-        var neck = this.getAnimationProcessor().getBone("head");
+        var shouldOverrideAnimationHeadRotation = !animatable.isSleeping();
+        if (shouldOverrideAnimationHeadRotation) {
+            var data = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
-        if (!animatable.isSleeping() && !animatable.isInSittingPose()) {
-            if (!animatable.isAlert()) {
-                neck.setRotX(data.headPitch() * Mth.DEG_TO_RAD);
+            var head = this.getAnimationProcessor().getBone("head");
+            var headRotation = this.getAnimationProcessor().getBone("head_rotation");
+            var headAxisAlign = this.getAnimationProcessor().getBone("head_axis_align");
+
+            if (data != null && head != null && headRotation != null && headAxisAlign != null) {
+                // rotation values for head_axis_align to make head_rotation have a world-space rotation of 0, 0, 0
+                var axisAlign = AnimationUtils.calculateInverseWorldRotation(headAxisAlign);
+                headAxisAlign.setRotX(axisAlign.x);
+                headAxisAlign.setRotY(axisAlign.y);
+                headAxisAlign.setRotZ(axisAlign.z);
+
+                // counteract animation compensation on head for parent bone rotations
+                head.setRotX(head.getRotX() - axisAlign.x);
+                head.setRotY(head.getRotY() - axisAlign.y);
+                head.setRotZ(head.getRotZ() - axisAlign.z);
+
+                headRotation.setRotX(data.headPitch() * Mth.DEG_TO_RAD);
+                headRotation.setRotY(data.netHeadYaw() * Mth.DEG_TO_RAD);
             }
-            neck.setRotY(data.netHeadYaw() * Mth.DEG_TO_RAD);
         }
     }
 }

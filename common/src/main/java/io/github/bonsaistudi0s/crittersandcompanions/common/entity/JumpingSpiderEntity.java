@@ -3,15 +3,18 @@ package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.JumpingSpiderMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.JumpingSpiderLeapGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableAnimalPanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -59,6 +62,7 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     public JumpingSpiderEntity(EntityType<? extends JumpingSpiderEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new JumpingSpiderMoveControl(this);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -77,11 +81,11 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new TameablePanicGoal(this, 1.5D));
+        this.goalSelector.addGoal(1, new TamableAnimalPanicGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
-        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new JumpingSpiderLeapGoal(this, 0.4F, 0.8F));
         this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(7, TAGS.temptGoal(this));
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, false));
@@ -121,6 +125,11 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         if (!blockState.is(Blocks.COBWEB)) {
             super.makeStuckInBlock(blockState, p_33797_);
         }
+    }
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return super.causeFallDamage(fallDistance - 3.0F, multiplier, source);
     }
 
     @Override
@@ -198,5 +207,10 @@ public class JumpingSpiderEntity extends TamableAnimal implements GeoEntity {
         }
 
         return super.wantsToAttack(target, owner);
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
     }
 }

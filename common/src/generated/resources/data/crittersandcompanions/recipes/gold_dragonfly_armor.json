@@ -2,9 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "item": "minecraft:gold_ingot"
-    }
+    "G": [
+      {
+        "tag": "forge:ingots/gold"
+      },
+      {
+        "tag": "c:gold_ingots"
+      },
+      {
+        "item": "minecraft:gold_ingot"
+      }
+    ]
   },
   "pattern": [
     "  G",

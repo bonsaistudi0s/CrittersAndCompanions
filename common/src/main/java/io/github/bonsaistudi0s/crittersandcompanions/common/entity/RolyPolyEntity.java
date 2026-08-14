@@ -4,11 +4,12 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.Bug
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FreezeWhileChestAccessedGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableAnimalPanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.menu.RolyPolyMenu;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -43,6 +44,7 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
 
     public RolyPolyEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
@@ -61,7 +63,7 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new FreezeWhileChestAccessedGoal(this));
-        goalSelector.addGoal(2, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(2, new TamableAnimalPanicGoal(this, 1.25D));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(4, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(5, TAGS.temptGoal(this));
@@ -74,7 +76,9 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 12.0D).add(Attributes.MOVEMENT_SPEED, 0.2D);
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 16.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.2D);
     }
 
     @Override
@@ -143,5 +147,10 @@ public class RolyPolyEntity extends TamableAnimal implements GeoEntity {
         }
 
         return baseDimensions;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
     }
 }

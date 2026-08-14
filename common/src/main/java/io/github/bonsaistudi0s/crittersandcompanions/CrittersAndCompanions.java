@@ -1,25 +1,31 @@
 package io.github.bonsaistudi0s.crittersandcompanions;
 
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.bonsaistudi0s.crittersandcompanions.common.api.CACColors;
 import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
-import io.github.bonsaistudi0s.crittersandcompanions.common.handler.AttributeHandler;
+import io.github.bonsaistudi0s.crittersandcompanions.common.handler.LushCaveSpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandler;
-import io.github.bonsaistudi0s.crittersandcompanions.common.handler.SpawnHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.network.CACPacketHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.world.CACWorldGen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.biome.Biomes;
 
 public class CrittersAndCompanions {
 
@@ -51,10 +57,13 @@ public class CrittersAndCompanions {
 
         registerColors();
 
-        AttributeHandler.registerAttributes();
-        SpawnHandler.registerSpawnPlacements();
+        LifecycleEvent.SETUP.register(() -> {
+            CACEntities.setup();
+            CACWorldGen.register();
+            CACItems.registerCompostables();
+        });
 
-        CACCommonConfig.HANDLER.load();
+        CACCommonConfig.loadAndMigrate();
 
         registerEvents();
     }
@@ -80,6 +89,18 @@ public class CrittersAndCompanions {
 
     private static void registerEvents() {
         TickEvent.PLAYER_POST.register(PlayerHandler::onPlayerTick);
+        TickEvent.SERVER_POST.register(LushCaveSpawnHandler::tick);
+
+        EntityEvent.LIVING_CHECK_SPAWN.register((entity, world, x, y, z, type, spawner) -> {
+            if (CACCommonConfig.HANDLER.instance().spawning.preventMonsterSpawnsInLushCaves && entity instanceof Monster && type == MobSpawnType.NATURAL) {
+                if (world.getBiome(BlockPos.containing(x, y, z)).is(Biomes.LUSH_CAVES)) {
+                    // Bug in Architectury 9.2.14
+                    return Platform.isFabric() ? EventResult.interruptFalse() : EventResult.interruptTrue();
+                }
+            }
+
+            return EventResult.pass();
+        });
 
         InteractionEvent.INTERACT_ENTITY.register((player, entity, hand) -> {
             if (player.level().isClientSide()) {

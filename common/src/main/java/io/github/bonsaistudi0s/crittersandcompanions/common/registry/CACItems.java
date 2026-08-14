@@ -6,6 +6,7 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACCommonConfig;
 import io.github.bonsaistudi0s.crittersandcompanions.common.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.function.Supplier;
@@ -38,7 +40,15 @@ public class CACItems {
     public static final RegistrySupplier<Item> SEA_BUNNY_SLIME_BLOCK = ITEMS.register("sea_bunny_slime_block", () -> new BlockItem(CACBlocks.SEA_BUNNY_SLIME_BLOCK.get(), baseProperties()));
 
     public static final RegistrySupplier<Item> SILK_LEAD = ITEMS.register("silk_lead", () -> new SilkLeashItem(baseProperties()));
-    public static final RegistrySupplier<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem(baseProperties().stacksTo(1).durability(128)));
+    public static final RegistrySupplier<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> {
+        var properties = baseProperties().stacksTo(1);
+
+        if (CACCommonConfig.HANDLER.instance().grapplingHook.enableDurability) {
+            properties = properties.durability(256);
+        }
+
+        return new GrapplingHookItem(properties);
+    });
 
     public static final RegistrySupplier<Item> PEARL_NECKLACE_1 = ITEMS.register("pearl_necklace_1", () -> new PearlNecklaceItem(baseProperties().stacksTo(1), 1));
     public static final RegistrySupplier<Item> PEARL_NECKLACE_2 = ITEMS.register("pearl_necklace_2", () -> new PearlNecklaceItem(baseProperties().stacksTo(1), 2));
@@ -48,9 +58,10 @@ public class CACItems {
     public static final RegistrySupplier<Item> KOI_FISH_BUCKET = ITEMS.register("koi_fish_bucket", () -> new ArchitecturyMobBucketItem(CACEntities.KOI_FISH, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1)));
     public static final RegistrySupplier<Item> SEA_BUNNY_BUCKET = ITEMS.register("sea_bunny_bucket", () -> new ArchitecturyMobBucketItem(CACEntities.SEA_BUNNY, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, baseProperties().stacksTo(1)));
 
-    public static final RegistrySupplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.DIAMOND, "diamond", baseProperties().stacksTo(1)));
-    public static final RegistrySupplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.GOLD, "gold", baseProperties().stacksTo(1)));
     public static final RegistrySupplier<Item> IRON_DRAGONFLY_ARMOR = ITEMS.register("iron_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.IRON, "iron", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> GOLD_DRAGONFLY_ARMOR = ITEMS.register("gold_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.GOLD, "gold", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> DIAMOND_DRAGONFLY_ARMOR = ITEMS.register("diamond_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.DIAMOND, "diamond", baseProperties().stacksTo(1)));
+    public static final RegistrySupplier<Item> NETHERITE_DRAGONFLY_ARMOR = ITEMS.register("netherite_dragonfly_armor", () -> new DragonflyArmorItem(ArmorMaterials.NETHERITE, "netherite", baseProperties().stacksTo(1)));
 
     public static final RegistrySupplier<Item> DRAGONFLY_SPAWN_EGG = registerSpawnEgg(CACEntities.DRAGONFLY, 0x08EECF, 0xD3FF96);
     public static final RegistrySupplier<Item> FERRET_SPAWN_EGG = registerSpawnEgg(CACEntities.FERRET, 0xC5AC88, 0x37212D);
@@ -89,6 +100,10 @@ public class CACItems {
 
     public static void init() {
         ITEMS.register();
+    }
+
+    public static void registerCompostables() {
+        ComposterBlock.add(0.3F, CACItems.ACORN.get());
     }
 
     @ExpectPlatform

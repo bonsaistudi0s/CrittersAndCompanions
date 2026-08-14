@@ -2,9 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "B": {
-      "item": "minecraft:slime_ball"
-    },
+    "B": [
+      {
+        "tag": "forge:slimeballs"
+      },
+      {
+        "tag": "c:slimeballs"
+      },
+      {
+        "item": "minecraft:slime_ball"
+      }
+    ],
     "S": {
       "item": "crittersandcompanions:silk"
     }

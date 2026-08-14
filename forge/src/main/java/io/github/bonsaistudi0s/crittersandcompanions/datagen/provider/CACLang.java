@@ -38,11 +38,10 @@ public final class CACLang extends LanguageProvider {
         withSpawnEgg(CACEntities.LEAF_INSECT);
         withSpawnEgg(CACEntities.LADYBUG);
         withSpawnEgg(CACEntities.STAG_BEETLE);
-        add(CACEntities.ROLY_POLY.get(), "Roly-Poly");
-        addSpawnEgg(CACEntities.ROLY_POLY, "Roly-Poly");
+        withSpawnEggAndCustomTranslation(CACEntities.ROLY_POLY, "Roly-Poly");
         withSpawnEgg(CACEntities.SNAIL);
         withSpawnEgg(CACEntities.STICK_BUG);
-        withSpawnEgg(CACEntities.WEEVIL);
+        withSpawnEggAndCustomTranslation(CACEntities.WEEVIL, "Acorn Weevil");
         add("entity.%s.%s".formatted(CACEntities.GRAPPLING_HOOK.getKey().location().getNamespace(), CACEntities.GRAPPLING_HOOK.getKey().location().getPath()), "Grappling Hook");
 
         translate(CACBlocks.SILK_COCOON.getKey());
@@ -52,6 +51,7 @@ public final class CACLang extends LanguageProvider {
         add(CACItems.SEA_BUNNY_BUCKET.get(), "Bucket of Sea Bunny");
         add(CACItems.KOI_FISH_BUCKET.get(), "Bucket of Koi Fish");
 
+        translate(CACItems.NETHERITE_DRAGONFLY_ARMOR.getKey());
         translate(CACItems.DIAMOND_DRAGONFLY_ARMOR.getKey());
         translate(CACItems.GOLD_DRAGONFLY_ARMOR.getKey());
         translate(CACItems.IRON_DRAGONFLY_ARMOR.getKey());
@@ -87,6 +87,7 @@ public final class CACLang extends LanguageProvider {
         subtitle(CACSounds.FERRET_HURT.get(), "Ferret hurts");
         subtitle(CACSounds.LEAF_INSECT_DEATH.get(), "Leaf insect dies");
         subtitle(CACSounds.LEAF_INSECT_HURT.get(), "Leaf insect hurts");
+        subtitle(CACSounds.LEAF_INSECT_EAT.get(), "Leaf insect eats");
         subtitle(CACSounds.OTTER_AMBIENT.get(), "Otter squeaks");
         subtitle(CACSounds.OTTER_DEATH.get(), "Otter dies");
         subtitle(CACSounds.OTTER_HURT.get(), "Otter hurts");
@@ -98,6 +99,7 @@ public final class CACLang extends LanguageProvider {
         subtitle(CACSounds.SEA_BUNNY_DEATH.get(), "Sea Bunny dies");
         subtitle(CACSounds.SEA_BUNNY_HURT.get(), "Sea Bunny hurts");
         subtitle(CACSounds.SHIMA_ENAGA_AMBIENT.get(), "Shima Enaga sings");
+        subtitle(CACSounds.SHIMA_ENAGA_FLY.get(), "Shima Enaga flutters");
         subtitle(CACSounds.BITE_ATTACK.get(), "Animal bites");
         subtitle(CACSounds.BUBBLE_POP.get(), "Bubble pops");
         subtitle(CACSounds.BUGS_HURT.get(), "Bug chitters");
@@ -133,6 +135,11 @@ public final class CACLang extends LanguageProvider {
         // (registry objects are not present yet when addTranslations() runs)
         add("entity.%s.%s".formatted(id.getNamespace(), id.getPath()), translation);
         add("item.%s.%s_spawn_egg".formatted(id.getNamespace(), id.getPath()), translation + " Spawn Egg");
+    }
+
+    private void withSpawnEggAndCustomTranslation(RegistrySupplier<? extends EntityType<?>> type, String customTranslation) {
+        add(type.get(), customTranslation);
+        addSpawnEgg(type, customTranslation);
     }
 
     private void addSpawnEgg(RegistrySupplier<? extends EntityType<?>> type, String translation) {

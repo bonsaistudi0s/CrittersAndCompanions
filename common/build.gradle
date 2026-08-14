@@ -16,7 +16,7 @@ dependencies {
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
     // https://github.com/bernie-g/geckolib/wiki/Installation-(Geckolib4)#1204-and-below
-    modCompileOnly "software.bernie.geckolib:geckolib-forge-${rootProject.minecraft_version}:${rootProject.geckolib_version}"
+    modCompileOnly "software.bernie.geckolib:geckolib-fabric-${rootProject.minecraft_version}:${rootProject.geckolib_version}"
 
     // "YACL provides no common artifact. Because Architectury is Loom-based, use the fabric artifact as the common one."
     modCompileOnly "dev.isxander:yet-another-config-lib:${yacl_version}-fabric"

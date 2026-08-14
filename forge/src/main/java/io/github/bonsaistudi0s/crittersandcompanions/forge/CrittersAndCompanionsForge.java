@@ -1,12 +1,5 @@
 package io.github.bonsaistudi0s.crittersandcompanions.forge;
 
-import dev.architectury.platform.forge.EventBuses;
-import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandler;
-import io.github.bonsaistudi0s.crittersandcompanions.forge.client.CrittersAndCompanionsForgeClient;
-import io.github.bonsaistudi0s.crittersandcompanions.forge.common.loot.AddItemModifier;
-import io.github.bonsaistudi0s.crittersandcompanions.forge.common.loot.ReplaceItemModifier;
-import io.github.bonsaistudi0s.crittersandcompanions.forge.common.world.CACSpawnsBiomeModifier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
@@ -23,6 +16,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.resource.PathPackResources;
 
+import dev.architectury.platform.forge.EventBuses;
+import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandler;
+import io.github.bonsaistudi0s.crittersandcompanions.forge.client.CrittersAndCompanionsForgeClient;
+import io.github.bonsaistudi0s.crittersandcompanions.forge.common.loot.AddItemModifier;
+import io.github.bonsaistudi0s.crittersandcompanions.forge.common.loot.ReplaceItemModifier;
+
 @Mod(CrittersAndCompanions.MODID)
 public final class CrittersAndCompanionsForge {
 
@@ -36,10 +36,6 @@ public final class CrittersAndCompanionsForge {
         lootModifiers.register("replace_item", () -> ReplaceItemModifier.CODEC);
         lootModifiers.register("add_item", () -> AddItemModifier.CODEC);
         lootModifiers.register(modEventBus);
-
-        var biomeModifiers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, CrittersAndCompanions.MODID);
-        biomeModifiers.register("config_driven_spawns", () -> CACSpawnsBiomeModifier.CODEC);
-        biomeModifiers.register(modEventBus);
 
         if (FMLLoader.getDist() == Dist.CLIENT) {
             CrittersAndCompanionsForgeClient.init(modEventBus);

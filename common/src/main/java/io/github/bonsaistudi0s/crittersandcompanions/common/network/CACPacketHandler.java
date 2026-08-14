@@ -58,8 +58,14 @@ public class CACPacketHandler {
             return;
         }
 
+        var buf = new FriendlyByteBuf(Unpooled.buffer());
+        payload.encode(buf);
+
         var trackedEntity = chunkCache.chunkMap.entityMap.get(entity.getId());
         if (trackedEntity == null) {
+            if (includeSelf && entity instanceof ServerPlayer player) {
+                NetworkManager.sendToPlayer(player, payload.getId(), buf);
+            }
             return;
         }
 
@@ -67,12 +73,12 @@ public class CACPacketHandler {
                 .map(ServerPlayerConnection::getPlayer)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        if (includeSelf && entity instanceof ServerPlayer player) {
+        if (includeSelf && entity instanceof ServerPlayer player && !players.contains(player)) {
             players.add(player);
         }
 
-        var buf = new FriendlyByteBuf(Unpooled.buffer());
-        payload.encode(buf);
-        NetworkManager.sendToPlayers(players, payload.getId(), buf);
+        if (!players.isEmpty()) {
+            NetworkManager.sendToPlayers(players, payload.getId(), buf);
+        }
     }
 }

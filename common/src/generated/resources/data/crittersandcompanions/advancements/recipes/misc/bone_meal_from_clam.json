@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_clam": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "crittersandcompanions:clam"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "crittersandcompanions:bone_meal_from_clam"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_clam",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "crittersandcompanions:bone_meal_from_clam"
+    ]
+  },
+  "sends_telemetry_event": false
+}

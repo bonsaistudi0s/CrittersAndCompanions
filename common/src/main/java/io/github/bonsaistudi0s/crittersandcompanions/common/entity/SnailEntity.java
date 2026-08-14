@@ -3,12 +3,13 @@ package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TamableAnimalPanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.mixin.WallClimberNavigationAccessor;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -65,6 +66,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public SnailEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
@@ -81,12 +83,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new TamableAnimalPanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
-        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F, false));
+        goalSelector.addGoal(6, new SnailFollowOwnerGoal());
         goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
             @Override
@@ -131,7 +133,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 12.0)
+                .add(Attributes.MAX_HEALTH, 16.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
     }
@@ -401,6 +403,11 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
         return getWakingUpTicks() >= 0;
     }
 
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
+    }
+
     private static class SnailNavigation extends WallClimberNavigation {
 
         public SnailNavigation(SnailEntity mob, Level level) {
@@ -444,6 +451,26 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
             }
 
             return null;
+        }
+    }
+
+    private class SnailFollowOwnerGoal extends FollowOwnerGoal {
+
+        public SnailFollowOwnerGoal() {
+            super(SnailEntity.this, 1.4D, 8F, 2F, false);
+        }
+
+        @Override
+        public void tick() {
+            SnailEntity.this.getLookControl().setLookAt(this.owner, 10.0F, (float)SnailEntity.this.getMaxHeadXRot());
+            if (--this.timeToRecalcPath <= 0) {
+                this.timeToRecalcPath = this.adjustedTickDelay(10);
+                if (SnailEntity.this.distanceToSqr(this.owner) >= 196.0) {
+                    this.teleportToOwner();
+                } else {
+                    this.navigation.moveTo(this.owner, this.speedModifier);
+                }
+            }
         }
     }
 }

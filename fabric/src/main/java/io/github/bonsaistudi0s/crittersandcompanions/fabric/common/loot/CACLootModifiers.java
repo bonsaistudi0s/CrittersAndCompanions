@@ -66,11 +66,10 @@ public class CACLootModifiers {
                                 ))
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(
                                         Enchantments.BLOCK_FORTUNE,
-                                        0.005f,
-                                        0.0055555557f,
-                                        0.00625f,
-                                        0.008333334f,
-                                        0.025f
+                                        0.05f,
+                                        0.0625f,
+                                        0.083333336f,
+                                        0.1f
                                 ))
                                 .add(LootItem.lootTableItem(CACItems.ACORN.get()))
                 );

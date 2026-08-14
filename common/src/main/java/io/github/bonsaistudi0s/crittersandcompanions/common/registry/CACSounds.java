@@ -18,6 +18,7 @@ public class CACSounds {
     public static final RegistrySupplier<SoundEvent> FERRET_HURT = SOUNDS.register("entity.ferret.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.ferret.hurt")));
     public static final RegistrySupplier<SoundEvent> LEAF_INSECT_DEATH = SOUNDS.register("entity.leaf_insect.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.leaf_insect.death")));
     public static final RegistrySupplier<SoundEvent> LEAF_INSECT_HURT = SOUNDS.register("entity.leaf_insect.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.leaf_insect.hurt")));
+    public static final RegistrySupplier<SoundEvent> LEAF_INSECT_EAT = SOUNDS.register("entity.leaf_insect.eat", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.leaf_insect.eat")));
     public static final RegistrySupplier<SoundEvent> OTTER_AMBIENT = SOUNDS.register("entity.otter.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.ambient")));
     public static final RegistrySupplier<SoundEvent> OTTER_DEATH = SOUNDS.register("entity.otter.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.death")));
     public static final RegistrySupplier<SoundEvent> OTTER_EAT = SOUNDS.register("entity.otter.eat", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.otter.eat")));
@@ -31,6 +32,7 @@ public class CACSounds {
     public static final RegistrySupplier<SoundEvent> SEA_BUNNY_DEATH = SOUNDS.register("entity.sea_bunny.death", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.sea_bunny.death")));
     public static final RegistrySupplier<SoundEvent> SEA_BUNNY_HURT = SOUNDS.register("entity.sea_bunny.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.sea_bunny.hurt")));
     public static final RegistrySupplier<SoundEvent> SHIMA_ENAGA_AMBIENT = SOUNDS.register("entity.shima_enaga.ambient", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.shima_enaga.ambient")));
+    public static final RegistrySupplier<SoundEvent> SHIMA_ENAGA_FLY = SOUNDS.register("entity.shima_enaga.fly", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.shima_enaga.fly")));
 
     public static final RegistrySupplier<SoundEvent> BUGS_WALK_LOOP = SOUNDS.register("entity.bugs.walk", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.walk")));
     public static final RegistrySupplier<SoundEvent> BUGS_HURT = SOUNDS.register("entity.bugs.hurt", () -> SoundEvent.createVariableRangeEvent(CrittersAndCompanions.createId("entity.bugs.hurt")));

@@ -2,10 +2,11 @@ package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FlyingTameablePanicGoal;
+import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.FlyingTamablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -40,6 +41,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     public LadybugEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
         this.moveControl = new FlyingMoveControl(this, 10, false);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new FlyingTameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new FlyingTamablePanicGoal(this, 1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
@@ -158,5 +160,10 @@ public class LadybugEntity extends TamableAnimal implements GeoEntity, FlyingAni
     @Override
     protected @Nullable SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return CACSounds.BUGS_HURT.get();
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
     }
 }

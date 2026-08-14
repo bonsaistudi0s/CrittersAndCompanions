@@ -46,6 +46,14 @@
     ],
     "subtitle": "subtitles.crittersandcompanions.entity.leaf_insect.hurt"
   },
+  "entity.leaf_insect.eat": {
+    "sounds": [
+      "crittersandcompanions:entity/leaf_insect/eat_1",
+      "crittersandcompanions:entity/leaf_insect/eat_2",
+      "crittersandcompanions:entity/leaf_insect/eat_3"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.leaf_insect.eat"
+  },
   "entity.otter.ambient": {
     "sounds": [
       "crittersandcompanions:entity/otter/ambient_1",
@@ -165,6 +173,19 @@
       "crittersandcompanions:entity/shima_enaga/ambient_4"
     ],
     "subtitle": "subtitles.crittersandcompanions.entity.shima_enaga.ambient"
+  },
+  "entity.shima_enaga.fly": {
+    "sounds": [
+      "crittersandcompanions:entity/shima_enaga/fly_1",
+      "crittersandcompanions:entity/shima_enaga/fly_2",
+      "crittersandcompanions:entity/shima_enaga/fly_3",
+      "crittersandcompanions:entity/shima_enaga/fly_4",
+      "crittersandcompanions:entity/shima_enaga/fly_5",
+      "crittersandcompanions:entity/shima_enaga/fly_6",
+      "crittersandcompanions:entity/shima_enaga/fly_7",
+      "crittersandcompanions:entity/shima_enaga/fly_8"
+    ],
+    "subtitle": "subtitles.crittersandcompanions.entity.shima_enaga.fly"
   },
   "entity.bite_attack": {
     "sounds": [

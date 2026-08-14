@@ -40,7 +40,8 @@
     "yet_another_config_lib_v3": ">=${yacl_version}"
   },
   "suggests": {
-    "modmenu": "*"
+    "modmenu": "*",
+    "trinkets": "*"
   },
   "custom": {
     "modmenu": {

@@ -5,13 +5,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class BabyHealthPenaltyBehaviour implements Behaviour {
 
-    private static final AttributeModifier BABY_HEALTH_MODIFIER = new AttributeModifier(
-            "baby_health_penalty",
-            -0.5D,
-            AttributeModifier.Operation.MULTIPLY_BASE
-    );
+    private static final UUID BABY_HEALTH_ID = UUID.fromString("6174a7eb-6d0e-4361-b1e1-e1cb67c7e5a0");
 
     @NotNull
     private final AgeableMob owner;
@@ -27,15 +25,38 @@ public class BabyHealthPenaltyBehaviour implements Behaviour {
             return;
         }
 
+        for (var modifier : new java.util.ArrayList<>(healthAttribute.getModifiers())) {
+            if ("baby_health_penalty".equals(modifier.getName()) && !BABY_HEALTH_ID.equals(modifier.getId())) {
+                healthAttribute.removeModifier(modifier.getId());
+                if (!owner.isBaby()) {
+                    owner.heal((float) (healthAttribute.getBaseValue() * 0.5));
+                }
+            }
+        }
+
         if (owner.isBaby()) {
-            if (!healthAttribute.hasModifier(BABY_HEALTH_MODIFIER)) {
-                healthAttribute.addPermanentModifier(BABY_HEALTH_MODIFIER);
+            if (healthAttribute.getModifier(BABY_HEALTH_ID) == null) {
+                var baseValue = healthAttribute.getBaseValue();
+                var targetHealth = Math.ceil((baseValue * 0.5) / 2.0) * 2.0;
+                var penalty = targetHealth - baseValue;
+
+                healthAttribute.addPermanentModifier(new AttributeModifier(
+                        BABY_HEALTH_ID,
+                        "baby_health_penalty",
+                        penalty,
+                        AttributeModifier.Operation.ADDITION
+                ));
+
                 owner.setHealth(Math.min(owner.getHealth(), owner.getMaxHealth()));
             }
         } else {
-            if (healthAttribute.hasModifier(BABY_HEALTH_MODIFIER)) {
-                healthAttribute.removeModifier(BABY_HEALTH_MODIFIER);
-                owner.heal(owner.getMaxHealth() / 2.0F);
+            var modifier = healthAttribute.getModifier(BABY_HEALTH_ID);
+            if (modifier != null) {
+                var amount = modifier.getAmount();
+                healthAttribute.removeModifier(BABY_HEALTH_ID);
+                if (amount < 0) {
+                    owner.heal((float) -amount);
+                }
             }
         }
     }

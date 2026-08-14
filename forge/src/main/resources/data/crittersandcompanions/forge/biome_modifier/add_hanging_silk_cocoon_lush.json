@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#crittersandcompanions:silk_cocoon_lush_spawns",
-  "features": "crittersandcompanions:hanging_silk_cocoon_lush",
-  "step": "top_layer_modification"
-}

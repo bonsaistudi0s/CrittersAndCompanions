@@ -48,6 +48,7 @@ public final class CACItemModels extends ItemModelProvider {
         basicItem(CACItems.IRON_DRAGONFLY_ARMOR.get());
         basicItem(CACItems.GOLD_DRAGONFLY_ARMOR.get());
         basicItem(CACItems.DIAMOND_DRAGONFLY_ARMOR.get());
+        basicItem(CACItems.NETHERITE_DRAGONFLY_ARMOR.get());
         basicItem(CACItems.GRAPPLING_HOOK.get());
         basicItem(CACItems.CLAM.get());
         basicItem(CACItems.SEA_BUNNY_SLIME_BOTTLE.get());

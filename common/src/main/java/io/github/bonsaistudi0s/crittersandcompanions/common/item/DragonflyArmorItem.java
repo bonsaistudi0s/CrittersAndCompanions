@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,15 +25,36 @@ public class DragonflyArmorItem extends Item {
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public DragonflyArmorItem(ArmorMaterial material, String tierName, Item.Properties properties) {
-        this(material, CrittersAndCompanions.createId("textures/entity/dragonfly_armor_" + tierName + ".png"), properties);
+        this(
+                material,
+                CrittersAndCompanions.createId("textures/entity/dragonfly_armor_" + tierName + ".png"),
+                properties
+        );
     }
 
     public DragonflyArmorItem(ArmorMaterial material, ResourceLocation tierName, Item.Properties properties) {
         super(properties);
         this.texture = tierName;
+
+        var defense = material.getDefenseForType(ArmorItem.Type.CHESTPLATE);
+        if (material == ArmorMaterials.NETHERITE) {
+            defense = 16;
+        }
+
         this.attributes = ImmutableMultimap.<Attribute, AttributeModifier>builder()
-                .put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "armor", material.getDefenseForType(ArmorItem.Type.CHESTPLATE), AttributeModifier.Operation.ADDITION))
-                .put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(TOUGHNESS_UUID, "toughness", material.getToughness(), AttributeModifier.Operation.ADDITION))
+                .put(
+                        Attributes.ARMOR,
+                        new AttributeModifier(ARMOR_UUID, "armor", defense, AttributeModifier.Operation.ADDITION)
+                )
+                .put(
+                        Attributes.ARMOR_TOUGHNESS,
+                        new AttributeModifier(
+                                TOUGHNESS_UUID,
+                                "toughness",
+                                material.getToughness(),
+                                AttributeModifier.Operation.ADDITION
+                        )
+                )
                 .build();
     }
 

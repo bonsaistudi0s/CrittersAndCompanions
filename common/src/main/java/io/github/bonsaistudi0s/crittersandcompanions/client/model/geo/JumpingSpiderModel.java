@@ -7,7 +7,7 @@ import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.data.EntityModelData;
 
-public class JumpingSpiderModel extends VariantGeoModel<JumpingSpiderEntity> {
+public class JumpingSpiderModel extends AgingVariantGeoModel<JumpingSpiderEntity> {
 
     public JumpingSpiderModel() {
         super(CrittersAndCompanions.createId("jumping_spider"));

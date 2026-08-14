@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_sea_bunny_slime": {
+    "has_sea_bunny_slime_bottle": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_sea_bunny_slime",
+      "has_sea_bunny_slime_bottle",
       "has_the_recipe"
     ]
   ],

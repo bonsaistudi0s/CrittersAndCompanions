@@ -51,7 +51,7 @@ module.exports = {
       '@semantic-release/exec',
       {
         prepareCmd: './gradlew build --build-cache',
-        successCmd: `git fetch origin ${mcVersion}/dev && git checkout ${mcVersion}/dev && git merge HEAD && git push origin ${mcVersion}/dev`,
+        successCmd: `git fetch origin ${mcVersion}/dev ${mcVersion}/main && git checkout ${mcVersion}/dev && git merge origin/${mcVersion}/main && git push origin ${mcVersion}/dev`,
       },
     ],
     // --------------------

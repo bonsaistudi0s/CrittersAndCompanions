@@ -7,5 +7,11 @@ accessible field net/minecraft/server/level/ChunkMap$TrackedEntity seenBy Ljava/
 accessible field net/minecraft/world/entity/ai/goal/AvoidEntityGoal avoidEntityTargeting Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;
 
 accessible method net/minecraft/world/entity/ai/goal/FollowOwnerGoal teleportToOwner ()V
+accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal owner Lnet/minecraft/world/entity/LivingEntity;
+accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal timeToRecalcPath I
+accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal navigation Lnet/minecraft/world/entity/ai/navigation/PathNavigation;
+accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal speedModifier D
 
 accessible method net/minecraft/world/item/alchemy/PotionBrewing addMix (Lnet/minecraft/world/item/alchemy/Potion;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/alchemy/Potion;)V
+
+accessible method net/minecraft/world/level/block/ComposterBlock add (FLnet/minecraft/world/level/ItemLike;)V
