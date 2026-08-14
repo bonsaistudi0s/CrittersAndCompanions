@@ -28,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.PathType;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -52,10 +51,22 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class FerretEntity extends TamableAnimal implements GeoEntity {
 
-    private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DIGGING = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> DATA_COLLAR_COLOR = SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(
+            FerretEntity.class,
+            EntityDataSerializers.BOOLEAN
+    );
+    private static final EntityDataAccessor<Boolean> DIGGING = SynchedEntityData.defineId(
+            FerretEntity.class,
+            EntityDataSerializers.BOOLEAN
+    );
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(
+            FerretEntity.class,
+            EntityDataSerializers.INT
+    );
+    private static final EntityDataAccessor<Integer> DATA_COLLAR_COLOR = SynchedEntityData.defineId(
+            FerretEntity.class,
+            EntityDataSerializers.INT
+    );
 
     private static final int TRANSITION_TICK_TIME = 4;
     private static final RawAnimation DIG_ANIM = RawAnimation.begin().then("dig", Animation.LoopType.PLAY_ONCE);
@@ -66,7 +77,10 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
 
     public static final AnimalTags TAGS = AnimalTags.create(CACEntities.FERRET.getKey());
-    public static final TagKey<Block> DIG_GROUNDS_TAG = TagKey.create(Registries.BLOCK, CrittersAndCompanions.createId("ferret_dig_grounds"));
+    public static final TagKey<Block> DIG_GROUNDS_TAG = TagKey.create(
+            Registries.BLOCK,
+            CrittersAndCompanions.createId("ferret_dig_grounds")
+    );
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -112,7 +126,17 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(2, new FerretDigGoal(this));
         goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(4, new TamableRelaxOnOwnerGoal<>(this, FerretEntity::isSleeping, this::setSleeping));
-        goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())));
+        goalSelector.addGoal(
+                5,
+                new AvoidEntityGoal<>(
+                        this,
+                        LivingEntity.class,
+                        8.0F,
+                        1.6D,
+                        1.4D,
+                        (livingEntity) -> livingEntity.is(this.getLastHurtByMob()) && !livingEntity.is(this.getOwner())
+                )
+        );
         goalSelector.addGoal(6, new BreedGoal(this, 1.1D));
         goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.2D, true));
         goalSelector.addGoal(8, TAGS.temptGoal(this));
@@ -125,7 +149,23 @@ public class FerretEntity extends TamableAnimal implements GeoEntity {
         goalSelector.addGoal(15, new LookAtPlayerGoal(this, Player.class, 8.0F));
         goalSelector.addGoal(16, new RandomLookAroundGoal(this));
 
-        targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Animal.class, 10, false, false, (entity) -> entity instanceof Chicken || entity instanceof Rabbit));
+        targetSelector.addGoal(
+                0,
+                new NearestAttackableTargetGoal<>(
+                        this,
+                        Animal.class,
+                        10,
+                        false,
+                        false,
+                        livingEntity -> {
+                            if (livingEntity instanceof TamableAnimal tamableAnimal && tamableAnimal.isTame()) {
+                                return false;
+                            }
+
+                            return livingEntity instanceof Chicken || livingEntity instanceof Rabbit;
+                        }
+                )
+        );
     }
 
     @Override
