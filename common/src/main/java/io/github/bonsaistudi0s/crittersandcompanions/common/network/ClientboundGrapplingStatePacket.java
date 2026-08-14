@@ -1,18 +1,14 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.OptionalInt;
 
 import dev.architectury.networking.NetworkManager;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.GrapplingHookEntity;
-import io.github.bonsaistudi0s.crittersandcompanions.common.extension.IGrapplingState;
 
 public record ClientboundGrapplingStatePacket(OptionalInt hook, int playerId) implements CustomPacketPayload {
 
@@ -30,26 +26,6 @@ public record ClientboundGrapplingStatePacket(OptionalInt hook, int playerId) im
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE.type();
-    }
-
-    public void handle(NetworkManager.PacketContext context) {
-        context.queue(() -> {
-            var level = Minecraft.getInstance().level;
-            if (level == null) {
-                return;
-            }
-
-            var player = (Player) level.getEntity(playerId);
-
-            if (!(player instanceof IGrapplingState grappleState)) {
-                return;
-            }
-
-            hook.ifPresentOrElse(id -> {
-                var entity = (GrapplingHookEntity) level.getEntity(id);
-                grappleState.setHook(entity);
-            }, () -> grappleState.setHook(null));
-        });
     }
 
 }

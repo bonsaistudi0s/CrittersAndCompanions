@@ -1,12 +1,8 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.network;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +12,6 @@ import java.util.List;
 
 import dev.architectury.networking.NetworkManager;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
-import io.github.bonsaistudi0s.crittersandcompanions.common.extension.ISilkLeashState;
 import it.unimi.dsi.fastutil.ints.IntList;
 
 public record ClientboundSilkLeashStatePacket(List<LeashData> leashDataList) implements CustomPacketPayload {
@@ -61,34 +56,4 @@ public record ClientboundSilkLeashStatePacket(List<LeashData> leashDataList) imp
         }
     }
 
-    public void handle(NetworkManager.PacketContext context) {
-        context.queue(() -> {
-            var level = Minecraft.getInstance().level;
-            if (level == null) {
-                return;
-            }
-
-            for (var data : leashDataList) {
-                var entity = level.getEntity(data.leashOwner());
-
-                if (entity instanceof ISilkLeashState leashState) {
-                    leashState.getLeashingEntities().clear();
-                    leashState.getLeashedByEntities().clear();
-
-                    data.leashingEntities().forEach(id -> {
-                        var leashingEntity = level.getEntity(id);
-                        if (leashingEntity instanceof LivingEntity) {
-                            leashState.getLeashingEntities().add((LivingEntity) leashingEntity);
-                        }
-                    });
-                    data.leashedByEntities().forEach(id -> {
-                        var leashedByEntity = level.getEntity(id);
-                        if (leashedByEntity instanceof LivingEntity) {
-                            leashState.getLeashedByEntities().add(((LivingEntity) leashedByEntity));
-                        }
-                    });
-                }
-            }
-        });
-    }
 }
