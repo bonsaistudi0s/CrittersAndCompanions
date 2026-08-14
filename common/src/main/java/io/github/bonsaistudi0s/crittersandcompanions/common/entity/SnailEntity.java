@@ -35,12 +35,12 @@ import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.animation.BugAnimations;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.behaviour.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.DancingStrollGoal;
-import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.TameablePanicGoal;
 import io.github.bonsaistudi0s.crittersandcompanions.common.mixin.WallClimberNavigationAccessor;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.AnimalTags;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACEntities;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACItems;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACSounds;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -48,6 +48,7 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
+
 
 public class SnailEntity extends TamableAnimal implements GeoEntity {
 
@@ -67,6 +68,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public SnailEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     @Override
@@ -83,12 +85,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new TameablePanicGoal(this, 1.25D));
+        goalSelector.addGoal(1, new TamableAnimal.TamableAnimalPanicGoal(1.25D));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         goalSelector.addGoal(3, new BreedGoal(this, 1.25D));
         goalSelector.addGoal(4, TAGS.temptGoal(this));
         goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
-        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 10F, 2F));
+        goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.4D, 8F, 2F));
         goalSelector.addGoal(7, new DancingStrollGoal<>(this, 1.0D));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
             @Override
@@ -133,7 +135,7 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 12.0)
+                .add(Attributes.MAX_HEALTH, 16.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
     }
@@ -187,6 +189,12 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         return new SnailNavigation(this, level);
+    }
+
+    @Override
+    public boolean shouldTryTeleportToOwner() {
+        LivingEntity livingEntity = this.getOwner();
+        return livingEntity != null && this.distanceToSqr(this.getOwner()) >= (double)196.0F;
     }
 
     @Override
@@ -378,6 +386,11 @@ public class SnailEntity extends TamableAnimal implements GeoEntity {
 
     private boolean isWakingUp() {
         return getWakingUpTicks() >= 0;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !isTame() && !hasCustomName();
     }
 
     private static class SnailNavigation extends WallClimberNavigation {

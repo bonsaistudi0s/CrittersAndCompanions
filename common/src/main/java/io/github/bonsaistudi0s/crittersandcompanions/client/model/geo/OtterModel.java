@@ -20,7 +20,7 @@ public class OtterModel extends AgingGeoModel<OtterEntity> {
         // This bone rotation predicate should be done separately as it could be overlapped with the net head azimuth
         var root = getAnimationProcessor().getBone("main");
         if (root != null) {
-            if (!animatable.isInWater()) {
+            if (!animatable.isInWater() && !animatable.isFloating()) {
                 // Hard bypasses all rotations of the core bone on land so the whole body stays in the default rotation,
                 // thus preventing random pitch spikes (that basically happen when the otter is moving its head). Another
                 // option is to cage the rots based on the otter state (more robust), but this impl requires less code

@@ -5,3 +5,5 @@ accessible field net/minecraft/server/level/ChunkMap entityMap Lit/unimi/dsi/fas
 accessible field net/minecraft/server/level/ChunkMap$TrackedEntity seenBy Ljava/util/Set;
 
 accessible field net/minecraft/world/entity/ai/goal/AvoidEntityGoal avoidEntityTargeting Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;
+
+accessible method net/minecraft/world/level/block/ComposterBlock add (FLnet/minecraft/world/level/ItemLike;)V

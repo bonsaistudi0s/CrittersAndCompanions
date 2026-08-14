@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": {
+      "item": "crittersandcompanions:sea_bunny_slime_bottle"
+    }
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "crittersandcompanions:sea_bunny_slime_block"
+  }
+}

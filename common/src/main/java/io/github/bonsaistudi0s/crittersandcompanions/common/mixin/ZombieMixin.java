@@ -52,7 +52,7 @@ public class ZombieMixin {
             return;
         }
 
-        if (serverLevel.getRandom().nextFloat() < 0.1F) {
+        if (serverLevel.getRandom().nextFloat() < 0.05F) {
             if (serverLevel.getRandom().nextBoolean()) {
                 var mount = CACEntities.SNAIL.get().create(self.level());
                 if (mount != null) {

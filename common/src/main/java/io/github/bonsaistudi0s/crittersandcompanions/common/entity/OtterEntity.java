@@ -45,6 +45,7 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.control.OtterMoveControl;
 import io.github.bonsaistudi0s.crittersandcompanions.common.entity.brain.goal.*;
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.*;
+import io.github.bonsaistudi0s.crittersandcompanions.common.util.EntityUtils;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -79,8 +80,9 @@ public class OtterEntity extends Animal implements GeoEntity {
         super(entityType, level);
         this.moveControl = new OtterMoveControl(this);
         this.lookControl = new OtterLookControl(this);
-        this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.setCanPickUpLoot(true);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        EntityUtils.applyAwarenessMaluses(this);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -215,6 +217,8 @@ public class OtterEntity extends Animal implements GeoEntity {
                         this.startEating();
                     }
                 }
+            } else if (!held.isEmpty()) {
+                this.rejectFood();
             }
 
             if (this.huntDelay > 0) {
@@ -235,7 +239,8 @@ public class OtterEntity extends Animal implements GeoEntity {
                 CACSounds.OTTER_CLAM_BREAK.get()
                 : CACSounds.OTTER_EAT.get();
         playSound(sound, 1.2F, 1.0F);
-        eatOrOpen(level, held);
+        var result = eatOrOpen(level, held);
+        setItemInHand(InteractionHand.MAIN_HAND, result);
         setEating(false);
     }
 
@@ -252,7 +257,12 @@ public class OtterEntity extends Animal implements GeoEntity {
             itemStack.shrink(1);
             return itemStack;
         } else {
-            return eat(level, itemStack);
+            var initialCount = itemStack.getCount();
+            var result = eat(level, itemStack);
+            if (result.getCount() == initialCount) {
+                result.shrink(1);
+            }
+            return result;
         }
     }
 

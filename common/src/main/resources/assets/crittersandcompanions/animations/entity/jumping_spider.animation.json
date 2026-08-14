@@ -817,9 +817,6 @@
 					}
 				},
 				"right_leg_1": {
-					"rotation": {
-						"vector": [0, 0, 0]
-					},
 					"position": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -1109,9 +1106,6 @@
 				},
 				"right_leg_3": {
 					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
 						"2.6": {
 							"vector": [0, 0, 0]
 						},
@@ -1667,12 +1661,12 @@
 			"bones": {
 				"head": {
 					"rotation": {
-						"vector": [0, 0, -12]
+						"vector": [0, 0, -16]
 					}
 				},
 				"body": {
 					"rotation": {
-						"vector": [0, 0, -12]
+						"vector": [0, 0, -4]
 					}
 				}
 			}

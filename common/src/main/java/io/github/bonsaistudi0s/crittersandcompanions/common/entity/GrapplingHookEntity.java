@@ -2,12 +2,13 @@ package io.github.bonsaistudi0s.crittersandcompanions.common.entity;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.OptionalInt;
@@ -87,16 +88,21 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
                 var maxSpeed = CACCommonConfig.HANDLER.instance().grapplingHook.maxSpeed;
                 var scale = Math.min(maxSpeed, 0.01D * Math.sqrt(offsetLengthSqr));
                 if (scale >= 0) {
+                    double oldY = owner.getDeltaMovement().y();
                     owner.setDeltaMovement(owner.getDeltaMovement().add(direction.scale(scale)));
+                    double newY = owner.getDeltaMovement().y();
                     owner.hurtMarked = true;
+                    if (oldY < 0) {
+                        if (newY >= 0) {
+                            owner.resetFallDistance();
+                        } else if (newY > oldY) {
+                            owner.fallDistance *= (float) (newY / oldY);
+                        }
+                    }
                 }
             }
             setDeltaMovement(0.0D, 0.0D, 0.0D);
-        } else {
-            setDeltaMovement(getDeltaMovement().scale(0.98D));
-            setDeltaMovement(getDeltaMovement().add(0.0D, -0.03D, 0.0D));
         }
-        move(MoverType.SELF, getDeltaMovement());
     }
 
     @Override
@@ -110,6 +116,15 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
         return distance < 4096.0D;
     }
 
+    @Override
+    protected void onHitBlock(BlockHitResult result) {
+        super.onHitBlock(result);
+        if (!this.isStick) {
+            this.setPos(result.getLocation());
+            this.setDeltaMovement(Vec3.ZERO);
+        }
+    }
+
     public void pull() {
         if (getOwner() != null) {
             if (isStick) {
@@ -117,9 +132,29 @@ public class GrapplingHookEntity extends ThrowableItemProjectile {
                 var maxSpeed = CACCommonConfig.HANDLER.instance().grapplingHook.maxSpeed;
                 var direction = position().subtract(getOwner().position()).normalize();
                 var distance = distanceTo(getOwner());
-                getOwner().setDeltaMovement(direction.scale(Math.min(maxSpeed, pullSpeed * distance)));
+                double oldY = getOwner().getDeltaMovement().y();
+
+                var moveVec = direction.scale(Math.min(maxSpeed, pullSpeed * distance));
+                var willTravelMostlyHorizontally = Math.abs(getOwner().getY() - this.getY()) <= 1.5D;
+                if (willTravelMostlyHorizontally) {
+                    moveVec = moveVec.add(0.0D, 0.25D, 0.0D);
+                }
+
+                getOwner().setDeltaMovement(moveVec);
+
+                double newY = getOwner().getDeltaMovement().y();
+                if (oldY < 0) {
+                    if (newY >= 0) {
+                        getOwner().resetFallDistance();
+                    } else if (newY > oldY) {
+                        getOwner().fallDistance *= (float) (newY / oldY);
+                    }
+                }
             }
-            discard();
+
+            if (!this.level().isClientSide) {
+                discard();
+            }
         }
     }
 

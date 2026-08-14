@@ -13,6 +13,7 @@ public class CACTags {
 
     public static final TagKey<Biome> SILK_COCOON_SPAWNS = TagKey.create(Registries.BIOME, CrittersAndCompanions.createId("silk_cocoon_spawns"));
     public static final TagKey<Biome> SILK_COCOON_LUSH_SPAWNS = TagKey.create(Registries.BIOME, CrittersAndCompanions.createId("silk_cocoon_lush_spawns"));
+    public static final TagKey<Biome> IS_LUSH = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("c", "is_lush"));
 
     public static final TagKey<Item> WOODEN_CHESTS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "chests/wooden"));
 

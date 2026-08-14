@@ -27,18 +27,25 @@ public class SilkLeashItem extends Item {
     public static int updateLeashStates(LivingEntity leashOwner, LivingEntity leashedEntity) {
          Map<Entity, ISilkLeashState> updatedStates = updateLeashStatesLocal(leashOwner, leashedEntity);
         if (!updatedStates.isEmpty()) {
-            CACPacketHandler.sendToTracking(leashOwner == null ? leashedEntity : leashOwner,
-                    new ClientboundSilkLeashStatePacket(
-                            updatedStates.entrySet().stream().map(entry ->
-                                    new ClientboundSilkLeashStatePacket.LeashData(
-                                            entry.getKey().getId(),
-                                            new IntArrayList(entry.getValue().getLeashingEntities().stream().mapToInt(Entity::getId).toArray()),
-                                            new IntArrayList(entry.getValue().getLeashedByEntities().stream().mapToInt(Entity::getId).toArray())
-                                    )
-                            ).collect(Collectors.toList())
-                    )
+            var packet = new ClientboundSilkLeashStatePacket(
+                    updatedStates.entrySet().stream().map(entry ->
+                            new ClientboundSilkLeashStatePacket.LeashData(
+                                    entry.getKey().getId(),
+                                    new IntArrayList(entry.getValue().getLeashingEntities().stream().mapToInt(Entity::getId).toArray()),
+                                    new IntArrayList(entry.getValue().getLeashedByEntities().stream().mapToInt(Entity::getId).toArray())
+                            )
+                    ).collect(Collectors.toList())
             );
+
+            if (leashOwner != null) {
+                CACPacketHandler.sendToTrackingAndSelf(leashOwner, packet);
+            }
+
+            if (leashedEntity != null) {
+                CACPacketHandler.sendToTrackingAndSelf(leashedEntity, packet);
+            }
         }
+
         return updatedStates.size();
     }
 
@@ -116,6 +123,8 @@ public class SilkLeashItem extends Item {
                 if (!player.level().isClientSide()) {
                     SilkLeashItem.updateLeashStates(player, entity);
                     return InteractionResult.CONSUME;
+                } else {
+                    SilkLeashItem.updateLeashStatesLocal(player, entity);
                 }
                 return InteractionResult.SUCCESS;
             }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "crittersandcompanions:pearl_necklace_1"
+    },
+    {
+      "item": "crittersandcompanions:pearl"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "crittersandcompanions:pearl_necklace_2"
+  }
+}

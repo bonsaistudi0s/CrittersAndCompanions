@@ -1,33 +1,39 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.config;
 
-import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.biome;
-import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.cTag;
-
 import com.google.common.base.CaseFormat;
-
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.biome.Biomes;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import dev.architectury.platform.Platform;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
 import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.SpawnEntry;
 import io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.SpawnEntryController;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biomes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.biome;
+import static io.github.bonsaistudi0s.crittersandcompanions.common.config.CACSpawnConfig.cTag;
 
 public class CACCommonConfig {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CACCommonConfig.class);
 
     public static final ConfigClassHandler<CACCommonConfig> HANDLER = ConfigClassHandler.createBuilder(CACCommonConfig.class)
             .id(CrittersAndCompanions.createId("common_config"))
@@ -36,6 +42,76 @@ public class CACCommonConfig {
                     .setJson5(true)
                     .build())
             .build();
+
+    @SuppressWarnings("ConstantValue")
+    public static void loadAndMigrate() {
+        renameOldTomlConfigs();
+
+        HANDLER.load();
+
+        var config = HANDLER.instance();
+        var needsSave = false;
+
+        needsSave |= runMigration(config, 2, () -> {
+            migrateSpawnRule(config.spawning.leafInsect, "#c:is_forest", 14, 1, 1, 6, 1, 1);
+            migrateSpawnRule(config.spawning.ladybug, "#c:is_lush", 12, 1, 2, 10, 1, 2);
+            migrateSpawnRule(config.spawning.stagBeetle, "#c:is_lush", 8, 1, 2, 10, 1, 2);
+            migrateSpawnRule(config.spawning.snail, "#c:is_lush", 10, 1, 2, 8, 1, 2);
+            migrateSpawnRule(config.spawning.stickBug, "#c:is_lush", 4, 1, 2, 10, 1, 2);
+            migrateSpawnRule(config.spawning.weevil, "#c:is_lush", 4, 1, 2, 10, 1, 2);
+
+            if (config.grapplingHook.maxSpeed == 4.0) {
+                config.grapplingHook.maxSpeed = 2.0;
+            }
+        });
+
+        // add more migration steps here if defaults change
+
+        if (needsSave) {
+            HANDLER.save();
+        }
+    }
+
+    private static boolean runMigration(CACCommonConfig config, int targetVersion, Runnable migrationStrategy) {
+        if (config.configVersion < targetVersion) {
+            LOGGER.info("Migrating config defaults to version {}", targetVersion);
+            migrationStrategy.run();
+            config.configVersion = targetVersion;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void migrateSpawnRule(List<SpawnEntry> list, String biomeSpec, int oldWeight, int oldMin, int oldMax, int newWeight, int newMin, int newMax) {
+        for (var i = 0; i < list.size(); i++) {
+            var entry = list.get(i);
+            if (entry.biomeSpec().equals(biomeSpec)) {
+                if (entry.weight() == oldWeight && entry.min() == oldMin && entry.max() == oldMax) {
+                    list.set(i, new SpawnEntry(biomeSpec, newWeight, newMin, newMax));
+                }
+            }
+        }
+    }
+
+    private static void renameOldTomlConfigs() {
+        var configDir = Platform.getConfigFolder();
+        var oldFiles = new String[]{"crittersandcompanions-common.toml", "crittersandcompanions-spawns.toml"};
+
+        for (var oldFileName : oldFiles) {
+            var oldFile = configDir.resolve(oldFileName);
+            if (Files.exists(oldFile)) {
+                try {
+                    Files.move(oldFile, configDir.resolve(oldFileName + ".old"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @SerialEntry
+    public int configVersion = 1; // do not change this
 
     @SerialEntry
     public final SpawningConfig spawning = new SpawningConfig();
@@ -49,13 +125,16 @@ public class CACCommonConfig {
     @SuppressWarnings("unused")
     public static class SpawningConfig {
 
+        @SerialEntry
+        public boolean preventMonsterSpawnsInLushCaves = false;
+
         // Just add any new entries as new fields below here, they'll be resolved via reflection
         // (transform snake_case entity id to camelCase field name)
 
         @SerialEntry
         public List<SpawnEntry> leafInsect = List.of(
                 cTag("is_jungle", 14, 1, 1),
-                cTag("is_forest", 14, 1, 1));
+                cTag("is_forest", 6, 1, 1));
         @SerialEntry
         public List<SpawnEntry> redPanda = List.of(
                 cTag("is_jungle", 8, 1, 2));
@@ -99,12 +178,12 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> ladybug = List.of(
                 cTag("is_forest", 6, 1, 3),
-                cTag("is_lush", 12, 1, 2),
+                cTag("is_lush", 10, 1, 2),
                 cTag("is_floral", 12, 1, 2));
         @SerialEntry
         public List<SpawnEntry> stagBeetle = List.of(
                 cTag("is_forest", 4, 1, 2),
-                cTag("is_lush", 8, 1, 2));
+                cTag("is_lush", 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> rolyPoly = List.of(
                 cTag("is_forest", 5, 1, 3),
@@ -113,25 +192,25 @@ public class CACCommonConfig {
         @SerialEntry
         public List<SpawnEntry> snail = List.of(
                 cTag("is_forest", 5, 1, 2),
-                cTag("is_lush", 10, 1, 2),
+                cTag("is_lush", 8, 1, 2),
                 cTag("is_swamp", 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> stickBug = List.of(
                 cTag("is_forest", 4, 1, 2),
-                cTag("is_lush", 4, 1, 2));
+                cTag("is_lush", 10, 1, 2));
         @SerialEntry
         public List<SpawnEntry> weevil = List.of(
                 cTag("is_forest", 4, 1, 3),
-                cTag("is_lush", 4, 1, 2));
+                cTag("is_lush", 10, 1, 2));
 
         private static final List<Field> ENTITY_FIELDS = Arrays.stream(SpawningConfig.class.getDeclaredFields())
-                .filter(field -> !java.lang.reflect.Modifier.isStatic(field.getModifiers()))
+                .filter(field -> !Modifier.isStatic(field.getModifiers()))
                 .filter(field -> field.getType() == List.class)
                 .toList();
 
         public Map<String, List<SpawnEntry>> getAllEntries() {
             Map<String, List<SpawnEntry>> entries = new LinkedHashMap<>();
-            for (Field field : ENTITY_FIELDS) {
+            for (var field : ENTITY_FIELDS) {
                 entries.put(entityId(field), get(this, field));
             }
             return entries;
@@ -141,7 +220,14 @@ public class CACCommonConfig {
             var builder = ConfigCategory.createBuilder()
                     .name(Component.literal("Spawning"));
 
-            SpawningConfig defaults = HANDLER.defaults().spawning;
+            builder.option(Option.<Boolean>createBuilder()
+                    .name(Component.literal("Prevent monster spawns in Lush Caves"))
+                    .description(val -> OptionDescription.of(Component.literal("(Changes take effect after a restart)")))
+                    .binding(false, () -> this.preventMonsterSpawnsInLushCaves, newVal -> this.preventMonsterSpawnsInLushCaves = newVal)
+                    .controller(TickBoxControllerBuilder::create)
+                    .build());
+
+            var defaults = HANDLER.defaults().spawning;
             for (var field : ENTITY_FIELDS) {
                 builder.group(buildGroup(field, defaults));
             }
@@ -154,11 +240,15 @@ public class CACCommonConfig {
                     .name(displayName(field))
                     .description(OptionDescription.of(Component.literal(
                             """
+                                    (Changes take effect after a restart)
+                                    
                                     Each entry is one biome spawn rule in the format "biome;weight;min;max".
                                     
                                     Use a biome id (e.g. minecraft:forest) or a tag prefixed with # (e.g. #c:is_forest).
                                     
                                     Weight is relative to other mobs in the same category. Min/max define the group size range.
+                                    
+                                    (Lush Caves spawns are handled by a separate spawning system.)
                                     """)))
                     .binding(get(defaults, field), () -> get(this, field), v -> set(this, field, v))
                     .initial(() -> new SpawnEntry("minecraft:plains", 1, 1, 1))
@@ -244,9 +334,11 @@ public class CACCommonConfig {
         @SerialEntry
         public double launchSpeed = 1.0;
         @SerialEntry
-        public double maxSpeed = 4.0;
+        public double maxSpeed = 2.0;
         @SerialEntry
         public double maxDistance = 32.0;
+        @SerialEntry
+        public boolean enableDurability = true;
 
         public ConfigCategory buildCategory() {
             return ConfigCategory.createBuilder()
@@ -260,7 +352,7 @@ public class CACCommonConfig {
 
                     .option(Option.<Double>createBuilder()
                             .name(Component.literal("Max Speed"))
-                            .binding(4.0, () -> this.maxSpeed, newVal -> this.maxSpeed = newVal)
+                            .binding(2.0, () -> this.maxSpeed, newVal -> this.maxSpeed = newVal)
                             .controller(opt -> DoubleFieldControllerBuilder.create(opt).range(1.0, 1000.0))
                             .build())
 
@@ -268,6 +360,13 @@ public class CACCommonConfig {
                             .name(Component.literal("Max Distance"))
                             .binding(32.0, () -> this.maxDistance, newVal -> this.maxDistance = newVal)
                             .controller(opt -> DoubleSliderControllerBuilder.create(opt).range(4.0, 128.0).step(1.0))
+                            .build())
+
+                    .option(Option.<Boolean>createBuilder()
+                            .name(Component.literal("Enable Durability"))
+                            .description(val -> OptionDescription.of(Component.literal("(Changes take effect after a restart)")))
+                            .binding(true, () -> this.enableDurability, newVal -> this.enableDurability = newVal)
+                            .controller(TickBoxControllerBuilder::create)
                             .build())
 
                     .build();

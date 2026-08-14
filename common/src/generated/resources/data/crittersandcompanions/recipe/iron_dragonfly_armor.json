@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "  I",
+    " I ",
+    "I  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "crittersandcompanions:iron_dragonfly_armor"
+  }
+}

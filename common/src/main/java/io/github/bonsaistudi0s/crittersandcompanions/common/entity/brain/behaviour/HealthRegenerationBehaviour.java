@@ -8,7 +8,7 @@ public record HealthRegenerationBehaviour(TamableAnimal owner) implements Behavi
 
     @Override
     public void serverTick() {
-        if (!owner.isTame()) {
+        if (!owner.isTame() || owner.isDeadOrDying()) {
             return;
         }
 

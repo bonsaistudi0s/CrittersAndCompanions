@@ -21,7 +21,6 @@ import io.github.bonsaistudi0s.crittersandcompanions.common.handler.PlayerHandle
 import io.github.bonsaistudi0s.crittersandcompanions.common.registry.CACPotions;
 import io.github.bonsaistudi0s.crittersandcompanions.neoforge.common.loot.AddItemModifier;
 import io.github.bonsaistudi0s.crittersandcompanions.neoforge.common.loot.ReplaceItemModifier;
-import io.github.bonsaistudi0s.crittersandcompanions.neoforge.common.world.CACSpawnsBiomeModifier;
 
 @Mod(CrittersAndCompanions.MODID)
 @EventBusSubscriber(modid = CrittersAndCompanions.MODID)
@@ -34,10 +33,6 @@ public final class CrittersAndCompanionsNeoForge {
         lootModifiers.register("replace_item", () -> ReplaceItemModifier.CODEC);
         lootModifiers.register("add_item", () -> AddItemModifier.CODEC);
         lootModifiers.register(modBus);
-
-        var biomeModifiers = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, CrittersAndCompanions.MODID);
-        biomeModifiers.register("config_driven_spawns", () -> CACSpawnsBiomeModifier.CODEC);
-        biomeModifiers.register(modBus);
     }
 
     @SubscribeEvent

@@ -12,12 +12,6 @@ import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
 public class BabyHealthPenaltyBehaviour implements Behaviour {
 
     private static final ResourceLocation BABY_HEALTH_ID = CrittersAndCompanions.createId("baby_health_penalty");
-    private static final AttributeModifier BABY_HEALTH_MODIFIER = new AttributeModifier(
-            BABY_HEALTH_ID,
-            -0.5D,
-            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
-    );
-
     @NotNull
     private final AgeableMob owner;
 
@@ -34,13 +28,26 @@ public class BabyHealthPenaltyBehaviour implements Behaviour {
 
         if (owner.isBaby()) {
             if (!healthAttribute.hasModifier(BABY_HEALTH_ID)) {
-                healthAttribute.addPermanentModifier(BABY_HEALTH_MODIFIER);
+                var baseValue = healthAttribute.getBaseValue();
+                var targetHealth = Math.ceil((baseValue * 0.5) / 2.0) * 2.0;
+                var penalty = targetHealth - baseValue;
+
+                healthAttribute.addPermanentModifier(new AttributeModifier(
+                        BABY_HEALTH_ID,
+                        penalty,
+                        AttributeModifier.Operation.ADD_VALUE
+                ));
+
                 owner.setHealth(Math.min(owner.getHealth(), owner.getMaxHealth()));
             }
         } else {
             if (healthAttribute.hasModifier(BABY_HEALTH_ID)) {
+                var modifier = healthAttribute.getModifier(BABY_HEALTH_ID);
+                var amount = modifier != null ? modifier.amount() : 0.0;
                 healthAttribute.removeModifier(BABY_HEALTH_ID);
-                owner.heal(owner.getMaxHealth() / 2.0F);
+                if (amount < 0) {
+                    owner.heal((float) -amount);
+                }
             }
         }
     }
