@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class BabyHealthPenaltyBehaviour implements Behaviour {
@@ -25,7 +26,7 @@ public class BabyHealthPenaltyBehaviour implements Behaviour {
             return;
         }
 
-        for (var modifier : new java.util.ArrayList<>(healthAttribute.getModifiers())) {
+        for (var modifier : new ArrayList<>(healthAttribute.getModifiers())) {
             if ("baby_health_penalty".equals(modifier.getName()) && !BABY_HEALTH_ID.equals(modifier.getId())) {
                 healthAttribute.removeModifier(modifier.getId());
                 if (!owner.isBaby()) {

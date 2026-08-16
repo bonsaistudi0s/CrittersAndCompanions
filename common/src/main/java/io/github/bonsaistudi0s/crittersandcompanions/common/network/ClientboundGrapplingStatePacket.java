@@ -35,23 +35,4 @@ public record ClientboundGrapplingStatePacket(OptionalInt hook, int playerId) im
         return ID;
     }
 
-    public void handle(NetworkManager.PacketContext context) {
-        context.queue(() -> {
-            var level = Minecraft.getInstance().level;
-            if (level == null) {
-                return;
-            }
-
-            var player = (Player) level.getEntity(playerId);
-
-            if (!(player instanceof IGrapplingState grappleState)) {
-                return;
-            }
-
-            hook.ifPresentOrElse(id -> {
-                var entity = (GrapplingHookEntity) level.getEntity(id);
-                grappleState.setHook(entity);
-            }, () -> grappleState.setHook(null));
-        });
-    }
 }
