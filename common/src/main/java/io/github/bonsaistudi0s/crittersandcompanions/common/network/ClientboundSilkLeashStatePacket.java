@@ -57,34 +57,4 @@ public record ClientboundSilkLeashStatePacket(List<LeashData> leashDataList) imp
         return ID;
     }
 
-    public void handle(NetworkManager.PacketContext context) {
-        context.queue(() -> {
-            var level = Minecraft.getInstance().level;
-            if (level == null) {
-                return;
-            }
-
-            for (var data : leashDataList) {
-                var entity = level.getEntity(data.leashOwner());
-
-                if (entity instanceof ISilkLeashState leashState) {
-                    leashState.getLeashingEntities().clear();
-                    leashState.getLeashedByEntities().clear();
-
-                    data.leashingEntities().forEach(id -> {
-                        var leashingEntity = level.getEntity(id);
-                        if (leashingEntity instanceof LivingEntity) {
-                            leashState.getLeashingEntities().add((LivingEntity) leashingEntity);
-                        }
-                    });
-                    data.leashedByEntities().forEach(id -> {
-                        var leashedByEntity = level.getEntity(id);
-                        if (leashedByEntity instanceof LivingEntity) {
-                            leashState.getLeashedByEntities().add(((LivingEntity) leashedByEntity));
-                        }
-                    });
-                }
-            }
-        });
-    }
 }

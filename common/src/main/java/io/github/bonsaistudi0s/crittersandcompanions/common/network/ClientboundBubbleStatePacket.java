@@ -1,7 +1,10 @@
 package io.github.bonsaistudi0s.crittersandcompanions.common.network;
 
 import dev.architectury.networking.NetworkManager;
+import dev.architectury.utils.Env;
+import dev.architectury.utils.EnvExecutor;
 import io.github.bonsaistudi0s.crittersandcompanions.CrittersAndCompanions;
+import io.github.bonsaistudi0s.crittersandcompanions.client.network.ClientPayloadHandler;
 import io.github.bonsaistudi0s.crittersandcompanions.common.extension.IBubbleState;
 import io.github.bonsaistudi0s.crittersandcompanions.common.util.ParticleUtils;
 import net.minecraft.client.Minecraft;
@@ -32,34 +35,5 @@ public record ClientboundBubbleStatePacket(boolean state, int playerId, Optional
     @Override
     public ResourceLocation getId() {
         return ID;
-    }
-
-    public void handle(NetworkManager.PacketContext context) {
-        context.queue(() -> {
-            var level = Minecraft.getInstance().level;
-            if (level == null) {
-                return;
-            }
-
-            var player = (Player) level.getEntity(playerId);
-
-            if (player instanceof IBubbleState bubbleState) {
-                bubbleState.setBubbleActive(state);
-                
-                if (state && octopusId().isPresent()) {
-                    var octopus = level.getEntity(octopusId.getAsInt());
-                    if (octopus != null) {
-                        ParticleUtils.drawParticleLine(
-                                ParticleTypes.BUBBLE,
-                                level,
-                                octopus.position(),
-                                player.getEyePosition(),
-                                0.2D,
-                                Vec3.ZERO
-                        );
-                    }
-                }
-            }
-        });
     }
 }
