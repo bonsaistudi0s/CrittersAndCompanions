@@ -339,12 +339,29 @@ public class OtterEntity extends Animal implements GeoEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack handStack = player.getItemInHand(interactionHand);
-        if (!this.isEating() && this.isFood(handStack)) {
-            this.setItemInHand(InteractionHand.MAIN_HAND, handStack.split(1));
-            handStack.shrink(1);
-            return super.mobInteract(player, interactionHand);
+        if (!this.isFood(handStack)) {
+            return InteractionResult.PASS;
         }
-        return InteractionResult.PASS;
+        if (this.isEating()) {
+            return InteractionResult.CONSUME;
+        }
+
+        boolean isClam = handStack.is(CACItems.CLAM.get());
+        boolean canFallInLove = this.getAge() == 0 && this.canFallInLove();
+        boolean shouldStartEating = isClam || canFallInLove || this.isBaby();
+        if (!shouldStartEating) {
+            return InteractionResult.CONSUME;
+        }
+
+        this.setItemInHand(InteractionHand.MAIN_HAND, handStack.split(1));
+        if (canFallInLove) {
+            this.setInLove(player);
+        }
+        if (this.isBaby()) {
+            this.ageUp(getSpeedUpSecondsWhenFeeding(-this.getAge()), true);
+        }
+
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
     @Override
